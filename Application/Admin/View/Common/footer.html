@@ -1,0 +1,57 @@
+<div class="footer">
+	<div class="footer-inner">
+		<!-- #section:basics/footer -->
+		<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder"><a href="http://www.rainfer.cn" target="_ablank">YFCMF</a></span>
+							后台管理系统 &copy; 2015-2016
+						</span>
+		</div>
+
+		<!-- /section:basics/footer -->
+	</div>
+</div>
+
+
+<!-- basic scripts -->
+
+
+<!--[if IE]>
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='../assets/js/jquery1x.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+	if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+</script>
+<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<!-- ace scripts -->
+<script src="__PUBLIC__/assets/js/maxlength.js"></script>
+<script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+<script src="__PUBLIC__/assets/js/ace/ace.sidebar.js"></script>
+<script src="__PUBLIC__/assets/js/ace/ace.submenu-hover.js"></script>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+	jQuery(function($) {
+		//插入header-nav
+		$('#sidebar2').insertBefore('.page-content');
+		$('.navbar-toggle[data-target="#sidebar2"]').insertAfter('#menu-toggler');
+		//固定
+		$(document).on('settings.ace.two_menu', function(e, event_name, event_val) {
+			if(event_name == 'sidebar_fixed') {
+				if( $('#sidebar').hasClass('sidebar-fixed') ) {
+					$('#sidebar2').addClass('sidebar-fixed');
+					$('#navbar').addClass('h-navbar');
+				}
+				else {
+					$('#sidebar2').removeClass('sidebar-fixed')
+					$('#navbar').removeClass('h-navbar');
+				}
+			}
+		}).triggerHandler('settings.ace.two_menu', ['sidebar_fixed' ,$('#sidebar').hasClass('sidebar-fixed')]);
+	})
+</script>

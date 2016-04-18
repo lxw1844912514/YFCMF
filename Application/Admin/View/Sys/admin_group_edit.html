@@ -1,0 +1,145 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							添加用户组
+						</small>
+					</h1>
+				</div>
+
+				<script>
+					$(function(){
+						$('#admin_group_edit').ajaxForm({
+							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+							success: complete, // 这是提交后的方法
+							dataType: 'json'
+						});
+
+						function checkForm(){
+							if( '' == $.trim($('#title').val())){
+								layer.alert('用户组名不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#title').focus();
+								});
+								return false;
+							}
+
+						}
+						function complete(data){
+							if(data.status==1){
+								layer.alert(data.info, {icon: 6}, function(index){
+									layer.close(index);
+									window.location.href=data.url;
+								});
+							}else{
+								layer.alert(data.info, {icon: 5}, function(index){
+									layer.close(index);
+									window.location.href="{:U('admin_group_list')}";
+								});
+								return false;
+							}
+						}
+
+					});
+				</script>
+
+
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" name="admin_group_edit" id="admin_group_edit" method="post" action="{:U('admin_group_runedit')}">
+							<input type="hidden" name="id" id="id" value="{$group.id}" />
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户组名：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="title" id="title" value="{$group.title}" class="col-xs-10 col-sm-4" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
+								<div class="col-sm-10" style="padding-top:5px;">
+									<input name="status" id="status" value="1"   class="ace ace-switch ace-switch-4 btn-flat" type="checkbox"  <if condition='$group[status] eq 1'>checked</if> />
+									<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 规则设置： </label>
+								<div class="col-sm-10" style="padding-top:3px;">
+									<span class="lbl">设置规则请在用户组列表页进行规则配置</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="clearfix form-actions">
+								<div class="col-md-offset-3 col-md-9">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										保存
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										重置
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="hr hr-24"></div>
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+	<include file='Common:footer' />
+
+</div><!-- /.main-container -->
+
+<!--下拉样式以及JS-->
+<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+<script type="text/javascript">
+	jQuery(function($) {
+		if(!ace.vars['touch']) {
+			$('.chosen-select').chosen({allow_single_deselect:true});
+			$(window)
+					.off('resize.chosen')
+					.on('resize.chosen', function() {
+						$('.chosen-select').each(function() {
+							var $this = $(this);
+							$this.next().css({'width': $this.parent().width()});
+						})
+					}).trigger('resize.chosen');
+
+		}
+	});
+</script>
+</body>
+</html>

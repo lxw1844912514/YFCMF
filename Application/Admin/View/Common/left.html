@@ -1,0 +1,129 @@
+<div id="sidebar" class="sidebar responsive sidebar-fixed">
+
+	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+		<!--左侧顶端按钮-->
+		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+			<a class="btn btn-success" href="{:U('News/news_list')}" role="button" title="文章列表"><i class="ace-icon fa fa-signal"></i></a>
+			<a class="btn btn-info" href="{:U('News/news_add')}" role="button" title="添加文章"><i class="ace-icon fa fa-pencil"></i></a>
+			<a class="btn btn-warning" href="{:U('Member/member_list')}" role="button" title="会员列表"><i class="ace-icon fa fa-users"></i></a>
+			<a class="btn btn-danger" href="{:U('Sys/sys')}" role="button" title="站点设置"><i class="ace-icon fa fa-cogs"></i></a>
+		</div>
+        <!--左侧顶端按钮（手机）-->
+		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+			<a class="btn btn-success" href="{:U('News/news_list')}" role="button" title="文章列表"></a>
+			<a class="btn btn-info" href="{:U('News/news_add')}" role="button" title="添加文章"></a>
+			<a class="btn btn-warning" href="{:U('Member/member_list')}" role="button" title="会员列表"></a>
+			<a class="btn btn-danger" href="{:U('Sys/sys')}" role="button" title="站点设置"></a>
+		</div>
+	</div>
+    <!--菜单栏开始-->
+	<ul class="nav nav-list">
+		<php>
+			use Common\Controller\AuthController;
+			use Think\Auth;
+			$m = M('auth_rule');
+			$field = 'id,name,title,css';
+			$data = $m->field($field)->where('pid=0 AND status=1')->order('sort')->select();
+			$auth = new Auth();
+			//没有权限的菜单不显示
+			foreach ($data as $k=>$v){
+                if(!$auth->check($v['name'], $_SESSION['aid']) && $_SESSION['aid'] != 1){
+                unset($data[$k]);
+                }
+			}
+		</php>
+        <!--一级菜单遍历-->
+		<foreach name="data" item="v">
+			<li class="<if condition="CONTROLLER_NAME eq $v['name']">open</if>">
+			<a href="#" class="dropdown-toggle">
+				<i class="menu-icon fa {$v.css}"></i>
+							<span class="menu-text">
+								{$v.title}
+							</span>
+
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+			<b class="arrow"></b>
+			<ul class="submenu">
+				<php>
+					$m = M('auth_rule');
+					$dataa = $m->where(array('pid'=>$v['id'],'status'=>1))->order('sort')->select();
+					foreach ($dataa as $kk=>$vv){
+                        if(!$auth->check($vv['name'], $_SESSION['aid']) && $_SESSION['aid'] != 1){
+                        unset($dataa[$kk]);
+                        }
+					}
+					//判断是否level=4
+					$id_4=$m->where(array('name'=>CONTROLLER_NAME.'/'.ACTION_NAME,'level'=>4))->field('pid')->find();
+					if($id_4){
+						//第4级,找上1级
+						$id_3=$m->where(array('id'=>$id_4['pid'],'level'=>3))->field('pid')->find();
+					}else{
+						//找第3级,从而得出
+						$id_3=$m->where(array('name'=>CONTROLLER_NAME.'/'.ACTION_NAME,'level'=>3))->field('pid')->find();
+						if(!$id_3){
+							//未找到3级,找2级
+							$id_2=$m->where(array('name'=>CONTROLLER_NAME.'/'.ACTION_NAME,'level'=>2))->field('id')->find();
+							$id_3['pid']=$id_2['id'];
+						}
+					}
+				</php>
+                <!--二级菜单遍历-->
+				<foreach name="dataa" item="j">
+				   <php>
+						$m = M('auth_rule');
+						$dataaa = $m->where(array('pid'=>$j['id'],'status'=>1))->order('sort')->select();
+						foreach ($dataaa as $kkk=>$vvv){
+							if(!$auth->check($vvv['name'], $_SESSION['aid']) && $_SESSION['aid'] != 1){
+							unset($dataaa[$kkk]);
+							}
+						}
+					</php>
+					<if condition="empty($dataaa)">
+					<!-- 无三级菜单 -->
+					<li class="<if condition="($id_3['pid'] eq $j['id'])">active open</if>">
+						<a href="{:U($j['name'])}">
+							<i class="menu-icon fa fa-caret-right"></i>
+							{$j.title}
+						</a>
+						<b class="arrow"></b>
+					</li>
+					<else />
+					<li class="<if condition="($id_3['pid'] eq $j['id'])">active open</if>">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-caret-right"></i>
+							{$j.title}
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<!--三级菜单遍历-->
+							 <foreach name="dataaa" item="m">
+								<li class="<if condition="((CONTROLLER_NAME.'/'.ACTION_NAME) eq $m['name'])">active</if>">
+								<a href="{:U($m['name'])}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									{$m.title}
+								</a>
+								<b class="arrow"></b>
+								</li>
+							</foreach>
+							<!--三级菜单遍历结束-->
+						</ul>
+					</li>
+					</if>
+				</foreach>
+                <!--二级菜单遍历结束-->
+			</ul>
+			</li>
+		</foreach>
+        <!--一级菜单遍历结束-->
+	</ul><!-- 菜单栏结束 -->
+
+	<!-- 左侧菜单伸缩 -->
+	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+		<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+	</div>
+	<script type="text/javascript">
+		try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+	</script>
+</div>

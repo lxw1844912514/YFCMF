@@ -1,0 +1,267 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+    <!-- #section:basics/sidebar -->
+
+    <include file='Common:left' />
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="page-content">
+
+
+
+                <div class="row maintop">
+                    <div class="col-xs-12 col-sm-8">
+
+                        <button class="btn btn-xs btn-danger">
+                            <i class="ace-icon fa fa-database bigger-110"></i>
+                            <a id="export" href="javascript:;" style="color:#FFFFFF" autocomplete="off">备份当前数据</a>
+                        </button>
+                        <a id="optimize" href="{:U('optimize')}">
+                            <button class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-check-circle bigger-110"></i>
+                                优化数据表
+                            </button>
+                        </a>
+                        <a id="repair"  href="{:U('repair')}">
+                            <button class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-check-square-o bigger-110"></i>
+                                修复数据表
+                            </button>
+                        </a>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div>
+                            <form id="export-form" method="post"   class="form-horizontal"  action="{:U('export')}">
+                                <table class="table table-striped table-bordered table-hover" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th width="4%" align="center" style="text-align:center;">
+                                            <label class="pos-rel">
+                                                <input class="check-all ace" id='chkAll' checked="chedked" type="checkbox" value=""  onclick='CheckAll(this.form)'>
+                                                <span class="lbl"></span>
+                                            </label></th>
+                                        <th>表名</th>
+                                        <th class="hidden-sm hidden-xs">数据量</th>
+                                        <th class="hidden-sm hidden-xs">数据大小</th>
+                                        <th class="hidden-sm hidden-xs">创建时间</th>
+                                        <th style="border-right:#CCC solid 1px;">操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    <foreach name="data_list" item="v">
+                                        <tr>
+                                            <td height="28" align="center" >
+                                                <label class="pos-rel">
+                                                    <input class="ids ace" checked="chedked" type="checkbox" name="tables[]" value="{$v.name}">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </td>
+                                            <td>{$v.name}</td>
+                                            <td class="hidden-sm hidden-xs">【{$v.rows}】 条记录 </td>
+                                            <td class="hidden-sm hidden-xs">{$v.data_length|format_bytes}</td>
+                                            <td class="hidden-sm hidden-xs">{$v.create_time}</td>
+                                            <td>
+                                                <div class="hidden-sm hidden-xs action-buttons" >
+                                                    <a class="green" href="{:U('optimize?tables='.$v['name'])}" id="optimize_{$v['name']}" title="优化表">
+                                                        <i class="ace-icon fa fa-check-circle bigger-130"></i>
+                                                    </a>
+                                                    <a class="info" href="{:U('repair?tables='.$v['name'])}" id="repair_{$v['name']}" title="修复表">
+                                                        <i class="ace-icon fa fa-check-square-o bigger-130"></i>
+                                                    </a>
+                                                    <a class="info" href="{:U('exportsql?table='.$v['name'])}" title="备份表">
+                                                        <i class="ace-icon fa fa-download bigger-130"></i>
+                                                    </a>
+                                                </div>
+												<div class="hidden-md hidden-lg">
+													<div class="inline position-relative">
+														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+														</button>
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<li>
+																<a href="{:U('optimize?tables='.$v['name'])}" id="optimize_{$v['name']}"  class="tooltip-success" data-rel="tooltip" title="" data-original-title="优化表">
+																	<span class="green">
+																		<i class="ace-icon fa fa-check-circle bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+															<li>
+																<a href="{:U('repair?tables='.$v['name'])}" id="repair_{$v['name']}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修复表">
+																	<span class="green">
+																		<i class="ace-icon fa fa-check-square-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a href="{:U('exportsql?table='.$v['name'])}"  class="tooltip-error" data-rel="tooltip" title="" data-original-title="备份表">
+																	<span class="red">
+																		<i class="ace-icon fa fa-download bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                    <tr>
+                                        <td height="50" colspan="7" align="left">&nbsp;</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <include file='Common:header_nav' />
+
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+
+    <script type="text/javascript">
+
+
+        function unselectall(){
+            if(document.myform.chkAll.checked){
+                document.myform.chkAll.checked = document.myform.chkAll.checked&0;
+            }
+        }
+        function CheckAll(form){
+            for (var i=0;i<form.elements.length;i++){
+                var e = form.elements[i];
+                if (e.Name != 'chkAll'&&e.disabled==false)
+                    e.checked = form.chkAll.checked;
+            }
+        }
+
+        (function($){
+            $("a[id^=optimize_]").click(function(){
+                $.get(this.href,function(data) {
+                    if(data.status){
+                        layer.alert(data.info, {icon: 6});                        
+                    }else{
+                        layer.alert(data.info, {icon: 5});
+                    }
+                });
+				return false;
+            });
+            $("a[id^=repair_]").click(function(){
+                $.get(this.href,function(data) {
+                    if(data.status){
+                        layer.alert(data.info, {icon: 6});
+                    }else{
+                        layer.alert(data.info, {icon: 5});
+                    }
+                });
+				return false;
+            });
+			
+            var $form = $("#export-form"), $export = $("#export"), tables
+            $optimize = $("#optimize"), $repair = $("#repair");
+
+            $optimize.add($repair).click(function(){
+                $.post(this.href, $form.serialize(), function(data){
+                    if(data.status){
+                        layer.alert(data.info, {icon: 6}, function(index){
+                            layer.close(index);
+                            window.location.href=data.url;
+                        });
+                    } else {
+                        layer.alert(data.info, {icon: 5}, function(index){
+                            layer.close(index);
+                            //window.location.href="{:U('export')}";
+                        });
+                    }
+                    setTimeout(function(){
+                        $('#top-alert').find('button').click();
+                        $(that).removeClass('disabled').prop('disabled',false);
+                    },1500);
+                }, "json");
+                return false;
+            });
+
+            $export.click(function(){
+                $export.parent().children().addClass("disabled");
+                $export.html("正在发送备份请求...");
+                $.post(
+                        $form.attr("action"),
+                        $form.serialize(),
+                        function(data){
+                            if(data.status){
+                                tables = data.tables;
+                                $export.html(data.info + "开始备份，请不要关闭本页面！");
+                                backup(data.tab);
+                                window.onbeforeunload = function(){ return "正在备份数据库，请不要关闭！" }
+                            } else {
+								layer.alert(data.info, {icon: 5});
+                                //updateAlert(data.info,'alert-error');
+                                $export.parent().children().removeClass("disabled");
+                                $export.html("立即备份");
+                                setTimeout(function(){
+                                    $('#top-alert').find('button').click();
+                                    $(that).removeClass('disabled').prop('disabled',false);
+                                },1500);
+                            }
+                        },
+                        "json"
+                );
+                return false;
+            });
+
+            function backup(tab, status){
+                status && showmsg(tab.id, "开始备份...(0%)");
+                $.get($form.attr("action"), tab, function(data){
+                    if(data.status){
+                        showmsg(tab.id, data.info);
+                        if(!$.isPlainObject(data.tab)){
+                            $export.parent().children().removeClass("disabled");
+                            $export.html("备份完成，点击重新备份");
+                            window.onbeforeunload = function(){ return null }
+                            return;
+                        }
+                        backup(data.tab, tab.id != data.tab.id);
+                    } else {
+                        updateAlert(data.info,'alert-error');
+                        $export.parent().children().removeClass("disabled");
+                        $export.html("立即备份");
+                        setTimeout(function(){
+                            $('#top-alert').find('button').click();
+                            $(that).removeClass('disabled').prop('disabled',false);
+                        },1500);
+                    }
+                }, "json");
+
+            }
+
+            function showmsg(id, msg){
+                $form.find("input[value=" + tables[id] + "]").closest("tr").find(".info").html(msg);
+            }
+        })(jQuery);
+    </script>
+
+    <include file='Common:footer' />
+
+</div><!-- /.main-container -->
+</body>
+</html>

@@ -1,0 +1,212 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							邮件设置
+						</small>
+					</h1>
+				</div>
+
+				<script>
+
+					$(function(){
+						$('#sys').ajaxForm({
+							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+							success: complete, // 这是提交后的方法
+							dataType: 'json'
+						});
+
+						function checkForm(){
+							if( '' == $.trim($('#email_name').val())){
+								layer.alert('发送邮箱地址不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#email_name').focus();
+								});
+							}
+
+							if( '' == $.trim($('#email_emname').val())){
+								layer.alert('邮箱名不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#email_emname').focus();
+								});
+							}
+
+							if( '' == $.trim($('#email_rename').val())){
+								layer.alert('发件人姓名不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#email_rename').focus();
+								});
+							}
+
+							if( '' == $.trim($('#email_pwd').val())){
+								layer.alert('邮箱密码不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#email_pwd').focus();
+								});
+							}
+							
+							if( '' == $.trim($('#smtp_port').val())){
+								layer.alert('SMTP端口不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#smtp_port').focus();
+								});
+							}							
+
+							if( '' == $.trim($('#email_smtpname').val())){
+								layer.alert('smtp服务器名称不能为空', {icon: 5}, function(index){
+									layer.close(index);
+									$('#email_smtpname').focus();
+								});
+							}
+						}
+						function complete(data){
+							if(data.status==1){
+								layer.alert(data.info, {icon: 6}, function(index){
+									layer.close(index);
+									window.location.href="{:U('Sys/emailsys')}";
+								});
+							}else{
+								layer.alert(data.info, {icon: 5}, function(index){
+								layer.close(index);
+								//window.location.href="{:U('Sys/emailsys')}";
+								});
+							}
+							return false;
+						}
+
+					});
+				</script>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" name="sys" id="sys" method="post" action="{:U('runemail')}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启邮箱： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="options[email_open]" id="email_open" <if condition='$sys.email_open eq 1'>checked</if>  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl"></span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 发件人姓名： </label>
+								<div class="col-sm-9">
+									<input type="text" name="options[email_rename]" id="email_rename" value="{$sys.email_rename}"  class="col-xs-10 col-sm-5" />
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置发送邮箱： </label>
+								<div class="col-sm-9">
+									<input type="text" name="options[email_name]" id="email_name" value="{$sys.email_name}"  class="col-xs-10 col-sm-5" />
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> smtp服务器的名称： </label>
+								<div class="col-sm-9">
+									<input type="text" name="options[email_smtpname]" id="email_smtpname" value="{$sys.email_smtpname}"  class="col-xs-10 col-sm-5" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 连接方式： </label>
+								<div class="col-sm-9">
+									<select name="options[smtpsecure]"  class="col-xs-10 col-sm-5" >
+										<option value="" <if condition="$sys.smtpsecure eq ''">selected</if>>普通连接方式</option>
+										<option value="ssl" <if condition="$sys.smtpsecure eq 'ssl'">selected</if>>SSL连接方式</option>
+										<option value="tls" <if condition="$sys.smtpsecure eq 'tls'">selected</if>>TLS连接方式</option>
+									</select>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SMTP服务器端口： </label>
+								<div class="col-sm-9">
+									<input type="text" name="options[smtp_port]" id="smtp_port" value="{$sys.smtp_port}"  class="col-xs-10 col-sm-5" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置邮箱登录名： </label>
+								<div class="col-sm-9">
+									<input type="text" name="options[email_emname]" id="email_emname" value="{$sys.email_emname}"  class="col-xs-10 col-sm-5" />
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置邮箱密码： </label>
+								<div class="col-sm-9">
+									<input type="password" name="options[email_pwd]" id="email_pwd" value="{$sys.email_pwd}"  class="col-xs-10 col-sm-5" />
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resthr"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="clearfix form-actions">
+								<div class="col-sm-offset-3 col-sm-9">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										保存
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										重置
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					</div>
+				</div>
+				<!-- <div class="hr hr-24"></div> -->
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+
+	<include file='Common:footer' />
+
+
+	</body>
+	</html>

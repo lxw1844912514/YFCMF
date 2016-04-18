@@ -1,0 +1,329 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+	<!-- /section:basics/sidebar -->
+
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+				<div class="row maintop">
+					<form class="form-horizontal" name="plug_linktype_add" id="plug_linktype_add" method="post" action="{:U('plug_linktype_runadd')}">
+						<div class="col-xs-12 col-sm-12"><small class="sl-left10">栏目名称：</small>
+							<small>
+								<input name="plug_linktype_name" id="plug_linktype_name" class="rule"  placeholder=" 输入名称" /></small>&nbsp;&nbsp;<small class="sl-left10">排序（从小到大）：</small>
+							<small>
+								<input name="plug_linktype_order" id="plug_linktype_order" class="wh40" style="text-align:center" value="50"/></small>
+							<small>
+								<button class="btn btn-xs btn-danger ruleadd">
+									添加栏目
+								</button>
+							</small>
+						</div>
+					</form>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div>
+							<form id="linktype" name="linktype" method="post" action="{:U('linktype_order')}" >
+								<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+									<thead>
+									<tr>
+										<th>ID</th>
+										<th>栏目名称</th>
+										<th style="border-right:#CCC solid 1px;">排序</th>
+										<th style="border-right:#CCC solid 1px;">操作</th>
+									</tr>
+									</thead>
+
+									<tbody>
+
+									<foreach name="link_type" item="v">
+										<tr>
+											<td height="28">{$v.plug_linktype_id}</td>
+											<td>{$v.plug_linktype_name}</td>
+											<td><input name="{$v.plug_linktype_id}" value="{$v.plug_linktype_order}" class="list_order"/></td>
+											<td>
+												<div class="hidden-sm hidden-xs action-buttons">
+													<a class="green" href="javascript:;" onclick="return openWindow({$v.plug_linktype_id},'{$v.plug_linktype_name}',{$v.plug_linktype_order});" data-toggle="tooltip" title="修改">
+														<i class="ace-icon fa fa-pencil bigger-130"></i>
+													</a>
+													<a class="red del" href="{:U('plug_linktype_del',array('plug_linktype_id'=>$v['plug_linktype_id']))}" data-toggle="tooltip"  title="删除">
+														<i class="ace-icon fa fa-trash-o bigger-130"></i>
+													</a>
+												</div>
+												<div class="hidden-md hidden-lg">
+													<div class="inline position-relative">
+														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+														</button>
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<li>
+																<a class="green" href="javascript:;" onclick="return openWindow({$v.plug_linktype_id},'{$v.plug_linktype_name}',{$v.plug_linktype_order});" data-toggle="tooltip" title="修改">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a href="{:U('plug_linktype_del',array('plug_linktype_id'=>$v['plug_linktype_id']))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																	<span class="red">
+																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</foreach>
+									<tr>
+										<td colspan="5" align="left"><button type="submit"  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+									</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<include file='Common:header_nav' />
+
+
+				<!--修改模态框,对于参数比较少的时候适用-->
+				<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+					<form class="form-horizontal" name="plug_linktype_edit" id="plug_linktype_edit" method="post" action="{:U('plug_linktype_edit')}">
+						<input type="hidden" name="plug_linktype_id" id="plug_linktype_id" value="" />
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" id="gb" data-dismiss="modal"
+											aria-hidden="true">×
+									</button>
+									<h4 class="modal-title" id="myModalLabel">
+										修改友情链接栏目
+									</h4>
+								</div>
+								<div class="modal-body">
+
+
+									<div class="row">
+										<div class="col-xs-12">
+
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
+												<div class="col-sm-10">
+													<input type="text" name="plug_linktype_name" id="newplug_linktype_name"  class="col-xs-10 col-sm-5" />
+													<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
+												</div>
+											</div>
+											<div class="space-4"></div>
+
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+												<div class="col-sm-10">
+													<input type="text" name="plug_linktype_order" id="newplug_linktype_order" class="col-xs-10 col-sm-3" />
+													<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+												</div>
+											</div>
+											<div class="space-4"></div>
+
+										</div>
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">
+										提交保存
+									</button>
+									<button type="button" class="btn btn-default" id="gbb" data-dismiss="modal"
+											aria-hidden="true">关闭
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div><!--修改-->
+			</div><!-- /.main-container -->
+
+
+			<script>
+				$(function(){
+					$('#plug_linktype_add').ajaxForm({
+						beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+						success: complete, // 这是提交后的方法
+						dataType: 'json'
+					});
+
+					function checkForm(){
+						if( '' == $.trim($('#plug_linktype_name').val())){
+							layer.alert('栏目名称不能为空', {icon: 5}, function(index){
+								layer.close(index);
+								$('#plug_linktype_name').focus();
+							});
+							return false;
+						}
+					}
+					function complete(data){
+						if(data.status==1){
+							layer.alert(data.info, {icon: 6}, function(index){
+								layer.close(index);
+								window.location.href=data.url;
+							});
+						}else{
+							layer.alert(data.info, {icon: 5}, function(index){
+								layer.close(index);
+								window.location.href="{:U('plug_linktype_list')}";
+							});
+						}
+					}
+
+				});
+
+				//排序
+
+				$(function(){
+					$('#linktype').ajaxForm({
+						success: complete, // 这是提交后的方法
+						dataType: 'json'
+					});
+
+					function complete(data){
+						if(data.status==1){
+							layer.alert(data.info, {icon: 6}, function(index){
+								layer.close(index);
+								window.location.href=data.url;
+							});
+						}else{
+							layer.alert(data.info, {icon: 5}, function(index){
+								layer.close(index);
+								//window.location.href="{:U('plug_linktype_list')}";
+							});
+						}
+					}
+				});
+
+			</script>
+
+			<script>
+				$(function(){
+					//删除操作
+					var $del = $(".del");
+					$del.click(function(){
+						var $url=this.href;
+						layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
+						layer.close(index);
+						$.get($url, function(data){
+							if(data.status){
+								layer.alert(data.info, {icon: 6}, function(index){
+									layer.close(index);
+									window.location.href=data.url;
+								});
+							} else {
+								layer.alert(data.info, {icon: 5}, function(index){
+									layer.close(index);
+									//window.location.href="{:U('we_menu_list')}";
+								});
+							}
+						}, "json");
+						});
+						return false;
+					});
+				});
+				function stateyes(val){
+					$.post('{:U("admin_rule_state")}',
+							{x:val},
+							function(data){
+								if(data.status){
+									if(data.info=='状态禁止'){
+										var a='<button class="btn btn-minier btn-danger">隐藏状态</button>'
+										$('#zt'+val).html(a);
+										return false;
+									}else{
+										var b='<button class="btn btn-minier btn-yellow">显示状态</button>'
+										$('#zt'+val).html(b);
+										return false;
+									}
+								}else{
+									layer.alert(data.info, {icon: 5});
+								}
+							});
+					return false;
+				}
+
+				$(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+			</script>
+		</div><!-- /.page-content -->
+	</div>
+</div><!-- /.main-content -->
+<include file='Common:footer' />
+
+<script language="javascript">
+	$(document).ready(function(){
+		$("#myModal").hide();
+		$("#gb").click(function(){
+			$("#myModal").hide(200);
+		});
+		$("#gbb").click(function(){
+			$("#myModal").hide(200);
+		});
+		$("#gbbb").click(function(){
+			$("#myModal").hide(200);
+		});
+	});
+	function openWindow(a,b,c) {
+		$(document).ready(function(){
+			$("#myModal").show(300);
+			$("#plug_linktype_id").val(a);
+			$("#newplug_linktype_name").val(b);
+			$("#newplug_linktype_order").val(c);
+		});
+
+	}
+
+
+	$(function(){
+		$('#plug_linktype_edit').ajaxForm({
+			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			success: complete, // 这是提交后的方法
+			dataType: 'json'
+		});
+
+		function checkForm(){
+			if( '' == $.trim($('#newplug_linktype_name').val())){
+				layer.alert('友情链接名称不能为空', {icon: 5}, function(index){
+					layer.close(index);
+					$('#newplug_linktype_name').focus();
+				});
+				return false;
+			}
+
+		}
+		function complete(data){
+			if(data.status==1){
+				layer.alert(data.info, {icon: 6}, function(index){
+					layer.close(index);
+					window.location.href=data.url;
+				});
+			}else{
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+					window.location.href="{:U('plug_linktype_list')}";
+				});
+				return false;
+			}
+		}
+
+	});
+</script>
+
+</body>
+</html>

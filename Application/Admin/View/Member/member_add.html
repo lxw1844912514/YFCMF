@@ -1,0 +1,246 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							添加会员信息
+						</small>
+					</h1>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" name="member_list_add" id="member_list_add" method="post" action="{:U('member_runadd')}">
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
+								<div class="col-sm-10">
+									<select name="member_list_groupid"  class="col-sm-4 selector" >
+										<option value="">请选择所属用户组</option>
+										<foreach name="member_group" item="v">
+											<option value="{$v.member_group_id}">{$v.member_group_name}</option>
+										</foreach>
+									</select>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户名：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="member_list_username" id="member_list_username" placeholder="输入登录用户名" class="col-xs-10 col-sm-4" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填，用户名必须是以字母开头，数字、符号组合</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登入密码：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="member_list_pwd" id="member_list_pwd" placeholder="输入登录密码" class="col-xs-10 col-sm-4" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填，密码必须大于6位，小于15位</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 昵称：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="member_list_petname" id="member_list_petname" placeholder="输入昵称" class="col-xs-10 col-sm-4" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所在地：  </label>
+								<div class="col-sm-10">
+									<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:U('Ajax/getRegion')}');">
+										<option value="0" selected>省份/直辖市</option><volist name="province" id="vo">
+										<option value="{$vo.id}" >{$vo.name}</option></volist>
+									</select>
+									<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:U('Ajax/getRegion')}');">
+										<option value="0">市/县</option>
+									</select>
+									<select name="member_list_town" id="town">
+										<option value="0">镇/区</option>
+									</select>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 性别：  </label>
+								<div class="col-sm-10">
+									<label>
+										<input name="member_list_sex" type="radio" value="1" checked class="ace" />
+										<span class="lbl"> 男 </span>&nbsp;&nbsp;
+									</label>
+									<label>
+										<input name="member_list_sex" type="radio" value="2" class="ace" />
+										<span class="lbl"> 女 </span>
+									</label>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="member_list_tel" id="member_list_tel" placeholder="输入手机号码" class="col-xs-10 col-sm-4" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>只能填写数字</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系邮箱：  </label>
+								<div class="col-sm-10">
+									<input type="email" name="member_list_email" id="member_list_email" placeholder="输入联系邮箱" class="col-xs-10 col-sm-4" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填：用于找回密码</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+								<div class="col-sm-10" style="padding-top:5px;">
+									<input name="member_list_open" id="member_list_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="clearfix form-actions">
+								<div class="col-md-offset-3 col-md-9">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										保存
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										重置
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="hr hr-24"></div>
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+	<include file='Common:footer' />
+
+</div><!-- /.main-container -->
+
+<script type="text/javascript" src="__PUBLIC__/assets/js/region.js"></script>
+<script>
+
+	$(function(){
+		$('#member_list_add').ajaxForm({
+			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			success: complete, // 这是提交后的方法
+			dataType: 'json'
+		});
+
+		function checkForm(){
+
+			if( '' == $(".selector").val()){
+				layer.alert('会员所属用户组必须选择', {icon: 5}, function(index){
+					layer.close(index);
+					$('.selector').focus();
+				});
+				return false;
+			}
+
+			if( '' == $("#member_list_username").val()){
+				layer.alert('登录用户名不能为空', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_username').focus();
+				});
+				return false;
+			}
+
+			if( '' == $.trim($('#member_list_pwd').val())){
+				layer.alert('登录密码不能为空', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_pwd').focus();
+				});
+				return false;
+			}
+
+			if( $.trim($('#member_list_pwd').val()).length < 6 || $.trim($('#member_list_pwd').val()).length >15 ){
+				layer.alert('登录密码位数不能少于6位或者大于15位', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_pwd').focus();
+				});
+				return false;
+			}
+
+			if( '' == $.trim($('#member_list_petname').val())){
+				layer.alert('昵称不能为空', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_petname').focus();
+				});
+				return false;
+			}
+
+			if (!$("#member_list_tel").val().match(/^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/)) {
+				layer.alert('电话号码格式不正确', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_tel').focus();
+				});
+				return false;
+			}
+
+			if( '' == $.trim($('#member_list_email').val())){
+				layer.alert('邮箱不能为空', {icon: 5}, function(index){
+					layer.close(index);
+					$('#member_list_email').focus();
+				});
+				return false;
+			}
+
+
+
+
+		}
+		function complete(data){
+			if(data.status==1){
+				layer.alert(data.info, {icon: 6}, function(index){
+					layer.close(index);
+					window.location.href=data.url;
+				});
+			}else{
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+					window.location.href="{:U('member_list')}";
+				});
+				return false;
+			}
+		}
+
+	});
+</script>
+</body>
+</html>

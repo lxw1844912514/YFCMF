@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>
+<html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>
+<html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en"> <!--<![endif]-->
+
+<head>
+
+    <meta name="viewport" content="width=100%; initial-scale=1; maximum-scale=1; minimum-scale=1; user-scalable=no;" />
+    <link rel="icon" href="__PUBLIC__/style/default/images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="__PUBLIC__/style/default/images/favicon.png" type="image/png" />
+    <title>{$sys.sys_title}</title>
+    <meta name="keywords" content="{$sys.sys_key}">
+    <meta name="description" content="{$sys.sys_des}">
+
+    <link href="__PUBLIC__/style/default/css/bootstrap.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/style/default/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/style/default/css/prettyPhoto.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.quicksand.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/superfish.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/hoverIntent.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.hoverdir.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jflickrfeed.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.elastislide.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.tweet.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/smoothscroll.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.ui.totop.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/ajax-mail.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/accordion.settings.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/style/default/js/jquery.flexslider-min.js"></script>
+
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+
+<body>
+
+<include file='Default:Common:header'/>
+
+<div class="copyrights">Collect from <a href=""  title="厦门庆典">厦门庆典</a></div>
+<section id="slider">
+    <div class="flexslider">
+        <ul class="slides">
+            <foreach name="plug_ad" item="v">
+                <li>
+                    <img src="__PUBLIC__/{$v.plug_ad_pic}" />
+                </li>
+            </foreach>
+        </ul>
+    </div>
+</section>
+<section id="welcome">
+    <h1>欢迎进入 <span class="color2">净悦庆典 </span>让我们来指引您更好的了解我们的网站 .
+    </h1>
+
+    <p class="color3"> – 时尚高端婚礼品牌强势入驻，联手打造专业，品质一流的行业高度 –</p>
+    <!--Button group goes here-->
+    <span class="read-buttons"><a href="/index.php/list/15" target="_blank"><button class="btn btn-more" type="button">服务项目</button></a><em> -or- </em><a href="/index.php/list/13" target="_blank"><button class="btn btn-more" type="button">成功案例</button></a></span>
+</section>
+<section id="container">
+    <div class="container">
+        <!--Recent Projects Block-->
+        <div class="row">
+            <div class="span3">
+                <h3>成功案例<div style="float:right; width:100px; height:20px; color:#FF0000; font-size:14px;">点击我>></div></h3>
+                <p class="hidden-phone">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;厦门净悦庆典有限公司在各项庆典活动中都有不错的成绩，公关活动、品牌推广、年会庆典、模特礼仪、商业演出、会展服务为一体的专业化综合传媒机构。<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们的成功案例展现我们的实力，力求完美，用心服务。
+                </p>
+                <a class="read-more hidden-phone" href="/index.php/list/12">更多>>...</a>
+            </div>
+            <div class="span9">
+                <div class="carousel btleft" id="latest-work">
+                    <div class="carousel-wrapper">
+                        <ul class="da-thumbs" style="width: 1800px; display: block; margin-left: 0px;">
+
+                            <foreach name="case" item="v">
+                                <li style="margin-right: 30px; width: 270px;">
+                                    <img src="__PUBLIC__/{$v.news_img}" />
+                                    <div style="display: block;" class="da-animate da-slideFromLeft">
+                                        <a data-rel="prettyPhoto" class="p-view" href="__PUBLIC__/{$v.news_img}" rel="prettyPhoto"></a>
+                                    </div>
+                                </li>
+                            </foreach>
+
+                        </ul>
+                    </div>
+
+                    <div class="es-nav"><span class="es-nav-prev" style="opacity: 0.5;">Previous</span><span class="es-nav-next" style="opacity: 1;">Next</span></div></div>
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $('#latest-work').elastislide({
+                            imageW  : 270,
+                            margin  : 30
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="divider">
+            <img alt="" src="__PUBLIC__/style/default/images/div-bg.jpg" />
+        </div>
+        <!--3 columns block-->
+        <div class="row bottom30">
+            <div class="span4 features-block">
+
+                <img class="im-bottom" src="__PUBLIC__/style/default/images/icon3a.png" />
+                <img class="im-top" src="__PUBLIC__/style/default/images/icon3.png" />
+                <h3>我们的服务</h3>
+
+                <p>服务于心，服务大型庆典活动、会议会务服务、婚礼婚庆策划、设备租赁租售、公关企划推广等整体解决方案，创新的设计理念给您不一样的现场体验。</p>
+                <a href="__APP__/list/15"><button class="btn btn-read" type="button">更多>></button></a>
+            </div>
+            <div class="span4 features-block">
+                <img class="im-bottom" src="__PUBLIC__/style/default/images/icon1a.png" />
+                <img class="im-top" src="__PUBLIC__/style/default/images/icon1.png" />
+                <h3>我们的设备</h3>
+
+                <p>我们拥有会场布置、灯光音效、设计、摄影、庆典整体解决方案等系列配套设置为客户提供一流的、专业的服务，在成功的路上让我们为您助力。</p>
+                <a href="__APP__/list/14"><button class="btn btn-read" type="button">更多>></button></a>
+            </div>
+            <div class="span4 features-block">
+                <style>
+                    .index_news{ width:100%; height:85px;}
+                    .index_news ul{ margin-top:20px;}
+                    .index_news ul li{ line-height:30px;}
+                </style>
+                <img class="im-bottom" src="__PUBLIC__/style/default/images/icon2a.png" />
+                <img class="im-top" src="__PUBLIC__/style/default/images/icon2.png" />
+                <h3>行业新闻</h3>
+                <div class="index_news">
+                    <ul>
+                        <foreach name="news_3" item="v">
+                            <li><a href="__APP__/con/{$v.n_id}" target="_blank">{$v.news_title}</a></li>
+                        </foreach>
+                    </ul>
+                </div>
+                <a href="__APP__/list/8"><button class="btn btn-read" type="button">更多>></button></a>
+            </div>
+
+        </div>
+
+    </div></section>
+
+<!--footer-->
+<include file='Default:Common:footer'/>
+
+</body>
+</html>

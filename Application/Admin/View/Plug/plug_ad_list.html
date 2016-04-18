@@ -1,0 +1,430 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+				<div class="row maintop">
+					<div class="col-xs-12 col-sm-1">
+						<!-- 点击模态框（Modal） -->
+						<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModal">
+							<i class="ace-icon fa fa-bolt bigger-110"></i>
+							添加广告
+						</button>
+
+					</div>
+
+					<div class="col-xs-12 col-sm-3">
+						<form name="admin_list_sea" class="form-search" method="post" action="{:U('plug_ad_list')}">
+							<div class="input-group">
+										<span class="input-group-addon">
+											<i class="ace-icon fa fa-check"></i>
+										</span>
+								<input type="text" name="key" id="key" class="form-control search-query admin_sea" value="{$val}" placeholder="输入广告名称" />
+										<span class="input-group-btn">
+											<button type="submit" class="btn btn-xs  btn-purple">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												搜索
+											</button>
+										</span>
+							</div>
+						</form>
+					</div>
+					<div class="input-group-btn">
+						<a href="{:U('plug_ad_list')}">
+							<button type="button" class="btn btn-xs  btn-purple">
+								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+								显示全部
+							</button>
+						</a>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div>
+							<form id="plug_ad_allorder" name="plug_ad_allorder" method="post" action="{:U('plug_ad_order')}" >
+								<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+									<thead>
+									<tr>
+										<th class="hidden-xs">ID</th>
+										<th>广告名称</th>
+										<th class="hidden-sm hidden-xs">所属位置</th>
+										<th class="hidden-sm hidden-xs">添加时间</th>
+										<th>排序</th>
+										<th>状态</th>
+										<th style="border-right:#CCC solid 1px;">操作</th>
+									</tr>
+									</thead>
+
+									<tbody>
+
+									<foreach name="plug_ad_list" item="v">
+										<tr>
+											<td class="hidden-xs" height="28" >{$v.plug_ad_id}</td>
+											<td><a href="{$v.plug_ad_url}" target="_blank">{$v.plug_ad_name}</a></td>
+											<td class="hidden-sm hidden-xs">位置</td>
+											<td class="hidden-sm hidden-xs">{$v.plug_ad_addtime|date='Y-m-d',###}</td>
+											<td><input name="{$v.plug_ad_id}" value=" {$v.plug_ad_order}" class="list_order"/></td>
+											<td>
+												<if condition='$v[plug_ad_open] eq 1'>
+													<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_ad_id});" title="已开启">
+														<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+													</a>
+													<else/>
+													<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_ad_id});" title="已禁用">
+														<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+													</a>														</if>														</td>
+											<td>
+												<div class="hidden-sm hidden-xs action-buttons">
+													<a class="green"  href="{:U('plug_ad_edit',array('plug_ad_id'=>$v['plug_ad_id']))}" title="修改">
+														<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
+													<a class="red del" href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}" title="删除">
+														<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
+												<div class="hidden-md hidden-lg">
+													<div class="inline position-relative">
+														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+														</button>
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<li>
+																<a href="{:U('plug_ad_edit',array('plug_ad_id'=>$v['plug_ad_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																	<span class="red">
+																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</foreach>
+									<tr>
+										<td height="50" align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+										<td height="50" colspan="6" align="right">{$page}</td>
+									</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+	<!-- 显示模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<form class="form-horizontal" name="plug_ad_add" id="plug_ad_add" method="post" action="{:U('plug_ad_runadd')}">
+			<div class="modal-dialog" style="width:1200px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							添加广告
+						</h4>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="row">
+							<div class="col-xs-12">
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属位置： </label>
+									<div class="col-sm-11">
+										<select name="plug_ad_adtypeid"  class="col-sm-4 selector" >
+											<option value="">请选择所属广告位</option>
+											<foreach name="plug_adtype_list" item="v">
+												<option value="{$v.plug_adtype_id}">{$v.plug_adtype_name}</option>
+											</foreach>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告名称：  </label>
+									<div class="col-sm-11">
+										<input type="text" name="plug_ad_name" id="plug_ad_name" placeholder="输入广告名称" class="col-xs-10 col-sm-5" />
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告模式： </label>
+									<div class="col-sm-11">
+										<div class="radio" >
+											<label>
+												<input name="plug_ad_checkid" id="plug_ad_checkid" checked type="radio" class="ace" value="1"/>
+												<span class="lbl"> 图片模式</span>
+											</label>
+											<label>
+												<input name="plug_ad_checkid" id="plug_ad_checkjsid" type="radio" class="ace" value="2"/>
+												<span class="lbl"> JS代码</span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group" id="pic_jslist">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> JS代码：  </label>
+									<div class="col-sm-11">
+										<input type="text" name="plug_ad_js" id="plug_ad_js" placeholder="输入JS代码" class="col-xs-10 col-sm-8" />
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group" id="pic_list">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告图片： </label>
+									<div class="col-sm-11">
+										<a href="javascript:;" class="file">
+											<input type="file" name="file0" id="file0" multiple="multiple"/>
+											选择上传文件
+										</a>
+										<a href="javascript:;" onclick="return backpic('__PUBLIC__/img/no_img.jpg');" title="还原修改前的图片" class="file">
+											撤销上传
+										</a>
+
+										<div><img src="__PUBLIC__/img/no_img.jpg" height="70" id="img0" ></div>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group" id="pic_listurl">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
+									<div class="col-sm-11">
+										<input type="text" name="plug_ad_url" id="plug_ad_url" placeholder="输入链接URL" class="col-xs-10 col-sm-8" />
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+									<div class="col-sm-11" style="padding-top:5px;">
+										<input name="plug_ad_open" id="plug_ad_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+									<div class="col-sm-11">
+										<input type="text" name="plug_ad_order" id="plug_ad_order" value="50" class="col-xs-10 col-sm-3" />
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+							</div>
+						</div>
+
+
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">
+							提交保存
+						</button>
+						<button class="btn btn-info" type="reset">
+							重置
+						</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</form>
+	</div><!-- /.modal -->
+
+
+
+
+
+	<script>
+		$(function(){
+			//删除操作
+			var $del = $(".del");
+			$del.click(function(){
+				var $url=this.href;
+				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
+				layer.close(index);
+				$.get($url, function(data){
+					if(data.status){
+						layer.alert(data.info, {icon: 6}, function(index){
+							layer.close(index);
+							window.location.href=data.url;
+						});
+					} else {
+						layer.alert(data.info, {icon: 5}, function(index){
+							layer.close(index);
+							//window.location.href="{:U('we_menu_list')}";
+						});
+					}
+				}, "json");
+				});
+				return false;
+			});
+		});
+
+		function stateyes(val){
+			$.post('{:U("plug_ad_state")}',
+					{x:val},
+					function(data){
+						if(data.status){
+							if(data.info=='状态禁止'){
+								var a='<button class="btn btn-minier btn-danger">禁用</button>'
+								$('#zt'+val).html(a);
+								return false;
+							}else{
+								var b='<button class="btn btn-minier btn-yellow">开启</button>'
+								$('#zt'+val).html(b);
+								return false;
+							}
+						}else{
+							layer.alert(data.info, {icon: 5});
+						}
+					});
+			return false;
+		}
+
+		//添加操作
+		$(function(){
+			$('#plug_ad_add').ajaxForm({
+				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+				success: complete, // 这是提交后的方法
+				dataType: 'json'
+			});
+
+			function checkForm(){
+				if( '' == $(".selector").val()){
+					layer.alert('所属广告位不能为空', {icon: 5}, function(index){
+						layer.close(index);
+						$('.selector').focus();
+					});
+					return false;
+				}
+
+				if( '' == $.trim($('#plug_ad_name').val())){
+					layer.alert('广告名称不能为空', {icon: 5}, function(index){
+						layer.close(index);
+						$('#plug_ad_name').focus();
+					});
+					return false;
+				}
+			}
+			function complete(data){
+				if(data.status==1){
+					layer.alert(data.info, {icon: 6}, function(index){
+						layer.close(index);
+						window.location.href=data.url;
+					});
+				}else{
+					layer.alert(data.info, {icon: 5}, function(index){
+						layer.close(index);
+						window.location.href="{:U('plug_ad_list')}";
+					});
+					return false;
+				}
+			}
+		});
+
+
+		$("#file0").change(function(){
+			var objUrl = getObjectURL(this.files[0]) ;
+			console.log("objUrl = "+objUrl) ;
+			if (objUrl) {
+				$("#img0").attr("src", objUrl) ;
+			}
+		}) ;
+
+		//建立一個可存取到該file的url
+		function getObjectURL(file) {
+
+			var url = null ;
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(file) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(file) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(file) ;
+			}
+			return url ;
+		}
+
+
+		function backpic(picurl){
+			$("#img0").attr("src",picurl);//还原修改前的图片
+			$("input[name='file0']").val("");//清空文本框的值
+		}
+
+		//批量排序
+		$(function(){
+			$('#plug_ad_allorder').ajaxForm({
+				success: complete, // 这是提交后的方法
+				dataType: 'json'
+			});
+			function complete(data){
+				if(data.status==1){
+					layer.alert(data.info, {icon: 6}, function(index){
+						layer.close(index);
+						window.location.href=data.url;
+					});
+				}else{
+					layer.alert(data.info, {icon: 5}, function(index){
+						layer.close(index);
+						//window.location.href="{:U('plug_ad_list')}";
+					});
+				}
+			}
+		});
+
+		$(document).ready(function(){
+			$("#pic_jslist").hide();
+
+			$("#plug_ad_checkjsid").click(function(){
+				$("#pic_jslist").show();
+				$("#pic_list").hide();
+				$("#pic_listurl").hide();
+			});
+
+			$("#plug_ad_checkid").click(function(){
+				$("#pic_jslist").hide();
+				$("#pic_list").show();
+				$("#pic_listurl").show();
+			});
+		});
+
+	</script>
+	<include file='Common:footer' />
+
+</div><!-- /.main-container -->
+</body>
+</html>

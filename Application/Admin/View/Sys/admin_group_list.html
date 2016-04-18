@@ -1,0 +1,177 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<div class="row maintop">
+					<div class="col-xs-12 col-sm-2">
+						<a href="{:U('admin_group_add')}">
+							<button class="btn btn-xs btn-danger">
+								<i class="ace-icon fa fa-bolt bigger-110"></i>
+								添加用户组
+							</button>
+						</a>
+					</div>
+				</div>
+
+
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div>
+							<form id="leftnav" name="leftnav" method="post" action="" >
+								<input type="hidden" name="checkk" id="checkk" value="1" /><!--用于判断操作类型-->
+								<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+									<thead>
+									<tr>
+										<th>ID</th>
+										<th>用户组名</th>
+										<th>状态</th>
+										<th class="hidden-sm hidden-xs">添加时间</th>
+										<th style="border-right:#CCC solid 1px;">操作</th>
+									</tr>
+									</thead>
+
+									<tbody>
+
+									<foreach name="auth_group" item="v">
+										<tr>
+											<td height="28">{$v.id}</td>
+											<td>{$v.title}</td>
+											<td id="h{$v.id}">
+												<if condition='$v[status] eq 1'>
+													<a class="red" href="javascript:;" onclick="return stateyes({$v.id});" title="已开启">
+														<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+													</a>
+													<else/>
+													<a class="red" href="javascript:;" onclick="return stateyes({$v.id});" title="已禁用">
+														<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+													</a>
+												</if>
+											</td>
+											<td class="hidden-sm hidden-xs">{$v.addtime|date='Y-m-d',###}</td>
+											<td>
+												<div class="hidden-sm hidden-xs action-buttons">
+													<a class="blue" href="{:U('admin_group_access',array('id'=>$v['id']))}" title="配置规则">
+														<i class="ace-icon fa fa-cog bigger-130"></i>
+													</a>
+													<a class="green" href="{:U('admin_group_edit',array('id'=>$v['id']))}" title="修改">
+														<i class="ace-icon fa fa-pencil bigger-130"></i>
+													</a>
+													<a class="red del" href="{:U('admin_group_del',array('id'=>$v['id']))}" title="删除">
+														<i class="ace-icon fa fa-trash-o bigger-130"></i>
+													</a>
+												</div>
+												<div class="hidden-md hidden-lg">
+													<div class="inline position-relative">
+														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+														</button>
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<li>
+																<a href="{:U('admin_group_access',array('id'=>$v['id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="配置规则">
+																	<span class="green">
+																		<i class="ace-icon fa fa-cog bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+															<li>
+																<a href="{:U('admin_group_edit',array('id'=>$v['id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a href="{:U('admin_group_del',array('id'=>$v['id']))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																	<span class="red">
+																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</foreach>
+									<tr>
+										<td height="50" colspan="6" align="left">&nbsp;</td>
+									</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+
+	<script>
+		$(function(){
+			//删除操作
+			var $del = $(".del");
+			$del.click(function(){
+				var $url=this.href;
+				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
+				layer.close(index);
+				$.get($url, function(data){
+					if(data.status){
+						layer.alert(data.info, {icon: 6}, function(index){
+							layer.close(index);
+							window.location.href=data.url;
+						});
+					} else {
+						layer.alert(data.info, {icon: 5}, function(index){
+							layer.close(index);
+						});
+					}
+				}, "json");
+				});
+				return false;
+			});
+		});
+
+		function stateyes(val){
+			$.post('{:U("admin_group_state")}',
+					{x:val},
+					function(data){
+						if(data.status){
+							if(data.info=='状态禁止'){
+								var a='<button class="btn btn-minier btn-danger">禁用</button>'
+								$('#zt'+val).html(a);
+								return false;
+							}else{
+								var b='<button class="btn btn-minier btn-yellow">开启</button>'
+								$('#zt'+val).html(b);
+								return false;
+							}
+
+						}else{
+							layer.alert(data.info, {icon: 5});
+						}
+					});
+			return false;
+		}
+	</script>
+	<include file='Common:footer' />
+
+</div><!-- /.main-container -->
+</body>
+</html>

@@ -1,0 +1,194 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							个人中心
+						</small>
+					</h1>
+				</div>
+				<div>
+					<div id="user-profile-1" class="user-profile row">
+						<div class="col-xs-12 col-sm-3 center">
+							<div>
+								<!-- #section:pages/profile.picture -->
+												<span class="profile-picture">
+													<img id="avatar" class="editable img-responsive" src="__PUBLIC__/img/girl.jpg" width="150"  data-toggle="modal" data-target="#myModal" />
+												</span>
+
+								<!-- /section:pages/profile.picture -->
+								<div class="space-4"></div>
+								<div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+									<div class="inline position-relative">
+										<a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+											<i class="ace-icon fa fa-circle light-green"></i>
+											&nbsp;
+											<span class="white">用户名</span>
+										</a>
+									</div>
+								</div>
+							</div>
+
+							<div class="space-6"></div>
+
+							<!-- #section:pages/profile.contact -->
+							<div class="profile-contact-info">
+								<div class="profile-contact-links align-left">
+									<a href="#" class="btn btn-link">
+										<i class="ace-icon fa fa-plus-circle bigger-120 green"></i>
+										修改个人资料
+									</a>
+
+									<a href="#" class="btn btn-link">
+										<i class="ace-icon fa fa-envelope bigger-120 pink"></i>
+										发送站内邮件													</a>
+
+									<a href="#" class="btn btn-link">
+										<i class="ace-icon fa fa-globe bigger-125 blue"></i>
+										修改登录密码
+									</a>												</div>
+
+								<div class="space-6"></div>
+
+								<!--												<div class="profile-social-links align-center">
+                                                                                    <a href="#" class="tooltip-info" title="" data-original-title="Visit my Facebook">
+                                                                                        <i class="middle ace-icon fa fa-facebook-square fa-2x blue"></i>													</a>
+
+                                                                                    <a href="#" class="tooltip-info" title="" data-original-title="Visit my Twitter">
+                                                                                        <i class="middle ace-icon fa fa-twitter-square fa-2x light-blue"></i>													</a>
+
+                                                                                    <a href="#" class="tooltip-error" title="" data-original-title="Visit my Pinterest">
+                                                                                        <i class="middle ace-icon fa fa-pinterest-square fa-2x red"></i>													</a>												</div>
+                                -->											</div>
+
+							<!-- /section:pages/profile.contact -->
+							<div class="hr hr12 dotted"></div>
+
+							<!-- #section:custom/extra.grid -->
+							<div class="clearfix">
+								<div class="grid2">
+									<span class="bigger-175 blue">25</span>
+
+									<br />
+									登录次数												</div>
+
+								<div class="grid2">
+									<span class="bigger-175 blue">12</span>
+
+									<br />
+									Following												</div>
+							</div>
+
+							<!-- /section:custom/extra.grid -->
+							<div class="hr hr16 dotted"></div>
+						</div>
+
+						<div class="col-xs-12 col-sm-9">
+
+							<!-- #section:pages/profile.info -->
+							<div class="profile-user-info profile-user-info-striped">
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 用户名 </div>
+
+									<div class="profile-info-value">
+										<span class="editable" id="username">alexdoe</span>													</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 所在位置 </div>
+
+									<div class="profile-info-value">
+										<i class="fa fa-map-marker light-orange bigger-110"></i>
+										<span class="editable" id="city">福建省龙岩市新罗区闽西交一次</span>													</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 联系电话 </div>
+
+									<div class="profile-info-value">
+										<span class="editable" id="age">156156431354</span>													</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 真实姓名 </div>
+
+									<div class="profile-info-value">
+										<span class="editable" id="signup">沈利</span>													</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 最后一次登录 </div>
+
+									<div class="profile-info-value">
+										<span class="editable" id="login">3 hours ago</span>													</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name"> 此次登录IP </div>
+
+									<div class="profile-info-value">
+										<span class="editable" id="about">127.0.0.1</span>													</div>
+								</div>
+							</div>
+
+							<!-- /section:pages/profile.info -->
+							<div class="space-20"></div>
+
+							<div class="widget-box transparent">
+								<div class="widget-header widget-header-small">
+									<h4 class="widget-title blue profile-info-name">
+										<i class="ace-icon fa fa-rss orange"></i>
+										消息动态
+									</h4>
+
+									<!--													<div class="widget-toolbar action-buttons">
+                                                                                            <a href="#" data-action="reload">
+                                                                                                <i class="ace-icon fa fa-refresh blue"></i>														</a>
+                                    &nbsp;
+                                                                                            <a href="#" class="pink">
+                                                                                                <i class="ace-icon fa fa-trash-o"></i>														</a>													</div>-->
+								</div>
+
+								<div class="widget-body">
+									<div class="widget-main padding-8">
+										<!-- #section:pages/profile.feed -->
+										<div id="profile-feed-1" class="profile-feed">
+
+											<!-- /section:pages/profile.feed -->
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<include file='Common:header_nav' />
+
+				</div><!-- /.page-content -->
+			</div>
+		</div><!-- /.main-content -->
+
+
+		<include file='Common:footer' />
+
+
+		</body>
+		</html>

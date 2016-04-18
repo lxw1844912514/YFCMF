@@ -1,0 +1,77 @@
+<!--/start-footer-section-->
+<div class="footer-section">
+	<div class="container">
+		<div class="footer-grids wow bounceIn animated" data-wow-delay="0.4s">
+			<div class="col-md-3 footer-grid">
+				<h4>公司简介</h4>
+				<div class="border2"></div>
+				<p>羽冉彩妆——是专注于为新人打造韩明星范儿的专业彩妆机构，本机构汇聚一批时尚新势力化妆造型师。</p>
+				<p class="sub">羽冉彩妆造型团队一直在努力并不断开拓最时尚前卫的彩妆领域，致力于将美丽事业进行到底。用手塑造形象，给您最靓最完美妆容，打造最适合您的整体造型。</p>
+			</div>
+			<div class="col-md-3 footer-grid tags">
+				<h4>友情链接</h4>
+				<div class="border2"></div>
+				<ul class="tag">
+					<li><a href="http://www.baidu.com" target="_blank">百度一下</a></li>
+
+				</ul>
+			</div>
+
+			　　
+			<div class="col-md-3 footer-grid tweet">
+				<h4>联系方式</h4>
+				<div class="border2"></div>
+
+				<div class="icon-text">
+					<p>联系人：何婕/Jane 首席化妆造型师</p>
+					<h5>咨询QQ： 254395606</h5>
+					<p>联系电话：15000255944</p>
+					<p>网址：www.shyuran.com</p>
+				</div>
+			</div>
+
+			<div class="col-md-3 footer-grid flickr">
+				<h4>微信公众号</h4>
+				<div class="border2"></div>
+				<div class="flickr-grids">
+					<div class="flickr-grid">
+						<img src="__PUBLIC__/style/sister/images/weixin.jpg" width="150" title="weixin" />
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<!--//end-footer-section-->
+
+<!--start-smoth-scrolling-->
+<script type="text/javascript" src="__PUBLIC__/style/sister/js/move-top.js"></script>
+<script type="text/javascript" src="__PUBLIC__/style/sister/js/easing.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+		});
+	});
+</script>
+<!--start-smoth-scrolling-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		/*
+		 var defaults = {
+		 containerID: 'toTop', // fading element id
+		 containerHoverID: 'toTopHover', // fading element hover id
+		 scrollSpeed: 1200,
+		 easingType: 'linear'
+		 };
+		 */
+
+		$().UItoTop({ easingType: 'easeOutQuart' });
+
+	});
+</script>
+<a href="#head" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+
