@@ -55,7 +55,7 @@
 							</button>
 						</a>
 						<foreach name="link_type" item="v">
-							<a href="{:U('plug_link_list',array('type'=>$v.plug_linktype_id))}">
+							<a href="{:U('plug_link_list',array('type'=>$v['plug_linktype_id']))}">
 								<button class="btn btn-xs btn-warning">
 									{$v.plug_linktype_name}
 								</button>
