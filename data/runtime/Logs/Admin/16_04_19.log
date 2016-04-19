@@ -1,0 +1,20 @@
+[ 2016-04-19T08:21:48+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Login&a=runlogin
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001329s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002353s ]
+NOTIC: [8] Undefined index: admin_changepwd C:\wamp\www\ace\Application\Admin\Controller\LoginController.class.php 第 54 行.
+
+[ 2016-04-19T08:24:22+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001617s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002706s ]
+
+[ 2016-04-19T08:31:03+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Index&a=index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000052s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000283s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001585s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001843s ]
+ERR: 没有定义数据库配置
+

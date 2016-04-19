@@ -1,0 +1,36 @@
+[ 2016-04-18T14:47:11+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001621s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002682s ]
+
+[ 2016-04-18T14:47:49+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001429s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002427s ]
+
+[ 2016-04-18T14:49:09+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001494s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002452s ]
+
+[ 2016-04-18T14:49:25+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001731s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002756s ]
+
+[ 2016-04-18T14:49:34+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001204s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002037s ]
+
+[ 2016-04-18T14:55:47+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=Login&a=runlogin
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001833s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002842s ]
+NOTIC: [8] Undefined index: admin_changepwd C:\wamp\www\ace\Application\Admin\Controller\LoginController.class.php 第 54 行.
+
+[ 2016-04-18T16:21:30+08:00 ] 127.0.0.1 /ace/index.php?m=Admin&c=News&a=news_alldel
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001223s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002098s ]
+
