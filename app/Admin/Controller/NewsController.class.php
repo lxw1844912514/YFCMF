@@ -239,8 +239,12 @@ class NewsController extends AuthController {
 
 	public function news_del(){
 		$p=I('p');
-		M('news')->where(array('n_id'=>I('n_id')))->setField('news_back',1);//转入回收站
-		$this->redirect('news_list', array('p' => $p));
+		$rst=M('news')->where(array('n_id'=>I('n_id')))->setField('news_back',1);//转入回收站
+		if($rst){
+			$this->success('文章已转入回收站',U('news_list',array('p' => $p)),1);
+		}else{
+			$this -> error("删除文章失败！");
+		}
 	}
 	public function news_alldel(){
 		$p = I('p');
@@ -274,8 +278,12 @@ class NewsController extends AuthController {
 	//回收站
 	public function news_back_open(){
 		$p=I('p');
-		M('news')->where(array('n_id'=>I('n_id')))->setField('news_back',0);//转入正常
-		$this->redirect('news_back', array('p' => $p));
+		$rst=M('news')->where(array('n_id'=>I('n_id')))->setField('news_back',0);//转入正常
+		if($rst){
+			$this->success('文章还原成功',U('news_back',array('p' => $p)),1);
+		}else{
+			$this -> error("文章还原失败！");
+		}
 	}
 
 	public function news_back(){
@@ -326,8 +334,12 @@ class NewsController extends AuthController {
 		if (empty($n_id)){
 			$this->error('参数错误',U('news_back'),0);
 		}else{
-			$news_back=M('news')->where(array('n_id'=>I('n_id')))->delete();
-			$this->redirect('news_back', array('p' => $p));
+			$rst=M('news')->where(array('n_id'=>I('n_id')))->delete();
+			if($rst){
+				$this->success('文章彻底删除成功',U('news_back',array('p' => $p)),1);
+			}else{
+				$this -> error("文章彻底删除失败！");
+			}
 		}
 	}
 
@@ -392,8 +404,12 @@ class NewsController extends AuthController {
 	//删除栏目
 	public function news_column_del(){
 		M('column')->where(array('c_id'=>I('c_id')))->delete();
-		M('column')->where(array('column_leftid'=>I('c_id')))->delete();
-		$this->redirect('news_column_list');
+		$rst=M('column')->where(array('column_leftid'=>I('c_id')))->delete();
+		if($rst){
+			$this->success('栏目删除成功',U('news_column_list'),1);
+		}else{
+			$this -> error("栏目删除失败！");
+		}
 	}
 
 

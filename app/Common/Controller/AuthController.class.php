@@ -11,8 +11,6 @@ use Think\Auth;
 class AuthController extends CommonController {
 	//初始化
 	protected function _initialize(){
-		//自动运行，为了判断左侧导航、右侧导航的选中状态,S为导航ID
-		session('se',I('se'));
 
 		//未登陆，不允许直接访问
 		if(!$_SESSION['aid']){

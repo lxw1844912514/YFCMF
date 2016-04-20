@@ -1,0 +1,133 @@
+[ 2016-04-20T17:40:01+08:00 ] ::1 /ace/index.php?m=Admin&c=Login&a=runlogin
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+NOTIC: [8] Undefined index: admin_changepwd C:\wamp\www\ace\app\Admin\Controller\LoginController.class.php 第 54 行.
+
+[ 2016-04-20T18:07:09+08:00 ] ::1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+
+[ 2016-04-20T18:14:26+08:00 ] ::1 /ace/index.php?m=Admin&c=Ueditor&a=upload&action=uploadscrawl&
+ERR: _STORAGE_WRITE_ERROR_:http://localhost/ace/data/upload/2016-04-20/571756827259b.png
+
+[ 2016-04-20T18:28:22+08:00 ] ::1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T18:50:13+08:00 ] ::1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T18:56:46+08:00 ] ::1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:01:12+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_runadd
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Undefined index: pic_one C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 76 行.
+NOTIC: [8] Undefined index: pic_all C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 76 行.
+NOTIC: [2] Invalid argument supplied for foreach() C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 105 行.
+NOTIC: [8] Undefined variable: picall_url C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 123 行.
+NOTIC: [8] Undefined variable: img_url C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 125 行.
+
+[ 2016-04-20T19:01:51+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_del&n_id=13&p=1
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:01:51+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_list&p=1
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+NOTIC: [8] Use of undefined constant news_title - assumed 'news_title' C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 10 行.
+NOTIC: [8] Undefined offset: 1 C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 18 行.
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.071004s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.071004s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:08:06+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_del&n_id=12&p=1
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:08:06+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_list&p=1
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Use of undefined constant news_title - assumed 'news_title' C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 10 行.
+NOTIC: [8] Undefined offset: 1 C:\wamp\www\ace\app\Admin\Controller\NewsController.class.php 第 18 行.
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+NOTIC: [8] Use of undefined constant news_open - assumed 'news_open' C:\wamp\www\ace\data\runtime\Cache\Admin\cd192f1cb9e5e19cc2011840df26ad39.php 第 465 行.
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.081005s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.081005s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000000s ]
+
+[ 2016-04-20T19:11:23+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_del&n_id=10&p=1
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2016-04-20T19:11:29+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_state
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:11:30+08:00 ] ::1 /ace/index.php?m=Admin&c=News&a=news_state
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-04-20T19:19:20+08:00 ] ::1 /ace/index.php?m=Admin&c=Login&a=runlogin
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Undefined index: admin_changepwd C:\wamp\www\ace\app\Admin\Controller\LoginController.class.php 第 54 行.
+
+[ 2016-04-20T19:19:22+08:00 ] ::1 /ace/index.php?m=Admin&c=Sys&a=clear
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+

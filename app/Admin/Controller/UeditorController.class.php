@@ -46,9 +46,11 @@ class UeditorController extends Controller {
 		
 				/* 上传图片 */
 			case 'uploadimage':
+				$result = $this->_ueditor_upload();
+				break;
 				/* 上传涂鸦 */
 			case 'uploadscrawl':
-				$result = $this->_ueditor_upload();
+				$result = $this->_ueditor_upload_scrawl();
 				break;
 				/* 上传视频 */
 			case 'uploadvideo':
@@ -67,7 +69,7 @@ class UeditorController extends Controller {
 				break;		
 				/* 抓取远程文件 */
 			case 'catchimage':
-				$result = $this->_ueditor_remote();
+				$result = $this->_ueditor_upload_catch();
 				break;
 		
 			default:
@@ -87,107 +89,6 @@ class UeditorController extends Controller {
 		} else {
 			exit($result) ;
 		}
-	}
-	private function _ueditor_remote(){
-		$source=array();
-		if (isset($_POST['source'])) {
-			$source = $_POST['source'];
-		} else {
-			$source = $_GET['source'];
-		}		
-		$item=array(
-				"state" => "",
-				"url" => "",
-				"size" => "",
-				"title" => "",
-				"original" => "",
-				"source" =>""
-		);
-		$date=date("Y-m-d");
-		//远程抓取图片配置
-		$config = array(
-				"savePath" => C("TMPL_PARSE_STRING.__UPLOAD__")."$date/",            //保存路径
-				"allowFiles" => array( ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp" ) , //文件允许格式
-				"maxSize" => 3000                    //文件大小限制，单位KB
-		);		
-		$list = array();
-		foreach ( $source as $imgUrl ) {
-			$return_img=$item;
-			$return_img['source']=$imgUrl;
-			$imgUrl = htmlspecialchars($imgUrl);
-			$imgUrl = str_replace("&amp;", "&", $imgUrl);
-			//http开头验证
-			if(strpos($imgUrl,"http")!==0){
-				$return_img['state']=$this->stateMap['ERROR_HTTP_LINK'];
-				array_push( $list , $return_img );
-				continue;
-			}
-			//获取请求头
-			if(!(defined('APP_MODE') && APP_MODE=='sae')){//SAE下无效
-				$heads = get_headers( $imgUrl );
-				//死链检测
-				if ( !( stristr( $heads[ 0 ] , "200" ) && stristr( $heads[ 0 ] , "OK" ) ) ) {
-					$return_img['state']=$this->stateMap['ERROR_DEAD_LINK'];
-					array_push( $list , $return_img );
-					continue;
-				}
-			}
-			//格式验证(扩展名验证和Content-Type验证)
-			$fileType = strtolower( strrchr( $imgUrl , '.' ) );
-			if ( !in_array( $fileType , $config[ 'allowFiles' ] ) || stristr( $heads[ 'Content-Type' ] , "image" ) ) {
-				$return_img['state']=$this->stateMap['ERROR_HTTP_CONTENTTYPE'];
-				array_push( $list , $return_img );
-				continue;
-			}
-			//打开输出缓冲区并获取远程图片
-			ob_start();
-			$context = stream_context_create(
-					array (
-							'http' => array (
-									'follow_location' => false // don't follow redirects
-							)
-					)
-			);
-			//请确保php.ini中的fopen wrappers已经激活
-			readfile( $imgUrl,false,$context);
-			$img = ob_get_contents();
-			ob_end_clean();
-			//大小验证
-			$uriSize = strlen( $img ); //得到图片大小
-			$allowSize = 1024 * $config[ 'maxSize' ];
-			if ( $uriSize > $allowSize ) {
-				$return_img['state']=$this->stateMap['ERROR_SIZE_EXCEED'];
-				array_push( $list , $return_img );
-				continue;
-			}
-			//创建保存位置
-			$savePath = $config[ 'savePath' ];
-			if ( !file_exists( $savePath ) ) {
-				mkdir( "$savePath" , 0777 );
-			}
-			$file=uniqid() . strrchr( $imgUrl , '.' );
-			//写入文件
-			$tmpName = $savePath .$file ;
-			$file = C("TMPL_PARSE_STRING.__UPLOAD__")."$date/".$file;
-			if(strpos($file, "https")===0 || strpos($file, "http")===0){
-			}else{//local
-				$host=(is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'];
-				$file=$host.$file;
-			}
-			if(file_write($tmpName,$img)){
-				$return_img['state']='SUCCESS';
-				$return_img['url']=$file;
-				array_push( $list ,  $return_img );
-			}else{
-				$return_img['state']=$this->stateMap['ERROR_WRITE_CONTENT'];
-				array_push( $list , $return_img );
-			}
-			
-		}
-		return json_encode(array(
-				'state'=> count($list) ? 'SUCCESS':'ERROR',
-				'list'=> $list
-		));
 	}
 	private function _ueditor_list($action){
 		/* 判断类型 */
@@ -314,5 +215,72 @@ class UeditorController extends Controller {
 		);
 		
 		return json_encode($response);
+	}
+	private function _ueditor_upload_scrawl(){		
+		$data = I('post.' . $this->config ['scrawlFieldName']);
+		if (empty ($data)) {
+			$state= 'Scrawl Data Empty!';
+		} else {
+			$img = base64_decode($data);
+			$savepath = save_storage_content('png', $img);
+			if ($savepath) {
+				$state = 'SUCCESS';
+				$url = (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath;
+				$title = '';
+				$oriName = '';
+			} else {
+				$state = 'Save scrawl file error!';
+			}
+		}
+		$response=array(
+		"state" => $state,
+		"url" => $url,
+		"title" => $title,
+		"original" =>$oriName,
+		);
+		return json_encode($response);
+	}
+	private function _ueditor_upload_catch(){
+		set_time_limit(0);
+		$sret = array(
+			'state' => '',
+			'list' => null
+		);
+		$savelist = array();
+		$flist = I('request.' . $this->config ['catcherFieldName']);
+		if (empty ($flist)) {
+			$sret ['state'] = 'ERROR';
+		} else {
+			$sret ['state'] = 'SUCCESS';
+			foreach ($flist as $f) {
+				if (preg_match('/^(http|ftp|https):\\/\\//i', $f)) {
+					$ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+					if (in_array('.' . $ext, $this->config ['catcherAllowFiles'])) {
+						if ($img = file_get_contents($f)) {
+							$savepath = save_storage_content($ext, $img);
+							if ($savepath) {
+								$savelist [] = array(
+									'state' => 'SUCCESS',
+									'url' => (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath,
+								);
+							} else {
+								$ret ['state'] = 'Save remote file error!';
+							}
+						} else {
+							$ret ['state'] = 'Get remote file error';
+						}
+					} else {
+						$ret ['state'] = 'File ext not allowed';
+					}
+				} else {
+					$savelist [] = array(
+						'state' => 'not remote image',
+						'url' => '',
+					);
+				}
+			}
+			$sret ['list'] = $savelist;
+		}
+		return json_encode($sret);
 	}
 }

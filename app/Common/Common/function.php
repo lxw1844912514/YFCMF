@@ -394,22 +394,24 @@ function remove_dir($dir, $time_thres = -1)
             }
         }
     }
-function file_write($file,$content){
-	
-	if(defined('APP_MODE') && APP_MODE=='sae'){
-		$s=new SaeStorage();
-		$arr=explode('/',ltrim($file,'./'));
-		$domain=array_shift($arr);
-		$save_path=implode('/',$arr);
-		return $s->write($domain,$save_path,$content);
-	}else{
-		try {
-			$fp2 = @fopen( $file , "w" );
-			fwrite( $fp2 , $content );
-			fclose( $fp2 );
-			return true;
-		} catch ( Exception $e ) {
-			return false;
-		}
-	}
+/**
+ * 将内容存到Storage中，返回转存后的文件路径
+ *
+ * @param string $dir
+ * @param string $ext
+ * @param string $content
+ * @return string
+ */
+function save_storage_content($ext = null, $content = null, $filename = '')
+{
+    $newfile = '';
+	//$path=C("TMPL_PARSE_STRING.__UPLOAD__");
+	//$path=substr($path,0,1)=='/' ? substr($path,1) :$path;
+    if ($ext && $content) {
+        do {
+            $newfile = 'data/upload/' . date('Y-m-d/') . uniqid() . '.' . $ext;
+        } while (Storage::has($newfile));
+        Storage::put($newfile, $content);
+    }
+    return $newfile;
 }
