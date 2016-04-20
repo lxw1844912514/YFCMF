@@ -72,7 +72,7 @@
 												<td class="hidden-xs" style='padding-left:<if condition="$v.leftpin neq 0">{$v.leftpin}px</if>' >{$v.lefthtml}{$v.title}</td>
 												<td>{$v.name}</td>
 												<td>
-													<if condition='$v[status] eq 1'>
+													<if condition="$v['status'] eq 1">
 														<a class="red" href="javascript:;" onclick="return stateyes({$v.id});" title="显示">
 															<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">显示</button></div>
 														</a>

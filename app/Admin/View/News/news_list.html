@@ -127,7 +127,7 @@
 												</td>
 												<td class="hidden-xs">{$v.news_hits}</td>
 												<td class="hidden-xs">
-													<if condition='$v[news_open] eq 1'>
+													<if condition="$v['news_open'] eq 1">
 														<a class="red" href="javascript:;" onclick="return stateyes({$v.n_id});" title="已审">
 															<div id="zt{$v.n_id}"><button class="btn btn-minier btn-yellow">已审</button></div>
 														</a>

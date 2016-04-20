@@ -117,7 +117,7 @@
 										<input type="file" name="pic_one[]" id="file0" multiple="multiple"/>
 										选择上传文件
 									</a>
-									<span class="lbl">&nbsp;&nbsp;<img src="<if condition="$news_list[news_img] neq ''">__UPLOAD__{$news_list.news_img}<else/>__PUBLIC__/img/no_img.jpg</if>" width="100" height="70" id="img0" ></span>&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$news_list.news_img eq ''">__PUBLIC__/img/no_img.jpg<else/>__UPLOAD__{$news_list.news_img}</if>');" title="还原修改前的图片" class="file">
+									<span class="lbl">&nbsp;&nbsp;<img src="<if condition="$news_list.news_img neq ''">__UPLOAD__{$news_list.news_img}<else/>__PUBLIC__/img/no_img.jpg</if>" width="100" height="70" id="img0" ></span>&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$news_list.news_img eq ''">__PUBLIC__/img/no_img.jpg<else/>__UPLOAD__{$news_list.news_img}</if>');" title="还原修改前的图片" class="file">
 									撤销修改
 									</a>
 											<span class="lbl">&nbsp;&nbsp;上传前先用PS处理成等比例图片后上传，默认比例100*70、600*420、800*560像素<br />
@@ -132,14 +132,14 @@
 								<div class="col-sm-10">
 									<div class="radio" >
 										<label>
-											<input name="news_pic_type" <if condition='$news_list[news_pic_type] eq 1'>checked</if> id="news_pic_list" checked type="radio" class="ace" value="1"/>
+											<input name="news_pic_type" <if condition="$news_list['news_pic_type'] eq 1">checked</if> id="news_pic_list" checked type="radio" class="ace" value="1"/>
 											<span class="lbl"> 无图模式</span>
 										</label>
 										<label>
-											<input name="news_pic_type" <if condition='$news_list[news_pic_type] eq 2'>checked</if> id="news_pic_qqlist" type="radio" class="ace" value="2"/>
+											<input name="news_pic_type" <if condition="$news_list['news_pic_type'] eq 2">checked</if> id="news_pic_qqlist" type="radio" class="ace" value="2"/>
 											<span class="lbl"> 多图模式</span>
 										</label>
-										<if condition='$news_list[news_pic_type] eq 2'>
+										<if condition="$news_list['news_pic_type'] eq 2">
 											<label>
 												<span class="btn btn-minier btn-success"  data-toggle="modal" data-target="#myModal">查看已上传的图片</span>
 											</label>
@@ -158,7 +158,7 @@
 
 
 
-							<div class="form-group" id="pic_list" <if condition='$news_list[news_pic_type] eq 1'>style="display:none"</if>>
+							<div class="form-group" id="pic_list" <if condition="$news_list['news_pic_type'] eq 1">style="display:none"</if>>
 							<div class="col-sm-10 col-sm-offset-2" style="padding-top:5px;">
 								<input id="file-5" name="pic_all[]" type="file" class="file"  multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""><br />
 								<textarea name="news_pic_content" class="col-xs-12 col-sm-12" id="news_pic_content"  placeholder="多图对应文章说明，例如： 图片一说明 | 图片二说明 | 图片三说明    每个文字说明以 | 分割" >{$news_list['news_pic_content']}</textarea>
@@ -176,7 +176,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
 						<div class="col-sm-10" style="padding-top:5px;">
-							<input name='news_open' id='news_open' <if condition='$news_list[news_open] eq 1'>checked</if>  value='1' class='ace ace-switch ace-switch-4 btn-flat' type='checkbox' />
+							<input name='news_open' id='news_open' <if condition="$news_list['news_open'] eq 1">checked</if>  value='1' class='ace ace-switch ace-switch-4 btn-flat' type='checkbox' />
 							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
 						</div>
 					</div>

@@ -75,7 +75,7 @@
 											<td class="hidden-sm hidden-xs">{$v.plug_ad_addtime|date='Y-m-d',###}</td>
 											<td><input name="{$v.plug_ad_id}" value=" {$v.plug_ad_order}" class="list_order"/></td>
 											<td>
-												<if condition='$v[plug_ad_open] eq 1'>
+												<if condition='$v.plug_ad_open eq 1'>
 													<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_ad_id});" title="已开启">
 														<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 													</a>

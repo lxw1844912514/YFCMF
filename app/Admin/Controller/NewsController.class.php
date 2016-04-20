@@ -7,22 +7,24 @@ class NewsController extends AuthController {
 	/************************************************文章管理**************************************************/
 	//文章列表
 	public function news_list(){
-		$keytype=I('keytype',news_title);
+		$keytype=I('keytype','news_title');
 		$key=I('key');
 		$opentype_check=I('opentype_check','');
 		$diyflag=I('diyflag','');
 		//查询：时间格式过滤
 		$sldate=I('reservation','');//获取格式 2015-11-12 - 2015-11-18
 		$arr = explode(" - ",$sldate);//转换成数组
-		$arrdateone=strtotime($arr[0]);
-		$arrdatetwo=strtotime($arr[1].' 23:55:55');
+        if(count($arr)==2){
+            $arrdateone=strtotime($arr[0]);
+            $arrdatetwo=strtotime($arr[1].' 23:55:55');
+            $map['news_time'] = array(array('egt',$arrdateone),array('elt',$arrdatetwo),'AND');
+        }
 		//map架构查询条件数组
 		$map['news_back']= 0;
 		$map[$keytype]= array('like',"%".$key."%");
 		if ($opentype_check!=''){
 			$map['news_open']= array('eq',$opentype_check);
 		}
-		$map['news_time'] = array(array('egt',$arrdateone),array('elt',$arrdatetwo),'AND');
 		if ($diyflag){
 			$map[] ="FIND_IN_SET('$diyflag',news_flag)";
 		}
@@ -137,7 +139,7 @@ class NewsController extends AuthController {
 	}
 
 	public function news_edit(){
-		$n_id = I('n_id','',htmlspecialchars);
+		$n_id = I('n_id');
 		if (empty($n_id)){
 			$this->error('参数错误',U('news_list'),0);
 		}else{
@@ -248,11 +250,10 @@ class NewsController extends AuthController {
 	}
 	public function news_alldel(){
 		$p = I('p');
-		$ids = I('n_id','',htmlspecialchars);
+		$ids = I('n_id');
 		if(empty($ids)){
 			$this -> error("请选择删除文章");//判断是否选择了文章ID
 		}
-		$model = D('news');
 		if(is_array($ids)){//判断获取文章ID的形式是否数组
 			$where = 'n_id in('.implode(',',$ids).')';
 		}else{
@@ -287,22 +288,24 @@ class NewsController extends AuthController {
 	}
 
 	public function news_back(){
-		$keytype=I('keytype',news_title);
+		$keytype=I('keytype','news_title');
 		$key=I('key');
 		$opentype_check=I('opentype_check','');
 		$diyflag=I('diyflag','');
 		//查询：时间格式过滤
 		$sldate=I('reservation','');//获取格式 2015-11-12 - 2015-11-18
 		$arr = explode(" - ",$sldate);//转换成数组
-		$arrdateone=strtotime($arr[0]);
-		$arrdatetwo=strtotime($arr[1].' 23:55:55');
+        if(count($arr)==2){
+            $arrdateone=strtotime($arr[0]);
+            $arrdatetwo=strtotime($arr[1].' 23:55:55');
+            $map['news_time'] = array(array('egt',$arrdateone),array('elt',$arrdatetwo),'AND');
+        }
 		//map架构查询条件数组
 		$map['news_back']= 1;
 		$map[$keytype]= array('like',"%".$key."%");
 		if ($opentype_check!=''){
 			$map['news_open']= array('eq',$opentype_check);
 		}
-		$map['news_time'] = array(array('egt',$arrdateone),array('elt',$arrdatetwo),'AND');
 		if ($diyflag){
 			$map[] ="FIND_IN_SET('$diyflag',news_flag)";
 		}

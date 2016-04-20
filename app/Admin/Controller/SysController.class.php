@@ -140,8 +140,12 @@ class SysController extends AuthController {
      */
 	public function source_del(){
 		$p=I('p');
-		M('source')->where(array('source_id'=>I('source_id')))->delete();
-		$this->redirect('source_list', array('p' => $p));
+		$rst=M('source')->where(array('source_id'=>I('source_id')))->delete();
+        if($rst!==false){
+            $this->success('来源删除成功',U('source_list',array('p' => $p)),1);
+        }else{
+            $this->error('来源删除失败',0,0);
+        }
 	}
 
 	/*
@@ -169,8 +173,12 @@ class SysController extends AuthController {
 				'source_name'=>I('source_name'),
 				'source_order'=>I('source_order'),
 			);
-			M('source')->save($sl_data);
-			$this->success('来源修改成功',U('source_list'),1);
+			$rst=M('source')->save($sl_data);
+            if($rst!==false){
+                $this->success('来源修改成功',U('source_list'),1);
+            }else{
+                $this->error('来源修改失败',0,0);
+            }
 		}
 	}
 
@@ -194,6 +202,8 @@ class SysController extends AuthController {
         if(empty($type)){
             $type='export';
         }
+        $title='';
+        $list=array();
         switch ($type) {
             /* 数据还原 */
             case 'import':
@@ -283,9 +293,8 @@ class SysController extends AuthController {
             }
         }
         //渲染模板
-        $this->assign('meta_title', $title);
         $this->assign('data_list', $list);
-        $this->display($type);
+        $this->display();
     }
 
 
@@ -429,7 +438,7 @@ class SysController extends AuthController {
                 $this->error('还原数据出错！');
             } elseif(0 === $start) { //下一卷
                 if(isset($list[++$part])){
-                    $data = array('part' => $part, 'start' => 0);
+                    //$data = array('part' => $part, 'start' => 0);
                     $this->restore(0,$part,0);
                 } else {
                     session('backup_list', null);
@@ -530,6 +539,7 @@ class SysController extends AuthController {
 		$val=I('val');
 		$auth = new Auth();
 		$this->assign('testval',$val);
+        $map=array();
 		if($val){
 			$map['admin_username']= array('like',"%".$val."%");
 		}
@@ -613,19 +623,27 @@ class SysController extends AuthController {
 		$admindata['admin_realname']=I('admin_realname');
 		$admindata['admin_open']=I('admin_open');
 		$admin_list->save($admindata);
-		//修改用户组
-		M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
-		$this->success('管理员修改成功',U('admin_list'),1);
+		//修改
+		$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+        if($rst!==false){
+            $this->success('管理员修改成功',U('admin_list'),1);
+        }else{
+            $this->error('管理员修改失败',U('admin_list'),0);
+        }
 	}
 
 	public function admin_del(){
 		$admin_id=I('admin_id');
 		if (empty($admin_id)){
-			$this->error('用户ID不存在',U('admin_list'),1);
+			$this->error('用户ID不存在',U('admin_list'),0);
 		}
 		M('admin')->where(array('admin_id'=>I('admin_id')))->delete();
-		M('auth_group_access')->where(array('uid'=>I('admin_id')))->delete();
-		$this->redirect('admin_list');
+		$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->delete();
+        if($rst!==false){
+            $this->success('管理员删除成功',U('admin_list'),1);
+        }else{
+            $this->error('管理员删除失败',U('admin_list'),0);
+        }
 	}
 
 	public function admin_state(){
@@ -636,11 +654,11 @@ class SysController extends AuthController {
 		$status=M('admin')->where(array('admin_id'=>$id))->getField('admin_open');//判断当前状态情况
 		if($status==1){
 			$statedata = array('admin_open'=>0);
-			$auth_group=M('admin')->where(array('admin_id'=>$id))->setField($statedata);
+			M('admin')->where(array('admin_id'=>$id))->setField($statedata);
 			$this->success('状态禁止',1,1);
 		}else{
 			$statedata = array('admin_open'=>1);
-			$auth_group=M('admin')->where(array('admin_id'=>$id))->setField($statedata);
+			M('admin')->where(array('admin_id'=>$id))->setField($statedata);
 			$this->success('状态开启',1,1);
 		}
 
@@ -671,8 +689,12 @@ class SysController extends AuthController {
 	}
 
 	public function admin_group_del(){
-		M('auth_group')->where(array('id'=>I('id')))->delete();
-		$this->redirect('admin_group_list');
+		$rst=M('auth_group')->where(array('id'=>I('id')))->delete();
+        if($rst!==false){
+            $this->success('用户组删除成功',U('admin_group_list'),1);
+        }else{
+            $this->error('用户组删除失败',U('admin_group_list'),0);
+        }
 	}
 
 	public function admin_group_edit(){
@@ -865,14 +887,13 @@ class SysController extends AuthController {
 	}
 
 	public function admin_rule_del(){
-		M('auth_rule')->where(array('id'=>I('id')))->delete();
-		$this->redirect('admin_rule_list');
+		$rst=M('auth_rule')->where(array('id'=>I('id')))->delete();
+        if($rst!==false){
+            $this->success('权限删除成功',U('admin_rule_list'),1);
+        }else{
+            $this->error('权限删除失败',U('admin_rule_list'),0);
+        }
 	}
-
-
-
-
-
 	/****************************************************************************表格导入导出模块*******************************************************************/
 	public function excel_import(){
 		$this->display();

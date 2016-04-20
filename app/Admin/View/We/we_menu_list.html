@@ -53,7 +53,7 @@
 											<td style='padding-left:<if condition="$v.leftpin neq 0">{$v.leftpin}px</if>' >{$v.lefthtml}{$v.we_menu_name}</td>
 											<td class="hidden-sm hidden-xs">{$v.we_menu_type}</td>
 											<td>
-												<if condition='$v[we_menu_open] eq 1'>
+												<if condition='$v.we_menu_open eq 1'>
 													<a class="red" href="javascript:;" onclick="return stateyes({$v.we_menu_id});" title="已显示">
 														<div id="zt{$v.we_menu_id}"><button class="btn btn-minier btn-yellow">显示</button></div>
 													</a>

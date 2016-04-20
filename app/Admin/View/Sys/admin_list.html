@@ -84,7 +84,7 @@
 											<td class="hidden-sm hidden-xs">{$v.admin_hits}</td>
 											<td class="hidden-sm hidden-xs">{$v.admin_ip}</td>
 											<td>
-												<if condition='$v[admin_open] eq 1'>
+												<if condition="$v['admin_open'] eq 1">
 													<a class="red" href="javascript:;" onclick="return stateyes({$v.admin_id});" title="已开启">
 														<div id="zt{$v.admin_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 													</a>

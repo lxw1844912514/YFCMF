@@ -49,11 +49,11 @@ class WeController extends AuthController {
 		$statusone=M('we_menu')->where(array('we_menu_id'=>$id))->getField('we_menu_open');//判断当前状态情况
 		if($statusone==1){
 			$statedata = array('we_menu_open'=>0);
-			$auth_group=M('we_menu')->where(array('we_menu_id'=>$id))->setField($statedata);
+			M('we_menu')->where(array('we_menu_id'=>$id))->setField($statedata);
 			$this->success('状态禁止',1,1);
 		}else{
 			$statedata = array('we_menu_open'=>1);
-			$auth_group=M('we_menu')->where(array('we_menu_id'=>$id))->setField($statedata);
+			M('we_menu')->where(array('we_menu_id'=>$id))->setField($statedata);
 			$this->success('状态开启',1,1);
 		}
 
@@ -115,8 +115,12 @@ class WeController extends AuthController {
      * 删除自定义菜单
      */
 	public function we_menu_del(){
-		M('we_menu')->where(array('we_menu_id'=>I('we_menu_id')))->delete();
-		$this->redirect('we_menu_list');
+		$rst=M('we_menu')->where(array('we_menu_id'=>I('we_menu_id')))->delete();
+		if($rst!==false){
+            $this->success('自定义菜单删除成功',U('we_menu_list'),1);
+        }else{
+            $this->error('自定义菜单删除失败',0,0);
+        }
 	}
 
 	/*

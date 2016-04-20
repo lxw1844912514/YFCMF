@@ -9,14 +9,13 @@ class PlugController extends AuthController {
 	public function plug_link_list(){
 		$type=I('type');
 		$val=I('val');
+		$map=array();
 		if (!empty($type)){
 			$map['plug_link_typeid']=  array('eq',I('type'));
 		}
 		if (!empty($val)){
 			$map['plug_link_name|plug_link_url'] = array('like',"%".$val."%");
 		}
-
-
 		$link_type=M('plug_linktype')->select();
 		$plug_link=D('Plug_link')->where($map)->order('plug_link_addtime desc')->relation(true)->select();
 		$this->assign('plug_link',$plug_link);

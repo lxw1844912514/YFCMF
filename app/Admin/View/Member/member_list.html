@@ -75,7 +75,7 @@
 										<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
 										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d h:i:s',###}</td>
 										<td class="hidden-xs">
-											<if condition='$v[member_list_open] eq 1'>
+											<if condition='$v.member_list_open eq 1'>
 												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已开启">
 													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 												</a>

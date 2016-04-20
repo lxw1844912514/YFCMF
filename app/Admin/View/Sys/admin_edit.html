@@ -118,7 +118,7 @@
 									<select name="group_id"  class="col-sm-5" >
 										<option value="">请选择所属用户组</option>
 										<foreach name="auth_group" item="v">
-											<option value="{$v.id}" <if condition='$v[id] eq $auth_group_access'>selected</if>>{$v.title}</option>
+											<option value="{$v.id}" <if condition="$v['id'] eq $auth_group_access">selected</if>>{$v.title}</option>
 										</foreach>
 									</select>
 								</div>
@@ -173,7 +173,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
 								<div class="col-sm-10" style="padding-top:5px;">
-									<input name="admin_open" id="admin_open" <if condition='$admin_list[admin_open] eq 1'>checked</if>  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<input name="admin_open" id="admin_open" <if condition="$admin_list['admin_open'] eq 1">checked</if>  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
 									<span class="lbl">默认关闭</span>
 								</div>
 							</div>
