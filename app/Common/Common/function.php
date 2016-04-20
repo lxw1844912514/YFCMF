@@ -1,5 +1,6 @@
 <?php
 use Think\Db;
+use Think\Storage;
 function p ($array){
     dump($array,1,'<pre>',0);
 }
@@ -393,3 +394,22 @@ function remove_dir($dir, $time_thres = -1)
             }
         }
     }
+function file_write($file,$content){
+	
+	if(defined('APP_MODE') && APP_MODE=='sae'){
+		$s=new SaeStorage();
+		$arr=explode('/',ltrim($file,'./'));
+		$domain=array_shift($arr);
+		$save_path=implode('/',$arr);
+		return $s->write($domain,$save_path,$content);
+	}else{
+		try {
+			$fp2 = @fopen( $file , "w" );
+			fwrite( $fp2 , $content );
+			fclose( $fp2 );
+			return true;
+		} catch ( Exception $e ) {
+			return false;
+		}
+	}
+}

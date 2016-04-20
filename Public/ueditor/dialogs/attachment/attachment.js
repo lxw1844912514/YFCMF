@@ -160,6 +160,9 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
+                dnd: '#dndArea',
+                disableGlobalDnd: true,
+                paste :document.body,
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),

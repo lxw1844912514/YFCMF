@@ -364,6 +364,8 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
+                dnd: '#dndArea',
+                disableGlobalDnd: true,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
@@ -371,6 +373,7 @@
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
+                paste :document.body,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: imageMaxSize,    // 默认 2 M

@@ -50,8 +50,8 @@ class Uploader
      */
     public function __construct($fileField, $config, $type = "upload")
     {
-        $this->fileField = $fileField;
-        $this->config = $config;
+        $this->fileField = $fileField;//文件域名
+        $this->config = $config;//配置信息
         $this->type = $type;
         if ($type == "remote") {
             $this->saveRemote();

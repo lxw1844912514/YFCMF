@@ -11,6 +11,7 @@ return array(
 	),
 	//模板相关
     'TMPL_PARSE_STRING' => array(
+		'__UPLOAD__' => __ROOT__ . '/data/upload/',
         '__RES__' => __ROOT__ . '/res/',
         '__DATA__' => __ROOT__ . '/data/',
 		'__AVATAR__' => __ROOT__ . '/data/image/avatar/',
@@ -20,5 +21,5 @@ return array(
     ),
 	//上传相关
 	'UPLOAD_TEMP_DIR' => DATA_PATH,
-	'UPLOAD_DIR' => './data/upload/',,
+	'UPLOAD_DIR' => './data/upload/',
 );
