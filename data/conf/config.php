@@ -22,4 +22,5 @@ return array(
 	//上传相关
 	'UPLOAD_TEMP_DIR' => DATA_PATH,
 	'UPLOAD_DIR' => './data/upload/',
+	'YFCMF_VERSION'=>'V1.0.0',
 );

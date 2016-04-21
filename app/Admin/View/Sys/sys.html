@@ -27,16 +27,19 @@
 				</div>
 
 				<script>
-
 					$(function(){
 						$('textarea.limited').maxlength({
 							'feedback' : '.charsLeft',
 						});
-
+						$('textarea.limited2').maxlength({
+							'feedback' : '.charsLeft2',
+						});
 						$('textarea.limitedone').maxlength({
 							'feedback' : '.charsLeftone',
 						});
-
+						$('textarea.limitedone2').maxlength({
+							'feedback' : '.charsLeftone2',
+						});
 						$('#sys').ajaxForm({
 							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
 							success: complete, // 这是提交后的方法
@@ -250,10 +253,10 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO关键字 </label>
 					<div class="col-sm-9">
-						<textarea  name="options[site_seo_keywords]" cols="20" class="col-xs-10 col-sm-7 limited"  id="form-field-11"  maxlength="100">{$sys.site_seo_keywords}</textarea>
+						<textarea  name="options[site_seo_keywords]" cols="20" class="col-xs-10 col-sm-7 limited2"  id="form-field-11"  maxlength="100">{$sys.site_seo_keywords}</textarea>
 						<input type="hidden" name="maxlength" value="100" />
 								<span class="help-inline col-xs-5 col-sm-5">
-									还可以输入 <span class="middle charsLeft"></span> 个字符,以英文 , 号隔开
+									还可以输入 <span class="middle charsLeft2"></span> 个字符,以英文 , 号隔开
 								</span>
 					</div>
 				</div>
@@ -262,10 +265,10 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO描述 </label>
 					<div class="col-sm-9">
-						<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limitedone"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
+						<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limitedone2"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
 						<input type="hidden" name="maxlengthone" value="200" />
 								<span class="help-inline col-xs-5 col-sm-5">
-									还可以输入 <span class="middle charsLeftone"></span> 个字符
+									还可以输入 <span class="middle charsLeftone2"></span> 个字符
 								</span>
 					</div>
 				</div>

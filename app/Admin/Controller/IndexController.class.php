@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
-use Think\Controller;
-class IndexController extends Controller {
+use Common\Controller\CommonController;
+class IndexController extends CommonController {
 	//首页
 	public function index(){
 		//未登录

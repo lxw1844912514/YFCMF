@@ -6,6 +6,7 @@
  * @如果需要公共控制器，就不要继承AuthController，直接继承Controller
  */
 namespace Common\Controller;
+use Common\Controller\CommonController;
 use Think\Auth;
 //权限认证
 class AuthController extends CommonController {

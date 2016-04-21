@@ -74,7 +74,7 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
  * 数据表导出excel
  *
  * @param string $table,不含前缀表名,必须
- * @param string $file,保存的excel文件名,默认时间戳为文件名
+ * @param string $file,保存的excel文件名,默认表名为文件名
  * @param string $fields,需要导出的字段名,默认全部,以半角逗号隔开
  * @param string $field_titles,需要导出的字段标题,需与$field一一对应,为空则表示直接以字段名为标题,以半角逗号隔开
  * @param stting $tag,筛选条件 以字符串方式传入,例："limit:0,8;order:post_date desc,listorder desc;where:id>0;"
@@ -414,4 +414,12 @@ function save_storage_content($ext = null, $content = null, $filename = '')
         Storage::put($newfile, $content);
     }
     return $newfile;
+}
+/**
+ * 返回带协议的域名
+ */
+function get_host(){
+	$host=$_SERVER["HTTP_HOST"];
+	$protocol=is_ssl()?"https://":"http://";
+	return $protocol.$host;
 }

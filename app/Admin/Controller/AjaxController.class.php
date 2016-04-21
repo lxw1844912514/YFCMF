@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
-use Think\Controller;
-class AjaxController extends Controller{
+use Common\Controller\CommonController;
+class AjaxController extends CommonController{
 	//返回行政区域json字符串
 	public function getRegion(){
 		$Region=M("region");

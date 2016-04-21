@@ -1,10 +1,10 @@
 <?php
 namespace Admin\Controller;
-use Think\Controller;
+use Common\Controller\CommonController;
 use LT\ThinkSDK\ThinkOauth;
 use Event\TypeEvent;
 use Think\Verify;
-class LoginController extends Controller {
+class LoginController extends CommonController {
 	//登入页面
 	public function login(){
 		//已登录,跳转到首页

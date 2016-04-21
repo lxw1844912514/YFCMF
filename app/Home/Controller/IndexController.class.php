@@ -1,11 +1,11 @@
 <?php
 namespace Home\Controller;
-use Think\Controller;
+use Common\Controller\CommonController;
 /*
  * 目前为第一套前台企业网站模板，通用参数功能需要进一步完善
  */
 
-class IndexController extends Controller {
+class IndexController extends CommonController {
 	/*
      * 公共控制器，输出导航以及底部提交信息
      */

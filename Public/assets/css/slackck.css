@@ -6,8 +6,8 @@
 .look{ padding:20px;}
 .look ul li{ list-style:none; line-height:30px;}
 
-.charsLeft{ color:#F00;}
-.charsLeftone{ color:#F00;}
+.charsLeft,.charsLeft2{ color:#F00;}
+.charsLeftone,.charsLeftone2{ color:#F00;}
 
 .rule{ border:#CCCCCC solid 1px; height:30px; width:120px;}
 .ruleadd{ height:30px; margin-bottom:3px;}

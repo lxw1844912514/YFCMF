@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
-use Think\Controller;
-class UeditorController extends Controller {
+use Common\Controller\CommonController;
+class UeditorController extends CommonController {
 	protected $config;
 	function _initialize() {
 		$adminid=session('aid');
