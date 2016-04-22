@@ -7,7 +7,7 @@ class leftnav{
 			if($v['adminnav_leftid']==$pid){
 				$v['lvl']=$lvl + 1;
 				$v['leftpin']=$leftpin + 0;//左边距
-				$v['lefthtml']='├'.$lvl>0?str_repeat($lefthtml,$lvl-1):'';
+				$v['lefthtml']='├'.($lvl>0?str_repeat($lefthtml,$lvl-1):'');
 				$arr[]=$v;
 				$arr= array_merge($arr,self::cznav($cate,$lefthtml,$v['adminnav_id'],$lvl+1 , $leftpin+20));
 			}
@@ -22,7 +22,7 @@ class leftnav{
 			if($v['pid']==$pid){
 				$v['lvl']=$lvl + 1;
 				$v['leftpin']=$leftpin + 0;//左边距
-				$v['lefthtml']='├'.$lvl>0?str_repeat($lefthtml,$lvl-1):'';
+				$v['lefthtml']='├'.($lvl>0?str_repeat($lefthtml,$lvl-1):'');
 				$arr[]=$v;
 				$arr= array_merge($arr,self::rule($cate,$lefthtml,$v['id'],$lvl+1 , $leftpin+20));
 			}
@@ -39,7 +39,7 @@ class leftnav{
 			if($v['we_menu_leftid']==$pid){
 				$v['lvl']=$lvl + 1;
 				$v['leftpin']=$leftpin + 0;
-				$v['lefthtml']='├'.$lvl>0?str_repeat($lefthtml,$lvl-1):'';
+				$v['lefthtml']='├'.($lvl>0?str_repeat($lefthtml,$lvl-1):'');
 				$arr[]=$v;
 				$arr= array_merge($arr,self::menu($cate,$lefthtml,$v['we_menu_id'], $lvl+1 ,$leftpin+20));
 			}
@@ -58,7 +58,7 @@ class leftnav{
 			if($v['column_leftid']==$pid){
 				$v['lvl']=$lvl + 1;
 				$v['leftpin']=$leftpin + 0;//左边距
-				$v['lefthtml']='├'.$lvl>0?str_repeat($lefthtml,$lvl-1):'';
+				$v['lefthtml']='├'.($lvl>0?str_repeat($lefthtml,$lvl-1):'');
 				$arr[]=$v;
 				$arr= array_merge($arr,self::column($cate,$lefthtml,$v['c_id'],$lvl+1 , $leftpin+20));
 			}

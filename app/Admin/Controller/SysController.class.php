@@ -848,8 +848,8 @@ class SysController extends AuthController {
 	public function admin_rule_edit(){
 		//全部规则
 		$nav = new \Org\Util\Leftnav;
-		$admin_rule=M('auth_rule')->order('sort')->select();
-		$arr = $nav::rule($admin_rule);
+		$admin_rule_all=M('auth_rule')->order('sort')->select();
+		$arr = $nav::rule($admin_rule_all);
 		$this->assign('admin_rule',$arr);
 		//待编辑规则
 		$admin_rule=M('auth_rule')->where(array('id'=>I('id')))->find();
@@ -859,8 +859,8 @@ class SysController extends AuthController {
     public function admin_rule_copy(){
         //全部规则
         $nav = new \Org\Util\Leftnav;
-        $admin_rule=M('auth_rule')->order('sort')->select();
-        $arr = $nav::rule($admin_rule);
+        $admin_rule_all=M('auth_rule')->order('sort')->select();
+        $arr = $nav::rule($admin_rule_all);
         $this->assign('admin_rule',$arr);
         //待编辑规则
         $admin_rule=M('auth_rule')->where(array('id'=>I('id')))->find();
@@ -872,17 +872,25 @@ class SysController extends AuthController {
 			$this->error('提交方式不正确',0,0);
 		}else{
 			$admin_rule=M('auth_rule');
+			$pid=$admin_rule->where(array('id'=>I('pid')))->field('level')->find();
+			$level=$pid['level']+1;
 			$sldata=array(
-				'id'=>I('id'),
+				'id'=>I('id',1,'intval'),
 				'name'=>I('name'),
 				'title'=>I('title'),
 				'status'=>I('status'),
-				'pid'=>I('pid'),
+				'pid'=>I('pid',0,'intval'),
 				'css'=>I('css'),
 				'sort'=>I('sort'),
+				'level'=>$level,
 			);
-			$admin_rule->save($sldata);
-			$this->success('权限修改成功',U('admin_rule_list'),1);
+			//dump($sldata);
+			$rst=$admin_rule->save($sldata);
+			if($rst!==false){
+				$this->success('权限修改成功',U('admin_rule_list'),1);
+			}else{
+				$this->error('权限修改失败',U('admin_rule_list'),0);
+			}
 		}
 	}
 
@@ -1005,5 +1013,9 @@ class SysController extends AuthController {
 		remove_dir(DATA_PATH, time() - 24 * 3600);
 		file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 		$this->success ('清理缓存成功',1,1);
+	}
+	/****************************************************************************个人中心模块*******************************************************************/
+	public function profile(){
+		$this->display();
 	}
 }

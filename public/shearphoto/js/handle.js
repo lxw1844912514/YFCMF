@@ -1,7 +1,7 @@
 
 window.ShearPhoto.MINGGE(function() {
 
-			 var relativeUrl= "/slackck/Public/shearphoto_common"; //你不要在后面加斜杠，系统会自动给你加上斜杠，不信看下面！   index.html的JS引用路径自己改，很简单的说
+			 var relativeUrl= "/public/shearphoto"; //你不要在后面加斜杠，系统会自动给你加上斜杠，不信看下面！   index.html的JS引用路径自己改，很简单的说
 
 	      relativeUrl = relativeUrl.replace(/(^\s*)|(\s*$)/g, "");//去掉相对路径的所有空格
           relativeUrl === "" || (relativeUrl += "/");//在相对地址后面加斜框，不需要用户自己加

@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `css` varchar(20) NOT NULL COMMENT '样式',
   `condition` char(100) NOT NULL DEFAULT '',
-  `pid` tinyint(5) NOT NULL DEFAULT '0' COMMENT '父栏目ID',
+  `pid` int(5) NOT NULL DEFAULT '0' COMMENT '父栏目ID',
   `level` int(1) unsigned NOT NULL DEFAULT '0' COMMENT '菜单等级',
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
