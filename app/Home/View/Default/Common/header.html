@@ -6,7 +6,13 @@
     <div class="container">
         <div class="row" >
             <div class="logo" >
-                <a href="/"><img src="__PUBLIC__/style/default/images/logo.png" alt="logo" /></a>
+                <a href="/">
+				<if condition="$sys.site_logo neq ''">
+				<img src="__UPLOAD__{$sys.site_logo}" alt=""/>				
+				<else />
+				<img src="__PUBLIC__/style/sister/images/logo.png" alt=""/>				
+				</if>
+				</a>
             </div>
 
         </div>

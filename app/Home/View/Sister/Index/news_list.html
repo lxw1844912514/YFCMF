@@ -11,9 +11,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-	<!--webfont-->
-	<link href='http://fonts.useso.com/css?family=Oswald:400,700,300|Open+Sans:300italic,400italic,600italic,400,300,600,700' rel='stylesheet' type='text/css'>
-	<!--//webfont-->
 	<!--Animation-->
 	<script src="__PUBLIC__/style/sister/js/wow.min.js"></script>
 	<link href="__PUBLIC__/style/sister/css/animate.css" rel='stylesheet' type='text/css' />
@@ -52,7 +49,7 @@
 						<if condition="$v.news_img neq ''">
 							<a href="__APP__/con/{$v.n_id}" target="_blank">
 								<div class="col-md-3 cmts-main-left" style=" height:100px; overflow:hidden;">
-									<img src="__PUBLIC__{$v.news_img}" alt="">
+									<img src="__UPLOAD__{$v.news_img}" alt="">
 								</div>
 							</a>
 						</if>
@@ -81,8 +78,8 @@
 
 					<foreach name="news_list" item="y">
 						<div class="col-md-3 port-grid wow zoomInRight animated">
-							<a href="__PUBLIC__/{$y.news_img}" rel="prettyPhoto[]">
-								<img src="__PUBLIC__/{$y.news_img}"  class="img-responsive"/>
+							<a href="__UPLOAD__/{$y.news_img}" rel="prettyPhoto[]">
+								<img src="__UPLOAD__/{$y.news_img}"  class="img-responsive"/>
 							</a>
 
 							<div class="text">

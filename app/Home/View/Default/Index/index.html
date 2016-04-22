@@ -13,9 +13,9 @@
     <meta name="viewport" content="width=100%; initial-scale=1; maximum-scale=1; minimum-scale=1; user-scalable=no;" />
     <link rel="icon" href="__PUBLIC__/style/default/images/favicon.png" type="image/png" />
     <link rel="shortcut icon" href="__PUBLIC__/style/default/images/favicon.png" type="image/png" />
-    <title>{$sys.sys_title}</title>
-    <meta name="keywords" content="{$sys.sys_key}">
-    <meta name="description" content="{$sys.sys_des}">
+    <title>{$sys.site_seo_title}</title>
+    <meta name="keywords" content="{$sys.site_seo_keywords}">
+    <meta name="description" content="{$sys.site_seo_description}">
 
     <link href="__PUBLIC__/style/default/css/bootstrap.css" type="text/css" rel="stylesheet" />
     <link href="__PUBLIC__/style/default/css/style.css" type="text/css" rel="stylesheet" />
@@ -52,7 +52,7 @@
         <ul class="slides">
             <foreach name="plug_ad" item="v">
                 <li>
-                    <img src="__PUBLIC__/{$v.plug_ad_pic}" />
+                    <img src="__UPLOAD__/{$v.plug_ad_pic}" />
                 </li>
             </foreach>
         </ul>
@@ -85,9 +85,9 @@
 
                             <foreach name="case" item="v">
                                 <li style="margin-right: 30px; width: 270px;">
-                                    <img src="__PUBLIC__/{$v.news_img}" />
+                                    <img src="__UPLOAD__/{$v.news_img}" />
                                     <div style="display: block;" class="da-animate da-slideFromLeft">
-                                        <a data-rel="prettyPhoto" class="p-view" href="__PUBLIC__/{$v.news_img}" rel="prettyPhoto"></a>
+                                        <a data-rel="prettyPhoto" class="p-view" href="__UPLOAD__/{$v.news_img}" rel="prettyPhoto"></a>
                                     </div>
                                 </li>
                             </foreach>

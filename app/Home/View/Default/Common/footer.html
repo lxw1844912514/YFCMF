@@ -57,11 +57,11 @@
             <div class="span3">
                 <h3>联系方式</h3>
                 <address>
-                    厦门市净悦庆典有限公司<br />
-                    厦门市海沧区海兴路67号206室<br />
-                    <i class="myicon-phone"></i>18060985791<br />
-                    <i class="myicon-mail"></i>1324740843@qq.com<br />
-                    <i class="myicon-mail"></i><img  style="CURSOR: pointer" onclick="javascript:window.open('http://b.qq.com/webc.htm?new=0&sid=1324740843&o=净悦庆典&q=7', '_blank', 'height=502, width=644,toolbar=no,scrollbars=no,menubar=no,status=no');"  border="0" SRC=http://wpa.qq.com/pa?p=1:1324740843:1 alt="点击这里给我发消息">
+                    {$sys.site_co_name}<br />
+                    {$sys.site_address}<br />
+                    <i class="myicon-phone"></i>{$sys.site_tel}<br />
+                    <i class="myicon-mail"></i>{$sys.site_admin_email}<br />
+                    <i class="myicon-mail"></i><img  style="CURSOR: pointer" onclick="javascript:window.open('http://b.qq.com/webc.htm?new=0&sid={$sys.site_qq}&o=净悦庆典&q=7', '_blank', 'height=502, width=644,toolbar=no,scrollbars=no,menubar=no,status=no');"  border="0" SRC=http://wpa.qq.com/pa?p=1:{$sys.site_qq}:1 alt="点击这里给我发消息">
                 </address>
 
             </div>
@@ -74,7 +74,7 @@
     <div class="container">
         <div class="row">
             <p class="span6 pull-left">Copyright &copy; 2016.Company name All rights reserved.<br>
-                版权所有：厦门市净悦庆典有限公司&nbsp;&nbsp;备案号：闽ICP备15026889号-1&nbsp;&nbsp;</p>
+                版权所有：{$sys.site_co_name}&nbsp;&nbsp;备案号：{$sys.site_icp}&nbsp;&nbsp;</p>
             <p class="offset6 span2 pull-right"></span></p>
 
         </div>

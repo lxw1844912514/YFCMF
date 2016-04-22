@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>上海羽冉彩妆</title>
-	<meta name="keywords" content="上海形象设计,上海婚庆,上海企业策划,上海包装设计">
-	<meta name="description" content="上海羽冉形象摄影工作室是上海致力于形象设计为主导的企业，面向上海所有客户，提供形象设计，化妆品销售，礼仪服务，婚庆服务等服务项目，打造上海诚信形象设计企业。">
+	<title>{$sys.site_seo_title}</title>
+	<meta name="keywords" content="{$sys.site_seo_keywords}">
+	<meta name="description" content="{$sys.site_seo_description}">
 	<link href="__PUBLIC__/style/sister/css/bootstrap.css" rel='stylesheet' type='text/css' />
 
 	<script type="text/javascript" src="__PUBLIC__/style/sister/js/jquery-1.11.0.min.js"></script>
@@ -11,9 +11,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-	<!--webfont-->
-	<link href='http://fonts.useso.com/css?family=Oswald:400,700,300|Open+Sans:300italic,400italic,600italic,400,300,600,700' rel='stylesheet' type='text/css'>
-	<!--//webfont-->
 	<!--Animation-->
 	<script src="__PUBLIC__/style/sister/js/wow.min.js"></script>
 	<link href="__PUBLIC__/style/sister/css/animate.css" rel='stylesheet' type='text/css' />
@@ -202,8 +199,8 @@
 
 			<foreach name="case" item="v">
 				<div class="col-md-3 port-grid wow zoomInRight animated">
-					<a href="__PUBLIC__/{$v.news_img}" rel="prettyPhoto[]">
-						<img src="__PUBLIC__/{$v.news_img}"  class="img-responsive"/>
+					<a href="__UPLOAD__/{$v.news_img}" rel="prettyPhoto[]">
+						<img src="__UPLOAD__/{$v.news_img}"  class="img-responsive"/>
 					</a>
 					<div class="box_type">{$v.column_name}</div>
 
@@ -245,7 +242,7 @@
 
 				<volist name="news_acti" id="v">
 					<div class="col-md-6 left-img wow bounceInLeft animated" data-wow-delay="0.4s">
-						<a href="__APP__/con/{$v.n_id}" target="_blank"><img src="__PUBLIC__{$v.news_img}" class="img-responsive" alt="" /></a>
+						<a href="__APP__/con/{$v.n_id}" target="_blank"><img src="__UPLOAD__{$v.news_img}" class="img-responsive" alt="" /></a>
 						<a href="__APP__/con/{$v.n_id}" target="_blank"><h4>{$v.news_title}</h4></a>
 						<p>{$v.news_scontent} </p>
 						<a class="read" href="__APP__/con/{$v.n_id}" target="_blank">查看更多 <span> </span></a>
@@ -263,7 +260,7 @@
 					<div class="test-grid <if condition="$i eq 2">second</if>">
 					<a href="__APP__/con/{$v.n_id}" target="_blank">
 						<div class="col-md-3 test-img">
-							<img src="__PUBLIC__{$v.news_img}" class="img-responsive" alt="" />
+							<img src="__UPLOAD__{$v.news_img}" class="img-responsive" alt="" />
 						</div>
 						<div class="col-md-9 test-text">
 							<h4>{$v.news_title}</h4>

@@ -22,7 +22,8 @@ class IndexController extends CommonController {
 		$column_two=$column->where($map)->order('column_order')->select();//所有数据
 		$arr = $nav::index_top($column_one,$column_two);
 		$this->assign('arr',$arr);
-		$sys=M('sys')->where(array('sys_id'=>1))->find();
+		$sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
+		$sys=json_decode($sys,true);
 		$this->assign('sys',$sys);
 	}
 

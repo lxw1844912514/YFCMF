@@ -98,9 +98,9 @@
 
                         <foreach name="news_list" item="y">
                             <article data-id="id-1" data-type="javascript html" class="span3">
-                                <img src="__PUBLIC__{$y.news_img}" alt="photo" />
+                                <img src="__UPLOAD__{$y.news_img}" alt="photo" />
                                 <div>
-                                    <a href="__PUBLIC__{$y.news_img}" class="p-view" data-rel="prettyPhoto" title="{$y.news_title}"></a>
+                                    <a href="__UPLOAD__{$y.news_img}" class="p-view" data-rel="prettyPhoto" title="{$y.news_title}"></a>
                                 </div>
                             </article>
                         </foreach>
@@ -130,7 +130,7 @@
 
                         <foreach name="news_pichot" item="t">
                             <li>
-                                <a href="__APP__/con/{$t.n_id}" target="_blank"><img src="__PUBLIC__/{$t.news_img}" alt="photo" width="60" height="60" /></a>
+                                <a href="__APP__/con/{$t.n_id}" target="_blank"><img src="__UPLOAD__/{$t.news_img}" alt="photo" width="60" height="60" /></a>
                                 <a href="__APP__/con/{$t.n_id}" target="_blank">{$t.news_title}</a>
                                 <p>阅读：{$t.news_hits}</p>
                                 <div class="clear"></div>

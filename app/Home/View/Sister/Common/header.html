@@ -2,7 +2,13 @@
 	<div class="container">
 		<div class="header-top">
 			<div class="logo wow bounceInLeft" data-wow-delay="0.4s">
-				<a href="__APP__"><img src="__PUBLIC__/style/sister/images/logo.png" alt=""/></a>
+				<a href="__APP__">
+				<if condition="$sys.site_logo neq ''">
+				<img src="__UPLOAD__{$sys.site_logo}" alt=""/>				
+				<else />
+				<img src="__PUBLIC__/style/sister/images/logo.png" alt=""/>				
+				</if>
+				</a>
 			</div>
 			<div class="h_menu4"><!-- start h_menu4 -->
 				<a class="toggleMenu" href="#">网站导航</a>
