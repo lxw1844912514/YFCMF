@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
--- 主机: localhost
--- 生成日期: 2016 年 04 月 19 日 06:26
--- 服务器版本: 5.5.20
--- PHP 版本: 5.3.10
+-- Host: 127.0.0.1
+-- Generation Time: 2016-04-24 13:29:16
+-- 服务器版本： 5.6.17
+-- PHP Version: 5.6.19
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- 数据库: `yfcmf`
+-- Database: `yfcmf`
 --
 
 -- --------------------------------------------------------
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 --
 -- 表的结构 `yf_admin`
 --
-DROP TABLE IF EXISTS `yf_admin`;
+
 CREATE TABLE IF NOT EXISTS `yf_admin` (
   `admin_id` tinyint(4) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
   `admin_username` varchar(20) NOT NULL COMMENT '管理员用户名',
@@ -45,12 +45,21 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
   `admin_mdemail` varchar(50) NOT NULL DEFAULT '0' COMMENT '传递修改密码参数加密',
   `admin_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '审核状态',
   PRIMARY KEY (`admin_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 转存表中的数据 `yf_admin`
+--
+
+INSERT INTO `yf_admin` (`admin_id`, `admin_username`, `admin_pwd`, `admin_pwd_salt`, `admin_changepwd`, `admin_email`, `admin_realname`, `admin_avatar`, `admin_tel`, `admin_hits`, `admin_ip`, `admin_time`, `admin_last_ip`, `admin_last_time`, `admin_addtime`, `admin_mdemail`, `admin_open`) VALUES
+(1, 'admin', '090b6a924b3d00c1d6b0f7d3b78d901b', 'GJsYfxUerK', 0, 'admin@163.com', '超管', '571b0afd54789.jpg', '13899999999', 16, '0.0.0.0', 1461420723, '0.0.0.0', 1461407584, 1461230934, '', 1);
+
+-- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_auth_group`
 --
-DROP TABLE IF EXISTS `yf_auth_group`;
+
 CREATE TABLE IF NOT EXISTS `yf_auth_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` char(100) NOT NULL DEFAULT '',
@@ -68,10 +77,12 @@ INSERT INTO `yf_auth_group` (`id`, `title`, `status`, `rules`, `addtime`) VALUES
 (1, '超级管理员', 1, '1,2,6,59,151,10,62,154,19,60,152,26,43,63,64,65,66,67,155,57,61,153,3,4,89,90,159,5,85,86,87,88,160,15,16,68,69,70,71,72,73,156,17,55,56,74,75,76,77,78,157,18,79,80,81,82,83,84,158,40,41,92,162,42,91,161,7,8,11,94,95,96,100,101,175,12,93,174,25,97,98,99,173,9,13,103,104,105,106,107,172,14,102,171,22,23,24,27,29,37,108,109,110,111,112,113,114,170,38,115,116,117,118,119,120,169,30,28,31,32,129,128,130,131,132,167,34,133,134,135,136,166,44,45,138,139,140,141,142,143,165,46,144,145,146,147,148,164,48,49,137,163,35,36,39,121,122,123,124,125,126,127,168,', 1212451252),
 (2, '管理员', 1, '1,2,6,151,10,154,19,152,43,65,155,57,153,3,4,159,5,160,15,16,68,70,156,17,74,77,157,176,18,82,158,177,40,41,162,42,161,7,8,11,94,175,12,174,25,173,9,13,105,172,14,171,22,23,24,27,29,37,108,110,170,38,119,169,28,31,32,131,167,34,166,44,45,142,165,46,145,164,48,49,137,163,35,36,39,124,168,', 1212451252);
 
+-- --------------------------------------------------------
+
 --
 -- 表的结构 `yf_auth_group_access`
 --
-DROP TABLE IF EXISTS `yf_auth_group_access`;
+
 CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
   `uid` mediumint(8) unsigned NOT NULL,
   `group_id` mediumint(8) unsigned NOT NULL,
@@ -83,15 +94,16 @@ CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
 --
 -- 转存表中的数据 `yf_auth_group_access`
 --
+
 INSERT INTO `yf_auth_group_access` (`uid`, `group_id`) VALUES
-(1,1);
+(1, 1);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_auth_rule`
 --
-DROP TABLE IF EXISTS `yf_auth_rule`;
+
 CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(80) NOT NULL DEFAULT '',
@@ -105,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=178 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=181 ;
 
 --
 -- 转存表中的数据 `yf_auth_rule`
@@ -137,7 +149,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (25, 'News/news_back', '回收站', 1, 1, '', '', 8, 3, 30, 1447039310),
 (26, 'Sys/pay', '支付配置', 1, 0, '', '', 2, 3, 60, 1447231369),
 (27, 'Member', '会员管理', 1, 1, 'fa-users', '', 0, 1, 30, 1447231507),
-(28, 'Plug', '网站工具', 1, 1, 'fa-plug', '', 0, 1, 50, 1447231590),
+(28, 'Plug', '插件功能', 1, 1, 'fa-plug', '', 0, 1, 50, 1447231590),
 (29, 'Member/member_list', '会员列表', 1, 1, '', '', 27, 2, 10, 1447232085),
 (30, 'Member/member_score', '积分管理', 1, 0, '', '', 27, 2, 20, 1447232133),
 (31, 'Plug/plug_link_list', '友情链接', 1, 1, '', '', 28, 2, 10, 1447232183),
@@ -280,14 +292,17 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (174, 'News/news_add', '添加显示', 1, 0, '', '', 12, 4, 10, 1460369128),
 (175, 'News/news_list', '列表显示', 1, 0, '', '', 11, 4, 10, 1460369158),
 (176, 'sys/admin_group_add', '添加显示', 1, 0, '', '', 17, 4, 15, 1460461365),
-(177, 'sys/admin_rule_copy', '复制显示', 1, 0, '', '', 18, 4, 40, 1460461557);
+(177, 'sys/admin_rule_copy', '复制显示', 1, 0, '', '', 18, 4, 40, 1460461557),
+(178, 'Sys/profile', '个人中心', 1, 0, '', '', 1, 2, 90, 1461395663),
+(179, 'Sys/profile', '信息显示', 1, 0, '', '', 178, 3, 10, 1461395702),
+(180, 'Sys/avatar', '头像编辑', 1, 0, '', '', 178, 3, 10, 1461395790);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_column`
 --
-DROP TABLE IF EXISTS `yf_column`;
+
 CREATE TABLE IF NOT EXISTS `yf_column` (
   `c_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
   `column_name` varchar(36) NOT NULL,
@@ -331,7 +346,7 @@ INSERT INTO `yf_column` (`c_id`, `column_name`, `column_enname`, `column_type`, 
 --
 -- 表的结构 `yf_diyflag`
 --
-DROP TABLE IF EXISTS `yf_diyflag`;
+
 CREATE TABLE IF NOT EXISTS `yf_diyflag` (
   `diyflag_id` int(2) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `diyflag_value` char(2) NOT NULL COMMENT '值',
@@ -360,7 +375,7 @@ INSERT INTO `yf_diyflag` (`diyflag_id`, `diyflag_value`, `diyflag_name`, `diyfla
 --
 -- 表的结构 `yf_member_group`
 --
-DROP TABLE IF EXISTS `yf_member_group`;
+
 CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员组ID',
   `member_group_name` varchar(30) NOT NULL COMMENT '会员组名',
@@ -369,14 +384,14 @@ CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_bomlimit` int(11) NOT NULL DEFAULT '0' COMMENT '积分下限',
   `member_group_order` int(11) NOT NULL COMMENT '排序',
   PRIMARY KEY (`member_group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_member_list`
 --
-DROP TABLE IF EXISTS `yf_member_list`;
+
 CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_id` int(11) NOT NULL AUTO_INCREMENT,
   `member_list_username` varchar(30) NOT NULL DEFAULT '' COMMENT '登录用户名',
@@ -393,13 +408,14 @@ CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   `member_list_addtime` int(11) NOT NULL COMMENT '添加时间戳',
   PRIMARY KEY (`member_list_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_member_lvl`
 --
-DROP TABLE IF EXISTS `yf_member_lvl`;
+
 CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
   `member_lvl_id` tinyint(3) NOT NULL AUTO_INCREMENT COMMENT '等级ID',
   `member_lvl_name` varchar(20) NOT NULL COMMENT '等级名称',
@@ -411,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
 --
 -- 表的结构 `yf_news`
 --
-DROP TABLE IF EXISTS `yf_news`;
+
 CREATE TABLE IF NOT EXISTS `yf_news` (
   `n_id` int(36) NOT NULL AUTO_INCREMENT,
   `news_title` varchar(255) NOT NULL COMMENT '文章标题',
@@ -444,20 +460,20 @@ CREATE TABLE IF NOT EXISTS `yf_news` (
 --
 
 INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`, `news_columnviceid`, `news_key`, `news_tag`, `news_auto`, `news_source`, `news_content`, `news_scontent`, `news_hits`, `news_img`, `news_pic_type`, `news_pic_allurl`, `news_pic_content`, `news_time`, `news_flag`, `news_zaddress`, `news_cpprice`, `news_back`, `news_open`, `news_lvtype`) VALUES
-(1, '小桌花—绿色清晰感', '', 13, 0, '', '', '1', '羽然彩妆', '', '绿色的小桌花带给婚礼清晰的点缀感，接近欧美风格的婚礼现场适用，时尚、前卫', 200, '2016-01-21/56a03ff96b6ff.jpg', 1, '', '', 1453342713, 'p', '', 0, 0, '1', 0),
-(2, '多彩小桌花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '多彩多姿的小桌花，由草绿，玫瑰红，粉红等类型花朵组合', 200, '2016-01-21/56a0428b39360.jpg', 1, '', '', 1453343371, 'p', '', 0, 0, '1', 0),
-(3, '怎么样才能拍出显瘦的婚纱照', '', 15, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;　　每一位胖新年在婚纱摄影前都显的不太自信，害怕因为自身的原因把婚纱照拍的不好看，那么胖新娘怎么样才能拍出显瘦的婚纱照呢，下面上海婚纱摄影就分享一下拍婚纱照应该注意的几点。&lt;/p&gt;&lt;p&gt;　　胖新娘在拍婚纱照的时候可以通过摆一些显瘦的姿势来拟补自己身材的缺陷。捧脸托腮：上海婚纱摄影提醒脸比较胖或比较大的胖新娘，在拍婚纱摄影的过程中我们可以通过用手捧脸的姿势，来遮掩脸上的一部分肉肉，让别人的视线不会集中在你的脸上。如果采用侧拍的时候用单手，正面拍摄用双手，还可以加上一些你喜欢的表情，这样可以达到不一样的效果，拍出你自己的自信心。交叉腿：对于大腿比较粗，而且喜欢穿短裙的胖新娘，浦东婚纱摄影该如何拍摄呢？下面就为胖新娘来说说该如何拍摄，胖新娘可以将双腿交叉起来，这样在拍摄的过程中就会显得，腿比较细，而且拍摄的效果也比较好。让丈夫将你抱起：在平地上进行婚纱摄影拍摄是胖新娘要比新郎要胖很的多，拍摄的实际效果也不是很好，胖新娘不妨让新郎将你抱起，这样可以增加拍摄的幸福感，婚纱的大裙摆也能让新娘看起来更加娇小。露出锁骨：有不少女性朋友都知道，女孩子的锁骨是最美的。对于身材苗条的女孩子的锁骨是很容易看见的，而对于胖新娘来说不是很明显，那么怎样在拍摄的过程中凸显胖新娘锁骨的美？在拍摄的时候胖新娘将肩部使劲往下压，这样你的锁骨就路出来了。&lt;/p&gt;&lt;p&gt;　　每一队新人在上海婚纱摄影都能找到合适自己的婚纱摄影，只要能够掌握一些小的拍摄的技巧就能够拍出唯美的婚纱照。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '只要能够掌握一些小的拍摄的技巧就能够拍出唯美的婚纱照', 220, '2016-01-21/56a0467d5ab9f.jpg', 1, '', '', 1453344326, 'p', '', 0, 0, '1', 0),
-(4, '选择伴郎应该注意什么', '', 15, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;　　既然有伴娘，那么肯定就会有伴郎了，不然就会有缺陷了，前面我们也分析过选择伴娘应该注意什么，其实选择伴郎也有很多方面需要注意的，下面上海婚纱摄影就带了解一下我们选择伴郎有写方面需要注意的。&lt;/p&gt;&lt;p&gt;　　选择伴郎首先要和伴娘的身高相配，也不要那种太高富帅了，一下把新郎比下去了，不知道的还以为还以为伴郎在娶新娘，其他的伴郎的人数是要和伴娘的人数相同的，在婚礼中，新娘和新郎有许多的事情要处理，很难的面面俱到，这时候一些琐碎的事情就需要伴郎伴娘来处理了，所以最好选择那些有责任心的，可以为兄弟两肋插刀的，关键时刻能够保持清醒理智的哥们。这样，婚礼出现什么状况，而新郎又脱不开身的时候，就可以放心把事情交给伴郎处理了。&lt;/p&gt;&lt;p&gt;　　最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张，或者婚礼气氛不够的时候挺身而出，让气氛活跃起来，这也很重要的。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张', 202, '2016-01-21/56a04bb6d9281.jpg', 1, '', '', 1453345718, 'p', '', 0, 0, '1', 0),
-(5, '相爱天长地久，回馈VIP客户', '', 16, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！&lt;/p&gt;', '即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！', 201, '2016-01-21/56a0a1fcaf013.jpg', 1, '', '', 1453367804, 'p', '', 0, 0, '1', 0),
-(6, '粉色手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '粉色玫瑰手捧花由翠绿装饰撑托着，彰显娇媚魅力', 200, '2016-01-21/56a0a57d282b7.jpg', 1, '', '', 1453368701, 'p', '', 0, 0, '1', 0),
-(7, '多彩手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '多姿多彩来形容也不为过，大红色，墨蓝色，翠绿色，橘黄色争香夺艳', 200, '2016-01-21/56a0a6107e735.jpg', 1, '', '', 1453368848, 'p,j,cp', 'http://www.rainfer.cn', 0, 0, '1', 0);
+(1, '小桌花—绿色清晰感', '', 13, 0, '', '', '1', '羽然彩妆', '', '绿色的小桌花带给婚礼清晰的点缀感，接近欧美风格的婚礼现场适用，时尚、前卫', 200, '/uploads/2016-01-21/56a03ff96b6ff.jpg', 1, '', '', 1453342713, 'p', '', 0, 0, '1', 0),
+(2, '多彩小桌花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '多彩多姿的小桌花，由草绿，玫瑰红，粉红等类型花朵组合', 200, '/uploads/2016-01-21/56a0428b39360.jpg', 1, '', '', 1453343371, 'p', '', 0, 0, '1', 0),
+(3, '怎么样才能拍出显瘦的婚纱照', '', 15, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;　　每一位胖新年在婚纱摄影前都显的不太自信，害怕因为自身的原因把婚纱照拍的不好看，那么胖新娘怎么样才能拍出显瘦的婚纱照呢，下面上海婚纱摄影就分享一下拍婚纱照应该注意的几点。&lt;/p&gt;&lt;p&gt;　　胖新娘在拍婚纱照的时候可以通过摆一些显瘦的姿势来拟补自己身材的缺陷。捧脸托腮：上海婚纱摄影提醒脸比较胖或比较大的胖新娘，在拍婚纱摄影的过程中我们可以通过用手捧脸的姿势，来遮掩脸上的一部分肉肉，让别人的视线不会集中在你的脸上。如果采用侧拍的时候用单手，正面拍摄用双手，还可以加上一些你喜欢的表情，这样可以达到不一样的效果，拍出你自己的自信心。交叉腿：对于大腿比较粗，而且喜欢穿短裙的胖新娘，浦东婚纱摄影该如何拍摄呢？下面就为胖新娘来说说该如何拍摄，胖新娘可以将双腿交叉起来，这样在拍摄的过程中就会显得，腿比较细，而且拍摄的效果也比较好。让丈夫将你抱起：在平地上进行婚纱摄影拍摄是胖新娘要比新郎要胖很的多，拍摄的实际效果也不是很好，胖新娘不妨让新郎将你抱起，这样可以增加拍摄的幸福感，婚纱的大裙摆也能让新娘看起来更加娇小。露出锁骨：有不少女性朋友都知道，女孩子的锁骨是最美的。对于身材苗条的女孩子的锁骨是很容易看见的，而对于胖新娘来说不是很明显，那么怎样在拍摄的过程中凸显胖新娘锁骨的美？在拍摄的时候胖新娘将肩部使劲往下压，这样你的锁骨就路出来了。&lt;/p&gt;&lt;p&gt;　　每一队新人在上海婚纱摄影都能找到合适自己的婚纱摄影，只要能够掌握一些小的拍摄的技巧就能够拍出唯美的婚纱照。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '只要能够掌握一些小的拍摄的技巧就能够拍出唯美的婚纱照', 220, '/uploads/2016-01-21/56a0467d5ab9f.jpg', 1, '', '', 1453344326, 'p', '', 0, 0, '1', 0),
+(4, '选择伴郎应该注意什么', '', 15, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;　　既然有伴娘，那么肯定就会有伴郎了，不然就会有缺陷了，前面我们也分析过选择伴娘应该注意什么，其实选择伴郎也有很多方面需要注意的，下面上海婚纱摄影就带了解一下我们选择伴郎有写方面需要注意的。&lt;/p&gt;&lt;p&gt;　　选择伴郎首先要和伴娘的身高相配，也不要那种太高富帅了，一下把新郎比下去了，不知道的还以为还以为伴郎在娶新娘，其他的伴郎的人数是要和伴娘的人数相同的，在婚礼中，新娘和新郎有许多的事情要处理，很难的面面俱到，这时候一些琐碎的事情就需要伴郎伴娘来处理了，所以最好选择那些有责任心的，可以为兄弟两肋插刀的，关键时刻能够保持清醒理智的哥们。这样，婚礼出现什么状况，而新郎又脱不开身的时候，就可以放心把事情交给伴郎处理了。&lt;/p&gt;&lt;p&gt;　　最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张，或者婚礼气氛不够的时候挺身而出，让气氛活跃起来，这也很重要的。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张', 202, '/uploads/2016-01-21/56a04bb6d9281.jpg', 1, '', '', 1453345718, 'p', '', 0, 0, '1', 0),
+(5, '相爱天长地久，回馈VIP客户', '', 16, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！&lt;/p&gt;', '即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！', 201, '/uploads/2016-01-21/56a0a1fcaf013.jpg', 1, '', '', 1453367804, 'p', '', 0, 0, '1', 0),
+(6, '粉色手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '粉色玫瑰手捧花由翠绿装饰撑托着，彰显娇媚魅力', 200, '/uploads/2016-01-21/56a0a57d282b7.jpg', 1, '', '', 1453368701, 'p', '', 0, 0, '1', 0),
+(7, '多彩手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '多姿多彩来形容也不为过，大红色，墨蓝色，翠绿色，橘黄色争香夺艳', 200, '/uploads/2016-01-21/56a0a6107e735.jpg', 1, '', '', 1453368848, 'p,j,cp', 'http://www.rainfer.cn', 0, 0, '1', 0);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_options`
 --
-DROP TABLE IF EXISTS `yf_options`;
+
 CREATE TABLE IF NOT EXISTS `yf_options` (
   `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `option_name` varchar(64) NOT NULL COMMENT '配置名',
@@ -465,12 +481,21 @@ CREATE TABLE IF NOT EXISTS `yf_options` (
   `autoload` int(2) NOT NULL DEFAULT '1' COMMENT '是否自动加载',
   PRIMARY KEY (`option_id`),
   UNIQUE KEY `option_name` (`option_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=2 ;
+
+--
+-- 转存表中的数据 `yf_options`
+--
+
+INSERT INTO `yf_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
+(1, 'site_options', '            {\r\n            		"site_name":"YFCMF内容管理框架",\r\n            		"site_host":"http://localhost/",\r\n            		"site_root":"",\r\n            		"site_icp":"",\r\n            		"site_admin_email":"admin@163.com",\r\n            		"site_tongji":"",\r\n            		"site_copyright":"",\r\n            		"site_seo_title":"YFCMF内容管理框架",\r\n            		"site_seo_keywords":"YFCMF,php,内容管理框架,cmf,cms,雨飞工作室",\r\n            		"site_seo_description":"YFCMF是雨飞工作室发布的一款用于快速开发的内容管理框架"\r\n        }', 1);
+
+-- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_plug_ad`
 --
-DROP TABLE IF EXISTS `yf_plug_ad`;
+
 CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
   `plug_ad_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_ad_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告名称',
@@ -492,14 +517,14 @@ CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
 --
 
 INSERT INTO `yf_plug_ad` (`plug_ad_id`, `plug_ad_name`, `plug_ad_adtypeid`, `plug_ad_checkid`, `plug_ad_js`, `plug_ad_pic`, `plug_ad_url`, `plug_ad_addtime`, `plug_ad_order`, `plug_ad_open`, `plug_ad_depid`, `plug_ad_butt`) VALUES
-(1, '轮播图片2', 1, 1, '', '2016-01-21/571972407942f.jpg', '', 1451356484, 50, 1, 0, 0);
+(1, '轮播图片2', 1, 1, '', '/uploads/Ad/2015-12-29/5681f14409b6a.jpg', '', 1451356484, 50, 1, 0, 0);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `yf_plug_adtype`
 --
-DROP TABLE IF EXISTS `yf_plug_adtype`;
+
 CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
   `plug_adtype_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `plug_adtype_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告位名称',
@@ -519,7 +544,7 @@ INSERT INTO `yf_plug_adtype` (`plug_adtype_id`, `plug_adtype_name`, `plug_adtype
 --
 -- 表的结构 `yf_plug_link`
 --
-DROP TABLE IF EXISTS `yf_plug_link`;
+
 CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_id` int(5) NOT NULL AUTO_INCREMENT,
   `plug_link_name` varchar(50) NOT NULL COMMENT '链接名称',
@@ -545,7 +570,7 @@ INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `
 --
 -- 表的结构 `yf_plug_linktype`
 --
-DROP TABLE IF EXISTS `yf_plug_linktype`;
+
 CREATE TABLE IF NOT EXISTS `yf_plug_linktype` (
   `plug_linktype_id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `plug_linktype_name` varchar(30) NOT NULL COMMENT '所属栏目名称',
@@ -566,7 +591,7 @@ INSERT INTO `yf_plug_linktype` (`plug_linktype_id`, `plug_linktype_name`, `plug_
 --
 -- 表的结构 `yf_plug_sug`
 --
-DROP TABLE IF EXISTS `yf_plug_sug`;
+
 CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   `plug_sug_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_sug_title` varchar(200) NOT NULL DEFAULT '' COMMENT '留言标题',
@@ -590,7 +615,7 @@ INSERT INTO `yf_plug_sug` (`plug_sug_id`, `plug_sug_title`, `plug_sug_email`, `p
 --
 -- 表的结构 `yf_region`
 --
-DROP TABLE IF EXISTS `yf_region`;
+
 CREATE TABLE IF NOT EXISTS `yf_region` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `pid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -4020,7 +4045,7 @@ INSERT INTO `yf_region` (`id`, `pid`, `name`, `type`) VALUES
 --
 -- 表的结构 `yf_source`
 --
-DROP TABLE IF EXISTS `yf_source`;
+
 CREATE TABLE IF NOT EXISTS `yf_source` (
   `source_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `source_name` varchar(30) NOT NULL,
@@ -4044,7 +4069,7 @@ INSERT INTO `yf_source` (`source_id`, `source_name`, `source_order`) VALUES
 --
 -- 表的结构 `yf_sys`
 --
-DROP TABLE IF EXISTS `yf_sys`;
+
 CREATE TABLE IF NOT EXISTS `yf_sys` (
   `sys_id` int(36) unsigned NOT NULL,
   `sys_name` char(36) NOT NULL DEFAULT '',
@@ -4080,7 +4105,7 @@ INSERT INTO `yf_sys` (`sys_id`, `sys_name`, `sys_url`, `sys_title`, `sys_key`, `
 --
 -- 表的结构 `yf_we_backtext`
 --
-DROP TABLE IF EXISTS `yf_we_backtext`;
+
 CREATE TABLE IF NOT EXISTS `yf_we_backtext` (
   `we_backtext_id` int(11) NOT NULL AUTO_INCREMENT,
   `we_backtext_textid` varchar(11) NOT NULL COMMENT '参数匹配',
@@ -4107,7 +4132,7 @@ INSERT INTO `yf_we_backtext` (`we_backtext_id`, `we_backtext_textid`, `we_backte
 --
 -- 表的结构 `yf_we_driver`
 --
-DROP TABLE IF EXISTS `yf_we_driver`;
+
 CREATE TABLE IF NOT EXISTS `yf_we_driver` (
   `we_driver_id` int(11) NOT NULL AUTO_INCREMENT,
   `we_driver_openid` varchar(50) NOT NULL COMMENT 'openid',
@@ -4124,7 +4149,7 @@ CREATE TABLE IF NOT EXISTS `yf_we_driver` (
 --
 -- 表的结构 `yf_we_menu`
 --
-DROP TABLE IF EXISTS `yf_we_menu`;
+
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (
   `we_menu_id` tinyint(11) NOT NULL AUTO_INCREMENT,
   `we_menu_name` varchar(20) NOT NULL COMMENT '菜单名称',
@@ -4154,7 +4179,7 @@ INSERT INTO `yf_we_menu` (`we_menu_id`, `we_menu_name`, `we_menu_leftid`, `we_me
 --
 -- 表的结构 `yf_we_userlist`
 --
-DROP TABLE IF EXISTS `yf_we_userlist`;
+
 CREATE TABLE IF NOT EXISTS `yf_we_userlist` (
   `we_userlist_id` int(11) NOT NULL AUTO_INCREMENT,
   `we_userlist_openid` varchar(100) NOT NULL DEFAULT '',
@@ -4168,7 +4193,7 @@ CREATE TABLE IF NOT EXISTS `yf_we_userlist` (
 --
 -- 表的结构 `yf_we_vote`
 --
-DROP TABLE IF EXISTS `yf_we_vote`;
+
 CREATE TABLE IF NOT EXISTS `yf_we_vote` (
   `we_vote_id` int(11) NOT NULL AUTO_INCREMENT,
   `we_vote_openid` varchar(50) NOT NULL,

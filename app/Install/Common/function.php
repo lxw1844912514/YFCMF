@@ -113,8 +113,8 @@ function create_admin_account($db,$table_prefix){
     $ip=get_client_ip();
     $sql =<<<hello
     INSERT INTO `{$table_prefix}admin` 
-    (admin_id, admin_username, admin_pwd, admin_pwd_salt, admin_email, admin_realname, admin_tel, admin_hits, admin_ip, admin_addtime, admin_mdemail, admin_open) VALUES 
-    ('1', '{$username}', '{$password}','{$admin_pwd_salt}','{$email}', '','',1,'{$ip}', {$create_date}, '', 1);;
+    (admin_id, admin_username, admin_pwd, admin_pwd_salt,admin_changepwd, admin_email, admin_realname, admin_tel, admin_hits, admin_ip, admin_addtime, admin_mdemail, admin_open) VALUES
+    ('1', '{$username}', '{$password}','{$admin_pwd_salt}','{$create_date}','{$email}', '','',1,'{$ip}', {$create_date}, '', 1);;
 hello;
     $db->execute($sql);
     show_msg("管理员账号创建成功!");

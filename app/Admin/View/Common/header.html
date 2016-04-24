@@ -185,7 +185,11 @@
 				<!-- #section:basics/navbar.user_menu -->
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="__PUBLIC__/assets/avatars/user.jpg" alt="Jason's Photo" />
+						<if condition="$_SESSION['admin_avatar'] neq ''">
+                            <img class="nav-user-photo" src="__UPLOAD__avatar/{$_SESSION['admin_avatar']}" alt="{$_SESSION['admin_username']}" />
+                        <else />
+                            <img class="nav-user-photo" src="__PUBLIC__/img/girl.jpg" alt="{$_SESSION['admin_username']}" />
+                        </if>
 								<span class="user-info">
 									<small>Welcome,</small>
 									{$_SESSION['admin_username']}
@@ -195,12 +199,6 @@
 					</a>
 
 					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-						<li>
-							<a href="#">
-								<i class="ace-icon fa fa-cog"></i>
-								个人设置
-							</a>
-						</li>
 
 						<li>
 							<a href="{:U('Sys/profile')}">

@@ -1,11 +1,6 @@
 <?php
-
 header('Content-type:text/html;charset=utf-8');
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); //关闭错误提示
-
-Session_Start();
-var_dump(123123);
-
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 require("shearphoto.config.php");
 require("shearphoto.up.php");
 if (!move_uploaded_file($_FILES['UpFile']['tmp_name'], $UpFile['file_url'])) {

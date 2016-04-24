@@ -22,7 +22,8 @@
 						<div class="col-xs-12 col-sm-4">
 							<select name="keytype">
 								<option value="news_title" <if condition="($keytype eq 'news_title') or ($keytype eq '')">selected</if>>按标题</option>
-								<option value="news_auto" <if condition="$keytype eq 'news_auto'">selected</if>>按发布人</option>
+								<option value="news_auto" <if condition="$keytype eq 'news_auto'">selected</if>>按发布人ID</option>
+								<option value="news_author" <if condition="$keytype eq 'news_author'">selected</if>>按发布人名</option>
 							</select>
 							<select name="diyflag">
 								<option value="">按属性</option>
@@ -112,7 +113,7 @@
 													</label>
 												</td>
 												<td class="hidden-xs" align="center">{$v.n_id}</td>
-												<td><a href="" target="_blank" title="{$v.news_title}">{$v.news_title|subtext=25}</a>【{$v.news_auto}】</td>
+												<td><a href="" target="_blank" title="{$v.news_title}">{$v.news_title|subtext=25}</a>【{$v['admin_realname']|default=$v['admin_username']}】</td>
 												<td class="hidden-sm hidden-xs">{$v.column_name}</td>
 												<td class="hidden-sm hidden-xs">
 													<if condition="strstr($v['news_flag'],'h') eq true"><span style="color:#03C">头</span></if>

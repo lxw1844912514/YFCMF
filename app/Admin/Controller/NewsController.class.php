@@ -21,7 +21,13 @@ class NewsController extends AuthController {
         }
 		//map架构查询条件数组
 		$map['news_back']= 0;
-		$map[$keytype]= array('like',"%".$key."%");
+        if($keytype=='news_title'){
+            $map[$keytype]= array('like',"%".$key."%");
+        }elseif($keytype=='news_author'){
+            $map['admin_realname|admin_username']= array('like',"%".$key."%");
+        }else{
+            $map[$keytype]= $key;
+        }
 		if ($opentype_check!=''){
 			$map['news_open']= array('eq',$opentype_check);
 		}
@@ -29,7 +35,9 @@ class NewsController extends AuthController {
 			$map[] ="FIND_IN_SET('$diyflag',news_flag)";
 		}
 		//p($map);die;
-		$count= M('news')->where($map)->count();// 查询满足要求的总记录数
+        $rs=D('News');
+        $join1 = "".C('DB_PREFIX').'admin as b on a.news_auto =b.admin_id';
+		$count= $rs->alias("a")->join($join1)->where($map)->count();// 查询满足要求的总记录数
 		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page',$show);
@@ -39,7 +47,7 @@ class NewsController extends AuthController {
 		}
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page_min',$show);
-		$news=D('News')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('news_time desc')->relation(true)->select();
+		$news=$rs->alias("a")->join($join1)->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('news_time desc')->relation(true)->select();
 		$diyflag_list=M('diyflag')->select();//文章属性数据
 		$this->assign('opentype_check',$opentype_check);
 		$this->assign('keytype',$keytype);
@@ -129,7 +137,7 @@ class NewsController extends AuthController {
 			'news_open'=>I('news_open'),
 			'news_scontent'=>I('news_scontent'),
 			'news_content'=>I('news_content'),
-			'news_auto'=>session('admin_realname'),
+			'news_auto'=>session('aid'),
 			'news_time'=>time(),
 			'news_hits'=>200,
 		);

@@ -44,13 +44,18 @@ class LoginController extends CommonController {
 				}
 				//登录后更新数据库，登录IP，登录次数,登录时间
 				$data=array(
-					'admin_ip'=>get_client_ip(),
+                    'admin_last_ip'=>$admin['admin_ip'],
+                    'admin_last_time'=>$admin['admin_time'],
+					'admin_ip'=>get_client_ip(0,true),
+                    'admin_time'=>time(),
 				);
+                //dump($data);
 				M('admin')->where(array('admin_username'=>$admin_username))->setInc('admin_hits',1);
-				M('admin')->save($data);
+				M('admin')->where(array('admin_username'=>$admin_username))->save($data);
 				session('aid',$admin['admin_id']);
 				session('admin_username',$admin['admin_username']);
 				session('admin_realname',$admin['admin_realname']);
+				session('admin_avatar',$admin['admin_avatar']);
 				session('admin_last_change_pwd_time', $admin ['admin_changepwd']);
 				$this->success('恭喜您，登陆成功',1,1);
 			}

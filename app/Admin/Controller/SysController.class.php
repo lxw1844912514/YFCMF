@@ -589,6 +589,7 @@ class SysController extends AuthController {
 			'admin_realname'=>I('admin_realname'),
 			'admin_ip'=>get_client_ip(),
 			'admin_addtime'=>time(),
+            'admin_changepwd'=>time(),
 		);
 		$result=$admin->add($sldata);
 		$accdata=array(
@@ -617,14 +618,17 @@ class SysController extends AuthController {
 		if ($admin_pwd){
 			$admin_pwd_salt=String::randString(10);
 			$admindata['admin_pwd']=encrypt_password(I('admin_pwd'),$admin_pwd_salt);
+            $admindata['admin_changepwd']=time();
 		}
 		$admindata['admin_email']=I('admin_email');
 		$admindata['admin_tel']=I('admin_tel');
 		$admindata['admin_realname']=I('admin_realname');
-		$admindata['admin_open']=I('admin_open');
+		$admindata['admin_open']=I('admin_open',0,'intval');
 		$admin_list->save($admindata);
-		//修改
-		$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+        if($group_id){
+            //修改
+            $rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+        }
         if($rst!==false){
             $this->success('管理员修改成功',U('admin_list'),1);
         }else{
@@ -1016,6 +1020,32 @@ class SysController extends AuthController {
 	}
 	/****************************************************************************个人中心模块*******************************************************************/
 	public function profile(){
+        $admin=array();
+        if(session('aid')){
+            //$admin=M('admin')->where(array('id'=>session('aid')))->find();
+            $rs=M('admin');
+            $join1 = "".C('DB_PREFIX').'auth_group_access as b on a.admin_id =b.uid';
+            $join2= "".C('DB_PREFIX').'auth_group as c on b.group_id = c.id';
+            $admin=$rs->alias("a")->join($join1)->join($join2)->where(array('a.admin_id'=>session('aid')))->find();
+            $news_count=M('News')->where(array('news_auto'))->count();
+            $admin['news_count']=$news_count;
+        }
+        $this->assign('admin', $admin);
 		$this->display();
 	}
+    public function avatar(){
+        $imgurl=I('post.imgurl');
+        //去'/'
+        $imgurl=str_replace('/','',$imgurl);
+        $admin=M('admin')->where(array('admin_id'=>session('aid')))->find();
+        $old_img=$admin['admin_avatar'];
+        $data['admin_avatar']=$imgurl;
+        $rst=M('admin')->where(array('admin_id'=>session('aid')))->save($data);
+        if($rst!==false){
+            session('admin_avatar',$imgurl);
+            $this->success ('头像更新成功',U('profile'),1);
+        }else{
+            $this->error ('头像更新失败',U('profile'),0);
+        }
+    }
 }

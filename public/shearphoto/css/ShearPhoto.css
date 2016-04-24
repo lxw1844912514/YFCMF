@@ -170,11 +170,11 @@
 #SelectBox #PhotoLoading {
 	background-position:0 -148px;
 	left:50%;
-	top:52%
+	top:70%
 }
 #SelectBox #selectImage {
 	left:50%;
-	top:25%
+	top:35%
 }
 #SelectBox #camerasImage {
 	background-position:0 -74px;
@@ -221,7 +221,7 @@
 	float:left;
 	height:20px;
 	position:relative;
-	width:200px
+	width:160px
 }
 #Shearbar #ZoomDist #ZoomBar {
 	background:url(../images/ZoomBar.gif) no-repeat;
@@ -271,7 +271,7 @@
 	position:relative;
 	z-index:50;
 	border: 1px solid #CCC;
-	float: left;
+	margin:0 auto;
 }
 #main .BigImg {
 	float:left;
@@ -460,7 +460,7 @@
 	border:1px solid #CCC;
 	display:inline-block;
 	float:left;
-	margin:5px 5px;
+	margin:2px 90px;
 	padding:2px;
 }
 .complete .completeTxt strong i {
@@ -480,52 +480,55 @@
 	border-radius:10px;
 	box-shadow:3px 3px 10px 0 #000;
 	display:none;
-	height:340px;
-	left:50%;
-	position:absolute;
-	top:50%;
-	width:465px;
+	height:400px;
+	position:relative;
+	width:420px;
 	z-index:210;
-	margin:-178px 0 0 -240.5px;
+	margin:0 auto;
 	background:#DFEFFF;
+	margin-top:-400px;
 }
 #photoalbum h1 {
 	background:#999;
 	color:#FFF;
 	font-size:15px;
-	height:40px;
+	height:35px;
 	line-height:30px;
 	padding-left:10px;
-	width:455px
+	width:410px;
+	position:absolute;
+	top:-10px;
 }
 #photoalbum i {
 	background:url(../images/fancybox_sprite.png) no-repeat;
 	display:block;
 	float:left;
 	height:37px;
-	left:429px;
-	position:absolute;
-	top:0;
 	cursor:pointer;
-	width:36px
+	width:36px;
+	position:absolute;
+	left:370px;
+	top:10px;
 }
 #photoalbum ul {
 	height:auto;
-	width:100%
+	width:100%;
+	position:absolute;
+	top:50px;
+	margin:0 auto;
 }
 #photoalbum ul li {
 	border:1px solid #CCC;
 	cursor:pointer;
 	display:inline;
 	float:left;
-	height:133px;
+	height:155px;
 	margin:5px;
-	padding:2px;
-	width:100px;
+	width:47%;
 	overflow: hidden;
 }
 #photoalbum ul li img {
-	width:100%
+	height:100%;
 }
 #photoalbum ul li:hover {
 	border:1px solid #09F
