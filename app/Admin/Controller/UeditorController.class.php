@@ -16,8 +16,7 @@ class UeditorController extends CommonController {
 		header("Content-Type: text/html; charset=utf-8");		
 		$CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("./public/ueditor/config.json")), true);
 		$this->config=$CONFIG;
-		$action = I('action');
-		
+		$action = $_GET['action'];
 		switch ($action) {
 			case 'config':
 				$result =  json_encode($CONFIG);
@@ -143,7 +142,6 @@ class UeditorController extends CommonController {
 		return $files;
 	}	
 	private function _ueditor_upload($config=array()){
-		
 		$date=date("Y-m-d");
 		//上传处理类
 		$mconfig=array(
@@ -178,11 +176,11 @@ class UeditorController extends CommonController {
 			}else{
 				$url = C("TMPL_PARSE_STRING.__UPLOAD__")."$date/".$info['upfile']['savename'];
 			}
-			if(strpos($url, "https")===0 || strpos($url, "http")===0){		
-			}else{//local
-				$host=(is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'];
-				$url=$host.$url;
-			}
+			// if(strpos($url, "https")===0 || strpos($url, "http")===0){		
+			// }else{//local
+				// $host=(is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'];
+				// $url=$host.$url;
+			// }
 		} else {
 			$state = $upload->getError();
             $url='';
@@ -194,7 +192,6 @@ class UeditorController extends CommonController {
 				"title" => $title,
 				"original" =>$oriName,
 		);
-		
 		return json_encode($response);
 	}
 	private function _ueditor_upload_scrawl(){		
@@ -209,7 +206,8 @@ class UeditorController extends CommonController {
 			$savepath = save_storage_content('png', $img);
 			if ($savepath) {
 				$state = 'SUCCESS';
-				$url = (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath;
+				//$url = (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath;
+				$url = __ROOT__.'/'.$savepath;
 			} else {
 				$state = 'Save scrawl file error!';
 			}
@@ -243,21 +241,44 @@ class UeditorController extends CommonController {
 							if ($savepath) {
 								$savelist [] = array(
 									'state' => 'SUCCESS',
-									'url' => (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath,
+									//'url' => (is_ssl() ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].__ROOT__.'/'.$savepath,
+									'url' => __ROOT__.'/'.$savepath,
+									'size' => strlen($img),
+									'title' => '',
+									'original' => '',
+									'source' => htmlspecialchars($f)
 								);
 							} else {
-								$ret ['state'] = 'Save remote file error!';
+								$savelist [] = array(
+								'state' => 'Save remote file error!',
+								'url' => '',
+								'size' => '',
+								'title' => '',
+								'original' => '',
+								'source' => htmlspecialchars($f),
+								);
 							}
 						} else {
-							$ret ['state'] = 'Get remote file error';
+							$savelist [] = array(
+							'state' => 'Get remote file error',
+							'url' => '',
+							'size' => '',
+							'title' => '',
+							'original' => '',
+							'source' => htmlspecialchars($f),
+							);
 						}
 					} else {
-						$ret ['state'] = 'File ext not allowed';
+						$sret ['state'] = 'File ext not allowed';
 					}
 				} else {
 					$savelist [] = array(
 						'state' => 'not remote image',
 						'url' => '',
+						'size' => '',
+						'title' => '',
+						'original' => '',
+						'source' => htmlspecialchars($f),
 					);
 				}
 			}

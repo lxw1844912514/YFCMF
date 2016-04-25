@@ -3,6 +3,9 @@ namespace Admin\Controller;
 use Common\Controller\AuthController;
 
 class PlugController extends AuthController {
+		private $files_res_exists;
+		private $files_res_used;
+		private $files_unused;
 	/*
      * 友情链接列表
      */
@@ -444,9 +447,127 @@ class PlugController extends AuthController {
 		$this->ajaxReturn($sl_data,'json');
 	}
 
-
-
-
+	/**********************************************文件设置***********************************************************/
+	public function plug_file_list(){
+		$count=M('plug_files')->count();
+		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
+		$show= $Page->show();// 分页显示输出
+		$plug_files=M('plug_files')->limit($Page->firstRow.','.$Page->listRows)->order('uptime desc')->select();
+		$this->assign('plug_files',$plug_files);
+		$this->assign('page',$show);
+		$this->display();
+	}
+	public function plug_file_init(){
+		//获取本地文件数组，'/data/upload/2016-01-21/56a03ff96b6ff.jpg' => int 224138
+		$file_list=list_file('data/upload');
+		$path="/data/upload/";
+		$this->files_res_exists=array();
+		foreach ($file_list as $a){
+			if ($a ['isDir']) {
+				foreach (list_file($a ['pathname'] . '/') as $d) {
+					if (!$d ['isDir']) {
+						//文件
+						if($d['ext']!='html' && $d['ext']!='lock'){
+							$this->files_res_exists [$path . $a ['filename'] . '/' . $d ['filename']] = $d ['size'];
+						}
+					}
+				}
+			}
+		}
+		//获取数据表datafile已存记录，并删除资源数组里的成员，完毕后得到未存入数据表datafile的资源文件
+		$datas = M('plug_files')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				$f = $d ['path'];
+				if (isset ($this->files_res_exists [$f])) {
+					unset ($this->files_res_exists [$f]);
+				}
+			}
+		}
+		//未存入数据表的数据写入数据表
+		$time=time();
+		foreach ($this->files_res_exists as $d => $v) {
+			M('plug_files')->add(array(
+				'path' => $d,
+				'uptime' => $time,
+				'filesize' => $v
+			));
+		}
+		//获取利用到的资源文件
+		$this->files_res_used=array();
+		//avatar,涉及表admin里字段admin_avatar，member_list里member_list_headpic
+		$datas = M('admin')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['admin_avatar']){
+					if(stripos($d['admin_avatar'],'http')===false){
+						//本地头像
+						$this->files_res_used['/data/upload/avatar/' . $d['admin_avatar']]=true;
+					}
+				}
+			}
+		}
+		$datas = M('member_list')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['member_list_headpic']){
+					if(stripos($d['member_list_headpic'],'http')===false){
+						//本地头像
+						$this->files_res_used['/data/upload/avatar/' . $d['member_list_headpic']]=true;
+					}
+				}
+			}
+		}
+		//news里的news_img,news_pic_allurl,news_content
+		$datas = M('news')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['news_img']){
+					if(stripos($d['news_img'],'http')===false){
+						$this->files_res_used[$d['news_img']]=true;
+					}
+				}
+				if($d['news_pic_allurl']){
+					$imgs=explode(",",$d['news_pic_allurl']);
+					foreach ($imgs as &$f) {
+						if(stripos($f,'http')===false){
+							$this->files_res_used[$f]=true;
+						}
+					}
+				}
+				if($d['news_content']){
+					preg_match_all('/data\\/upload\\/([a-z]+\\/[0-9]{6}\\/[0-9]{2}\\/[0-9]+_[a-z0-9]+_[0-9]+\\.[a-z0-9]+)/i', $d['news_content'], $mat);
+				}
+			}
+		}
+		//options里'option_name'=>'site_options'的site_logo、site_qr
+		$datas = M('options')->where(array('option_name'=>'site_options'))->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['option_value']){
+					$smeta=json_decode($d['option_value'],true);
+					if($smeta['site_logo'] && stripos($smeta['site_logo'],'http')===false){
+						$this->files_res_used[$smeta['site_logo']]=true;
+					}
+					if($smeta['site_qr'] && stripos($smeta['site_qr'],'http')===false){
+						$this->files_res_used[$smeta['site_qr']]=true;
+					}
+				}
+			}
+		}		
+		//plug_ad里plug_ad_pic
+		$datas = M('plug_ad')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['plug_ad_pic']){
+					if(stripos($d['plug_ad_pic'],'http')===false){
+						//本地图片
+						$this->files_res_used[$d['plug_ad_pic']]=true;
+					}
+				}
+			}
+		}
+	}
 
 
 
