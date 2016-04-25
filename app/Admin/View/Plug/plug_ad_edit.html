@@ -76,17 +76,17 @@
 					<div class="form-group" id="pic_list" <if condition="$plug_ad.plug_ad_checkid eq 2">style="display:none"</if>>
 					<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告图片： </label>
 					<div class="col-sm-11">
-						<input type="hidden" name="checkpic" id="checkpic" value="__UPLOAD__{$plug_ad.plug_ad_pic}" />
-						<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="__UPLOAD__{$plug_ad.plug_ad_pic}" />
+						<input type="hidden" name="checkpic" id="checkpic" value="{$plug_ad.plug_ad_pic}" />
+						<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$plug_ad.plug_ad_pic}" />
 						<a href="javascript:;" class="file" title="点击选择所要上传的图片">
 							<input type="file" name="file0" id="file0" multiple="multiple"/>
 							选择上传文件
 						</a>
-						&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$plug_ad.plug_ad_pic eq ''">__PUBLIC__/img/no_img.jpg<else/>__UPLOAD__{$plug_ad.plug_ad_pic}</if>');" title="还原修改前的图片" class="file">
+						&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$plug_ad.plug_ad_pic eq ''">__PUBLIC__/img/no_img.jpg<else/>{$plug_ad.plug_ad_pic}</if>');" title="还原修改前的图片" class="file">
 						撤销上传
 						</a>
 
-						<div><img src="<if condition="$plug_ad.plug_ad_pic neq ''">__UPLOAD__{$plug_ad.plug_ad_pic}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
+						<div><img src="<if condition="$plug_ad.plug_ad_pic neq ''">{$plug_ad.plug_ad_pic}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
 					</div>
 				</div>
 				<div class="space-4"></div>

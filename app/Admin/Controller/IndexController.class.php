@@ -4,7 +4,7 @@ use Common\Controller\CommonController;
 class IndexController extends CommonController {
 	//首页
 	public function index(){
-		$this->show(U('Plug/plug_file_init'));
+		dump(__ROOT__);
 		//未登录
 		if (empty($_SESSION['aid'])){
 			$this->redirect('Login/login');

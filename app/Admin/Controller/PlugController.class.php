@@ -208,7 +208,7 @@ class PlugController extends AuthController {
 			$info   =   $upload->upload();
 
 			if($info) {
-				$img_url=$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+				$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
@@ -313,7 +313,7 @@ class PlugController extends AuthController {
 				$info   =   $upload->upload();
 
 				if($info) {
-					$img_url=$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
 					$this->error($upload->getError());//否则就是上传错误，显示错误原因
 				}
@@ -458,7 +458,7 @@ class PlugController extends AuthController {
 		$this->display();
 	}
 	public function plug_file_init(){
-		//获取本地文件数组，'/data/upload/2016-01-21/56a03ff96b6ff.jpg' => int 224138
+		//获取本地文件数组，'./data/upload/2016-01-21/56a03ff96b6ff.jpg' => int 224138
 		$file_list=list_file('data/upload');
 		$path="/data/upload/";
 		$this->files_res_exists=array();
@@ -468,7 +468,7 @@ class PlugController extends AuthController {
 					if (!$d ['isDir']) {
 						//文件
 						if($d['ext']!='html' && $d['ext']!='lock'){
-							$this->files_res_exists [$path . $a ['filename'] . '/' . $d ['filename']] = $d ['size'];
+							$this->files_res_exists ['.'.$path . $a ['filename'] . '/' . $d ['filename']] = $d ['size'];
 						}
 					}
 				}
@@ -502,7 +502,7 @@ class PlugController extends AuthController {
 				if($d['admin_avatar']){
 					if(stripos($d['admin_avatar'],'http')===false){
 						//本地头像
-						$this->files_res_used['/data/upload/avatar/' . $d['admin_avatar']]=true;
+						$this->files_res_used['./data/upload/avatar/' . $d['admin_avatar']]=true;
 					}
 				}
 			}
@@ -513,7 +513,7 @@ class PlugController extends AuthController {
 				if($d['member_list_headpic']){
 					if(stripos($d['member_list_headpic'],'http')===false){
 						//本地头像
-						$this->files_res_used['/data/upload/avatar/' . $d['member_list_headpic']]=true;
+						$this->files_res_used['./data/upload/avatar/' . $d['member_list_headpic']]=true;
 					}
 				}
 			}
@@ -530,13 +530,16 @@ class PlugController extends AuthController {
 				if($d['news_pic_allurl']){
 					$imgs=explode(",",$d['news_pic_allurl']);
 					foreach ($imgs as &$f) {
-						if(stripos($f,'http')===false){
+						if(stripos($f,'http')===false && !empty($f)){
 							$this->files_res_used[$f]=true;
 						}
 					}
 				}
 				if($d['news_content']){
-					preg_match_all('/data\\/upload\\/([a-z]+\\/[0-9]{6}\\/[0-9]{2}\\/[0-9]+_[a-z0-9]+_[0-9]+\\.[a-z0-9]+)/i', $d['news_content'], $mat);
+					preg_match_all(__ROOT__.'\/data\/upload\/([0-9]{4}[-][0-9]{2}[-][0-9]{2}\/[a-z0-9]{13}\.[a-z0-9]+)/i', $d['news_content'], $mat);
+                    foreach ($mat [1] as &$f) {
+                        $this->files_res_used['./data/upload/'.$f]=true;
+                    }
 				}
 			}
 		}
@@ -567,6 +570,8 @@ class PlugController extends AuthController {
 				}
 			}
 		}
+        dump($this->files_res_used);
+        dump($this->files_res_exists);
 	}
 
 

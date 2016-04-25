@@ -96,9 +96,9 @@ class NewsController extends AuthController {
 			if($info) {
 				foreach($info as $file){
 					if ($file['key']=='pic_one'){//单图路径数组
-						$img_url=$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$img_url=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 					}else{
-						$picall=$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$picall=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 						$picall_url=$picall.','.$picall_url;
 					}
 				}
@@ -197,9 +197,9 @@ class NewsController extends AuthController {
 			if($info) {
 				foreach($info as $file){//获取全部的上传数据
 					if ($file['key']=='pic_one'){//单图路径数组，通过key来判断是单图还是多图
-						$img_url=$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$img_url=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 					}else{//多图上传路径
-						$picall=$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$picall=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 						$picall_url=$picall.','.$picall_url;//循环拼凑成字符串
 					}
 				}
