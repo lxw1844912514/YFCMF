@@ -449,15 +449,29 @@ class PlugController extends AuthController {
 
 	/**********************************************文件设置***********************************************************/
 	public function plug_file_list(){
-		$count=M('plug_files')->count();
+        $map=array();
+        //查询：时间格式过滤
+        $sldate=I('reservation','');//获取格式 2015-11-12 - 2015-11-18
+        $arr = explode(" - ",$sldate);//转换成数组
+        if(count($arr)==2){
+            $arrdateone=strtotime($arr[0]);
+            $arrdatetwo=strtotime($arr[1].' 23:55:55');
+            $map['uptime'] = array(array('egt',$arrdateone),array('elt',$arrdatetwo),'AND');
+        }
+        //查询文件路径
+        $val=I('val');
+        if(!empty($val)){
+            $map['path']= array('like',"%".$val."%");
+        }
+		$count=M('plug_files')->where($map)->count();
 		$Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
-		$plug_files=M('plug_files')->limit($Page->firstRow.','.$Page->listRows)->order('uptime desc')->select();
+		$plug_files=M('plug_files')->where($map)->order('id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
 		$this->assign('plug_files',$plug_files);
 		$this->assign('page',$show);
 		$this->display();
 	}
-	public function plug_file_init(){
+	public function plug_file_filter(){
 		//获取本地文件数组，'./data/upload/2016-01-21/56a03ff96b6ff.jpg' => int 224138
 		$file_list=list_file('data/upload');
 		$path="/data/upload/";
@@ -578,8 +592,37 @@ class PlugController extends AuthController {
 				}
 			}
 		}
-        dump($this->files_res_used);
-        dump($this->files_res_exists);
+        //dump($this->files_res_used);
+        //dump($this->files_res_exists);
+        //找出未使用的资源文件
+        $this->files_unused=array();
+        $ids=array();
+        $datas = M('plug_files')->select();
+        if (is_array($datas)) {
+            foreach ($datas as &$d) {
+                $f = $d ['path'];
+                if (isset ($this->files_res_used[$f])) {
+                    unset ($this->files_res_used[$f]);
+                } else {
+                    $ids[]=$d ['id'];
+                    $this->files_unused [] = array(
+                        'id' => $d ['id'],
+                        'filesize' =>$d['filesize'],
+                        'path' => $f,
+                        'uptime' => $d ['uptime']
+                    );
+                }
+            }
+        }
+        //数据库
+        $where['id']=array('in',$ids);
+        $count=M('plug_files')->where($where)->count();
+        $Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
+        $show= $Page->show();// 分页显示输出
+        $plug_files=M('plug_files')->where($where)->order('id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
+        $this->assign('plug_files',$plug_files);
+        $this->assign('page',$show);
+        $this->display();
 	}
 
 
