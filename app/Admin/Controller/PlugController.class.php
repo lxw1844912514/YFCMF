@@ -450,7 +450,7 @@ class PlugController extends AuthController {
 	/**********************************************文件设置***********************************************************/
 	public function plug_file_list(){
 		$count=M('plug_files')->count();
-		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
+		$Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
 		$plug_files=M('plug_files')->limit($Page->firstRow.','.$Page->listRows)->order('uptime desc')->select();
 		$this->assign('plug_files',$plug_files);
@@ -495,7 +495,7 @@ class PlugController extends AuthController {
 		}
 		//获取利用到的资源文件
 		$this->files_res_used=array();
-		//avatar,涉及表admin里字段admin_avatar，member_list里member_list_headpic
+		//avatar,涉及表admin里字段admin_avatar，member_list里member_list_headpic,头像只保存头像图片名
 		$datas = M('admin')->select();
 		if (is_array($datas)) {
 			foreach ($datas as &$d) {
@@ -522,11 +522,13 @@ class PlugController extends AuthController {
 		$datas = M('news')->select();
 		if (is_array($datas)) {
 			foreach ($datas as &$d) {
+				//字段保存'./data/....'
 				if($d['news_img']){
 					if(stripos($d['news_img'],'http')===false){
 						$this->files_res_used[$d['news_img']]=true;
 					}
 				}
+				//字段保存'./data/....'
 				if($d['news_pic_allurl']){
 					$imgs=explode(",",$d['news_pic_allurl']);
 					foreach ($imgs as &$f) {
@@ -536,14 +538,20 @@ class PlugController extends AuthController {
 					}
 				}
 				if($d['news_content']){
+					//匹配'/网站目录/data/....'
 					preg_match_all(__ROOT__.'\/data\/upload\/([0-9]{4}[-][0-9]{2}[-][0-9]{2}\/[a-z0-9]{13}\.[a-z0-9]+)/i', $d['news_content'], $mat);
+                    foreach ($mat [1] as &$f) {
+                        $this->files_res_used['./data/upload/'.$f]=true;
+                    }
+					//匹配'./data/....'
+					preg_match_all('/\.\/data\/upload\/([0-9]{4}[-][0-9]{2}[-][0-9]{2}\/[a-z0-9]{13}\.[a-z0-9]+)/i', $d['news_content'], $mat);
                     foreach ($mat [1] as &$f) {
                         $this->files_res_used['./data/upload/'.$f]=true;
                     }
 				}
 			}
 		}
-		//options里'option_name'=>'site_options'的site_logo、site_qr
+		//options里'option_name'=>'site_options'的site_logo、site_qr,字段保存'./data/....'
 		$datas = M('options')->where(array('option_name'=>'site_options'))->select();
 		if (is_array($datas)) {
 			foreach ($datas as &$d) {
@@ -558,7 +566,7 @@ class PlugController extends AuthController {
 				}
 			}
 		}		
-		//plug_ad里plug_ad_pic
+		//plug_ad里plug_ad_pic,字段保存'./data/....'
 		$datas = M('plug_ad')->select();
 		if (is_array($datas)) {
 			foreach ($datas as &$d) {
