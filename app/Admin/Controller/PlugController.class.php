@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
 use Common\Controller\AuthController;
-
+use Think\Storage;
 class PlugController extends AuthController {
 		private $files_res_exists;
 		private $files_res_used;
@@ -624,12 +624,71 @@ class PlugController extends AuthController {
         $this->assign('page',$show);
         $this->display();
 	}
-
-
-
-
-
-
-
-
+	public function plug_file_alldel(){
+		$p = I('p');
+		$ids = I('id');
+		if(empty($ids)){
+			$this -> error("请选择要删除的文件");
+		}
+		if(is_array($ids)){
+			$where = 'id in('.implode(',',$ids).')';
+			foreach (M('plug_files')->field('path')->where($where)->select() as $r) {
+				$file = $r ['path'];
+				if(stripos($file, "/")===0){
+					$file=substr($file,1);
+				}
+				if (Storage::has($file)) {
+					Storage::unlink($file);
+				}
+			}
+			if (M('plug_files')->where($where)->delete()!==false) {
+				$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
+			} else {
+				$this->error("删除文件失败！");
+			}
+		}else{
+			$r=M('plug_files')->find($ids);
+			if($r){
+				$file=$r['path'];
+				if(stripos($file, "/")===0){
+					$file=substr($file,1);
+				}
+				if (Storage::has($file)) {
+					Storage::unlink($file);
+				}
+				if (M('plug_files')->delete($ids)!==false) {
+					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
+				}else{
+					$this->error("删除文件失败！");
+				}
+			}else{
+				$this->error("删除文件失败！");
+			}
+		}
+	}
+	public function plug_file_del(){
+		$id=I('id');
+		$p = I('p');
+		if (empty($id)){
+			$this->error('参数错误',U('plug_file_filter'),0);
+		}else{
+			$r=M('plug_files')->find($id);
+			if($r){
+				$file=$r['path'];
+				if(stripos($file, "/")===0){
+					$file=substr($file,1);
+				}
+				if (Storage::has($file)) {
+					Storage::unlink($file);
+				}
+				if (M('plug_files')->delete($id)!==false) {
+					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
+				}else{
+					$this->error("删除文件失败！");
+				}
+			}else{
+				$this -> error("文件删除失败！");
+			}
+		}
+	}
 }
