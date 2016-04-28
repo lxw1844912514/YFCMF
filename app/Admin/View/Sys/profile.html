@@ -50,16 +50,11 @@
                             <!-- #section:pages/profile.contact -->
                             <div class="profile-contact-info">
                                 <div class="profile-contact-links align-left">
-                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#myModaledit">
+                                    <span id="edit" class="btn btn-link" data-toggle="modal" data-target="#myModaledit">
                                         <i class="ace-icon fa fa-pencil bigger-120 green"></i>
-                                        修改个人资料
-                                    </a>
-
-                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#myModaledit">
-                                        <i class="ace-icon fa fa-globe bigger-125 blue"></i>
-                                        修改登录密码
-                                    </a>												</div>
-
+                                        修改个人信息
+                                    </span>
+								</div>
                                 <div class="space-6"></div>
                             </div>
 
@@ -407,10 +402,14 @@
             $(document).ready(function(){
                 $("#myModaledit").hide();
                 $("#gb").click(function(){
-                    $("#myModaledit").hide(200);
+                    $("#myModaledit").hide(300);
                 });
                 $("#gbb").click(function(){
-                    $("#myModaledit").hide(200);
+                    $("#myModaledit").hide(300);
+                });
+				$("#edit").click(function(){
+                    $("#myModaledit").show(300);
+					return false;
                 });
             });
         </script>

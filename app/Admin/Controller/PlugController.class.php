@@ -615,13 +615,17 @@ class PlugController extends AuthController {
             }
         }
         //数据库
-        $where['id']=array('in',$ids);
-        $count=M('plug_files')->where($where)->count();
-        $Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
-        $show= $Page->show();// 分页显示输出
-        $plug_files=M('plug_files')->where($where)->order('id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
-        $this->assign('plug_files',$plug_files);
-        $this->assign('page',$show);
+		$where=array();
+		$plug_files=array();
+		if(!empty($ids)){
+			$where['id']=array('in',$ids);
+			$count=M('plug_files')->where($where)->count();
+			$Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
+			$show= $Page->show();// 分页显示输出
+			$plug_files=M('plug_files')->where($where)->order('id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
+			$this->assign('plug_files',$plug_files);
+			$this->assign('page',$show);
+		}
         $this->display();
 	}
 	public function plug_file_alldel(){

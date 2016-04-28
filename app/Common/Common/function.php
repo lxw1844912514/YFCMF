@@ -423,3 +423,21 @@ function get_host(){
 	$protocol=is_ssl()?"https://":"http://";
 	return $protocol.$host;
 }
+/**
+ * 获取后台管理设置的网站信息，此类信息一般用于前台
+ */
+function get_site_options(){
+	$site_options = F("site_options");
+	if(empty($site_options)){
+		$options_obj = M("Options");
+		$option = $options_obj->where("option_name='site_options'")->find();
+		if($option){
+			$site_options = json_decode($option['option_value'],true);
+		}else{
+			$site_options = array();
+		}
+		F("site_options", $site_options);
+	}
+	$site_options['site_tongji']=htmlspecialchars_decode($site_options['site_tongji']);
+	return $site_options;	
+}
