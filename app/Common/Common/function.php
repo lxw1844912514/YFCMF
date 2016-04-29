@@ -433,6 +433,7 @@ function get_site_options(){
 		$option = $options_obj->where("option_name='site_options'")->find();
 		if($option){
 			$site_options = json_decode($option['option_value'],true);
+			$site_options['site_copyright']=htmlspecialchars_decode($site_options['site_copyright']);
 		}else{
 			$site_options = array();
 		}
@@ -440,4 +441,12 @@ function get_site_options(){
 	}
 	$site_options['site_tongji']=htmlspecialchars_decode($site_options['site_tongji']);
 	return $site_options;	
+}
+/**
+ * 获取所有友情连接
+ * @return array
+ */
+function get_links($type=1){
+	$links_obj= M("plug_link");
+	return $links_obj->where(array('plug_link_typeid'=>$type,'plug_link_open'=>1))->order("plug_link_order ASC")->select();
 }

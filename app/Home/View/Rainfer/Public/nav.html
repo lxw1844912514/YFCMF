@@ -29,7 +29,7 @@
                 <h1>
                     <a href="__ROOT__/">
 						<if condition="!empty($site_logo)">
-						<img src="#" alt="logo" style="margin-top:-14px;height:86px;">
+						<img src="{$site_logo}" alt="logo" style="margin-top:-14px;height:86px;">
 						<else />
 						<img src="{$Think.const.THEME_PATH}Public/images/logo.png" alt="logo" style="margin-top:-14px;height:86px;">
                         </if>
@@ -72,7 +72,7 @@
                         <else />
                         <li>
                             <a href="#" class="sf-with-ul menu-login">
-                                <img src="__TMPL__/Public/images/headicon.png" class="headicon"/>登录
+                                <img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="headicon"/>登录
 						<span class="sf-sub-indicator">
                            <i class="fa fa-angle-down "></i>
                            </span>

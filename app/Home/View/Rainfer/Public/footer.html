@@ -9,9 +9,9 @@
                 <section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-two">
                     <h3>友情链接</h3>
                     <ul id="tweets">
-                        <php>$links='';</php>
+                        <php>$links=get_links($link_footer);</php>
                         <foreach name="links" item="vo">
-                            <li><a href="{$vo.link_url}" target="{$vo.link_target}">{$vo.link_name}</a></li>
+                            <li><a href="{$vo.plug_link_url}" target="{$vo.plug_link_target}">{$vo.plug_link_name}</a></li>
                         </foreach>
                     </ul>
                 </section>

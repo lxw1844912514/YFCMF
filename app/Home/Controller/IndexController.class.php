@@ -1,15 +1,16 @@
 <?php
 namespace Home\Controller;
-use Common\Controller\CommonController;
+use Common\Controller\HomebaseController;
 /*
  * 目前为第一套前台企业网站模板，通用参数功能需要进一步完善
  */
 
-class IndexController extends CommonController {
+class IndexController extends HomebaseController {
 	/*
      * 公共控制器，输出导航以及底部提交信息
      */
 	Public function _initialize(){
+		parent::_initialize();
 		/*
 		 * 公共模块
 		 * 主要作用于顶部导航

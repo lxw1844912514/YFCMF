@@ -38,6 +38,7 @@ class PlugController extends AuthController {
 			$sl_data=array(
 				'plug_link_name'=>I('plug_link_name'),
 				'plug_link_url'=>I('plug_link_url'),
+				'plug_link_target'=>I('plug_link_target'),
 				'plug_link_typeid'=>I('plug_link_typeid'),
 				'plug_link_qq'=>I('plug_link_qq'),
 				'plug_link_order'=>I('plug_link_order'),
@@ -54,8 +55,12 @@ class PlugController extends AuthController {
      */
 	public function plug_link_del(){
 		$p=I('p');
-		M('plug_link')->where(array('plug_link_id'=>I('plug_link_id')))->delete();
-		$this->redirect('plug_link_list', array('p' => $p));
+		$rst=M('plug_link')->where(array('plug_link_id'=>I('plug_link_id')))->delete();
+		if($rst!==false){
+			$this->success('友情链接删除成功',U('plug_link_list',array('p' => $p)),1);
+		}else{
+			$this->error('友情链接删除失败',0,0);
+		}
 	}
 
 	/*
@@ -85,6 +90,7 @@ class PlugController extends AuthController {
 		$sl_data['plug_link_name']=$plug_link['plug_link_name'];
 		$sl_data['plug_link_url']=$plug_link['plug_link_url'];
 		$sl_data['plug_link_qq']=$plug_link['plug_link_qq'];
+		$sl_data['plug_link_target']=$plug_link['plug_link_target'];
 		$sl_data['plug_link_order']=$plug_link['plug_link_order'];
 		$sl_data['plug_link_open']=$plug_link['plug_link_open'];
 		$sl_data['plug_link_typeid']=$plug_link['plug_link_typeid'];
@@ -103,6 +109,7 @@ class PlugController extends AuthController {
 				'plug_link_id'=>I('plug_link_id'),
 				'plug_link_name'=>I('plug_link_name'),
 				'plug_link_url'=>I('plug_link_url'),
+				'plug_link_target'=>I('plug_link_target'),
 				'plug_link_typeid'=>I('plug_link_typeid'),
 				'plug_link_qq'=>I('plug_link_qq'),
 				'plug_link_order'=>I('plug_link_order'),

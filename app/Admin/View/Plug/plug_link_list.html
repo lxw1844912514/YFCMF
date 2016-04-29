@@ -198,6 +198,17 @@
 								<div class="space-4"></div>
 
 								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
+									<div class="col-sm-10">
+										<select name="plug_link_target" class="col-xs-10 col-sm-5">
+											<option value="_blank">新标签页打开</option>
+											<option value="_self">本窗口打开</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
 									<div class="col-sm-10" style="padding-top:5px;">
 										<input name="plug_link_open" id="plug_link_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
@@ -302,7 +313,16 @@
 									</div>
 								</div>
 								<div class="space-4"></div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
+									<div class="col-sm-10">
+										<select name="plug_link_target" id="editplug_link_target" class="col-xs-10 col-sm-5">
+											<option value="_blank">新标签页打开</option>
+											<option value="_self">本窗口打开</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系站长：  </label>
 									<div class="col-sm-10">
@@ -412,6 +432,7 @@
 								$("#editplug_link_id").val(data.plug_link_id);
 								$("#editplug_link_name").val(data.plug_link_name);
 								$("#editplug_link_url").val(data.plug_link_url);
+								$("#editplug_link_target").val(data.plug_link_target);
 								$("#editplug_link_qq").val(data.plug_link_qq);
 								$("#editplug_link_order").val(data.plug_link_order);
 								$("#editplug_link_typeid").val(data.plug_link_typeid);
