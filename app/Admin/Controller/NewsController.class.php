@@ -414,12 +414,26 @@ class NewsController extends AuthController {
 
 	//删除栏目
 	public function news_column_del(){
-		M('column')->where(array('c_id'=>I('c_id')))->delete();
-		$rst=M('column')->where(array('column_leftid'=>I('c_id')))->delete();
+		$rst=M('column')->where(array('column_leftid'=>I('c_id')))->select();
 		if($rst){
-			$this->success('栏目删除成功',U('news_column_list'),1);
+			$rst=M('column')->where(array('column_leftid'=>I('c_id')))->delete();
+			if($rst!==false){
+				$rst=M('column')->where(array('c_id'=>I('c_id')))->delete();
+				if($rst!==false){
+					$this->success('栏目删除成功',U('news_column_list'),1);
+				}else{
+					$this -> error("栏目删除失败！");
+				}
+			}else{
+				$this -> error("栏目删除失败！");
+			}
 		}else{
-			$this -> error("栏目删除失败！");
+			$rst=M('column')->where(array('c_id'=>I('c_id')))->delete();
+			if($rst!==false){
+				$this->success('栏目删除成功',U('news_column_list'),1);
+			}else{
+				$this -> error("栏目删除失败！");
+			}
 		}
 	}
 

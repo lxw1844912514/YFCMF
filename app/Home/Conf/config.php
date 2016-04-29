@@ -1,5 +1,5 @@
 <?php
 return array (
-    'DEFAULT_THEME'=>'Rainfer',
+	//模板相关
+	'TMPL_DETECT_THEME' => true, // 自动侦测模板主题
 );
-return array_merge(include './Conf/config.php', $config);

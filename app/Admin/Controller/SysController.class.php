@@ -8,6 +8,8 @@ use Org\Util\String;
 class SysController extends AuthController {
 	//站点设置显示
 	public function sys(){
+		$tpls=explode(',',C('THEME_LIST'));
+		$this->assign("templates",$tpls);
 		$sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
 		$sys=json_decode($sys,true);
 		$this->assign('sys',$sys)->display();
@@ -41,6 +43,7 @@ class SysController extends AuthController {
 			}
 			$rst=M('options')->where(array('option_name'=>'site_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
+				F("site_options", $$options);
 				$this->success('站点设置保存成功',1,1);
 			}else{
 				$this->error('提交参数不正确',0,0);
