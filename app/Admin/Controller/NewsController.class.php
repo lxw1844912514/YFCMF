@@ -375,9 +375,8 @@ class NewsController extends AuthController {
 	/************************************************栏目管理**************************************************/
 	//栏目管理
 	public function news_column_list(){
-		$column=M('column');
 		$nav = new \Org\Util\Leftnav;
-		$column=$column->order('column_order')->select();
+		$column=M('column')->order('column_order')->select();
 		$arr = $nav::column($column);
 		$this->assign('arr',$arr);
 		$this->display();
