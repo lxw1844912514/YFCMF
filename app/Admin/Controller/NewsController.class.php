@@ -3,7 +3,11 @@ namespace Admin\Controller;
 use Common\Controller\AuthController;
 
 class NewsController extends AuthController {
-
+    protected function _initialize(){
+        $sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
+        $sys=json_decode($sys,true);
+        $this->tpls=list_file(APP_PATH.'Home/view/'.$sys['site_tpl'],'*.html');
+    }
 	/************************************************文章管理**************************************************/
 	//文章列表
 	public function news_list(){
@@ -64,7 +68,7 @@ class NewsController extends AuthController {
 		$menu=M('menu');
 		$diyflag=M('diyflag');
 		$nav = new \Org\Util\Leftnav;
-		$menu_next=$menu->where('menu_type <> 5 and menu_type <> 2')-> order('listorder') -> select();
+		$menu_next=$menu->where('menu_type <> 4 and menu_type <> 2')-> order('listorder') -> select();
 		$diyflag=$diyflag->select();
 		$arr = $nav::menu_n($menu_next);
 		$source=M('source')->select();
@@ -160,15 +164,14 @@ class NewsController extends AuthController {
 			$pic_list = explode(",", $newstr);
 			$this->assign('pic_list',$pic_list);
 
-			$column=M('column');
 			$diyflag=M('diyflag');
 			$nav = new \Org\Util\Leftnav;
-			$column_next=$column->where('column_type <> 5 and column_type <> 2')-> order('column_order') -> select();
+			$menu_next=M('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('listorder') -> select();
 			$diyflag=$diyflag->select();
-			$arr = $nav::column($column_next);
+			$arr = $nav::menu_n($menu_next);
 			$source=M('source')->select();//来源
 			$this->assign('source',$source);
-			$this->assign('column',$arr);
+			$this->assign('menu',$arr);
 			$this->assign('diyflag',$diyflag);
 			$this->assign('news_list',$news_list);
 			$this->display();
@@ -386,6 +389,7 @@ class NewsController extends AuthController {
 	public function news_menu_add(){
 		$parentid=I('id',0);
 		$this->assign('parentid',$parentid);
+        $this->assign('tpls',$this->tpls);
 		$this->display();
 	}
 
@@ -406,20 +410,39 @@ class NewsController extends AuthController {
 				'menu_seo_des'=>I('menu_seo_des'),
 				'menu_content'=>I('menu_content'),
 			);
-			M('menu')->add($data);
-			$this->success('菜单保存成功',U('news_menu_list'),1);
+			$rst=M('menu')->add($data);
+            if($rst!==false){
+                $arr=M('menu')->find(I('parentid'));
+                if(I('menu_type')==3 && $arr['menu_type']==3){
+                    M('menu')->where(array('id'=>I('parentid')))->setField('menu_type' , 1);
+                }
+                $this->success('菜单添加成功',U('news_menu_list'),1);
+            }else{
+                $this->error('菜单添加失败',U('news_menu_list'),0);
+            }
+
 		}
 	}
 
 	//删除栏目
 	public function news_menu_del(){
+		$arr=M('menu')->find(I('id'));
+        $parentid=$arr['parentid'];
+        $arr=M('menu')->find($parentid);
 		$rst=M('menu')->where(array('parentid'=>I('id')))->select();
 		if($rst){
-			$rst=M('menu')->where(array('parentid'=>I('id')))->delete();
+			$rst=M('menu')->where(array('parentid'=>I('id')))->delete();//删除子菜单
 			if($rst!==false){
-				$rst=M('menu')->where(array('id'=>I('id')))->delete();
+				$rst=M('menu')->where(array('id'=>I('id')))->delete();//删除自身菜单
 				if($rst!==false){
-					$this->success('菜单删除成功',U('news_menu_list'),1);
+                    //判断其父菜单是否还存在子菜单，如无子菜单，且父菜单类型为1
+                    if($parentid && $arr['menu_type']==1){
+                        $child=M('menu')->where(array('parentid'=>$parentid))->select();
+                        if(empty($child)){
+                            M('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
+                        }
+                    }
+                    $this->success('菜单删除成功',U('news_menu_list'),1);
 				}else{
 					$this -> error("菜单删除失败！");
 				}
@@ -427,9 +450,16 @@ class NewsController extends AuthController {
 				$this -> error("菜单删除失败！");
 			}
 		}else{
-			$rst=M('menu')->where(array('id'=>I('id')))->delete();
+			$rst=M('menu')->where(array('id'=>I('id')))->delete();//无子菜单，删除自身
 			if($rst!==false){
-				$this->success('菜单删除成功',U('news_menu_list'),1);
+                //判断其父菜单是否还存在子菜单，如无子菜单，且父菜单类型为1
+                if($parentid && $arr['menu_type']==1){
+                    $child=M('menu')->where(array('parentid'=>$parentid))->select();
+                    if(empty($child)){
+                        M('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
+                    }
+                }
+                $this->success('菜单删除成功',U('news_menu_list'),1);
 			}else{
 				$this -> error("菜单删除失败！");
 			}
@@ -468,6 +498,7 @@ class NewsController extends AuthController {
 	public function news_menu_edit(){
 		$menu=M('menu')->where(array('id'=>I('id')))->find();
 		$this->assign('menu',$menu);
+        $this->assign('tpls',$this->tpls);
 		$this->display();
 	}
 

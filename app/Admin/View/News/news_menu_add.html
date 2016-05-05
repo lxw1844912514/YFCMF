@@ -30,7 +30,7 @@
 						<form class="form-horizontal" name="menuadd" id="menuadd" method="post" action="{:U('news_menu_runadd')}">
 							<input type="hidden" name="parentid" value="{$parentid}" />
 							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称 </label>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
 								<div class="col-sm-9">
 									<input type="text" name="menu_name" id="menu_name"  placeholder="必填：菜单名称"  class="col-xs-10 col-sm-5" />
                                             <span class="help-inline col-xs-12 col-sm-7">
@@ -41,7 +41,7 @@
 							<div class="space-4"></div>
 
 							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文菜单名称 </label>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文菜单名称： </label>
 								<div class="col-sm-9">
 									<input type="text" name="menu_enname" id="menu_enname" placeholder="英文菜单名称" class="col-xs-10 col-sm-5" />
 								</div>
@@ -49,7 +49,24 @@
 							<div class="space-4"></div>
 
 							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单类型 </label>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="menu_open" id="menu_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+								<div class="col-sm-9">
+									<input type="text" name="listorder" id="menu_order" value="50" class="col-xs-10 col-sm-1" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
 								<div class="col-sm-9">
 									<div class="radio">
 										<label>
@@ -75,13 +92,6 @@
 									<div class="radio">
 										<label>
 											<input name="menu_type" id="type4" type="radio" class="ace" value="4"/>
-											<span class="lbl"> 作为发布栏目，图片列表模式</span>
-										</label>
-									</div>
-
-									<div class="radio">
-										<label>
-											<input name="menu_type" id="type5" type="radio" class="ace" value="5"/>
 											<span class="lbl"> 单页面模式，例如企业简介</span>
 										</label>
 									</div>
@@ -90,7 +100,7 @@
 							<div class="space-4"></div>
 
 							<div class="form-group" id="address">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 跳转地址 </label>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 跳转地址： </label>
 								<div class="col-sm-9">
 									<input type="text" name="menu_address" id="menu_address" placeholder="跳转地址" class="col-xs-10 col-sm-7" />
                                             <span class="help-inline col-xs-12 col-sm-5">
@@ -100,26 +110,34 @@
 							</div>
 							<div class="space-4"></div>
 
+                            <div class="form-group" id="listtpl">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 列表页(单页)模板选择： </label>
+                                <div class="col-sm-9">
+                                    <select name="menu_listtpl"  class="col-sm-3 selector">
+                                        <option value="">请选择模板</option>
+                                        <foreach name="tpls" item="vo">
+                                            <option value="{$vo.filename}">{$vo.filename}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
 
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启 </label>
-								<div class="col-sm-9" style="padding-top:5px;">
-									<input name="menu_open" id="menu_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
-									<span class="lbl">&nbsp;&nbsp;默认关闭</span>
-								</div>
-							</div>
-							<div class="space-4"></div>
+                            <div class="form-group" id="newstpl">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单文章页模板选择： </label>
+                                <div class="col-sm-9">
+                                    <select name="menu_newstpl"  class="col-sm-3 selector">
+                                        <option value="">请选择模板</option>
+                                        <foreach name="tpls" item="vo">
+                                            <option value="{$vo.filename}">{$vo.filename}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
 
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大） </label>
-								<div class="col-sm-9">
-									<input type="text" name="listorder" id="menu_order" value="50" class="col-xs-10 col-sm-1" />
-								</div>
-							</div>
-							<div class="space-4"></div>
-
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容 </label>
+							<div class="form-group" id="menu_content">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容： </label>
 								<div class="col-sm-9">
 									<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
 									<script src="__PUBLIC__/ueditor/ueditor.all.js" type="text/javascript"></script>
@@ -131,6 +149,7 @@
 								</div>
 							</div>
 							<div class="space-4"></div>
+
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO标题： </label>
 								<div class="col-sm-9">
@@ -189,12 +208,29 @@
 	<script>
 		$(function(){
 			$('#address').hide();//默认隐藏
+            $('#menu_content').hide();//默认隐藏
+            $('#single').hide();//默认隐藏
 			$('#type2').click(function(){
 				$('#address').show();
+                $('#menu_content').hide();
+                $('#single').hide();
+                $('#listtpl').hide();
+                $('#newstpl').hide();
 			});
-			$('#type1,#type3,#type4,#type5').click(function(){
+			$('#type1,#type3').click(function(){
 				$('#address').hide();
+                $('#menu_content').hide();
+                $('#single').hide();
+                $('#listtpl').show();
+                $('#newstpl').show();
 			});
+            $('#type4').click(function(){
+                $('#address').hide();
+                $('#single').show();
+                $('#listtpl').show();
+                $('#newstpl').hide();
+                $('#menu_content').show();
+            });
 		});
 
 		$(function(){
