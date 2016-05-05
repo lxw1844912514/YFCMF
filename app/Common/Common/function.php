@@ -450,3 +450,90 @@ function get_links($type=1){
 	$links_obj= M("plug_link");
 	return $links_obj->where(array('plug_link_typeid'=>$type,'plug_link_open'=>1))->order("plug_link_order ASC")->select();
 }
+/**
+ * 返回指定id的菜单
+ * 同上一类方法，jquery treeview 风格，可伸缩样式
+ * @param $myid 表示获得这个ID下的所有子级
+ * @param $effected_id 需要生成treeview目录数的id
+ * @param $str 末级样式
+ * @param $str2 目录级别样式
+ * @param $showlevel 直接显示层级数，其余为异步显示，0为全部限制
+ * @param $ul_class 内部ul样式 默认空  可增加其他样式如'sub-menu'
+ * @param $li_class 内部li样式 默认空  可增加其他样式如'menu-item'
+ * @param $style 目录样式 默认 filetree 可增加其他样式如'filetree treeview-famfamfam'
+ * @param $dropdown 有子元素时li的class
+ * $id="main";
+ $effected_id="mainmenu";
+ $filetpl="<a href='\$href'><span class='file'>\$label</span></a>";
+ $foldertpl="<span class='folder'>\$label</span>";
+ $ul_class="" ;
+ $li_class="" ;
+ $style="filetree";
+ $showlevel=6;
+ sp_get_menu($id,$effected_id,$filetpl,$foldertpl,$ul_class,$li_class,$style,$showlevel);
+ * such as
+ * <ul id="example" class="filetree ">
+ <li class="hasChildren" id='1'>
+ <span class='folder'>test</span>
+ <ul>
+ <li class="hasChildren" id='4'>
+ <span class='folder'>caidan2</span>
+ <ul>
+ <li class="hasChildren" id='5'>
+ <span class='folder'>sss</span>
+ <ul>
+ <li id='3'><span class='folder'>test2</span></li>
+ </ul>
+ </li>
+ </ul>
+ </li>
+ </ul>
+ </li>
+ <li class="hasChildren" id='6'><span class='file'>ss</span></li>
+ </ul>
+ */
+
+function get_menu($id="main",$effected_id="mainmenu",$childtpl="<span class='file'>\$label</span>",$parenttpl="<span class='folder'>\$label</span>",$ul_class="" ,$li_class="" ,$style="filetree",$showlevel=6,$dropdown='hasChild'){
+	$navs=F("site_nav_".$id);
+	if(empty($navs)){
+		$navs=get_menu_datas($id);
+	}
+	import("Org.Util.Tree");
+	$tree = new \Tree();
+	$tree->init($navs);
+	return $tree->get_treeview_menu(0,$effected_id, $childtpl, $parenttpl,  $showlevel,$ul_class,$li_class,  $style,  1, FALSE, $dropdown);
+}
+
+
+function get_menu_datas($id){
+	$nav_obj= M("menu");
+	$navs= $nav_obj->where(array('menu_open'=>1))->order(array("listorder" => "ASC"))->select();
+	foreach ($navs as $key=>$nav){
+		if($nav['menu_type']==2){
+			$nav['href']=$nav['menu_address'];
+		}else{
+			$nav['href']=U('list',array('id'=>$nav['id']));
+			if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
+				$nav['href']=U('index/index');
+			}
+		}
+		$navs[$key]=$nav;
+	}
+	F("site_nav_".$id,$navs);
+	return $navs;
+}
+
+/**
+ * 获取树形数组
+ * @return array
+ */
+function get_menu_tree($id="main"){
+	$navs=F("site_nav_".$id);
+	if(empty($navs)){
+		$navs=get_menu_datas($id);
+	}
+	import("Org.Util.Tree");
+	$tree = new \Tree();
+	$tree->init($navs);
+	return $tree->get_tree_array(0, "");
+}

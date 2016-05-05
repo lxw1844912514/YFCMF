@@ -61,15 +61,15 @@ class NewsController extends AuthController {
 
 	//添加文章
 	public function news_add(){
-		$column=M('column');
+		$menu=M('menu');
 		$diyflag=M('diyflag');
 		$nav = new \Org\Util\Leftnav;
-		$column_next=$column->where('column_type <> 5 and column_type <> 2')-> order('column_order') -> select();
+		$menu_next=$menu->where('menu_type <> 5 and menu_type <> 2')-> order('listorder') -> select();
 		$diyflag=$diyflag->select();
-		$arr = $nav::column($column_next);
+		$arr = $nav::menu_n($menu_next);
 		$source=M('source')->select();
 		$this->assign('source',$source);
-		$this->assign('column',$arr);
+		$this->assign('menu',$arr);
 		$this->assign('diyflag',$diyflag);
 		$this->display();
 	}
@@ -372,126 +372,126 @@ class NewsController extends AuthController {
 
 
 
-	/************************************************栏目管理**************************************************/
-	//栏目管理
-	public function news_column_list(){
+	/************************************************前台菜单管理**************************************************/
+	//菜单管理
+	public function news_menu_list(){
 		$nav = new \Org\Util\Leftnav;
-		$column=M('column')->order('column_order')->select();
-		$arr = $nav::column($column);
+		$menus=M('menu')->order('listorder')->select();
+		$arr = $nav::menu_n($menus);
 		$this->assign('arr',$arr);
 		$this->display();
 	}
 
 	//添加栏目
-	public function news_column_add(){
-		$column_leftid=I('c_id',0);
-		$this->assign('column_leftid',$column_leftid);
+	public function news_menu_add(){
+		$parentid=I('id',0);
+		$this->assign('parentid',$parentid);
 		$this->display();
 	}
 
-	public function news_column_runadd(){
+	public function news_menu_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',U('news_column_list'),0);
+			$this->error('提交方式不正确',U('news_menu_list'),0);
 		}else{
 			$data=array(
-				'column_name'=>I('column_name'),
-				'column_enname'=>I('column_enname'),
-				'column_type'=>I('column_type'),
-				'column_leftid'=>I('column_leftid'),
-				'column_address'=>I('column_address'),
-				'column_open'=>I('column_open',0),
-				'column_order'=>I('column_order'),
-				'column_title'=>I('column_title'),
-				'column_key'=>I('column_key'),
-				'column_des'=>I('column_des'),
-				'column_content'=>I('column_content'),
+				'menu_name'=>I('menu_name'),
+				'menu_enname'=>I('menu_enname'),
+				'menu_type'=>I('menu_type'),
+				'parentid'=>I('parentid'),
+				'menu_address'=>I('menu_address'),
+				'menu_open'=>I('menu_open',0),
+				'listorder'=>I('listorder'),
+				'menu_seo_title'=>I('menu_seo_title'),
+				'menu_seo_key'=>I('menu_seo_key'),
+				'menu_seo_des'=>I('menu_seo_des'),
+				'menu_content'=>I('menu_content'),
 			);
-			M('column')->add($data);
-			$this->success('栏目保存成功',U('news_column_list'),1);
+			M('menu')->add($data);
+			$this->success('菜单保存成功',U('news_menu_list'),1);
 		}
 	}
 
 	//删除栏目
-	public function news_column_del(){
-		$rst=M('column')->where(array('column_leftid'=>I('c_id')))->select();
+	public function news_menu_del(){
+		$rst=M('menu')->where(array('parentid'=>I('id')))->select();
 		if($rst){
-			$rst=M('column')->where(array('column_leftid'=>I('c_id')))->delete();
+			$rst=M('menu')->where(array('parentid'=>I('id')))->delete();
 			if($rst!==false){
-				$rst=M('column')->where(array('c_id'=>I('c_id')))->delete();
+				$rst=M('menu')->where(array('id'=>I('id')))->delete();
 				if($rst!==false){
-					$this->success('栏目删除成功',U('news_column_list'),1);
+					$this->success('菜单删除成功',U('news_menu_list'),1);
 				}else{
-					$this -> error("栏目删除失败！");
+					$this -> error("菜单删除失败！");
 				}
 			}else{
-				$this -> error("栏目删除失败！");
+				$this -> error("菜单删除失败！");
 			}
 		}else{
-			$rst=M('column')->where(array('c_id'=>I('c_id')))->delete();
+			$rst=M('menu')->where(array('id'=>I('id')))->delete();
 			if($rst!==false){
-				$this->success('栏目删除成功',U('news_column_list'),1);
+				$this->success('菜单删除成功',U('news_menu_list'),1);
 			}else{
-				$this -> error("栏目删除失败！");
+				$this -> error("菜单删除失败！");
 			}
 		}
 	}
 
 
 
-	public function news_column_order(){
+	public function news_menu_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',U('news_column_list'),0);
+			$this->error('提交方式不正确',U('news_menu_list'),0);
 		}else{
-			$column=M('column');
+			$menu=M('menu');
 			foreach ($_POST as $id => $sort){
-				$column->where(array('c_id' => $id ))->setField('column_order' , $sort);
+				$menu->where(array('id' => $id ))->setField('listorder' , $sort);
 			}
-			$this->success('排序更新成功',U('news_column_list'),1);
+			$this->success('排序更新成功',U('news_menu_list'),1);
 		}
 	}
 
 
-	public function news_column_state(){
+	public function news_menu_state(){
 		$id=I('x');
-		$status=M('column')->where(array('c_id'=>$id))->getField('column_open');//判断当前状态情况
+		$status=M('menu')->where(array('id'=>$id))->getField('menu_open');//判断当前状态情况
 		if($status==1){
-			$statedata = array('column_open'=>0);
-			$auth_group=M('column')->where(array('c_id'=>$id))->setField($statedata);
+			$statedata = array('menu_open'=>0);
+			$auth_group=M('menu')->where(array('id'=>$id))->setField($statedata);
 			$this->success('状态禁止',1,1);
 		}else{
-			$statedata = array('column_open'=>1);
-			$auth_group=M('column')->where(array('c_id'=>$id))->setField($statedata);
+			$statedata = array('menu_open'=>1);
+			$auth_group=M('menu')->where(array('id'=>$id))->setField($statedata);
 			$this->success('状态开启',1,1);
 		}
 	}
 
-	public function news_column_edit(){
-		$column=M('column')->where(array('c_id'=>I('c_id')))->find();
-		$this->assign('column',$column);
+	public function news_menu_edit(){
+		$menu=M('menu')->where(array('id'=>I('id')))->find();
+		$this->assign('menu',$menu);
 		$this->display();
 	}
 
 
-	public function news_column_runedit(){
+	public function news_menu_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',U('news_column_list'),0);
+			$this->error('提交方式不正确',U('news_menu_list'),0);
 		}else{
 			$data=array(
-				'c_id'=>I('c_id'),
-				'column_name'=>I('column_name'),
-				'column_enname'=>I('column_enname'),
-				'column_type'=>I('column_type'),
-				'column_leftid'=>I('column_leftid'),
-				'column_address'=>I('column_address'),
-				'column_open'=>I('column_open',0),
-				'column_order'=>I('column_order'),
-				'column_title'=>I('column_title'),
-				'column_key'=>I('column_key'),
-				'column_des'=>I('column_des'),
-				'column_content'=>I('column_content'),
+				'id'=>I('id'),
+				'menu_name'=>I('menu_name'),
+				'menu_enname'=>I('menu_enname'),
+				'menu_type'=>I('menu_type'),
+				'parentid'=>I('parentid'),
+				'menu_address'=>I('menu_address'),
+				'menu_open'=>I('menu_open',0),
+				'listorder'=>I('listorder'),
+				'menu_seo_title'=>I('menu_seo_title'),
+				'menu_seo_key'=>I('menu_seo_key'),
+				'menu_seo_des'=>I('menu_seo_des'),
+				'menu_content'=>I('menu_content'),
 			);
-			M('column')->save($data);
-			$this->success('栏目保存成功',U('news_column_list'),1);
+			M('menu')->save($data);
+			$this->success('菜单保存成功',U('news_menu_list'),1);
 		}
 	}
 

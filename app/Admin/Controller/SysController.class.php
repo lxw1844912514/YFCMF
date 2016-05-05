@@ -1017,7 +1017,7 @@ class SysController extends AuthController {
 	public function clear(){
 		remove_dir(TEMP_PATH);
 		remove_dir(CACHE_PATH);
-		remove_dir(DATA_PATH, time() - 24 * 3600);
+		remove_dir(DATA_PATH);
 		file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 		$this->success ('清理缓存成功',1,1);
 	}

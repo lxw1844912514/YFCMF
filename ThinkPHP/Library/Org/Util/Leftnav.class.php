@@ -52,15 +52,15 @@ class leftnav{
 
 
 	
-	static public function column($cate , $lefthtml = '─' , $pid=0 , $lvl=0, $leftpin=0 ){
+	static public function menu_n($cate , $lefthtml = '─' , $pid=0 , $lvl=0, $leftpin=0 ){
 		$arr=array();
 		foreach ($cate as $v){
-			if($v['column_leftid']==$pid){
+			if($v['parentid']==$pid){
 				$v['lvl']=$lvl + 1;
 				$v['leftpin']=$leftpin + 0;//左边距
 				$v['lefthtml']='├'.str_repeat($lefthtml,$lvl);
 				$arr[]=$v;
-				$arr= array_merge($arr,self::column($cate,$lefthtml,$v['c_id'],$lvl+1 , $leftpin+20));
+				$arr= array_merge($arr,self::menu_n($cate,$lefthtml,$v['id'],$lvl+1 , $leftpin+20));
 			}
 		}
 		return $arr;

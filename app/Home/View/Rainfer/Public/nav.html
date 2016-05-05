@@ -45,14 +45,14 @@
                 <?php
 				$user['id']=(!empty($user))?$user['id']:0;				
 				$effected_id="";
-				$filetpl="<a href='\$href' class='sf-with-ul'>\$label</a>";
-                $foldertpl="<a href='#' class='sf-with-ul'>\$label<span class='sf-sub-indicator'><i class='fa fa-angle-down'></i></span></a>";
+				$childtpl="<a href='\$href' class='sf-with-ul'>\$menu_name</a>";
+                $parenttpl="<a href='#' class='sf-with-ul'>\$menu_name<span class='sf-sub-indicator'>&nbsp;<i class='fa fa-angle-down'></i></span></a>";
                 $ul_class="" ;
                 $li_class="" ;
                 $style="nav navbar-nav sf-menu";
                 $showlevel=6;
                 $dropdown='';
-                //echo sp_get_menu("main",$effected_id,$filetpl,$foldertpl,$ul_class,$li_class,$style,$showlevel,$dropdown);
+                echo get_menu("main",$effected_id,$childtpl,$parenttpl,$ul_class,$li_class,$style,$showlevel,$dropdown);
                 ?>
                 <ul class="nav navbar-nav sf-menu">
                     <if condition="$user['id'] gt 0">

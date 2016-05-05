@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
+-- version 3.4.10.1
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: 2016-04-24 13:29:16
--- 服务器版本： 5.6.17
--- PHP Version: 5.6.19
+-- 主机: localhost
+-- 生成日期: 2016 年 05 月 05 日 08:43
+-- 服务器版本: 5.5.20
+-- PHP 版本: 5.4.45
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `yfcmf`
+-- 数据库: `yfcmf`
 --
 
 -- --------------------------------------------------------
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
 --
 
 INSERT INTO `yf_admin` (`admin_id`, `admin_username`, `admin_pwd`, `admin_pwd_salt`, `admin_changepwd`, `admin_email`, `admin_realname`, `admin_avatar`, `admin_tel`, `admin_hits`, `admin_ip`, `admin_time`, `admin_last_ip`, `admin_last_time`, `admin_addtime`, `admin_mdemail`, `admin_open`) VALUES
-(1, 'admin', '090b6a924b3d00c1d6b0f7d3b78d901b', 'GJsYfxUerK', 0, 'admin@163.com', '超管', '571b0afd54789.jpg', '13899999999', 16, '0.0.0.0', 1461420723, '0.0.0.0', 1461407584, 1461230934, '', 1);
+(1, 'admin', '090b6a924b3d00c1d6b0f7d3b78d901b', 'GJsYfxUerK', 0, 'admin@163.com', '超管', '57218c0148950.jpg', '13899999999', 38, '127.0.0.1', 1462428278, '127.0.0.1', 1462263526, 1461230934, '', 1);
 
 -- --------------------------------------------------------
 
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=181 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=184 ;
 
 --
 -- 转存表中的数据 `yf_auth_rule`
@@ -132,12 +132,12 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (6, 'Sys/sys', '站点设置', 1, 1, '', '', 2, 3, 10, 1446535843),
 (7, 'News', '文章管理', 1, 1, 'fa-folder', '', 0, 1, 20, 1446535875),
 (8, 'News/news_list', '文章操作', 1, 1, '', '', 7, 2, 10, 1446535875),
-(9, 'News/news_column_list', '栏目管理', 1, 1, '', '', 7, 2, 20, 1446535750),
+(9, 'News/news_menu_list', '菜单管理', 1, 1, '', '', 7, 2, 20, 1446535750),
 (10, 'Sys/wesys', '微信设置', 1, 1, '', '', 2, 3, 40, 1446535750),
 (11, 'News/news_list', '文章列表', 1, 1, '', '', 8, 3, 10, 1446535750),
 (12, 'News/news_add', '添加文章', 1, 1, '', '', 8, 3, 20, 1446535750),
-(13, 'News/news_column_list', '栏目列表', 1, 1, '', '', 9, 3, 10, 1446535750),
-(14, 'News/news_column_add', '添加栏目', 1, 1, '', '', 9, 3, 20, 1446535750),
+(13, 'News/news_menu_list', '前台菜单', 1, 1, '', '', 9, 3, 10, 1446535750),
+(14, 'News/news_menu_add', '添加菜单', 1, 1, '', '', 9, 3, 20, 1446535750),
 (15, 'Sys/admin_list', '管理员管理', 1, 1, '', '', 1, 2, 20, 1446535750),
 (16, 'Sys/admin_list', '管理员列表', 1, 1, '', '', 15, 3, 10, 1446535750),
 (17, 'Sys/admin_group_list', '用户组列表', 1, 1, '', '', 15, 3, 20, 1446535750),
@@ -221,12 +221,12 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (99, 'news/news_back_alldel', '删除全部', 1, 0, '', '', 25, 4, 30, 1460341109),
 (100, 'news/news_alldel', '删除全部', 1, 0, '', '', 11, 4, 40, 1460341178),
 (101, 'news/news_state', '状态操作', 1, 0, '', '', 11, 4, 50, 1460341216),
-(102, 'news/news_column_runadd', '添加操作', 1, 0, '', '', 14, 4, 15, 1460341752),
-(103, 'news/news_column_del', '删除操作', 1, 0, '', '', 13, 4, 15, 1460341796),
-(104, 'news/news_column_order', '排序操作', 1, 0, '', '', 13, 4, 20, 1460341845),
-(105, 'news/news_column_edit', '编辑显示', 1, 0, '', '', 13, 4, 30, 1460341972),
-(106, 'news/news_column_runedit', '编辑操作', 1, 0, '', '', 13, 4, 40, 1460342057),
-(107, 'news/news_column_state', '状态操作', 1, 0, '', '', 13, 4, 50, 1460342099),
+(102, 'news/news_menu_runadd', '添加操作', 1, 0, '', '', 14, 4, 15, 1460341752),
+(103, 'news/news_menu_del', '删除操作', 1, 0, '', '', 13, 4, 15, 1460341796),
+(104, 'news/news_menu_order', '排序操作', 1, 0, '', '', 13, 4, 20, 1460341845),
+(105, 'news/news_menu_edit', '编辑显示', 1, 0, '', '', 13, 4, 30, 1460341972),
+(106, 'news/news_menu_runedit', '编辑操作', 1, 0, '', '', 13, 4, 40, 1460342057),
+(107, 'news/news_menu_state', '状态操作', 1, 0, '', '', 13, 4, 50, 1460342099),
 (108, 'member/member_add', '添加显示', 1, 0, '', '', 37, 4, 15, 1460343493),
 (109, 'member/member_runadd', '添加操作', 1, 0, '', '', 37, 4, 20, 1460343550),
 (110, 'member/member_edit', '编辑显示', 1, 0, '', '', 37, 4, 30, 1460343589),
@@ -286,8 +286,8 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (168, 'We/we_menu_list', '列表显示', 1, 0, '', '', 39, 4, 10, 1460368744),
 (169, 'Member/member_group_list', '列表显示', 1, 0, '', '', 38, 4, 10, 1460368780),
 (170, 'Member/member_list', '列表显示', 1, 0, '', '', 37, 4, 10, 1460368804),
-(171, 'News/news_column_add', '添加显示', 1, 0, '', '', 14, 4, 10, 1460369022),
-(172, 'News/news_column_list', '列表显示', 1, 0, '', '', 13, 4, 10, 1460369062),
+(171, 'News/news_menu_add', '添加显示', 1, 0, '', '', 14, 4, 10, 1460369022),
+(172, 'News/news_menu_list', '列表显示', 1, 0, '', '', 13, 4, 10, 1460369062),
 (173, 'News/news_back', '列表显示', 1, 0, '', '', 25, 4, 10, 1460369095),
 (174, 'News/news_add', '添加显示', 1, 0, '', '', 12, 4, 10, 1460369128),
 (175, 'News/news_list', '列表显示', 1, 0, '', '', 11, 4, 10, 1460369158),
@@ -295,7 +295,10 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (177, 'sys/admin_rule_copy', '复制显示', 1, 0, '', '', 18, 4, 40, 1460461557),
 (178, 'Sys/profile', '个人中心', 1, 0, '', '', 1, 2, 90, 1461395663),
 (179, 'Sys/profile', '信息显示', 1, 0, '', '', 178, 3, 10, 1461395702),
-(180, 'Sys/avatar', '头像编辑', 1, 0, '', '', 178, 3, 10, 1461395790);
+(180, 'Sys/avatar', '头像编辑', 1, 0, '', '', 178, 3, 10, 1461395790),
+(181, 'Plug/plug_file_list', '本地文件管理', 1, 1, '', '', 28, 2, 40, 1461810174),
+(182, 'Plug/plug_file_list', '文件列表', 1, 1, '', '', 181, 3, 10, 1461810218),
+(183, 'Plug/plug_file_filter', '文件清理', 1, 1, '', '', 181, 3, 20, 1461810273);
 
 -- --------------------------------------------------------
 
@@ -308,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `yf_column` (
   `column_name` varchar(36) NOT NULL,
   `column_enname` varchar(50) NOT NULL COMMENT '英文标题',
   `column_type` int(8) NOT NULL,
-  `column_leftid` tinyint(3) NOT NULL,
+  `column_leftid` int(3) NOT NULL COMMENT '父级id',
   `column_address` varchar(70) NOT NULL,
   `column_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否开启',
   `column_order` int(7) NOT NULL,
@@ -317,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `yf_column` (
   `column_des` varchar(200) NOT NULL,
   `column_content` longtext NOT NULL,
   PRIMARY KEY (`c_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 --
 -- 转存表中的数据 `yf_column`
@@ -326,7 +329,7 @@ CREATE TABLE IF NOT EXISTS `yf_column` (
 INSERT INTO `yf_column` (`c_id`, `column_name`, `column_enname`, `column_type`, `column_leftid`, `column_address`, `column_open`, `column_order`, `column_title`, `column_key`, `column_des`, `column_content`) VALUES
 (1, '公司简介', '', 5, 0, '', 1, 10, '', '', '', '&lt;p&gt;公司简介&lt;/p&gt;'),
 (2, '服务项目', '', 1, 0, '', 1, 20, '', '', '', ''),
-(3, '彩妆培训', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;彩妆培训&lt;/p&gt;'),
+(3, '彩妆培训', '', 2, 2, 'http://www.rainfer.cn', 1, 50, '', '', '', '&lt;p&gt;彩妆培训&lt;/p&gt;'),
 (4, '婚纱摄影', '', 5, 2, '', 1, 50, '', '', '', ''),
 (5, '新娘跟妆', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;新娘跟妆&lt;/p&gt;'),
 (6, '个人写真', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;个人写真&lt;/p&gt;'),
@@ -425,6 +428,51 @@ CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `yf_menu`
+--
+
+CREATE TABLE IF NOT EXISTS `yf_menu` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `menu_name` varchar(36) NOT NULL,
+  `menu_enname` varchar(50) NOT NULL COMMENT '英文标题',
+  `menu_type` int(8) NOT NULL,
+  `parentid` int(3) NOT NULL COMMENT '父级id',
+  `menu_address` varchar(70) NOT NULL,
+  `menu_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否开启',
+  `listorder` int(7) NOT NULL,
+  `menu_seo_title` varchar(36) NOT NULL,
+  `menu_seo_key` varchar(200) NOT NULL,
+  `menu_seo_des` varchar(200) NOT NULL,
+  `menu_content` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+
+--
+-- 转存表中的数据 `yf_menu`
+--
+
+INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`, `menu_address`, `menu_open`, `listorder`, `menu_seo_title`, `menu_seo_key`, `menu_seo_des`, `menu_content`) VALUES
+(1, '公司简介', '', 5, 0, '', 1, 10, '', '', '', '&lt;p&gt;公司简介&lt;/p&gt;'),
+(2, '服务项目', '', 1, 0, '', 1, 20, '', '', '', ''),
+(3, '彩妆培训', '', 2, 2, 'http://www.rainfer.cn', 1, 50, '', '', '', '&lt;p&gt;彩妆培训&lt;/p&gt;'),
+(4, '婚纱摄影', '', 5, 2, '', 1, 50, '', '', '', ''),
+(5, '新娘跟妆', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;新娘跟妆&lt;/p&gt;'),
+(6, '个人写真', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;个人写真&lt;/p&gt;'),
+(7, '形象设计', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;形象设计&lt;/p&gt;'),
+(8, '婚庆小秘', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;婚庆小秘&lt;/p&gt;'),
+(9, '成功案例', '', 4, 0, '', 1, 50, '', '', '', ''),
+(10, '联系方式', '', 5, 0, '', 1, 50, '', '', '', '&lt;p&gt;联系方式&lt;/p&gt;'),
+(11, '彩妆形象', '', 4, 9, '', 1, 50, '', '', '', ''),
+(12, '婚纱美景', '', 4, 9, '', 1, 50, '', '', '', ''),
+(13, '婚礼布置', '', 4, 9, '', 1, 50, '', '', '', ''),
+(14, '活动·动态', '', 1, 0, '', 1, 30, '', '', '', ''),
+(15, '行业动态', '', 3, 14, '', 1, 50, '', '', '', ''),
+(16, '优惠信息', '', 3, 14, '', 1, 50, '', '', '', ''),
+(17, '首页首页', 'Home', 1, 0, '', 1, 1, '', '', '', '');
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `yf_news`
 --
 
@@ -466,7 +514,7 @@ INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`,
 (4, '选择伴郎应该注意什么', '', 15, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;　　既然有伴娘，那么肯定就会有伴郎了，不然就会有缺陷了，前面我们也分析过选择伴娘应该注意什么，其实选择伴郎也有很多方面需要注意的，下面上海婚纱摄影就带了解一下我们选择伴郎有写方面需要注意的。&lt;/p&gt;&lt;p&gt;　　选择伴郎首先要和伴娘的身高相配，也不要那种太高富帅了，一下把新郎比下去了，不知道的还以为还以为伴郎在娶新娘，其他的伴郎的人数是要和伴娘的人数相同的，在婚礼中，新娘和新郎有许多的事情要处理，很难的面面俱到，这时候一些琐碎的事情就需要伴郎伴娘来处理了，所以最好选择那些有责任心的，可以为兄弟两肋插刀的，关键时刻能够保持清醒理智的哥们。这样，婚礼出现什么状况，而新郎又脱不开身的时候，就可以放心把事情交给伴郎处理了。&lt;/p&gt;&lt;p&gt;　　最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张，或者婚礼气氛不够的时候挺身而出，让气氛活跃起来，这也很重要的。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '最后现在伴郎要选择积极活跃的分子，至少新郎能够伴郎谈得来，而这个伴郎又能够在新郎紧张', 202, '/uploads/2016-01-21/56a04bb6d9281.jpg', 1, '', '', 1453345718, 'p', '', 0, 0, '1', 0),
 (5, '相爱天长地久，回馈VIP客户', '', 16, 0, '', '', '1', '羽冉彩妆', '&lt;p&gt;即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！&lt;/p&gt;', '即将进入2016年，在2015年终，针对VIP客户优惠回馈活动中，想知道什么内容，请查看详情~！！', 201, '/uploads/2016-01-21/56a0a1fcaf013.jpg', 1, '', '', 1453367804, 'p', '', 0, 0, '1', 0),
 (6, '粉色手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '粉色玫瑰手捧花由翠绿装饰撑托着，彰显娇媚魅力', 200, '/uploads/2016-01-21/56a0a57d282b7.jpg', 1, '', '', 1453368701, 'p', '', 0, 0, '1', 0),
-(7, '多彩手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '', '多姿多彩来形容也不为过，大红色，墨蓝色，翠绿色，橘黄色争香夺艳', 200, '/uploads/2016-01-21/56a0a6107e735.jpg', 1, '', '', 1453368848, 'p,j,cp', 'http://www.rainfer.cn', 0, 0, '1', 0);
+(7, '多彩手捧花', '', 13, 0, '', '', '1', '羽冉彩妆', '&lt;ul class=&quot;content-pic js_content list-paddingleft-2&quot; style=&quot;list-style-type: none;&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://www.hao123.com/link/https/?key=http%3A%2F%2Fv.hao123.com%2Fdianshi%2F23630.htm&amp;&quot; title=&quot;武神赵子龙- 允儿为林更新挡刀被刺香消玉殒&quot; hidefocus=&quot;true&quot; class=&quot;pic &quot; data-cpc=&quot;link&quot; alog-custom=&quot;ind:0,sal:0,atd:0&quot; style=&quot;color: rgb(51, 51, 51); text-decoration: none; outline: 0px; display: inline-block; height: 110px; cursor: pointer; overflow: hidden;&quot;&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://v.hao123.com/dianshi/23655.htm&quot; title=&quot;欢乐颂-刘涛被人诬陷谣言四处疯传&quot; hidefocus=&quot;true&quot; class=&quot;pic &quot; data-cpc=&quot;link&quot; alog-custom=&quot;ind:0,sal:0,atd:0&quot; style=&quot;color: rgb(51, 51, 51); text-decoration: none; outline: 0px; display: inline-block; height: 110px; cursor: pointer; overflow: hidden;&quot;&gt;&lt;img src=&quot;./data/upload/2016-04-27/5720247f8542c.jpg&quot; data-src=&quot;&quot; data-cpc=&quot;img&quot; style=&quot;border: 0px; vertical-align: middle; width: 278px; height: 110px;&quot;/&gt;&lt;span class=&quot;pic-bg&quot; style=&quot;position: absolute; bottom: 0px; left: 0px; width: 278px; height: 28px; display: block; background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0)); background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;pic-txt&quot; data-cpc=&quot;txt&quot; style=&quot;position: relative; display: block; width: 278px; height: 20px; padding-top: 6px; text-align: center; top: -26px; color: rgb(255, 255, 255); cursor: pointer;&quot;&gt;欢乐颂-刘涛被人诬陷谣言四处疯传&lt;/span&gt;&lt;span class=&quot;v&quot; style=&quot;display: block; position: absolute; top: 89px; left: 14px; width: 16px; height: 16px; background-image: url(https://gss1.bdstatic.com/5eN1dDebRNRTm2_p8IuM_a/v5/gy/GB/tZ/y3/-e/2/index_widthlg.png); background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: -100px -56px; background-repeat: no-repeat;&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;span style=&quot;color:#333333&quot;&gt;&lt;span style=&quot;display: inline-block; cursor: pointer; overflow: hidden; border-style: initial; border-color: initial; border-image-source: initial; border-image-slice: initial; border-image-width: initial; border-image-outset: initial; border-image-repeat: initial;&quot;&gt;&lt;a href=&quot;http://www.hao123.com/link/https/?key=http%3A%2F%2Fv.hao123.com%2Fdianshi%2F23630.htm&amp;&quot; title=&quot;武神赵子龙- 允儿为林更新挡刀被刺香消玉殒&quot; hidefocus=&quot;true&quot; class=&quot;pic &quot; data-cpc=&quot;link&quot; alog-custom=&quot;ind:0,sal:0,atd:0&quot; style=&quot;color: rgb(51, 51, 51); text-decoration: none; outline: 0px; display: inline-block; height: 110px; cursor: pointer; overflow: hidden;&quot;&gt;&lt;img src=&quot;/ace/data/upload/2016-04-27/5720247fa01e2.jpg&quot; data-src=&quot;https://gss0.bdstatic.com/5eR1dDebRNRTm2_p8IuM_a/res/r/image/2016-04-25/9dfee2cd29fb635e56ef5fe3d439b618.jpg&quot; data-cpc=&quot;img&quot; style=&quot;border: 0px; vertical-align: middle; width: 278px; height: 110px;&quot;/&gt;&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;pic-bg&quot; style=&quot;color: rgb(51, 51, 51); text-decoration: none; outline: 0px; display: block; height: 28px; cursor: pointer; overflow: hidden; position: absolute; bottom: 0px; left: 0px; width: 278px; background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0)); background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;pic-txt&quot; data-cpc=&quot;txt&quot; style=&quot;color: rgb(255, 255, 255); text-decoration: none; outline: 0px; display: block; height: 20px; cursor: pointer; overflow: hidden; position: relative; width: 278px; padding-top: 6px; text-align: center; top: -26px;&quot;&gt;&lt;a href=&quot;http://www.hao123.com/link/https/?key=http%3A%2F%2Fv.hao123.com%2Fdianshi%2F23630.htm&amp;&quot; title=&quot;武神赵子龙- 允儿为林更新挡刀被刺香消玉殒&quot; hidefocus=&quot;true&quot; class=&quot;pic &quot; data-cpc=&quot;link&quot; alog-custom=&quot;ind:0,sal:0,atd:0&quot; style=&quot;color: rgb(51, 51, 51); text-decoration: none; outline: 0px; display: inline-block; height: 110px; cursor: pointer; overflow: hidden;&quot;&gt;武神赵子龙- 允儿为林更新挡刀被刺香消玉殒&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '多姿多彩来形容也不为过，大红色，墨蓝色，翠绿色，橘黄色争香夺艳', 200, '2016-04-25/571dc0e941d5e.jpg', 2, '2016-04-25/571dc0e944acf.jpg,2016-04-25/571dc0e943812.jpg,', '', 1453368848, 'c,p,j,cp', 'http://www.rainfer.cn', 0, 0, '1', 0);
 
 -- --------------------------------------------------------
 
@@ -488,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `yf_options` (
 --
 
 INSERT INTO `yf_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
-(1, 'site_options', '            {\r\n            		"site_name":"YFCMF内容管理框架",\r\n            		"site_host":"http://localhost/",\r\n            		"site_root":"",\r\n            		"site_icp":"",\r\n            		"site_admin_email":"admin@163.com",\r\n            		"site_tongji":"",\r\n            		"site_copyright":"",\r\n            		"site_seo_title":"YFCMF内容管理框架",\r\n            		"site_seo_keywords":"YFCMF,php,内容管理框架,cmf,cms,雨飞工作室",\r\n            		"site_seo_description":"YFCMF是雨飞工作室发布的一款用于快速开发的内容管理框架"\r\n        }', 1);
+(1, 'site_options', '{"site_name":"YFCMF\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_host":"http:\\/\\/localhost\\/","site_tpl":"Rainfer","site_icp":"\\u7ca4ICP\\u590711092604\\u53f7-1","site_tongji":"","site_copyright":"Copyright \\u00a9 2016 &lt;a href=&quot;\\/&quot;&gt;\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4&lt;\\/a&gt;  Powered By &lt;a href=&quot;http:\\/\\/www.rainfer.cn&quot;&gt;YFCMF&lt;\\/a&gt;","site_co_name":"\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4","site_address":"\\u5e7f\\u4e1c\\u7701\\u4e1c\\u839e\\u5e02\\u5357\\u57ce\\u533a\\u521b\\u5c55\\u4e2d\\u5fc3","site_tel":"+86 769 8888 8888","site_admin_email":"81818832@qq.com","site_qq":"81818832","site_seo_title":"YFCMF\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_seo_keywords":"YFCMF,php,\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6,cmf,cms,\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4","site_seo_description":"YFCMF\\u662f\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4\\u53d1\\u5e03\\u7684\\u4e00\\u6b3e\\u7528\\u4e8e\\u5feb\\u901f\\u5f00\\u53d1\\u7684\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_logo":".\\/data\\/upload\\/2016-04-29\\/5722b73b49c59.png"}', 1);
 
 -- --------------------------------------------------------
 
@@ -517,7 +565,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
 --
 
 INSERT INTO `yf_plug_ad` (`plug_ad_id`, `plug_ad_name`, `plug_ad_adtypeid`, `plug_ad_checkid`, `plug_ad_js`, `plug_ad_pic`, `plug_ad_url`, `plug_ad_addtime`, `plug_ad_order`, `plug_ad_open`, `plug_ad_depid`, `plug_ad_butt`) VALUES
-(1, '轮播图片2', 1, 1, '', '/uploads/Ad/2015-12-29/5681f14409b6a.jpg', '', 1451356484, 50, 1, 0, 0);
+(1, '轮播图片2', 1, 1, '', '2016-04-25/571dc07db6cd0.jpg', '', 1451356484, 50, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -542,6 +590,31 @@ INSERT INTO `yf_plug_adtype` (`plug_adtype_id`, `plug_adtype_name`, `plug_adtype
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `yf_plug_files`
+--
+
+CREATE TABLE IF NOT EXISTS `yf_plug_files` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uptime` int(10) unsigned NOT NULL DEFAULT '0',
+  `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
+  `path` varchar(255) DEFAULT '' COMMENT '路径',
+  PRIMARY KEY (`id`),
+  KEY `uptime` (`uptime`),
+  KEY `path` (`path`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=62 ;
+
+--
+-- 转存表中的数据 `yf_plug_files`
+--
+
+INSERT INTO `yf_plug_files` (`id`, `uptime`, `filesize`, `path`) VALUES
+(61, 1461903105, 7371, './data/upload/2016-04-29/5722b73b49c59.png'),
+(60, 1461903105, 21608, './data/upload/2016-04-28/5721b343dfea7.jpg'),
+(59, 1461816331, 8026, './data/upload/avatar/57218c0148950.jpg');
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `yf_plug_link`
 --
 
@@ -549,21 +622,23 @@ CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_id` int(5) NOT NULL AUTO_INCREMENT,
   `plug_link_name` varchar(50) NOT NULL COMMENT '链接名称',
   `plug_link_url` varchar(200) NOT NULL COMMENT '链接URL',
+  `plug_link_target` varchar(25) NOT NULL DEFAULT '_blank' COMMENT '打开方式',
   `plug_link_typeid` tinyint(4) DEFAULT NULL COMMENT '所属栏目ID',
   `plug_link_qq` varchar(20) NOT NULL COMMENT '联系QQ',
   `plug_link_order` varchar(10) NOT NULL DEFAULT '50' COMMENT '排序',
   `plug_link_addtime` int(11) NOT NULL COMMENT '添加时间',
   `plug_link_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0禁用1启用',
   PRIMARY KEY (`plug_link_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- 转存表中的数据 `yf_plug_link`
 --
 
-INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `plug_link_typeid`, `plug_link_qq`, `plug_link_order`, `plug_link_addtime`, `plug_link_open`) VALUES
-(1, '雨飞工作室', 'http://www.rainfer.cn', 1, 'eee', '50', 1460260482, 1),
-(2, '雨飞工作室', 'http://www.rainfer.cn', 11, '81818832', '50', 1460362536, 1);
+INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `plug_link_target`, `plug_link_typeid`, `plug_link_qq`, `plug_link_order`, `plug_link_addtime`, `plug_link_open`) VALUES
+(1, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 1, 'eee', '50', 1460260482, 1),
+(2, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 2, '81818832', '50', 1460362536, 1),
+(3, 'YFCMF', 'http://www.rainfer.cn', '_blank', 1, '', '50', 1461909470, 1);
 
 -- --------------------------------------------------------
 
