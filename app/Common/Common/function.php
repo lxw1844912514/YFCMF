@@ -1,13 +1,6 @@
 <?php
 use Think\Db;
 use Think\Storage;
-function p ($array){
-    dump($array,1,'<pre>',0);
-}
-
-function get_avatar_name(){
-    return 'temp';
-}
 
 function sendMail($to, $title, $content) {
 
@@ -37,7 +30,7 @@ function subtext($text, $length)
     return $text;
 }
 
-/**************************数据备份操作*****************************/
+
 
 /**
  * 格式化字节大小
@@ -512,7 +505,7 @@ function get_menu_datas($id){
 		if($nav['menu_type']==2){
 			$nav['href']=$nav['menu_address'];
 		}else{
-			$nav['href']=U('list',array('id'=>$nav['id']));
+			$nav['href']=U('list/index',array('id'=>$nav['id']));
 			if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
 				$nav['href']=U('index/index');
 			}
@@ -536,4 +529,131 @@ function get_menu_tree($id="main"){
 	$tree = new \Tree();
 	$tree->init($navs);
 	return $tree->get_tree_array(0, "");
+}
+function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
+    if(function_exists("mb_substr"))
+        $slice = mb_substr($str, $start, $length, $charset);
+    elseif(function_exists('iconv_substr')) {
+        $slice = iconv_substr($str,$start,$length,$charset);
+        if(false === $slice) {
+            $slice = '';
+        }
+    }else{
+        $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+        $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
+        $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+        $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+        preg_match_all($re[$charset], $str, $match);
+        $slice = join("",array_slice($match[0], $start, $length));
+    }
+    return ($suffix && $slice!=$str)? $slice.'...' : $slice;
+}
+/**
+ * 查询文章列表，支持分页或不分页
+ * Author: Raifner <81818832@qq.com> 2016-2-22
+ * @param string $type 查询类型,可以为'cid',可以为'keyword',可以为'tag'
+ * @param string $v 当查询类型为'cid'或'keyword'时,待搜索的值
+ * @param string $tag  查询标签，以字符串方式传入,例："cid:1,2;field:post_title,post_content;limit:0,8;order:post_date desc,listorder desc;where:id>0;"<br>
+ *  ids:调用指定id的一个或多个数据,如 1,2,3<br>
+ * 	cid:数据所在分类,可调出一个或多个分类数据,如 1,2,3 默认值为全部,在当前分类为:'.$cid.'<br>
+ * 	field:调用post指定字段,如(id,post_title...) 默认全部<br>
+ * 	limit:数据条数,默认值为10,可以指定从第几条开始,如3,8(表示共调用8条,从第3条开始),使用分页时无效
+ * 	order:排序方式，如：post_date desc<br>
+ *	where:查询条件，字符串形式，和sql语句一样
+ * @param array $where 查询条件，（暂只支持数组），格式和thinkphp where方法一样；
+ * @param bool $ispage 是否分页
+ * @param int $pagesize 每页条数.
+ * @param array $pagesetting 分页设置<br>
+ * 	参数形式：<br>
+ * 	array(<br>
+ * 		&nbsp;&nbsp;"listlong" => "9",<br>
+ * 		&nbsp;&nbsp;"first" => "首页",<br>
+ * 		&nbsp;&nbsp;"last" => "尾页",<br>
+ * 		&nbsp;&nbsp;"prev" => "上一页",<br>
+ * 		&nbsp;&nbsp;"next" => "下一页",<br>
+ * 		&nbsp;&nbsp;"list" => "*",<br>
+ * 		&nbsp;&nbsp;"disabledclass" => ""<br>
+ * 	)
+ * @param string $pagetpl 以字符串方式传入,例："{first}{prev}{liststart}{list}{listend}{next}{last}"
+* @return array 包括分页的文章列表<br>
+ * array(<br>
+ * 	&nbsp;&nbsp;"posts"=>"",//文章列表，array<br>
+ * 	&nbsp;&nbsp;"page"=>""//分页html<br>
+* )
+ */
+function get_post($type=null,$v=null,$tag,$where=array(),$ispage,$pagesize=20,$pagesetting=array(),$pagetpl='{first}{prev}{liststart}{list}{listend}{next}{last}',$Current_page=1){
+    $where=is_array($where)?$where:array();
+    $tag=param2array($tag);
+    $field = !empty($tag['field']) ? $tag['field'] : '*';
+    $limit = !empty($tag['limit']) ? $tag['limit'] : '';
+    $order = !empty($tag['order']) ? $tag['order'] : 'news_time';
+    switch($type){
+        case 'keyword':
+			$where['news_title|news_key'] = array('like','%' . $v . '%');//关键字
+			break;
+		case 'tag':
+			$where['news_tag'] = array('IN','%' . $v . '%');//标签
+			break;
+        case 'cid':
+            $cid=intval($v);
+            $catids=array();
+            $terms=M("Terms")->field("term_id")->where("status=1 and ( term_id=$cid OR path like '%-$cid-%' )")->order('term_id asc')->select();
+            foreach($terms as $item){
+                $catids[]=$item['term_id'];
+            }
+            if(!empty($catids)){
+                $catids=implode(",", $catids);
+                $catids="cid:$catids;";
+            }else{
+                $catids="";
+            }
+            $tag['cid']=$catids;//重新生成条件
+			break;
+        default:
+    }
+    //根据参数生成查询条件
+    $where['status'] = array('eq',1);
+    $where['post_status'] = array('eq',1);
+    if (!empty($tag['cid'])) {
+        $where['term_id'] = array('in',$tag['cid']);
+    }
+    if (!empty($tag['ids'])) {
+        $where['object_id'] = array('in',$tag['ids']);
+    }
+    if (!empty($tag['where'])) {
+        $where['_string'] = $tag['where'];
+    }
+    $join = "".C('DB_PREFIX').'posts as b on a.object_id =b.id';
+    $join2= "".C('DB_PREFIX').'users as c on b.post_author = c.id';
+    $rs= M("TermRelationships");
+    if($ispage){
+        //使用分页
+		//需要处理重复字段(排除c表id字段)				//$field=($field=='*')?'a.*,b.*,user_login,user_pass,user_nicename,user_email,user_url,avatar,sex,birthday,signature,last_login_ip,last_login_time,create_time,user_activation_key,user_status,score,user_type,coin,mobile':$field;
+		//$sub=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->limit($limit)->buildsql();
+		//$totalsize=M()->table($sub.' d')->count();
+        $totalsize=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->count();
+		import('Page');
+		if ($pagesize == 0) {
+			$pagesize = 20;
+		}
+		$PageParam = C("VAR_PAGE");
+		$page = new \Page($totalsize,$pagesize,$Current_page);
+		$page->setLinkWraper("li");
+		$page->__set("PageParam", $PageParam);
+		$page->SetPager('default', $pagetpl, array("listlong" => "9", "first" => "首页", "last" => "尾页", "prev" => "上一页", "next" => "下一页", "list" => "*", "disabledclass" => ""));
+		//$sub=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($limit)->buildsql();
+		//$posts=M()->table($sub.' d')->limit($page->firstRow . ',' . $page->listRows)->select();
+		$posts=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($page->firstRow . ',' . $page->listRows)->select();
+		$content['posts']=$posts;
+		$content['page']=$page->show('default');
+		$content['count']=$totalsize;
+		$content['pagesize']=$pagesize;
+		$next_page=($page->Current_page<$page->Total_Pages)?$page->Current_page+1:0;
+		$content['next_page']=$next_page;
+        return $content;
+    }else{
+        //不使用分页
+        $posts=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($limit)->select();
+        return $posts;
+    }
 }

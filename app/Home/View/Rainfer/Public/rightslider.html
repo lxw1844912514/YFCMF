@@ -1,6 +1,5 @@
 <div class="sidebar col-lg-3 col-md-3 col-sm-4 col-xs-12">
     <div class="blog-entry-meta-tags">
-    {:hook('sider',array('action'=>'sider'))}
     </div>
     <form action="{:U('portal/search/index')}" method="post">
         <div class="widget search-form">
@@ -24,35 +23,35 @@
                     <ul class="posts">
                         <php>
                             $tag="cid:".$portal_hot_articles.";field:post_title,post_date,post_excerpt,tid,term_id,smeta;order:post_hits desc;limit:5;";
-                            $hot_articles=sp_sql_posts($tag);
-                        </php><foreach name="hot_articles" item="vo">				<php>
+                            //$hot_articles=sp_sql_posts($tag);
+                        </php><php>
                         $smeta=json_decode($vo['smeta'], true);
                     </php>
                         <li>
-                            <a href="#"><img class="img-thumbnail recent-post-img" alt="" src="{:sp_get_asset_upload_path($smeta['thumb'])}"></a>
-                            <p><a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">{$vo.post_title|msubstr=0,32}</a></p>
+                            <a href="#"><img class="img-thumbnail recent-post-img" alt="" src="#"></a>
+                            <p><a href="#">{$vo.post_title|msubstr=0,32}</a></p>
                             <span class="color">{$vo.post_date|strtotime|date="yy-m-d",###}</span>
-                        </li></foreach>
+                        </li>
                     </ul>
                 </div>
                 <div class="tabscontent" id="content2">
                     <ul class="posts">
                         <php>
                             $tag="cid:".$portal_last_post.";field:post_title,post_date,post_excerpt,tid,term_id,smeta;order:listorder asc;limit:5;";
-                            $last_post=sp_sql_posts($tag);
-                        </php><foreach name="hot_articles" item="vo">				<php>
+                            //$last_post=sp_sql_posts($tag);
+                        </php><php>
                         $smeta=json_decode($vo['smeta'], true);
                     </php>
                         <li>
-                            <a href="#"><img class="img-thumbnail recent-post-img" alt="" src="{:sp_get_asset_upload_path($smeta['thumb'])}"></a>
-                            <p><a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">{$vo.post_title|msubstr=0,32}</a></p>
+                            <a href="#"><img class="img-thumbnail recent-post-img" alt="" src="#"></a>
+                            <p><a href="#">{$vo.post_title|msubstr=0,32}</a></p>
                             <span class="color">{$vo.post_date|strtotime|date="yy-m-d",###}</span>
-                        </li></foreach>
+                        </li>
                     </ul>
                 </div>
                 <div class="tabscontent" id="content3">
                     <ul class="posts">
-                        <php>$last_comments=sp_get_comments("field:*;limit:0,5;order:createtime desc;");</php>
+                        <php>//$last_comments=sp_get_comments("field:*;limit:0,5;order:createtime desc;");</php>
                         <foreach name="last_comments" item="vo">
                             <li>
                                 <i class="fa fa-comment"></i>

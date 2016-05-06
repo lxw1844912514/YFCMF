@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2016 年 05 月 05 日 08:43
+-- 生成日期: 2016 年 05 月 06 日 08:59
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.4.45
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
 --
 
 INSERT INTO `yf_admin` (`admin_id`, `admin_username`, `admin_pwd`, `admin_pwd_salt`, `admin_changepwd`, `admin_email`, `admin_realname`, `admin_avatar`, `admin_tel`, `admin_hits`, `admin_ip`, `admin_time`, `admin_last_ip`, `admin_last_time`, `admin_addtime`, `admin_mdemail`, `admin_open`) VALUES
-(1, 'admin', '090b6a924b3d00c1d6b0f7d3b78d901b', 'GJsYfxUerK', 0, 'admin@163.com', '超管', '57218c0148950.jpg', '13899999999', 38, '127.0.0.1', 1462428278, '127.0.0.1', 1462263526, 1461230934, '', 1);
+(1, 'admin', '090b6a924b3d00c1d6b0f7d3b78d901b', 'GJsYfxUerK', 0, 'admin@163.com', '超管', '57218c0148950.jpg', '13899999999', 42, '127.0.0.1', 1462514787, '127.0.0.1', 1462506102, 1461230934, '', 1);
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (32, 'Plug/plug_link_list', '链接列表', 1, 1, '', '', 31, 3, 10, 1447639935),
 (129, 'plug/plug_link_del', '删除操作', 1, 0, '', '', 32, 4, 20, 1460345954),
 (34, 'Plug/plug_linktype_list', '所属栏目', 1, 1, '', '', 31, 3, 20, 1447640839),
-(35, 'We', '微信基本功能', 1, 1, 'fa-weixin', '', 0, 1, 40, 1447842435),
+(35, 'We', '微信基本功能', 1, 0, 'fa-weixin', '', 0, 1, 40, 1447842435),
 (36, 'We/we_menu_list', '菜单管理', 1, 1, '', '', 35, 2, 10, 1447842477),
 (44, 'Plug/plug_ad_list', '广告管理', 1, 1, '', '', 28, 2, 20, 1450314265),
 (37, 'Member/member_list', '会员列表', 1, 1, '', '', 29, 3, 10, 1448413219),
@@ -437,6 +437,8 @@ CREATE TABLE IF NOT EXISTS `yf_menu` (
   `menu_enname` varchar(50) NOT NULL COMMENT '英文标题',
   `menu_type` int(8) NOT NULL,
   `parentid` int(3) NOT NULL COMMENT '父级id',
+  `menu_listtpl` varchar(50) NOT NULL DEFAULT '' COMMENT '列表页模板',
+  `menu_newstpl` varchar(50) NOT NULL DEFAULT '' COMMENT '单文章页模板',
   `menu_address` varchar(70) NOT NULL,
   `menu_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否开启',
   `listorder` int(7) NOT NULL,
@@ -451,24 +453,21 @@ CREATE TABLE IF NOT EXISTS `yf_menu` (
 -- 转存表中的数据 `yf_menu`
 --
 
-INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`, `menu_address`, `menu_open`, `listorder`, `menu_seo_title`, `menu_seo_key`, `menu_seo_des`, `menu_content`) VALUES
-(1, '公司简介', '', 5, 0, '', 1, 10, '', '', '', '&lt;p&gt;公司简介&lt;/p&gt;'),
-(2, '服务项目', '', 1, 0, '', 1, 20, '', '', '', ''),
-(3, '彩妆培训', '', 2, 2, 'http://www.rainfer.cn', 1, 50, '', '', '', '&lt;p&gt;彩妆培训&lt;/p&gt;'),
-(4, '婚纱摄影', '', 5, 2, '', 1, 50, '', '', '', ''),
-(5, '新娘跟妆', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;新娘跟妆&lt;/p&gt;'),
-(6, '个人写真', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;个人写真&lt;/p&gt;'),
-(7, '形象设计', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;形象设计&lt;/p&gt;'),
-(8, '婚庆小秘', '', 5, 2, '', 1, 50, '', '', '', '&lt;p&gt;婚庆小秘&lt;/p&gt;'),
-(9, '成功案例', '', 4, 0, '', 1, 50, '', '', '', ''),
-(10, '联系方式', '', 5, 0, '', 1, 50, '', '', '', '&lt;p&gt;联系方式&lt;/p&gt;'),
-(11, '彩妆形象', '', 4, 9, '', 1, 50, '', '', '', ''),
-(12, '婚纱美景', '', 4, 9, '', 1, 50, '', '', '', ''),
-(13, '婚礼布置', '', 4, 9, '', 1, 50, '', '', '', ''),
-(14, '活动·动态', '', 1, 0, '', 1, 30, '', '', '', ''),
-(15, '行业动态', '', 3, 14, '', 1, 50, '', '', '', ''),
-(16, '优惠信息', '', 3, 14, '', 1, 50, '', '', '', ''),
-(17, '首页首页', 'Home', 1, 0, '', 1, 1, '', '', '', '');
+INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`, `menu_listtpl`, `menu_newstpl`, `menu_address`, `menu_open`, `listorder`, `menu_seo_title`, `menu_seo_key`, `menu_seo_des`, `menu_content`) VALUES
+(1, '公司简介', '', 4, 0, 'about', '', '', 1, 10, '', '', '', '&lt;p&gt;公司简介&lt;/p&gt;'),
+(2, '服务项目', '', 1, 0, 'list', 'news', '', 1, 20, '', '', '', ''),
+(3, '彩妆培训', '', 3, 2, 'list', 'news', 'http://www.rainfer.cn', 1, 50, '', '', '', '&lt;p&gt;彩妆培训&lt;/p&gt;'),
+(4, '婚纱摄影', '', 3, 2, 'list', 'news', '', 1, 50, '', '', '', ''),
+(5, '新娘跟妆', '', 3, 2, 'list', 'news', '', 1, 50, '', '', '', '&lt;p&gt;新娘跟妆&lt;/p&gt;'),
+(6, '个人写真', '', 3, 2, 'list', 'news', '', 1, 50, '', '', '', '&lt;p&gt;个人写真&lt;/p&gt;'),
+(7, '形象设计', '', 3, 2, 'list', 'news', '', 1, 50, '', '', '', '&lt;p&gt;形象设计&lt;/p&gt;'),
+(8, '婚庆小秘', '', 3, 2, 'list', 'news', '', 1, 50, '', '', '', '&lt;p&gt;婚庆小秘&lt;/p&gt;'),
+(9, '成功案例', '', 3, 0, 'photo_list', 'news', '', 1, 50, '', '', '', ''),
+(10, '联系方式', '', 3, 0, 'contact', '', '', 1, 50, '', '', '', '&lt;p&gt;联系方式&lt;/p&gt;'),
+(14, '活动·动态', '', 1, 0, 'list', 'news', '', 1, 30, '', '', '', ''),
+(15, '行业动态', '', 3, 14, 'list', 'news', '', 1, 50, '', '', '', ''),
+(16, '优惠信息', '', 3, 14, 'list', 'news', '', 1, 50, '', '', '', ''),
+(17, '首页首页', 'Home', 1, 0, '', '', '', 1, 1, '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -669,21 +668,24 @@ INSERT INTO `yf_plug_linktype` (`plug_linktype_id`, `plug_linktype_name`, `plug_
 
 CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   `plug_sug_id` int(11) NOT NULL AUTO_INCREMENT,
-  `plug_sug_title` varchar(200) NOT NULL DEFAULT '' COMMENT '留言标题',
+  `plug_sug_name` varchar(200) NOT NULL DEFAULT '' COMMENT '留言人姓名',
   `plug_sug_email` varchar(50) NOT NULL DEFAULT '' COMMENT '留言邮箱',
   `plug_sug_addtime` int(11) NOT NULL COMMENT '留言时间',
   `plug_sug_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '1=审核 0=不审核',
   `plug_sug_ip` varchar(50) NOT NULL DEFAULT '' COMMENT '留言者IP',
   `plug_sug_content` longtext NOT NULL COMMENT '留言内容',
   PRIMARY KEY (`plug_sug_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- 转存表中的数据 `yf_plug_sug`
 --
 
-INSERT INTO `yf_plug_sug` (`plug_sug_id`, `plug_sug_title`, `plug_sug_email`, `plug_sug_addtime`, `plug_sug_open`, `plug_sug_ip`, `plug_sug_content`) VALUES
-(1, '1', '1', 1453170440, 0, '127.0.0.1', '1');
+INSERT INTO `yf_plug_sug` (`plug_sug_id`, `plug_sug_name`, `plug_sug_email`, `plug_sug_addtime`, `plug_sug_open`, `plug_sug_ip`, `plug_sug_content`) VALUES
+(1, '1', '1', 1453170440, 0, '127.0.0.1', '1'),
+(2, 'cc', 'dddd@ddd.com', 1462518495, 0, '127.0.0.1', 'dddd'),
+(3, 'dddd', 'dddd@ddd.com', 1462521543, 0, '127.0.0.1', 'dddd'),
+(4, 'ddd', 'dddd@ddd.com', 1462523453, 0, '127.0.0.1', 'ddd');
 
 -- --------------------------------------------------------
 

@@ -117,7 +117,7 @@
                                     <select name="menu_listtpl"  class="col-sm-3 selector">
                                         <option value="">请选择模板</option>
                                         <foreach name="tpls" item="vo">
-                                            <option value="{$vo.filename}" <if condition="$vo.filename eq $menu.menu_listtpl">selected</if>>{$vo.filename}</option>
+                                            <option value="{$vo}" <if condition="$vo eq $menu['menu_listtpl']">selected</if>>{$vo}</option>
                                         </foreach>
                                     </select>
                                 </div>
@@ -130,7 +130,7 @@
                                     <select name="menu_newstpl"  class="col-sm-3 selector">
                                         <option value="">请选择模板</option>
                                         <foreach name="tpls" item="vo">
-                                            <option value="{$vo.filename}" <if condition="$vo.filename eq $menu.menu_newstpl">selected</if>>{$vo.filename}</option>
+                                            <option value="{$vo}" <if condition="$vo eq $menu['menu_newstpl']">selected</if>>{$vo}</option>
                                         </foreach>
                                     </select>
                                 </div>

@@ -6,7 +6,12 @@ class NewsController extends AuthController {
     protected function _initialize(){
         $sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
         $sys=json_decode($sys,true);
-        $this->tpls=list_file(APP_PATH.'Home/view/'.$sys['site_tpl'],'*.html');
+		$arr=list_file(APP_PATH.'Home/view/'.$sys['site_tpl'],'*.html');
+		$tpls=array();
+		foreach($arr as $v){
+			$tpls[]=basename($v['filename'],'.html');
+		}
+		$this->tpls=$tpls;
     }
 	/************************************************文章管理**************************************************/
 	//文章列表
@@ -385,7 +390,7 @@ class NewsController extends AuthController {
 		$this->display();
 	}
 
-	//添加栏目
+	//添加菜单
 	public function news_menu_add(){
 		$parentid=I('id',0);
 		$this->assign('parentid',$parentid);
@@ -402,6 +407,8 @@ class NewsController extends AuthController {
 				'menu_enname'=>I('menu_enname'),
 				'menu_type'=>I('menu_type'),
 				'parentid'=>I('parentid'),
+				'menu_listtpl'=>I('menu_listtpl'),
+				'menu_newstpl'=>I('menu_newstpl'),
 				'menu_address'=>I('menu_address'),
 				'menu_open'=>I('menu_open',0),
 				'listorder'=>I('listorder'),
@@ -424,7 +431,7 @@ class NewsController extends AuthController {
 		}
 	}
 
-	//删除栏目
+	//删除菜单
 	public function news_menu_del(){
 		$arr=M('menu')->find(I('id'));
         $parentid=$arr['parentid'];
@@ -513,6 +520,8 @@ class NewsController extends AuthController {
 				'menu_enname'=>I('menu_enname'),
 				'menu_type'=>I('menu_type'),
 				'parentid'=>I('parentid'),
+				'menu_listtpl'=>I('menu_listtpl'),
+				'menu_newstpl'=>I('menu_newstpl'),
 				'menu_address'=>I('menu_address'),
 				'menu_open'=>I('menu_open',0),
 				'listorder'=>I('listorder'),
