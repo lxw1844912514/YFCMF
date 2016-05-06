@@ -16,13 +16,12 @@
       <div class="fullwidthbanner-container">
          <div class="fullwidthbanner rslider">
             <php>
-               //$home_slides=sp_getslide($home_slides_id);
-               //$home_slides=empty($home_slides)?$default_home_slides:$home_slides;
+               $home_slides=get_ads($home_adtype_id);
             </php>
             <ul>
                <foreach name="home_slides" item="vo">
                   <li data-delay="6000" data-masterspeed="300" data-transition="fade">
-                     <div class="slotholder"><a href="{$vo.slide_url}"><img class="img-responsive" src="{:sp_get_asset_upload_path($vo['slide_pic'])}" data-fullwidthcentering="on" alt="{$vo.slide_name}"></a></div>
+                     <div class="slotholder"><a href="{$vo.plug_ad_url}"><img class="img-responsive" src="{$vo.plug_ad_pic}" data-fullwidthcentering="on" alt="{$vo.plug_ad_name}"></a></div>
                      <div class="caption list_slide lfb tp-caption start"
                           data-x="40"
                           data-y="85"
@@ -31,14 +30,11 @@
                           data-start="1000"
                           data-easing="easeOutQuint"
                           data-endeasing="easeOutQuint">
-                        <h3>{$vo.slide_name}</h3>
-<!--                         <div class="list-slide">
-                           <h5 class="dblue">{$vo.slide_des}</h5>
-                        </div> -->
+                        <h3>{$vo.plug_ad_name}</h3>
                      </div>
 					 <php>
 					 //幻灯片内容,换行符隔开
-					 //$slide_content=explode("\n",$vo['slide_content']);
+					 $slide_content=explode("\n",$vo['plug_ad_content']);
 					 </php>
 					 <foreach name="slide_content" item="voo" key="k">
 					 <div class="caption list_slide lfb tp-caption start" 
@@ -132,29 +128,23 @@
                      <div id="portfolio-carousel" class="portfolio-carousel slide">
                         <div class="carousel-inner">
                            <php>
-                              $tag="cid:".$lastportfolios_cid.";field:post_title,post_excerpt,tid,term_id,smeta;order:listorder asc;limit:6;";
-                              //$lastportfolios=sp_sql_posts($tag);
+                              $tag="cid:".$lastportfolios_cid.";field:news_title,news_scontent,n_id,news_columnid,news_img,news_pic_allurl;order:news_time desc;limit:6;";
+                              $lastportfolios=get_news($tag);
                            </php>
                            <div class="item active">
                               <volist name="lastportfolios" id="vo" key="k" offset="0" length='3'>
-                                 <php>$smeta=json_decode($vo['smeta'],true);</php>
                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item animate_afc d{$k+1}">
                                     <div class="portfolio-item">
-									<if condition="!empty($smeta['thumb'])">
-                                       <a href="{:sp_get_asset_upload_path($smeta['thumb'])}" class="portfolio-item-link" data-rel="prettyPhoto" >
+									<if condition="!empty($vo['news_img'])">
+                                       <a href="{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
                                           <span class="portfolio-item-hover"></span>
-                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="{:sp_get_asset_upload_path($smeta['thumb'])}" alt=" "/>
+                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']}" alt=" "/>
                                        </a>
-									<else />
-                                       <a href="{:sp_get_asset_upload_path($smeta['photo'][0]['url'])}" class="portfolio-item-link" data-rel="prettyPhoto" >
-                                          <span class="portfolio-item-hover"></span>
-                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="{:sp_get_asset_upload_path($smeta['photo'][0]['url'])}" alt=" "/>
-                                       </a>									
 									</if>
                                        <div class="portfolio-item-title">
-                                          <a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">{$vo.post_title}</a>
+                                          <a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
                                           <p>
-                                             {$vo.post_excerpt}
+                                             {$vo.news_scontent}
                                           </p>
                                        </div>
                                        <div class="clearfix"></div>
@@ -164,20 +154,15 @@
                            </div>
                            <div class="item">
                               <volist name="lastportfolios" id="vo" offset="3" length='3'>
-                                 <php>$smeta=json_decode($vo['smeta'],true);</php>
                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item">
                                     <div class="portfolio-item">
 									<if condition="!empty($smeta['thumb'])">
-                                       <a href="{:sp_get_asset_upload_path($smeta['thumb'])}" class="portfolio-item-link" data-rel="prettyPhoto" >
-                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="{:sp_get_asset_upload_path($smeta['thumb'])}" alt=" "/>
-                                       </a>
-									<else />
-                                       <a href="{:sp_get_asset_upload_path($smeta['photo'][0]['url'])}" class="portfolio-item-link" data-rel="prettyPhoto" >
-                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="{:sp_get_asset_upload_path($smeta['photo'][0]['url'])}" alt=" "/>
+                                       <a href="{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
+                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']}" alt=" "/>
                                        </a>
 									</if>
                                        <div class="portfolio-item-title">
-                                          <a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">{$vo.post_title}</a>
+                                          <a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
                                           <p>
                                              {$vo.post_excerpt}
                                           </p>
@@ -205,15 +190,15 @@
                         <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 animate_afl">
                            <div id="cn-tabs">
                               <php>
-                                 $tag="cid:".$services_cid.";field:post_content,post_title,tid,term_id;order:listorder asc;limit:6;";
-                                 //$services=sp_sql_posts($tag);
+                                 $tag="cid:".$services_cid.";field:news_content,news_title,n_id,news_columnid;order:news_time desc;limit:6;";
+                                 $services=get_news($tag);
                               </php>
                               <foreach name="services" item="vo" key="k" >
                                  <div class="service service-{$k+1}">
                                     <div class="cn-content">
-                                       <h4>{$vo.post_title}</h4>
-                                       <p>{$vo.post_content|html_trim=420}</p>
-                                       <a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
+                                       <h4>{$vo.news_title}</h4>
+                                       <p>{$vo.news_content|html_trim=420}</p>
+                                       <a href="{:U('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
                                        <div class="clearfix"></div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -252,24 +237,21 @@
                <div class="blog-showcase col-lg-12 col-md-12 col-sm-12 col-xs-12 animate_afb d1">
                   <ul>
                      <php>
-                        $tag="cid:".$portal_index_lastnews.";field:post_title,post_like,post_excerpt,comment_count,tid,smeta,term_id,post_date;order:listorder asc;limit:3;";
-                        //$lastnews=sp_sql_posts($tag);
+                        $tag="cid:".$portal_index_lastnews.";field:news_title,news_hits,news_scontent,n_id,news_img,news_columnid,news_time;order:news_time desc;limit:3;";
+                        $lastnews=get_news($tag);
                      </php>
                      <foreach name="lastnews" item="vo" key="k">
-                        <php>$smeta=json_decode($vo['smeta'],true);</php>
                         <li <if condition="$k eq 2">class="blog-first-el"</if>>
                         <div class="blog-showcase-thumb col-lg-4">
                            <div class="post-body">
-                              <a class="post-item-link" href="{:sp_get_asset_upload_path($smeta['thumb'])}" data-rel="prettyPhoto"><span class="post-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img alt="" src="{:sp_get_asset_upload_path($smeta['thumb'])}"></a>
+                              <a class="post-item-link" href="{$vo['news_img']}" data-rel="prettyPhoto"><span class="post-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img alt="" src="{$vo['news_img']}"></a>
                            </div>
                         </div>
                         <div class="blog-showcase-extra-info col-lg-4">
-                           <i class="fa fa-clock-o">{$vo.post_date|strtotime|date="Y-m-d h:m:s",###}</i> 
-						   <a><i class="fa fa-comment"></i></a> {$vo.comment_count} 
-						   <a href="{:U('article/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i></a> {$vo.post_like}
-                           <h5><a href="#" class="title">{$vo.post_title}</a></h5>
-                           <p>{:msubstr($vo['post_excerpt'],0,45)}</p>
-                           <a href="{:leuu('article/index',array('id'=>$vo['tid'],'cid'=>$vo['term_id']))}">查看 <i class="fa fa-angle-double-right"></i></a>
+                           <i class="fa fa-clock-o">{$vo.news_time|date="Y-m-d h:m:s",###}</i>
+                           <h5><a href="{:U('News/index',array('id'=>$vo['n_id']))}" class="title">{$vo.news_title}</a></h5>
+                           <p>{:msubstr($vo['news_scontent'],0,45)}</p>
+                           <a href="{:U('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-double-right"></i></a>
                         </div>
                         </li>
                      </foreach>

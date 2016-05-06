@@ -553,35 +553,17 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
  * Author: Raifner <81818832@qq.com> 2016-2-22
  * @param string $type 查询类型,可以为'cid',可以为'keyword',可以为'tag'
  * @param string $v 当查询类型为'cid'或'keyword'时,待搜索的值
- * @param string $tag  查询标签，以字符串方式传入,例："cid:1,2;field:post_title,post_content;limit:0,8;order:post_date desc,listorder desc;where:id>0;"<br>
+ * @param string $tag  查询标签，以字符串方式传入,例："cid:1,2;field:news_title,news_content;limit:0,8;order:news_time desc,news_hits desc;where:n_id>5;"<br>
  *  ids:调用指定id的一个或多个数据,如 1,2,3<br>
  * 	cid:数据所在分类,可调出一个或多个分类数据,如 1,2,3 默认值为全部,在当前分类为:'.$cid.'<br>
- * 	field:调用post指定字段,如(id,post_title...) 默认全部<br>
+ * 	field:调用post指定字段,如(n_id,news_title...) 默认全部<br>
  * 	limit:数据条数,默认值为10,可以指定从第几条开始,如3,8(表示共调用8条,从第3条开始),使用分页时无效
- * 	order:排序方式，如：post_date desc<br>
+ * 	order:排序方式，如：news_hits desc<br>
  *	where:查询条件，字符串形式，和sql语句一样
  * @param array $where 查询条件，（暂只支持数组），格式和thinkphp where方法一样；
  * @param bool $ispage 是否分页
- * @param int $pagesize 每页条数.
- * @param array $pagesetting 分页设置<br>
- * 	参数形式：<br>
- * 	array(<br>
- * 		&nbsp;&nbsp;"listlong" => "9",<br>
- * 		&nbsp;&nbsp;"first" => "首页",<br>
- * 		&nbsp;&nbsp;"last" => "尾页",<br>
- * 		&nbsp;&nbsp;"prev" => "上一页",<br>
- * 		&nbsp;&nbsp;"next" => "下一页",<br>
- * 		&nbsp;&nbsp;"list" => "*",<br>
- * 		&nbsp;&nbsp;"disabledclass" => ""<br>
- * 	)
- * @param string $pagetpl 以字符串方式传入,例："{first}{prev}{liststart}{list}{listend}{next}{last}"
-* @return array 包括分页的文章列表<br>
- * array(<br>
- * 	&nbsp;&nbsp;"posts"=>"",//文章列表，array<br>
- * 	&nbsp;&nbsp;"page"=>""//分页html<br>
-* )
  */
-function get_post($type=null,$v=null,$tag,$where=array(),$ispage,$pagesize=20,$pagesetting=array(),$pagetpl='{first}{prev}{liststart}{list}{listend}{next}{last}',$Current_page=1){
+function get_news($tag,$ispage,$type=null,$v=null,$where=array()){
     $where=is_array($where)?$where:array();
     $tag=param2array($tag);
     $field = !empty($tag['field']) ? $tag['field'] : '*';
@@ -592,15 +574,11 @@ function get_post($type=null,$v=null,$tag,$where=array(),$ispage,$pagesize=20,$p
 			$where['news_title|news_key'] = array('like','%' . $v . '%');//关键字
 			break;
 		case 'tag':
-			$where['news_tag'] = array('IN','%' . $v . '%');//标签
+			$where['news_tag'] = array('like','%,' . $v . ',%');//标签
 			break;
         case 'cid':
             $cid=intval($v);
-            $catids=array();
-            $terms=M("Terms")->field("term_id")->where("status=1 and ( term_id=$cid OR path like '%-$cid-%' )")->order('term_id asc')->select();
-            foreach($terms as $item){
-                $catids[]=$item['term_id'];
-            }
+            $catids=get_menu_byid($cid,1);
             if(!empty($catids)){
                 $catids=implode(",", $catids);
                 $catids="cid:$catids;";
@@ -612,48 +590,194 @@ function get_post($type=null,$v=null,$tag,$where=array(),$ispage,$pagesize=20,$p
         default:
     }
     //根据参数生成查询条件
-    $where['status'] = array('eq',1);
-    $where['post_status'] = array('eq',1);
+    $where['news_open'] = array('eq',1);
+    $where['news_back'] = array('eq',0);
     if (!empty($tag['cid'])) {
-        $where['term_id'] = array('in',$tag['cid']);
+        $where['news_columnid'] = array('in',$tag['cid']);
     }
     if (!empty($tag['ids'])) {
-        $where['object_id'] = array('in',$tag['ids']);
+        $where['n_id'] = array('in',$tag['ids']);
     }
     if (!empty($tag['where'])) {
         $where['_string'] = $tag['where'];
     }
-    $join = "".C('DB_PREFIX').'posts as b on a.object_id =b.id';
-    $join2= "".C('DB_PREFIX').'users as c on b.post_author = c.id';
-    $rs= M("TermRelationships");
+    $join = "".C('DB_PREFIX').'admin as b on a.news_auto =b.admin_id';
+    $rs= M("news");
     if($ispage){
         //使用分页
-		//需要处理重复字段(排除c表id字段)				//$field=($field=='*')?'a.*,b.*,user_login,user_pass,user_nicename,user_email,user_url,avatar,sex,birthday,signature,last_login_ip,last_login_time,create_time,user_activation_key,user_status,score,user_type,coin,mobile':$field;
-		//$sub=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->limit($limit)->buildsql();
-		//$totalsize=M()->table($sub.' d')->count();
-        $totalsize=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->count();
-		import('Page');
-		if ($pagesize == 0) {
-			$pagesize = 20;
-		}
-		$PageParam = C("VAR_PAGE");
-		$page = new \Page($totalsize,$pagesize,$Current_page);
-		$page->setLinkWraper("li");
-		$page->__set("PageParam", $PageParam);
-		$page->SetPager('default', $pagetpl, array("listlong" => "9", "first" => "首页", "last" => "尾页", "prev" => "上一页", "next" => "下一页", "list" => "*", "disabledclass" => ""));
-		//$sub=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($limit)->buildsql();
-		//$posts=M()->table($sub.' d')->limit($page->firstRow . ',' . $page->listRows)->select();
-		$posts=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($page->firstRow . ',' . $page->listRows)->select();
-		$content['posts']=$posts;
-		$content['page']=$page->show('default');
-		$content['count']=$totalsize;
-		$content['pagesize']=$pagesize;
-		$next_page=($page->Current_page<$page->Total_Pages)?$page->Current_page+1:0;
-		$content['next_page']=$next_page;
+        $count=$rs->alias("a")->join($join)->field($field)->where($where)->count();
+        $Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
+        $show= $Page->show();// 分页显示输出
+        $content['page']=$show;
+        $listRows=(intval(C('DB_PAGENUM'))>0)?C('DB_PAGENUM'):20;
+        if($count>$listRows){
+            $Page->setConfig('theme','<div class=pagination><ul> %upPage% %downPage% %first%  %prePage%  %linkPage%  %nextPage% %end%</ul></div>');
+        }
+        $show= $Page->show();// 分页显示输出
+        $content['page_min']=$show;
+		$news=$rs->alias("a")->join($join)->field($field)->where($where)->order($order)->limit($Page->firstRow.','.$Page->listRows)->select();
+		$content['posts']=$news;
+		$content['count']=$count;
         return $content;
     }else{
         //不使用分页
-        $posts=$rs->alias("a")->join($join)->join($join2)->field($field)->where($where)->order($order)->limit($limit)->select();
-        return $posts;
+        $news=$rs->alias("a")->join($join)->field($field)->where($where)->order($order)->limit($limit)->select();
+        return $news;
     }
+}
+/**
+ * 获取新闻分类ids
+ * $id 待获取的id
+ * $self 是否返回自身，默认false
+ * @return array
+ */
+function get_menu_byid($id=0,$self=false){
+    $arr=M('menu')->where(array('menu_open'=>1,'id'=>$id))->select();
+    if($arr){
+        $rst=$self?array($id):array();
+        $menu=M('menu')->where(array('menu_open'=>1,'parentid'=>$id))->field('id')->select();
+        foreach($menu as $v){
+            $rst[]=intval($v['id']);
+            $arr=M('menu')->where(array('menu_open'=>1,'parentid'=>$v['id']))->field('id')->select();
+            if($arr){
+                $rst=array_merge($rst,get_menu_byid($v['id'],false));
+            }
+        }
+        return $rst;
+    }else{
+        return array();
+    }
+}
+/**
+ * 根据广告位获取所有广告
+ * @param int $plug_ad_adtypeid 广告位id
+ * @return array;
+ */
+function get_ads($plug_ad_adtypeid,$limit=5,$order = "plug_ad_order ASC"){
+    $ad_obj= M("plug_ad");
+    if($order == ''){
+        $order = "plug_ad_order ASC";
+    }
+    if ($limit == 0) {
+        $limit = 5;
+    }
+    return $ad_obj->where(array('plug_ad_open'=>1,'plug_ad_adtypeid'=>$plug_ad_adtypeid))->order($order)->limit('0,'.$limit)->select();
+}
+function html_trim($html, $max, $suffix='...')
+{
+    $non_paired_tags = array('br', 'hr', 'img', 'input', 'param'); // 非成对标签
+    $html = trim($html);
+    $html = preg_replace('/<img([^>]+)>/i', '', $html);
+    $count = 0; // 有效字符计数(一个HTML实体字符算一个有效字符)
+    $tag_status = 0; // (0:非标签, 1:标签开始, 2:标签名开始, 3:标签名结束)
+    $nodes = array(); // 存放解析出的节点(文本节点:array(0, '文本内容', 'text', 0), 标签节点:array(1, 'tag', 'tag_name', '标签性质:0:非成对标签,1:成对标签的开始标签,2:闭合标签'))
+    $segment = ''; // 文本片段
+    $tag_name = ''; // 标签名
+    for($i=0;$i<strlen($html);$i++)
+    {
+        $char = $html[$i]; // 当前字符
+        $segment .= $char; // 保存文本片段
+        if($tag_status == 4)
+        {
+            $tag_status = 0;
+        }
+        if($tag_status == 0 && $char == '<')
+        {
+            // 没有开启标签状态,设置标签开启状态
+            $tag_status = 1;
+        }
+        if($tag_status == 1 && $char != '<')
+        {
+            // 标签状态设置为开启后,用下一个字符来确定是一个标签的开始
+            $tag_status = 2; //标签名开始
+            $tag_name = ''; // 清空标签名
+            // 确认标签开启,将标签之前保存的字符版本存为文本节点
+            $nodes[] = array(0, substr($segment, 0, strlen($segment)-2), 'text', 0);
+            $segment = '<'.$char; // 重置片段,以标签开头
+        }
+        if($tag_status == 2)
+        {
+            // 提取标签名
+            if($char == ' ' || $char == '>' || $char == "\t")
+            {
+                $tag_status = 3; // 标签名结束
+            }else
+            {
+                $tag_name .= $char; // 增加标签名字符
+            }
+        }
+        if($tag_status == 3 && $char == '>')
+        {
+            $tag_status = 4; // 重置标签状态
+            $tag_name = strtolower($tag_name);
+            // 跳过成对标签的闭合标签
+            $tag_type = 1;
+            if(in_array($tag_name, $non_paired_tags))
+            {
+                // 非成对标签
+                $tag_type = 0;
+            }elseif($tag_name[0] == '/')
+            {
+                $tag_type = 2;
+            }
+            // 标签结束,保存标签节点
+            $nodes[] = array(1, $segment, $tag_name, $tag_type);
+            $segment = ''; // 清空片段
+        }
+        if($tag_status == 0)
+        {
+            //echo $char.')'.$count."\n";
+            if($char == '&')
+            {
+                // 处理HTML实体,10个字符以内碰到';',则认为是一个HTML实体
+                for($e=1;$e<=10;$e++)
+                {
+                    if($html[$i+$e] == ';')
+                    {
+                        $segment .= substr($html, $i+1, $e); // 保存实体
+                        $i += $e; // 跳过实体字符所占长度
+                        break;
+                    }
+                }
+            }else
+            {
+                // 非标签情况下检查有效文本
+                $char_code = ord($char); // 字符编码
+                if($char_code >= 224) // 三字节字符
+                {
+                    $segment .= $html[$i+1].$html[$i+2]; // 保存字符
+                    $i += 2; // 跳过下2个字符的长度
+                }elseif($char_code >= 129) // 双字节字符
+                {
+                    $segment .= $html[$i+1];
+                    $i += 1; // 跳过下一个字符的长度
+                }
+            }
+            $count ++;
+            if($count == $max)
+            {
+                $nodes[] = array(0, $segment.$suffix, 'text',0);
+                break;
+            }
+        }
+    }
+    $html = '';
+    $tag_open_stack = array(); // 成对标签的开始标签栈
+    for($i=0;$i<count($nodes);$i++)
+    {
+        $node = $nodes[$i];
+        if($node[3] == 1)
+        {
+            array_push($tag_open_stack, $node[2]); // 开始标签入栈
+        }elseif($node[3] == 2)
+        {
+            array_pop($tag_open_stack); // 碰到一个结束标签,出栈一个开始标签
+        }
+        $html .= $node[1];
+    }
+    while($tag_name = array_pop($tag_open_stack)) // 用剩下的未出栈的开始标签补齐未闭合的成对标签
+    {
+        $html .= '</'.$tag_name.'>';
+    }
+    return $html;
 }

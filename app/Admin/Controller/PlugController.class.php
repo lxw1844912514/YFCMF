@@ -233,6 +233,7 @@ class PlugController extends AuthController {
 				'plug_ad_js'=>I('plug_ad_js'),
 				'plug_ad_open'=>I('plug_ad_open'),
 				'plug_ad_order'=>I('plug_ad_order'),
+                'plug_ad_content'=>I('plug_ad_content'),
 				'plug_ad_addtime'=>time(),
 				//plug_ad_depid
 				//plug_ad_butt 数据库中为预留字段
@@ -333,6 +334,7 @@ class PlugController extends AuthController {
 				'plug_ad_url'=>I('plug_ad_url'),
 				'plug_ad_order'=>I('plug_ad_order'),
 				'plug_ad_checkid'=>I('plug_ad_checkid'),
+                'plug_ad_content'=>I('plug_ad_content'),
 				'plug_ad_js'=>I('plug_ad_js'),
 			);
 			if ($checkpic!=$oldcheckpic){

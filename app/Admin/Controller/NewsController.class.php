@@ -145,7 +145,7 @@ class NewsController extends AuthController {
 
 			'news_open'=>I('news_open'),
 			'news_scontent'=>I('news_scontent'),
-			'news_content'=>I('news_content'),
+			'news_content'=>htmlspecialchars_decode(I('news_content')),
 			'news_auto'=>session('aid'),
 			'news_time'=>time(),
 			'news_hits'=>200,
@@ -245,7 +245,7 @@ class NewsController extends AuthController {
 			'news_pic_content'=>I('news_pic_content'),
 			'news_open'=>I('news_open'),
 			'news_scontent'=>I('news_scontent'),
-			'news_content'=>I('news_content'),
+			'news_content'=>htmlspecialchars_decode(I('news_content')),
 		);
 		if ($checkpic!=$oldcheckpic){
 			$sl_data['news_img']=$img_url;

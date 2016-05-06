@@ -4,8 +4,6 @@ use Common\Controller\CommonController;
 class IndexController extends CommonController {
 	//首页
 	public function index(){
-		//$arr=list_file(APP_PATH.'Home/view/Rainfer','*.html');
-		//dump($arr);
 		//未登录
 		if (empty($_SESSION['aid'])){
 			$this->redirect('Login/login');
