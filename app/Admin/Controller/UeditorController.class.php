@@ -115,6 +115,7 @@ class UeditorController extends CommonController {
 	}
 	/**
 	 * 遍历获取目录下的指定类型的文件
+	 * @author rainfer <81818832@qq.com>
 	 * @param $path
 	 * @param array $files
 	 * @return array

@@ -1,5 +1,9 @@
 <?php
 use Org\Util\String;
+/*
+*	测试是否可写
+*	rainfer <81818832@qq.com>
+*/
 function testwrite($d) {
     $tfile = "_test.txt";
     $fp = @fopen($d . "/" . $tfile, "w");
@@ -13,7 +17,10 @@ function testwrite($d) {
     }
     return false;
 }
-
+/*
+*	建立文件夹
+*	rainfer <81818832@qq.com>
+*/
 function create_dir($path) {
     if (is_dir($path))
         return true;
@@ -30,14 +37,20 @@ function create_dir($path) {
     }
     return is_dir($path);
 }
-
+/*
+*	返回路径
+*	rainfer <81818832@qq.com>
+*/
 function dir_path($path) {
     $path = str_replace('\\', '/', $path);
     if (substr($path, -1) != '/')
         $path = $path . '/';
     return $path;
 }
-
+/*
+*	执行sql文件
+*	rainfer <81818832@qq.com>
+*/
 function execute_sql($db,$file,$tablepre){
     //读取SQL文件
     $sql = file_get_contents(MODULE_PATH . 'Data/'.$file);
@@ -69,16 +82,19 @@ function execute_sql($db,$file,$tablepre){
     }
 }
 
-/**
- * 显示提示信息
- * @param  string $msg 提示信息
- */
+/*
+*	显示提示信息
+*	rainfer <81818832@qq.com>
+*/
 function show_msg($msg, $class = ''){
     echo "<script type=\"text/javascript\">showmsg(\"{$msg}\", \"{$class}\")</script>";
     flush();
     ob_flush();
 }
-
+/*
+*	更新系统设置
+*	rainfer <81818832@qq.com>
+*/
 function update_site_configs($db,$table_prefix){
     $sitename=I("post.sitename");
     $email=I("post.manager_email");
@@ -103,7 +119,10 @@ helllo;
     $db->execute($sql);
     show_msg("网站信息配置成功!");
 }
-
+/*
+*	创建管理员
+*	rainfer <81818832@qq.com>
+*/
 function create_admin_account($db,$table_prefix){
     $username=I("post.manager");
 	$admin_pwd_salt=String::randString(10);
@@ -121,10 +140,10 @@ hello;
 }
 
 
-/**
- * 写入配置文件
- * @param  array $config 配置信息
- */
+/*
+*	写入配置
+*	rainfer <81818832@qq.com>
+*/
 function create_config($config){
     if(is_array($config)){
         //读取配置内容

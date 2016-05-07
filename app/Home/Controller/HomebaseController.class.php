@@ -9,4 +9,12 @@ class HomebaseController extends CommonController{
 		$this->assign($site_options);
 		$this->theme(C('DEFAULT_THEME'));
 	}
+	/**
+	 * 检查用户登录
+	 */
+	protected function check_login(){
+		if(!session('uid')){
+			$this->error('您还没有登录！',__ROOT__."/");
+		}
+	}
 }

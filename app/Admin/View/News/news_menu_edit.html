@@ -137,6 +137,24 @@
                             </div>
                             <div class="space-4"></div>
 
+							<div class="form-group" id="pic_list">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 缩略图： </label>
+								<div class="col-sm-9">
+									<input type="hidden" name="checkpic" id="checkpic" value="{$menu.menu_img}" />
+									<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$menu.menu_img}" />
+									<a href="javascript:;" class="file" title="点击选择所要上传的图片">
+										<input type="file" name="file0" id="file0" multiple="multiple"/>
+										选择上传文件
+									</a>
+									&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$menu.menu_img eq ''">__PUBLIC__/img/no_img.jpg<else/>{$menu.menu_img}</if>');" title="还原修改前的图片" class="file">
+									撤销上传
+									</a>
+
+									<div><img src="<if condition="$menu.menu_img neq ''">{$menu.menu_img}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
+								</div>
+							</div>
+							<div class="space-4"></div>
+				
 							<div class="form-group" id="menu_content">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容：</label>
 								<div class="col-sm-9">
@@ -213,16 +231,19 @@
                 if($type==2){
                     $('#address').show()
                     $('#menu_content').hide();
+					$('#pic_list').hide();
                     $('#listtpl').hide();
                     $('#newstpl').hide();
                 }else if($type==1 || $type==3){
                     $('#address').hide();
                     $('#menu_content').hide();
+					$('#pic_list').hide();
                     $('#listtpl').show();
                     $('#newstpl').show();
                 }else{
                     $('#address').hide();
                     $('#menu_content').show();
+					$('#pic_list').show();
                     $('#listtpl').show();
                     $('#newstpl').hide();
                 }
@@ -272,6 +293,34 @@
 			}
 
 		});
+	function backpic(picurl){
+		$("#img0").attr("src",picurl);//还原修改前的图片
+		$("input[name='file0']").val("");//清空文本框的值
+		$("input[name='oldcheckpic']").val(picurl);//清空文本框的值
+	}
+	$("#file0").change(function(){
+		var objUrl = getObjectURL(this.files[0]) ;
+		console.log("objUrl = "+objUrl) ;
+		if (objUrl) {
+			$("#img0").attr("src", objUrl) ;
+		}
+	}) ;
+
+	//建立一個可存取到該file的url
+	function getObjectURL(file) {
+		var url = null ;
+		if (window.createObjectURL!=undefined) { // basic
+			$("#oldcheckpic").val("nopic");
+			url = window.createObjectURL(file) ;
+		} else if (window.URL!=undefined) { // mozilla(firefox)
+			$("#oldcheckpic").val("nopic");
+			url = window.URL.createObjectURL(file) ;
+		} else if (window.webkitURL!=undefined) { // webkit or chrome
+			$("#oldcheckpic").val("nopic");
+			url = window.webkitURL.createObjectURL(file) ;
+		}
+		return url ;
+	}
 	</script>
 
 </div><!-- /.main-container -->

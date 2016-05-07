@@ -136,6 +136,22 @@
                             </div>
                             <div class="space-4"></div>
 
+							<div class="form-group" id="pic_list">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 缩略图： </label>
+								<div class="col-sm-9">
+									<a href="javascript:;" class="file">
+										<input type="file" name="file0" id="file0" multiple="multiple"/>
+										选择上传文件
+									</a>
+									<a href="javascript:;" onclick="return backpic('__PUBLIC__/img/no_img.jpg');" title="还原修改前的图片" class="file">
+										撤销上传
+									</a>
+
+									<div><img src="__PUBLIC__/img/no_img.jpg" height="70" id="img0" ></div>
+								</div>
+							</div>
+							<div class="space-4"></div>							
+							
 							<div class="form-group" id="menu_content">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容： </label>
 								<div class="col-sm-9">
@@ -210,9 +226,11 @@
 			$('#address').hide();//默认隐藏
             $('#menu_content').hide();//默认隐藏
             $('#single').hide();//默认隐藏
+			$('#pic_list').hide();//默认隐藏
 			$('#type2').click(function(){
 				$('#address').show();
                 $('#menu_content').hide();
+				$('#pic_list').hide();
                 $('#single').hide();
                 $('#listtpl').hide();
                 $('#newstpl').hide();
@@ -220,6 +238,7 @@
 			$('#type1,#type3').click(function(){
 				$('#address').hide();
                 $('#menu_content').hide();
+				$('#pic_list').hide();
                 $('#single').hide();
                 $('#listtpl').show();
                 $('#newstpl').show();
@@ -230,9 +249,38 @@
                 $('#listtpl').show();
                 $('#newstpl').hide();
                 $('#menu_content').show();
+				$('#pic_list').show();
             });
 		});
+		
+		$("#file0").change(function(){
+			var objUrl = getObjectURL(this.files[0]) ;
+			console.log("objUrl = "+objUrl) ;
+			if (objUrl) {
+				$("#img0").attr("src", objUrl) ;
+			}
+		}) ;
 
+		//建立一個可存取到該file的url
+		function getObjectURL(file) {
+
+			var url = null ;
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(file) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(file) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(file) ;
+			}
+			return url ;
+		}
+
+
+		function backpic(picurl){
+			$("#img0").attr("src",picurl);//还原修改前的图片
+			$("input[name='file0']").val("");//清空文本框的值
+		}
+		
 		$(function(){
 			$('#menuadd').ajaxForm({
 				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置

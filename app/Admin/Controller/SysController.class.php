@@ -8,7 +8,13 @@ use Org\Util\String;
 class SysController extends AuthController {
 	//站点设置显示
 	public function sys(){
-		$tpls=explode(',',C('THEME_LIST'));
+		$arr=list_file(APP_PATH.'Home/view/');
+		$tpls=array();
+		foreach($arr as $v){
+			if($v['isDir'] && strtolower($v['filename']!='public')){
+				$tpls[]=$v['filename'];
+			}
+		}
 		$this->assign("templates",$tpls);
 		$sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
 		$sys=json_decode($sys,true);
@@ -115,6 +121,7 @@ class SysController extends AuthController {
 	/*******************************************来源管理模块***************************************************/
 	/*
      * 文章来源列表
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_list(){
 		$count= M('source')->count();
@@ -128,6 +135,7 @@ class SysController extends AuthController {
 
 	/*
      * 添加来源操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_runadd(){
 		if (!IS_AJAX){
@@ -140,6 +148,7 @@ class SysController extends AuthController {
 
 	/*
      * 来源删除操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_del(){
 		$p=I('p');
@@ -153,6 +162,7 @@ class SysController extends AuthController {
 
 	/*
      * 来源修改返回值操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_edit(){
 		$source_id=I('source_id');
@@ -166,6 +176,7 @@ class SysController extends AuthController {
 
 	/*
      * 修改来源操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_runedit(){
 		if (!IS_AJAX){
@@ -187,6 +198,7 @@ class SysController extends AuthController {
 
 	/*
      * 来源排序
+	 * @author rainfer <81818832@qq.com>
      */
 	public function source_order(){
 		if (!IS_AJAX){
@@ -305,7 +317,7 @@ class SysController extends AuthController {
     /**
      * 优化表
      * @param  String $tables 表名
-     * @author slackck<876902658@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function optimize($tables = null){
         if($tables) {
@@ -335,7 +347,7 @@ class SysController extends AuthController {
     /**
      * 修复表
      * @param  String $tables 表名
-     * @author slackck<876902658@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function repair($tables = null){
         if($tables) {
@@ -364,7 +376,7 @@ class SysController extends AuthController {
     /**
      * 备份单表
      * @param  String $table 不含前缀表名
-     * @author slackck<876902658@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function exportsql($table = null){
         if($table){
@@ -383,7 +395,7 @@ class SysController extends AuthController {
     /**
      * 删除备份文件
      * @param  Integer $time 备份时间
-     * @author slackck<876902658@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function del($time = 0){
         if($time){
@@ -401,7 +413,7 @@ class SysController extends AuthController {
     }
     /**
      * 还原数据库
-     * @author rainfer<81818832@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function restore($time = 0, $part = null, $start = null){
         //读取备份配置
@@ -465,7 +477,7 @@ class SysController extends AuthController {
      * @param  String  $tables 表名
      * @param  Integer $id     表ID
      * @param  Integer $start  起始行数
-     * @author slackck<876902658@qq.com>
+     * @author rainfer <81818832@qq.com>
      */
     public function export($tables = null, $id = null, $start = null){
         if(IS_POST && !empty($tables) && is_array($tables)){ //初始化
@@ -930,6 +942,7 @@ class SysController extends AuthController {
 
 	/*
      * 表格导入
+	 * @author rainfer <81818832@qq.com>
      */
 	public function excel_runimport(){
 		import("Org.Util.PHPExcel");
@@ -1009,6 +1022,7 @@ class SysController extends AuthController {
 
 	/*
      * 数据导出功能
+	 * @author rainfer <81818832@qq.com>
      */
 	public function excel_runexport($table){
         export2excel($table);
@@ -1025,7 +1039,6 @@ class SysController extends AuthController {
 	public function profile(){
         $admin=array();
         if(session('aid')){
-            //$admin=M('admin')->where(array('id'=>session('aid')))->find();
             $rs=M('admin');
             $join1 = "".C('DB_PREFIX').'auth_group_access as b on a.admin_id =b.uid';
             $join2= "".C('DB_PREFIX').'auth_group as c on b.group_id = c.id';

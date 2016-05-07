@@ -1,13 +1,11 @@
 <?php
-/**
- * 文章内页
- */
 namespace Home\Controller;
 use Home\Controller\HomebaseController;
 class NewsController extends HomebaseController {
     //文章内页
     public function index() {
-		$news=M('news')->where(array('n_id'=>I('id'),'news_open'=>1,'news_back'=>0))->find();
+		$join = "".C('DB_PREFIX').'admin as b on a.news_auto =b.admin_id';
+		$news=M('news')->alias("a")->join($join)->where(array('n_id'=>I('id'),'news_open'=>1,'news_back'=>0))->find();
 		if(empty($news)){
 		    $this->error('此操作无效');
 		}
@@ -17,6 +15,11 @@ class NewsController extends HomebaseController {
 		}
 		$tplname=$menu['menu_newstpl'];
     	$tplname=$tplname?$tplname:'news';
+		$next=M('news')->where(array("news_time"=>array("egt",$news['news_time']), "n_id"=>array('neq',I('id')),"news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time asc")->find();
+		$prev=M('news')->where(array("news_time"=>array("elt",$news['news_time']), "n_id"=>array('neq',I('id')), "news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time desc")->find();
+		$this->assign($news);
+		$this->assign("next",$next);
+    	$this->assign("prev",$prev);
     	$this->display(":$tplname");
     }
     

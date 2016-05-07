@@ -17,9 +17,12 @@ class ListController extends HomebaseController {
     	$this->assign('list_id', I('id'));
     	$this->display(":$tplname");
 	}
-	
-	public function nav_index(){		
-	}
-	public function load_more(){	
-	}
+    public function search() {
+		$k = I("keyword");
+		if (empty($k)) {
+			$this -> error("关键词不能为空！请重新输入！");
+		}
+		$this -> assign("keyword", $k);
+		$this -> display(":search");
+    }
 }

@@ -18,9 +18,6 @@ class IndexController extends CommonController {
 		$this->assign('info',$info);
 
 		$news=M('news');
-		//$start=strtotime(date('Y-m-01 00:00:00'));
-		//$end = strtotime(date('Y-m-d H:i:s'));
-		//$data['news_time'] = array('between',array($start,$end));
 		//热门文章排行
 		$news_list=$news->order('news_hits desc')->limit(0,10)->select();
 		$this->assign('news_list',$news_list);

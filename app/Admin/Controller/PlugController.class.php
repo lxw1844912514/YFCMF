@@ -8,6 +8,7 @@ class PlugController extends AuthController {
 		private $files_unused;
 	/*
      * 友情链接列表
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_list(){
 		$type=I('type');
@@ -30,6 +31,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接添加操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_runadd(){
 		if (!IS_AJAX){
@@ -52,6 +54,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接删除操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_del(){
 		$p=I('p');
@@ -65,6 +68,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接状态操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_state(){
 		$id=I('x');
@@ -82,6 +86,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接修改返回值操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_edit(){
 		$plug_link_id=I('plug_link_id');
@@ -100,6 +105,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情 链接修改操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_link_runedit(){
 		if (!IS_AJAX){
@@ -123,6 +129,7 @@ class PlugController extends AuthController {
 	/**********************************************友情链接所属栏目***********************************************************/
 	/*
      * 友情链接类型列表
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_linktype_list(){
 		$link_type=M('plug_linktype')->select();
@@ -131,14 +138,20 @@ class PlugController extends AuthController {
 	}
 	/*
      * 友情链接类型删除
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_linktype_del(){
-		$link_type=M('plug_linktype')->where(array('plug_linktype_id'=>I('plug_linktype_id')))->delete();
-		$this->redirect('plug_linktype_list');
+		$rst=M('plug_linktype')->where(array('plug_linktype_id'=>I('plug_linktype_id')))->delete();
+		if($rst!==false){
+			$this->success('友链类型删除成功',U('plug_linktype_list'),1);
+		}else{
+			$this->error('友链类型删除失败',0,0);
+		}
 	}
 
 	/*
      * 友情链接类型添加
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_linktype_runadd(){
 		$plug_linktype=M('plug_linktype');
@@ -148,6 +161,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接类型修改
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_linktype_runedit(){
 		$plug_linktype=M('plug_linktype');
@@ -162,6 +176,7 @@ class PlugController extends AuthController {
 
 	/*
      * 友情链接排序
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_linktype_order(){
 		if (!IS_AJAX){
@@ -178,6 +193,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告管理
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_list(){
 		$key=I('key');
@@ -198,6 +214,7 @@ class PlugController extends AuthController {
 
 	/*
      * 添加广告操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_runadd(){
 		if (!IS_AJAX){
@@ -246,15 +263,21 @@ class PlugController extends AuthController {
 
 	/*
      * 广告删除
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_del(){
 		$plug_ad_id=I('plug_ad_id');
-		M('plug_ad')->where(array('plug_ad_id'=>$plug_ad_id))->delete();
-		$this->redirect('plug_ad_list', array('p' => $p));
+		$rst=M('plug_ad')->where(array('plug_ad_id'=>$plug_ad_id))->delete();
+		if($rst!==false){
+			$this->success('广告删除成功',U('plug_ad_list'),1);
+		}else{
+			$this->error('广告删除失败',0,0);
+		}
 	}
 
 	/*
      * 批量排序
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_order(){
 		if (!IS_AJAX){
@@ -270,6 +293,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告状态
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_state(){
 		$id=I('x');
@@ -287,6 +311,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位修改操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_edit(){
 		$plug_adtype_list=M('plug_adtype')->select();
@@ -300,6 +325,7 @@ class PlugController extends AuthController {
 
 	/*
      * 修改广告操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_ad_runedit(){
 		if (!IS_AJAX){
@@ -349,6 +375,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位列表
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_list(){
 
@@ -368,6 +395,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位添加操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_runadd(){
 		if (!IS_AJAX){
@@ -380,6 +408,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位修改操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_edit(){
 		if (!IS_AJAX){
@@ -398,6 +427,7 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位修改操作
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_runedit(){
 		if (!IS_AJAX){
@@ -410,15 +440,24 @@ class PlugController extends AuthController {
 
 	/*
      * 广告位删除
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_del(){
-		M('plug_adtype')->where(array('plug_adtype_id'=>I('plug_ad_adtypeid')))->delete();//删除广告位
-		M('plug_ad')->where(array('plug_ad_adtypeid'=>I('plug_ad_adtypeid')))->delete();//删除该广告位所有广告
-		$this->redirect('plug_linktype_list', array('p' => $p));
+		if($rst!==false){
+			$rst=M('plug_adtype')->where(array('plug_adtype_id'=>I('plug_ad_adtypeid')))->delete();//删除广告位
+			if($rst!==false){
+				$this->success('广告位删除成功',U('plug_linktype_list', array('p' => $p)),1);
+			}else{
+				$this->error('广告位删除失败',0,0);
+			}
+		}else{
+			$this->error('广告位删除失败',0,0);
+		}
 	}
 
 	/*
      * 广告位排序
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_order(){
 		if (!IS_AJAX){
@@ -437,6 +476,7 @@ class PlugController extends AuthController {
 
 	/*
      * 留言列表
+	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_sug_list(){
 		$plug_sug=M('plug_sug')->select();
@@ -455,7 +495,19 @@ class PlugController extends AuthController {
 		$sl_data['status']=1;
 		$this->ajaxReturn($sl_data,'json');
 	}
-
+	/*
+     * 留言删除
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function plug_sug_del(){
+		$plug_sug_id=I('plug_sug_id');
+		$rst=M('plug_sug')->where(array('plug_sug_id'=>$plug_sug_id))->delete();
+		if($rst!==false){
+			$this->success('留言删除成功',U('plug_sug_list'),1);
+		}else{
+			$this->error('留言删除失败',0,0);
+		}
+	}
 	/**********************************************文件设置***********************************************************/
 	public function plug_file_list(){
         $map=array();

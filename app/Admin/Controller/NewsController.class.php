@@ -402,6 +402,26 @@ class NewsController extends AuthController {
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('news_menu_list'),0);
 		}else{
+			//处理图片
+			$img_url='';
+			$file=I('file0');//获取图片路径
+			//获取图片上传后路径
+			$upload = new \Think\Upload();// 实例化上传类
+			$upload->maxSize   =     3145728 ;// 设置附件上传大小
+			$upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+			$upload->rootPath  =     C('UPLOAD_DIR'); // 设置附件上传根目录
+			$upload->savePath  =     ''; // 设置附件上传（子）目录
+			$upload->saveRule  =     'time';
+			$info   =   $upload->upload();
+			if($info) {
+				$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+			}elseif(!$file){
+				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
+			}else{
+				$this->error($upload->getError());//否则就是上传错误，显示错误原因
+			}
+			//构建数组
+			
 			$data=array(
 				'menu_name'=>I('menu_name'),
 				'menu_enname'=>I('menu_enname'),
@@ -415,7 +435,8 @@ class NewsController extends AuthController {
 				'menu_seo_title'=>I('menu_seo_title'),
 				'menu_seo_key'=>I('menu_seo_key'),
 				'menu_seo_des'=>I('menu_seo_des'),
-				'menu_content'=>I('menu_content'),
+				'menu_content'=>htmlspecialchars_decode(I('menu_content')),
+				'menu_img'=>$img_url,
 			);
 			$rst=M('menu')->add($data);
             if($rst!==false){
@@ -514,6 +535,26 @@ class NewsController extends AuthController {
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('news_menu_list'),0);
 		}else{
+			$file=I('file1');//获取图片路径
+			$checkpic=I('checkpic');
+			$oldcheckpic=I('oldcheckpic');
+			$img_url='';
+			if ($checkpic!=$oldcheckpic){
+				//获取图片上传后路径
+				$upload = new \Think\Upload();// 实例化上传类
+				$upload->maxSize   =     3145728 ;// 设置附件上传大小
+				$upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+				$upload->rootPath  =     C('UPLOAD_DIR'); // 设置附件上传根目录
+				$upload->savePath  =     ''; // 设置附件上传（子）目录
+				$upload->saveRule  =     'time';
+				$info   =   $upload->upload();
+
+				if($info) {
+					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+				}else{
+					$this->error($upload->getError());//否则就是上传错误，显示错误原因
+				}
+			}
 			$data=array(
 				'id'=>I('id'),
 				'menu_name'=>I('menu_name'),
@@ -528,8 +569,11 @@ class NewsController extends AuthController {
 				'menu_seo_title'=>I('menu_seo_title'),
 				'menu_seo_key'=>I('menu_seo_key'),
 				'menu_seo_des'=>I('menu_seo_des'),
-				'menu_content'=>I('menu_content'),
+				'menu_content'=>htmlspecialchars_decode(I('menu_content')),
 			);
+			if ($checkpic!=$oldcheckpic){
+				$data['menu_img']=$img_url;
+			}
 			M('menu')->save($data);
 			$this->success('菜单保存成功',U('news_menu_list'),1);
 		}

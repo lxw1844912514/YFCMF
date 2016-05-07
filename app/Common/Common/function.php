@@ -1,7 +1,10 @@
 <?php
 use Think\Db;
 use Think\Storage;
-
+/**
+ * 发送邮件
+ * @author rainfer <81818832@qq.com>
+ */
 function sendMail($to, $title, $content) {
 
     Vendor('PHPMailer.PHPMailerAutoload');
@@ -30,14 +33,12 @@ function subtext($text, $length)
     return $text;
 }
 
-
-
 /**
  * 格式化字节大小
  * @param  number $size      字节数
  * @param  string $delimiter 数字和单位分隔符
  * @return string            格式化后的带单位的大小
- * @author slackck <876902658@qq.com>
+ * @author rainfer <81818832@qq.com>
  */
 function format_bytes($size, $delimiter = '') {
     $units = array(' B', ' KB', ' MB', ' GB', ' TB', ' PB');
@@ -49,6 +50,7 @@ function format_bytes($size, $delimiter = '') {
  *
  * @param array $node
  * @param number $pid
+ * @author rainfer <81818832@qq.com>
  */
 function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child_name = '_child')
 {
@@ -65,6 +67,8 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
 }
 /**
  * 数据表导出excel
+ *
+ * @author rainfer <81818832@qq.com>
  *
  * @param string $table,不含前缀表名,必须
  * @param string $file,保存的excel文件名,默认表名为文件名
@@ -154,6 +158,7 @@ function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
 }
 /**
  * 生成参数列表,以数组形式返回
+ * @author rainfer <81818832@qq.com>
  */
 function param2array($tag = ''){
     $param = array();
@@ -169,6 +174,7 @@ function param2array($tag = ''){
 }
 /**
  * 数字到字母列
+ * @author rainfer <81818832@qq.com>
  */
 function num2alpha($intNum, $isLower = false)
 {
@@ -187,6 +193,8 @@ function num2alpha($intNum, $isLower = false)
 }
 /**
  * 返回不含前缀的数据库表数组
+ *
+ * @author rainfer <81818832@qq.com>
  *
  * @return array
  */
@@ -209,6 +217,8 @@ function db_get_tables()
 /**
  * 返回数据表的sql
  *
+ * @author rainfer <81818832@qq.com>
+ * 
  * @param $table : 不含前缀的表名
  * @return string
  */
@@ -251,6 +261,8 @@ function db_get_insert_sqls($table)
 /**
  * 检测当前数据库中是否含指定表
  *
+ * @author rainfer <81818832@qq.com>
+ *
  * @param $table : 不含前缀的数据表名
  * @return bool
  */
@@ -260,6 +272,9 @@ function db_is_valid_table_name($table)
 }
 /**
  * 不检测表前缀,恢复数据库
+ *
+ * @author rainfer <81818832@qq.com>
+ *
  * @param $file
  */
 function db_restore_file($file)
@@ -279,6 +294,8 @@ function db_restore_file($file)
 }
 /**
  * 返回表前缀替代符
+ * @author rainfer <81818832@qq.com>
+ *
  * @return string
  */
 function db_get_db_prefix_holder()
@@ -287,6 +304,7 @@ function db_get_db_prefix_holder()
 }
 /**
  * 强制下载
+ * @author rainfer <81818832@qq.com>
  *
  * @param string $filename
  */
@@ -303,6 +321,7 @@ function force_download_content($filename, $content)
 }
 /**
  * 所有用到密码的不可逆加密方式
+ * @author rainfer <81818832@qq.com>
  *
  * @param string $password
  * @param string $password_salt
@@ -314,6 +333,7 @@ function encrypt_password($password, $password_salt)
 }
 /**
  * 列出本地目录的文件
+ * @author rainfer <81818832@qq.com>
  *
  * @param string $filename
  * @param string $pattern
@@ -373,6 +393,7 @@ function list_file($filename, $pattern = '*')
 }
 /**
  * 删除文件夹
+ * @author rainfer <81818832@qq.com>
  *
  */
 function remove_dir($dir, $time_thres = -1)
@@ -389,6 +410,7 @@ function remove_dir($dir, $time_thres = -1)
     }
 /**
  * 将内容存到Storage中，返回转存后的文件路径
+ * @author rainfer <81818832@qq.com>
  *
  * @param string $dir
  * @param string $ext
@@ -410,6 +432,7 @@ function save_storage_content($ext = null, $content = null, $filename = '')
 }
 /**
  * 返回带协议的域名
+ * @author rainfer <81818832@qq.com>
  */
 function get_host(){
 	$host=$_SERVER["HTTP_HOST"];
@@ -418,6 +441,7 @@ function get_host(){
 }
 /**
  * 获取后台管理设置的网站信息，此类信息一般用于前台
+ * @author rainfer <81818832@qq.com>
  */
 function get_site_options(){
 	$site_options = F("site_options");
@@ -437,6 +461,8 @@ function get_site_options(){
 }
 /**
  * 获取所有友情连接
+ * @author rainfer <81818832@qq.com>
+ *
  * @return array
  */
 function get_links($type=1){
@@ -445,6 +471,8 @@ function get_links($type=1){
 }
 /**
  * 返回指定id的菜单
+ * @author rainfer <81818832@qq.com>
+ * 
  * 同上一类方法，jquery treeview 风格，可伸缩样式
  * @param $myid 表示获得这个ID下的所有子级
  * @param $effected_id 需要生成treeview目录数的id
@@ -518,6 +546,8 @@ function get_menu_datas($id){
 
 /**
  * 获取树形数组
+ * @author rainfer <81818832@qq.com>
+ *
  * @return array
  */
 function get_menu_tree($id="main"){
@@ -550,7 +580,8 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
 }
 /**
  * 查询文章列表，支持分页或不分页
- * Author: Raifner <81818832@qq.com> 2016-2-22
+ * @author rainfer <81818832@qq.com>
+ *
  * @param string $type 查询类型,可以为'cid',可以为'keyword',可以为'tag'
  * @param string $v 当查询类型为'cid'或'keyword'时,待搜索的值
  * @param string $tag  查询标签，以字符串方式传入,例："cid:1,2;field:news_title,news_content;limit:0,8;order:news_time desc,news_hits desc;where:n_id>5;"<br>
@@ -563,7 +594,7 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
  * @param array $where 查询条件，（暂只支持数组），格式和thinkphp where方法一样；
  * @param bool $ispage 是否分页
  */
-function get_news($tag,$ispage,$type=null,$v=null,$where=array()){
+function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=array()){
     $where=is_array($where)?$where:array();
     $tag=param2array($tag);
     $field = !empty($tag['field']) ? $tag['field'] : '*';
@@ -606,17 +637,13 @@ function get_news($tag,$ispage,$type=null,$v=null,$where=array()){
     if($ispage){
         //使用分页
         $count=$rs->alias("a")->join($join)->field($field)->where($where)->count();
-        $Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
+		$pagesize=$pagesize?$pagesize:C('DB_PAGENUM');
+        $Page= new \Think\Page($count,$pagesize);// 实例化分页类 传入总记录数和每页显示的记录数
+		$Page->setConfig('theme',' %upPage% %downPage% %first%  %prePage%  %linkPage%  %nextPage% %end%');
         $show= $Page->show();// 分页显示输出
         $content['page']=$show;
-        $listRows=(intval(C('DB_PAGENUM'))>0)?C('DB_PAGENUM'):20;
-        if($count>$listRows){
-            $Page->setConfig('theme','<div class=pagination><ul> %upPage% %downPage% %first%  %prePage%  %linkPage%  %nextPage% %end%</ul></div>');
-        }
-        $show= $Page->show();// 分页显示输出
-        $content['page_min']=$show;
 		$news=$rs->alias("a")->join($join)->field($field)->where($where)->order($order)->limit($Page->firstRow.','.$Page->listRows)->select();
-		$content['posts']=$news;
+		$content['news']=$news;
 		$content['count']=$count;
         return $content;
     }else{
@@ -627,6 +654,8 @@ function get_news($tag,$ispage,$type=null,$v=null,$where=array()){
 }
 /**
  * 获取新闻分类ids
+ * @author rainfer <81818832@qq.com>
+ *
  * $id 待获取的id
  * $self 是否返回自身，默认false
  * @return array
@@ -650,6 +679,8 @@ function get_menu_byid($id=0,$self=false){
 }
 /**
  * 根据广告位获取所有广告
+ * @author rainfer <81818832@qq.com>
+ *
  * @param int $plug_ad_adtypeid 广告位id
  * @return array;
  */
@@ -663,6 +694,13 @@ function get_ads($plug_ad_adtypeid,$limit=5,$order = "plug_ad_order ASC"){
     }
     return $ad_obj->where(array('plug_ad_open'=>1,'plug_ad_adtypeid'=>$plug_ad_adtypeid))->order($order)->limit('0,'.$limit)->select();
 }
+/**
+ * 截取待html的文本
+ * @author rainfer <81818832@qq.com>
+ *
+ * @param int $plug_ad_adtypeid 广告位id
+ * @return array;
+ */
 function html_trim($html, $max, $suffix='...')
 {
     $non_paired_tags = array('br', 'hr', 'img', 'input', 'param'); // 非成对标签
@@ -780,4 +818,18 @@ function html_trim($html, $max, $suffix='...')
         $html .= '</'.$tag_name.'>';
     }
     return $html;
+}
+/**
+ * 获取单页面菜单
+ * @author rainfer <81818832@qq.com>
+ *
+ * @param int $id 菜单id
+ * @return array;
+ */
+function get_menu_one($id){
+	$rst=array();
+	if($id){
+		$rst=M('menu')->where(array('menu_type'=>4,'id'=>$id))->find();
+	}
+    return $rst;
 }

@@ -23,6 +23,4 @@ return array(
 	'UPLOAD_TEMP_DIR' => DATA_PATH,
 	'UPLOAD_DIR' => './data/upload/',
 	'YFCMF_VERSION'=>'V1.0.0',
-	//模板主题
-	'THEME_LIST'=>'Default,Rainfer,Sister',//支持的模板主题项
 );
