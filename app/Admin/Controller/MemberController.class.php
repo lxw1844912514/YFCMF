@@ -1,4 +1,11 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
 
@@ -56,7 +63,7 @@ class MemberController extends AuthController {
 				'member_list_addtime'=>time(),
 			);
 			M('member_list')->add($sl_data);
-			$this->success('会员添加成功，返回列表页进行头像操作',U('member_list'),1);
+			$this->success('会员添加成功',U('member_list'),1);
 		}
 	}
 
@@ -100,7 +107,7 @@ class MemberController extends AuthController {
 			$sl_data['member_list_open']=I('member_list_open');
 
 			M('member_list')->save($sl_data);
-			$this->success('会员修改成功，返回列表页进行头像操作',U('member_list'),1);
+			$this->success('会员修改成功',U('member_list'),1);
 		}
 	}
 
@@ -124,8 +131,12 @@ class MemberController extends AuthController {
      */
 	public function member_del(){
 		$p=I('p');
-		M('member_list')->where(array('member_list_id'=>I('member_list_id')))->delete();
-		$this->redirect('member_list', array('p' => $p));
+		$rst=M('member_list')->where(array('member_list_id'=>I('member_list_id')))->delete();
+		if($rst!==false){
+            $this->success('会员删除成功',U('member_list', array('p' => $p)),1);
+        }else{
+            $this->error('会员删除失败',0,0);
+        }
 	}
 
 	/*
@@ -173,8 +184,12 @@ class MemberController extends AuthController {
 		if (empty($member_group_id)){
 			$this->error('会员组ID不存在',U('member_group_list'),0);
 		}
-		M('member_group')->where(array('member_group_id'=>I('member_group_id')))->delete();
-		$this->redirect('member_group_list');
+        $rst=M('member_group')->where(array('member_group_id'=>I('member_group_id')))->delete();
+        if($rst!==false){
+            $this->success('会员组删除成功',U('member_group_list'),1);
+        }else{
+            $this->error('会员组删除失败',0,0);
+        }
 	}
 
 	/*

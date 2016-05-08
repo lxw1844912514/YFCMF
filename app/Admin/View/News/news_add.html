@@ -1,20 +1,12 @@
 <include file='Common:header' />
-
 <!-- /section:basics/navbar.layout -->
 <div class="main-container" id="main-container">
-
 	<!-- #section:basics/sidebar -->
-
 	<include file='Common:left' />
-
-
 	<!-- /section:basics/sidebar -->
 	<div class="main-content">
 		<div class="main-content-inner">
 			<div class="page-content">
-
-
-
 				<!--主题-->
 				<div class="page-header">
 					<h1>
@@ -25,8 +17,6 @@
 						</small>
 					</h1>
 				</div>
-
-
 				<div class="row">
 					<div class="col-xs-12">
 						<form class="form-horizontal" name="form0" id="form0"  method="post" action="{:U('news_runadd')}"  enctype="multipart/form-data">
@@ -97,7 +87,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章来源：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="news_source" id="news_source" value="羽冉彩妆" class="col-xs-10 col-sm-2" />
+									<input type="text" name="news_source" id="news_source" value="YFCMF" class="col-xs-10 col-sm-2" />
 									<label class="input_last">
 										常用：
 										<volist name="source" id="k">
@@ -120,7 +110,7 @@
 									<span class="lbl">&nbsp;&nbsp;<img src="__PUBLIC__/img/no_img.jpg" width="100" height="70" id="img0" ></span>&nbsp;&nbsp;<a href="javascript:;" onClick="return backpic('__PUBLIC__/img/no_img.jpg');" title="还原修改前的图片" class="file">
 									撤销上传
 								</a>
-											<span class="lbl">&nbsp;&nbsp;上传前先用PS处理成等比例图片后上传，默认比例100*70、600*420、800*560像素<br />
+											<span class="lbl">&nbsp;&nbsp;上传前先用PS处理成等比例图片后上传，最后都统一比例<br />
 </span>
 								</div>
 							</div>
@@ -215,9 +205,6 @@
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->
-
-</body>
-</html>
 <script>
 	function backpic(picurl){
 		$("#img0").attr("src",picurl);//还原修改前的图片
@@ -322,3 +309,5 @@
 	}
 
 </script>
+</body>
+</html>

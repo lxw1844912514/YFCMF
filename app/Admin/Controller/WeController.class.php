@@ -1,11 +1,16 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
 use Com\Wechat;
 use Com\WechatAuth;
 class WeController extends AuthController {
-
-	/************************************自定义菜单模块****************************************/
 	/*
      * 自定义菜单列表
      */
@@ -19,7 +24,6 @@ class WeController extends AuthController {
 		$this->assign('we_menu',$arr);
 		$this->display();
 	}
-
 	/*
      * 添加自定义菜单方法
      */

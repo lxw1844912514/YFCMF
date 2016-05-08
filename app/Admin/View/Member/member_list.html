@@ -73,7 +73,7 @@
 										<td>{$v.member_list_petname}【{$v.member_list_email}】</td>
 										<td class="hidden-sm hidden-xs"><if condition="$v.member_list_petname eq 1">男<else/>女</if></td>
 										<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
-										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d h:i:s',###}</td>
+										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
 										<td class="hidden-xs">
 											<if condition='$v.member_list_open eq 1'>
 												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已开启">

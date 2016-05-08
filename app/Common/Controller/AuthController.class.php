@@ -1,9 +1,11 @@
 <?php
-/*
- * @thinkphp3.2.2  auth认证   php5.3以上
- * @author rainfer <81818832@qq.com>
- * @如果需要公共控制器，就不要继承AuthController，直接继承Controller
- */
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Common\Controller;
 use Common\Controller\CommonController;
 use Think\Auth;
@@ -11,7 +13,7 @@ use Think\Auth;
 class AuthController extends CommonController {
 	//初始化
 	protected function _initialize(){
-
+        parent::_initialize();
 		//未登陆，不允许直接访问
 		if(!$_SESSION['aid']){
 			$this->error('还没有登录，正在跳转到登录页',U('Admin/Login/login'));

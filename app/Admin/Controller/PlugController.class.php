@@ -1,4 +1,11 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
 use Think\Storage;
@@ -126,7 +133,6 @@ class PlugController extends AuthController {
 		}
 	}
 
-	/**********************************************友情链接所属栏目***********************************************************/
 	/*
      * 友情链接类型列表
 	 * @author rainfer <81818832@qq.com>
@@ -189,7 +195,6 @@ class PlugController extends AuthController {
 			$this->success('排序更新成功',U('plug_linktype_list'),1);
 		}
 	}
-	/**********************************************广告设置***********************************************************/
 
 	/*
      * 广告管理
@@ -371,7 +376,6 @@ class PlugController extends AuthController {
 		}
 	}
 
-	/**********************************************广告位设置***********************************************************/
 
 	/*
      * 广告位列表
@@ -472,8 +476,6 @@ class PlugController extends AuthController {
 	}
 
 
-	/**********************************************留言设置***********************************************************/
-
 	/*
      * 留言列表
 	 * @author rainfer <81818832@qq.com>
@@ -508,7 +510,7 @@ class PlugController extends AuthController {
 			$this->error('留言删除失败',0,0);
 		}
 	}
-	/**********************************************文件设置***********************************************************/
+	//本地文件列表
 	public function plug_file_list(){
         $map=array();
         //查询：时间格式过滤
@@ -605,7 +607,7 @@ class PlugController extends AuthController {
 				}
 				//字段保存'./data/....'
 				if($d['news_pic_allurl']){
-					$imgs=explode(",",$d['news_pic_allurl']);
+					$imgs=array_filter(explode(",",$d['news_pic_allurl']));
 					foreach ($imgs as &$f) {
 						if(stripos($f,'http')===false && !empty($f)){
 							$this->files_res_used[$f]=true;
@@ -653,8 +655,18 @@ class PlugController extends AuthController {
 				}
 			}
 		}
-        //dump($this->files_res_used);
-        //dump($this->files_res_exists);
+		//menu里menu_img,字段保存'./data/....'
+		$datas = M('menu')->select();
+		if (is_array($datas)) {
+			foreach ($datas as &$d) {
+				if($d['menu_img']){
+					if(stripos($d['menu_img'],'http')===false){
+						//本地图片
+						$this->files_res_used[$d['menu_img']]=true;
+					}
+				}
+			}
+		}
         //找出未使用的资源文件
         $this->files_unused=array();
         $ids=array();
@@ -693,7 +705,7 @@ class PlugController extends AuthController {
 		$p = I('p');
 		$ids = I('id');
 		if(empty($ids)){
-			$this -> error("请选择要删除的文件");
+			$this -> error("请选择要删除的文件",0,0);
 		}
 		if(is_array($ids)){
 			$where = 'id in('.implode(',',$ids).')';
@@ -709,7 +721,7 @@ class PlugController extends AuthController {
 			if (M('plug_files')->where($where)->delete()!==false) {
 				$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 			} else {
-				$this->error("删除文件失败！");
+				$this->error("删除文件失败！",0,0);
 			}
 		}else{
 			$r=M('plug_files')->find($ids);
@@ -724,10 +736,10 @@ class PlugController extends AuthController {
 				if (M('plug_files')->delete($ids)!==false) {
 					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 				}else{
-					$this->error("删除文件失败！");
+					$this->error("删除文件失败！",0,0);
 				}
 			}else{
-				$this->error("删除文件失败！");
+				$this->error("删除文件失败！",0,0);
 			}
 		}
 	}
@@ -749,10 +761,10 @@ class PlugController extends AuthController {
 				if (M('plug_files')->delete($id)!==false) {
 					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 				}else{
-					$this->error("删除文件失败！");
+					$this->error("删除文件失败！",0,0);
 				}
 			}else{
-				$this -> error("文件删除失败！");
+				$this -> error("文件删除失败！",0,0);
 			}
 		}
 	}

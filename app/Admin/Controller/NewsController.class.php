@@ -1,9 +1,17 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
 
 class NewsController extends AuthController {
     protected function _initialize(){
+		parent::_initialize();
         $sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
         $sys=json_decode($sys,true);
 		$arr=list_file(APP_PATH.'Home/view/'.$sys['site_tpl'],'*.html');
@@ -13,7 +21,6 @@ class NewsController extends AuthController {
 		}
 		$this->tpls=$tpls;
     }
-	/************************************************文章管理**************************************************/
 	//文章列表
 	public function news_list(){
 		$keytype=I('keytype','news_title');
@@ -82,10 +89,8 @@ class NewsController extends AuthController {
 		$this->assign('diyflag',$diyflag);
 		$this->display();
 	}
-
+	//添加操作
 	public function news_runadd(){
-
-
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('news_list'),0);
 		}
@@ -165,8 +170,7 @@ class NewsController extends AuthController {
 			 * 多图字符串转换成数组
 			 */
 			$text = $news_list['news_pic_allurl'];
-			$newstr = substr($text,0,strlen($text)-1);
-			$pic_list = explode(",", $newstr);
+			$pic_list = array_filter(explode(",", $text));
 			$this->assign('pic_list',$pic_list);
 
 			$diyflag=M('diyflag');
@@ -218,7 +222,6 @@ class NewsController extends AuthController {
 		}else{
 			$picall_list=$pic_oldlist;//整合新的多图字符串以及老的字符串
 		}
-
 		$sll_data=array(
 			'n_id'=>I('n_id'),
 		);
@@ -378,9 +381,6 @@ class NewsController extends AuthController {
 		$this->success("成功把文章删除，不可还原！",U('news_back',array('p'=>$p)),1);
 	}
 
-
-
-	/************************************************前台菜单管理**************************************************/
 	//菜单管理
 	public function news_menu_list(){
 		$nav = new \Org\Util\Leftnav;

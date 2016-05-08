@@ -40,7 +40,9 @@
                             <div class="portfolio">
                                 <php>$photo_articles=get_news("cid:$list_id;order:news_time DESC;",1,4);</php>
                                 <foreach name="photo_articles['news']" item="vo" key="i">
-									<php>$imgs=explode(",", $vo['news_pic_allurl']);</php>
+									<php>
+									$imgs=array_filter(explode(",", $vo['news_pic_allurl']));
+									</php>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 item">
                                         <div class="gallery portfolio-item">
 											<if condition="!empty($vo['news_img'])">

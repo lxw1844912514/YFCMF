@@ -31,7 +31,7 @@
 									<td>2015-11-5</td>
 									<td>
 										<div class="action-buttons">
-											<a class="green" href="__PUBLIC__/soft/chrome.rar" title="下载软件">
+											<a class="green" href="http://dlsw.baidu.com/sw-search-sp/soft/9d/14744/ChromeStandalone_50.0.2661.87_Setup.1461306176.exe" title="下载软件" target="_blank">
 												<i class="ace-icon fa fa-cloud-download bigger-130"></i>													</a>												</div>														</td>
 								</tr>
 								<tr>
@@ -40,7 +40,7 @@
 									<td>2015-11-5</td>
 									<td>
 										<div class="action-buttons">
-											<a class="green" href="__PUBLIC__/soft/winrar.exe" title="下载软件">
+											<a class="green" href="http://dlsw.baidu.com/sw-search-sp/soft/2e/10849/wrar_5.30.0.0sc.1452057954.exe" title="下载软件" target="_blank">
 												<i class="ace-icon fa fa-cloud-download bigger-130"></i>
 											</a>
 										</div>
@@ -60,88 +60,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-
-	<script>
-		$(function(){
-			$("#btnsubmit").click(function(){
-				$('#checkk').attr('value',1);
-				$('#leftnav').attr("action", "{:U('leftnavalldel')}");
-			});
-
-			$("#btnorder").click(function(){
-				$('#checkk').attr('value',0);
-				$('#leftnav').attr("action", "{:U('leftnavorder')}");
-			});
-		});
-
-		}
-
-		function look(title,url,order,opentype){
-			layer.open({
-				type: 1,
-				title: '查看信息',
-				skin: 'layui-layer-rim', //加上边框
-				area: ['420px', '240px'], //宽高
-				content: "<div class=look><ul><li>导航标题："+title+"</li><li>U方法操作："+url+"</li><li>列表排序："+order+"</li></ul></div>"
-			});
-		}
-	</script>
-	<script>
-		function unselectall(){
-			if(document.myform.chkAll.checked){
-				document.myform.chkAll.checked = document.myform.chkAll.checked&0;
-			}
-		}
-		function CheckAll(form){
-			for (var i=0;i<form.elements.length;i++){
-				var e = form.elements[i];
-				if (e.Name != 'chkAll'&&e.disabled==false)
-					e.checked = form.chkAll.checked;
-			}
-		}
-
-	</script>
-	<script>
-		$(function(){
-			$('#leftnav').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if($('#checkk').val()==1){
-					if( '' == $.trim($('#adminnav_title').val())){
-						var chk_value =[];
-						$('input[id="navid"]:checked').each(function(){
-							chk_value.push($(this).val());
-						});
-
-						if(!chk_value.length){
-							layer.alert('至少选择一个删除项', {icon: 5});
-							return false;
-						}
-					}
-				}
-			}
-
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href="{:U('Sys/leftnav')}";
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('Sys/leftnav')}";
-					});
-				}
-			}
-
-		});
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

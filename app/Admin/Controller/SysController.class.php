@@ -1,4 +1,11 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
 use Think\Db;
@@ -118,7 +125,7 @@ class SysController extends AuthController {
 			}
 		}
 	}
-	/*******************************************来源管理模块***************************************************/
+
 	/*
      * 文章来源列表
 	 * @author rainfer <81818832@qq.com>
@@ -211,7 +218,7 @@ class SysController extends AuthController {
 			$this->success('排序更新成功',U('source_list'),1);
 		}
 	}
-    /************************************数据库备份、还原****************************************/
+
 
     public function database($type = null){
         if(empty($type)){
@@ -547,7 +554,7 @@ class SysController extends AuthController {
             $this->error('参数错误！');
         }
     }
-	/************************************管理员模块****************************************/
+
 
 	public function admin_list(){
 		$admin=M('admin');
@@ -921,7 +928,7 @@ class SysController extends AuthController {
             $this->error('权限删除失败',U('admin_rule_list'),0);
         }
 	}
-	/****************************************************************************表格导入导出模块*******************************************************************/
+
 	public function excel_import(){
 		$this->display();
 	}
@@ -1027,7 +1034,7 @@ class SysController extends AuthController {
 	public function excel_runexport($table){
         export2excel($table);
 	}
-	/****************************************************************************清理缓存模块*******************************************************************/
+
 	public function clear(){
 		remove_dir(TEMP_PATH);
 		remove_dir(CACHE_PATH);
@@ -1035,7 +1042,7 @@ class SysController extends AuthController {
 		file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 		$this->success ('清理缓存成功',1,1);
 	}
-	/****************************************************************************个人中心模块*******************************************************************/
+
 	public function profile(){
         $admin=array();
         if(session('aid')){

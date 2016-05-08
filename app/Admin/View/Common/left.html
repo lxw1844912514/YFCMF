@@ -34,7 +34,7 @@
 		</php>
         <!--一级菜单遍历-->
 		<foreach name="data" item="v">
-			<li class="<if condition="CONTROLLER_NAME eq $v['name']">open</if>">
+			<li class="<if condition="strtolower(CONTROLLER_NAME) eq strtolower($v['name'])">open</if>">
 			<a href="#" class="dropdown-toggle">
 				<i class="menu-icon fa {$v.css}"></i>
 							<span class="menu-text">
@@ -99,7 +99,7 @@
 						<ul class="submenu">
 							<!--三级菜单遍历-->
 							 <foreach name="dataaa" item="m">
-								<li class="<if condition="((CONTROLLER_NAME.'/'.ACTION_NAME) eq $m['name'])">active</if>">
+								<li class="<if condition="strtolower(CONTROLLER_NAME.'/'.ACTION_NAME) eq strtolower($m['name'])">active</if>">
 								<a href="{:U($m['name'])}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									{$m.title}

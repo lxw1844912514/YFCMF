@@ -3,6 +3,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta charset="utf-8" />
+    <meta name="author" content="YFCMF">
 	<title>YFCMF后台系统管理</title>
 
 	<meta name="description" content="" />
@@ -78,8 +79,11 @@
 			<!-- #section:basics/navbar.toggle -->
 			<button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons">
 				<span class="sr-only">Toggle user menu</span>
-
-				<img src="__PUBLIC__/assets/avatars/user.jpg" alt="Jason's Photo" />
+                <if condition="$_SESSION['admin_avatar'] neq ''">
+                    <img class="nav-user-photo" src="__UPLOAD__avatar/{$_SESSION['admin_avatar']}" alt="{$_SESSION['admin_username']}" />
+                    <else />
+                    <img class="nav-user-photo" src="__PUBLIC__/img/girl.jpg" alt="{$_SESSION['admin_username']}" />
+                </if>
 			</button>
 
 			<!-- /section:basics/navbar.toggle -->
@@ -95,7 +99,7 @@
 				<li class="transparent">
 					<a style="cursor:pointer;" id="cache" class="dropdown-toggle" href="{:U('Sys/clear')}">清除缓存</a>
 				</li>
-				<li class="transparent">
+				<li class="transparent" style="display: none">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<i class="ace-icon fa fa-bell icon-animated-bell"></i>
 					</a>

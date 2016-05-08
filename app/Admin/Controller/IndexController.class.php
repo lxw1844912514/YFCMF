@@ -1,8 +1,14 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\CommonController;
 class IndexController extends CommonController {
-	//首页
 	public function index(){
 		//未登录
 		if (empty($_SESSION['aid'])){
@@ -24,13 +30,18 @@ class IndexController extends CommonController {
 		//总文章数
 		$news_count=$news->count();
 		$this->assign('news_count',$news_count);
+        //总会员数
+        $members_count=M('member_list')->count();
+        $this->assign('members_count',$members_count);
+        //总留言数
+        $sugs_count=M('plug_sug')->count();
+        $this->assign('sugs_count',$sugs_count);
 
 		$today=strtotime(date('Y-m-d 00:00:00'));//今天开始日期
 		$todata['news_time'] = array('egt',$today);
 		//今日发表文章数
 		$tonews_count=$news->where($todata)->count();
 		$this->assign('tonews_count',$tonews_count);
-
 		$ztday=strtotime(date('Y-m-d 00:00:00'))-60*60*24;//昨天开始日期
 		$ztdata['news_time'] = array('between',array($ztday,$today));
 		//昨日文章数
@@ -39,7 +50,21 @@ class IndexController extends CommonController {
 		$difday=($ztnews_count>0)?($tonews_count-$ztnews_count)/$ztnews_count*100:0;
 		//今日提升比
 		$this->assign('difday',$difday);
-		
+		//今日增加会员
+        $tomembers_count=M('member_list')->where(array('member_list_addtime'=>array('egt',$today)))->count();
+        $this->assign('tomembers_count',$tomembers_count);
+        //昨日会员数
+        $ztmembers_count=M('member_list')->where(array('member_list_addtime'=>array('between',array($ztday,$today))))->count();
+        $this->assign('ztmembers_count',$ztmembers_count);
+        $difday_m=($ztmembers_count>0)?($tomembers_count-$ztmembers_count)/$ztmembers_count*100:0;
+        $this->assign('difday_m',$difday_m);
+        //今日留言
+        $tosugs_count=M('plug_sug')->where(array('plug_sug_addtime'=>array('egt',$today)))->count();
+        $this->assign('tosugs_count',$tosugs_count);
+        $ztsugs_count=M('plug_sug')->where(array('plug_sug_addtime'=>array('between',array($ztday,$today))))->count();
+        $this->assign('ztsugs_count',$ztsugs_count);
+        $difday_s=($ztsugs_count>0)?($tosugs_count-$ztsugs_count)/$ztsugs_count*100:0;
+        $this->assign('difday_s',$difday_s);
 		//安全检测
 		$this->system_safe = true;
 

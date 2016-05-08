@@ -1,30 +1,11 @@
--- phpMyAdmin SQL Dump
--- version 3.4.10.1
--- http://www.phpmyadmin.net
---
--- 主机: localhost
--- 生成日期: 2016 年 05 月 07 日 07:49
--- 服务器版本: 5.5.20
--- PHP 版本: 5.4.45
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- 数据库: `yfcmf`
---
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_admin`
---
 
 DROP TABLE IF EXISTS `yf_admin`;
 CREATE TABLE IF NOT EXISTS `yf_admin` (
@@ -48,12 +29,6 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
   PRIMARY KEY (`admin_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_auth_group`
---
-
 DROP TABLE IF EXISTS `yf_auth_group`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -64,19 +39,9 @@ CREATE TABLE IF NOT EXISTS `yf_auth_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- 转存表中的数据 `yf_auth_group`
---
-
 INSERT INTO `yf_auth_group` (`id`, `title`, `status`, `rules`, `addtime`) VALUES
 (1, '超级管理员', 1, '1,2,6,59,151,10,62,154,19,60,152,26,43,63,64,65,66,67,155,57,61,153,3,4,89,90,159,5,85,86,87,88,160,15,16,68,69,70,71,72,73,156,17,55,56,74,75,76,77,78,157,18,79,80,81,82,83,84,158,40,41,92,162,42,91,161,7,8,11,94,95,96,100,101,175,12,93,174,25,97,98,99,173,9,13,103,104,105,106,107,172,14,102,171,22,23,24,27,29,37,108,109,110,111,112,113,114,170,38,115,116,117,118,119,120,169,30,28,31,32,129,128,130,131,132,167,34,133,134,135,136,166,44,45,138,139,140,141,142,143,165,46,144,145,146,147,148,164,48,49,137,163,35,36,39,121,122,123,124,125,126,127,168,', 1212451252),
 (2, '管理员', 1, '1,2,6,151,10,154,19,152,43,65,155,57,153,3,4,159,5,160,15,16,68,70,156,17,74,77,157,176,18,82,158,177,40,41,162,42,161,7,8,11,94,175,12,174,25,173,9,13,105,172,14,171,22,23,24,27,29,37,108,110,170,38,119,169,28,31,32,131,167,34,166,44,45,142,165,46,145,164,48,49,137,163,35,36,39,124,168,', 1212451252);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_auth_group_access`
---
 
 DROP TABLE IF EXISTS `yf_auth_group_access`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
@@ -87,18 +52,8 @@ CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
   KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- 转存表中的数据 `yf_auth_group_access`
---
-
 INSERT INTO `yf_auth_group_access` (`uid`, `group_id`) VALUES
 (1, 1);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_auth_rule`
---
 
 DROP TABLE IF EXISTS `yf_auth_rule`;
 CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
@@ -115,10 +70,6 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=184 ;
-
---
--- 转存表中的数据 `yf_auth_rule`
---
 
 INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES
 (1, 'Sys', '系统设置', 1, 1, 'fa-tachometer', '', 0, 1, 10, 1446535750),
@@ -151,7 +102,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (30, 'Member/member_score', '积分管理', 1, 0, '', '', 27, 2, 20, 1447232133),
 (31, 'Plug/plug_link_list', '友情链接', 1, 1, '', '', 28, 2, 10, 1447232183),
 (32, 'Plug/plug_link_list', '链接列表', 1, 1, '', '', 31, 3, 10, 1447639935),
-(129, 'plug/plug_link_del', '删除操作', 1, 0, '', '', 32, 4, 20, 1460345954),
+(129, 'Plug/plug_link_del', '删除操作', 1, 0, '', '', 32, 4, 20, 1460345954),
 (34, 'Plug/plug_linktype_list', '所属栏目', 1, 1, '', '', 31, 3, 20, 1447640839),
 (35, 'We', '微信基本功能', 1, 0, 'fa-weixin', '', 0, 1, 40, 1447842435),
 (36, 'We/we_menu_list', '菜单管理', 1, 1, '', '', 35, 2, 10, 1447842477),
@@ -165,105 +116,105 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (43, 'Sys/source_list', '来源管理', 1, 1, '', '', 2, 3, 50, 1448940532),
 (45, 'Plug/plug_ad_list', '广告设置', 1, 1, '', '', 44, 3, 10, 1450314297),
 (46, 'Plug/plug_adtype_list', '广告位设置', 1, 1, '', '', 44, 3, 20, 1450314324),
-(138, 'plug/plug_ad_runadd', '添加操作', 1, 0, '', '', 45, 4, 15, 1460346513),
+(138, 'Plug/plug_ad_runadd', '添加操作', 1, 0, '', '', 45, 4, 15, 1460346513),
 (48, 'Plug/plug_sug_list', '留言插件', 1, 1, '', '', 28, 2, 30, 1451267354),
 (49, 'Plug/plug_sug_list', '留言管理', 1, 1, '', '', 48, 3, 10, 1451267369),
 (51, 'We/we_datum_tp', '图文素材', 1, 0, '', '', 50, 3, 50, 1453255857),
 (52, 'We/we_datum_pic', '图片', 1, 0, '', '', 50, 3, 50, 1453255922),
 (53, 'We/we_datum_voice', '语音', 1, 0, '', '', 50, 3, 50, 1453255953),
 (54, 'We/we_datum_video', '视频', 1, 0, '', '', 50, 3, 50, 1453255995),
-(55, 'sys/admin_group_runadd', '添加操作', 1, 0, '', '', 17, 4, 15, 1460110505),
-(56, 'sys/admin_group_del', '删除操作', 1, 0, '', '', 17, 4, 20, 1460110551),
-(68, 'sys/admin_add', '添加显示', 1, 0, '', '', 16, 4, 15, 1460301646),
-(85, 'sys/export', '备份多表', 1, 0, '', '', 5, 4, 15, 1460302396),
+(55, 'Sys/admin_group_runadd', '添加操作', 1, 0, '', '', 17, 4, 15, 1460110505),
+(56, 'Sys/admin_group_del', '删除操作', 1, 0, '', '', 17, 4, 20, 1460110551),
+(68, 'Sys/admin_add', '添加显示', 1, 0, '', '', 16, 4, 15, 1460301646),
+(85, 'Sys/export', '备份多表', 1, 0, '', '', 5, 4, 15, 1460302396),
 (57, 'Sys/activesys', '帐号激活', 1, 1, '', '', 2, 3, 30, 1460299219),
-(60, 'sys/runemail', '编辑操作', 1, 0, '', '', 19, 4, 20, 1460299500),
-(59, 'sys/runsys', '编辑操作', 1, 0, '', '', 6, 4, 20, 1460299338),
-(61, 'sys/runactive', '编辑操作', 1, 0, '', '', 57, 4, 20, 1460299563),
-(62, 'sys/runwesys', '编辑操作', 1, 0, '', '', 10, 4, 20, 1460299610),
-(63, 'sys/source_runadd', '添加操作', 1, 0, '', '', 43, 4, 20, 1460299680),
-(64, 'sys/source_del', '删除操作', 1, 0, '', '', 43, 4, 20, 1460299709),
-(65, 'sys/source_edit', '编辑显示', 1, 0, '', '', 43, 4, 30, 1460299760),
-(66, 'sys/source_runedit', '编辑操作', 1, 0, '', '', 43, 4, 40, 1460299803),
-(67, 'sys/source_order', '排序操作', 1, 0, '', '', 43, 4, 50, 1460299827),
-(69, 'sys/admin_runadd', '添加操作', 1, 0, '', '', 16, 4, 20, 1460301671),
-(70, 'sys/admin_edit', '编辑显示', 1, 0, '', '', 16, 4, 30, 1460301711),
-(71, 'sys/admin_runedit', '编辑操作', 1, 0, '', '', 16, 4, 40, 1460301751),
-(72, 'sys/admin_del', '删除操作', 1, 0, '', '', 16, 4, 50, 1460301774),
-(73, 'sys/admin_state', '状态操作', 1, 0, '', '', 16, 4, 60, 1460301806),
-(74, 'sys/admin_group_edit', '编辑显示', 1, 0, '', '', 17, 4, 30, 1460301956),
-(75, 'sys/admin_group_runedit', '编辑操作', 1, 0, '', '', 17, 4, 40, 1460301980),
-(76, 'sys/admin_group_state', '状态操作', 1, 0, '', '', 17, 4, 50, 1460302008),
-(77, 'sys/admin_group_access', '权限配置', 1, 0, '', '', 17, 4, 60, 1460302033),
-(78, 'sys/admin_group_runaccess', '权限配置操作', 1, 0, '', '', 17, 4, 70, 1460302062),
-(79, 'sys/admin_rule_runadd', '添加操作', 1, 0, '', '', 18, 4, 15, 1460302177),
-(80, 'sys/admin_rule_state', '状态操作', 1, 0, '', '', 18, 4, 20, 1460302201),
-(81, 'sys/admin_rule_order', '排序操作', 1, 0, '', '', 18, 4, 30, 1460302223),
-(82, 'sys/admin_rule_edit', '编辑显示', 1, 0, '', '', 18, 4, 40, 1460302247),
-(83, 'sys/admin_rule_runedit', '编辑操作', 1, 0, '', '', 18, 4, 50, 1460302266),
-(84, 'sys/admin_rule_del', '删除操作', 1, 0, '', '', 18, 4, 60, 1460302287),
-(86, 'sys/exportsql', '备份单表', 1, 0, '', '', 5, 4, 20, 1460302429),
-(87, 'sys/repair', '修复表', 1, 0, '', '', 5, 4, 30, 1460302464),
-(88, 'sys/optimize', '优化表', 1, 0, '', '', 5, 4, 40, 1460302487),
-(89, 'sys/del', '删除操作', 1, 0, '', '', 4, 4, 15, 1460302516),
-(90, 'sys/restore', '还原操作', 1, 0, '', '', 4, 4, 20, 1460302545),
-(91, 'sys/excel_runexport', '导出操作', 1, 0, '', '', 42, 4, 15, 1460302639),
-(92, 'sys/excel_runimport', '导入操作', 1, 0, '', '', 41, 4, 15, 1460302665),
-(93, 'news/news_runadd', '添加操作', 1, 0, '', '', 12, 4, 15, 1460335746),
-(94, 'news/news_edit', '编辑显示', 1, 0, '', '', 11, 4, 15, 1460335887),
-(95, 'news/news_runedit', '编辑操作', 1, 0, '', '', 11, 4, 20, 1460335925),
-(96, 'news/news_del', '删到回收站', 1, 0, '', '', 11, 4, 30, 1460335982),
-(97, 'news/news_back_open', '还原', 1, 0, '', '', 25, 4, 15, 1460336269),
-(98, 'news/news_back_del', '删除操作', 1, 0, '', '', 25, 4, 20, 1460341080),
-(99, 'news/news_back_alldel', '删除全部', 1, 0, '', '', 25, 4, 30, 1460341109),
-(100, 'news/news_alldel', '删除全部', 1, 0, '', '', 11, 4, 40, 1460341178),
-(101, 'news/news_state', '状态操作', 1, 0, '', '', 11, 4, 50, 1460341216),
-(102, 'news/news_menu_runadd', '添加操作', 1, 0, '', '', 14, 4, 15, 1460341752),
-(103, 'news/news_menu_del', '删除操作', 1, 0, '', '', 13, 4, 15, 1460341796),
-(104, 'news/news_menu_order', '排序操作', 1, 0, '', '', 13, 4, 20, 1460341845),
-(105, 'news/news_menu_edit', '编辑显示', 1, 0, '', '', 13, 4, 30, 1460341972),
-(106, 'news/news_menu_runedit', '编辑操作', 1, 0, '', '', 13, 4, 40, 1460342057),
-(107, 'news/news_menu_state', '状态操作', 1, 0, '', '', 13, 4, 50, 1460342099),
-(108, 'member/member_add', '添加显示', 1, 0, '', '', 37, 4, 15, 1460343493),
-(109, 'member/member_runadd', '添加操作', 1, 0, '', '', 37, 4, 20, 1460343550),
-(110, 'member/member_edit', '编辑显示', 1, 0, '', '', 37, 4, 30, 1460343589),
-(111, 'member/member_runedit', '编辑操作', 1, 0, '', '', 37, 4, 40, 1460343773),
-(112, 'member/member_state', '排序操作', 1, 0, '', '', 37, 4, 50, 1460343804),
-(113, 'member/member_del', '删除操作', 1, 0, '', '', 37, 4, 60, 1460343932),
-(114, 'member/member_userpic', '头像上传', 1, 0, '', '', 37, 4, 70, 1460344029),
-(115, 'member/member_group_runadd', '添加操作', 1, 0, '', '', 38, 4, 15, 1460344133),
-(116, 'member/member_group_del', '删除操作', 1, 0, '', '', 38, 4, 20, 1460344158),
-(117, 'member/member_group_state', '状态操作', 1, 0, '', '', 38, 4, 30, 1460344212),
-(118, 'member/member_group_order', '排序操作', 1, 0, '', '', 38, 4, 40, 1460344255),
-(119, 'member/member_group_edit', '编辑显示', 1, 0, '', '', 38, 4, 50, 1460344294),
-(120, 'member/member_group_runedit', '编辑操作', 1, 0, '', '', 38, 4, 60, 1460344347),
-(121, 'we/we_menu_runadd', '添加操作', 1, 0, '', '', 39, 4, 15, 1460345046),
-(122, 'we/we_menu_state', '状态操作', 1, 0, '', '', 39, 4, 20, 1460345151),
-(123, 'we/we_menu_order', '排序操作', 1, 0, '', '', 39, 4, 30, 1460345176),
-(124, 'we/we_menu_edit', '编辑显示', 1, 0, '', '', 39, 4, 40, 1460345280),
-(125, 'we/we_menu_runedit', '编辑操作', 1, 0, '', '', 39, 4, 50, 1460345306),
-(126, 'we/we_menu_del', '删除操作', 1, 0, '', '', 39, 4, 60, 1460345332),
-(127, 'we/we_menu_make', '生成菜单', 1, 0, '', '', 39, 4, 70, 1460345377),
-(128, 'plug/plug_link_runadd', '添加操作', 1, 0, '', '', 32, 4, 15, 1460345848),
-(130, 'plug/plug_link_state', '状态操作', 1, 0, '', '', 32, 4, 30, 1460345976),
-(131, 'plug/plug_link_edit', '编辑显示', 1, 0, '', '', 32, 4, 40, 1460345999),
-(132, 'plug/plug_link_runedit', '编辑操作', 1, 0, '', '', 32, 4, 50, 1460346017),
-(133, 'plug/plug_linktype_del', '删除操作', 1, 0, '', '', 34, 4, 15, 1460346077),
-(134, 'plug/plug_linktype_runadd', '添加操作', 1, 0, '', '', 34, 4, 20, 1460346115),
-(135, 'plug/plug_linktype_runedit', '编辑操作', 1, 0, '', '', 34, 4, 30, 1460346171),
-(136, 'plug/plug_linktype_order', '排序操作', 1, 0, '', '', 34, 4, 40, 1460346207),
-(137, 'plug/plug_sug_edit', '编辑显示', 1, 0, '', '', 49, 4, 15, 1460346468),
-(139, 'plug/plug_ad_del', '删除操作', 1, 0, '', '', 45, 4, 20, 1460346533),
-(140, 'plug/plug_ad_order', '排序操作', 1, 0, '', '', 45, 4, 30, 1460346549),
-(141, 'plug/plug_ad_state', '状态操作', 1, 0, '', '', 45, 4, 40, 1460346571),
-(142, 'plug/plug_ad_edit', '编辑显示', 1, 0, '', '', 45, 4, 50, 1460346593),
-(143, 'plug/plug_ad_runedit', '编辑操作', 1, 0, '', '', 45, 4, 60, 1460346610),
-(144, 'plug/plug_adtype_runadd', '添加操作', 1, 0, '', '', 46, 4, 15, 1460346640),
-(145, 'plug/plug_adtype_edit', '编辑显示', 1, 0, '', '', 46, 4, 20, 1460346659),
-(146, 'plug/plug_adtype_runedit', '编辑操作', 1, 0, '', '', 46, 4, 30, 1460346680),
-(147, 'plug/plug_adtype_del', '删除操作', 1, 0, '', '', 46, 4, 40, 1460346700),
-(148, 'plug/plug_adtype_order', '排序操作', 1, 0, '', '', 46, 4, 50, 1460346717),
-(151, 'sys/sys', '设置显示', 1, 0, '', '', 6, 4, 10, 1460367871),
+(60, 'Sys/runemail', '编辑操作', 1, 0, '', '', 19, 4, 20, 1460299500),
+(59, 'Sys/runsys', '编辑操作', 1, 0, '', '', 6, 4, 20, 1460299338),
+(61, 'Sys/runactive', '编辑操作', 1, 0, '', '', 57, 4, 20, 1460299563),
+(62, 'Sys/runwesys', '编辑操作', 1, 0, '', '', 10, 4, 20, 1460299610),
+(63, 'Sys/source_runadd', '添加操作', 1, 0, '', '', 43, 4, 20, 1460299680),
+(64, 'Sys/source_del', '删除操作', 1, 0, '', '', 43, 4, 20, 1460299709),
+(65, 'Sys/source_edit', '编辑显示', 1, 0, '', '', 43, 4, 30, 1460299760),
+(66, 'Sys/source_runedit', '编辑操作', 1, 0, '', '', 43, 4, 40, 1460299803),
+(67, 'Sys/source_order', '排序操作', 1, 0, '', '', 43, 4, 50, 1460299827),
+(69, 'Sys/admin_runadd', '添加操作', 1, 0, '', '', 16, 4, 20, 1460301671),
+(70, 'Sys/admin_edit', '编辑显示', 1, 0, '', '', 16, 4, 30, 1460301711),
+(71, 'Sys/admin_runedit', '编辑操作', 1, 0, '', '', 16, 4, 40, 1460301751),
+(72, 'Sys/admin_del', '删除操作', 1, 0, '', '', 16, 4, 50, 1460301774),
+(73, 'Sys/admin_state', '状态操作', 1, 0, '', '', 16, 4, 60, 1460301806),
+(74, 'Sys/admin_group_edit', '编辑显示', 1, 0, '', '', 17, 4, 30, 1460301956),
+(75, 'Sys/admin_group_runedit', '编辑操作', 1, 0, '', '', 17, 4, 40, 1460301980),
+(76, 'Sys/admin_group_state', '状态操作', 1, 0, '', '', 17, 4, 50, 1460302008),
+(77, 'Sys/admin_group_access', '权限配置', 1, 0, '', '', 17, 4, 60, 1460302033),
+(78, 'Sys/admin_group_runaccess', '权限配置操作', 1, 0, '', '', 17, 4, 70, 1460302062),
+(79, 'Sys/admin_rule_runadd', '添加操作', 1, 0, '', '', 18, 4, 15, 1460302177),
+(80, 'Sys/admin_rule_state', '状态操作', 1, 0, '', '', 18, 4, 20, 1460302201),
+(81, 'Sys/admin_rule_order', '排序操作', 1, 0, '', '', 18, 4, 30, 1460302223),
+(82, 'Sys/admin_rule_edit', '编辑显示', 1, 0, '', '', 18, 4, 40, 1460302247),
+(83, 'Sys/admin_rule_runedit', '编辑操作', 1, 0, '', '', 18, 4, 50, 1460302266),
+(84, 'Sys/admin_rule_del', '删除操作', 1, 0, '', '', 18, 4, 60, 1460302287),
+(86, 'Sys/exportsql', '备份单表', 1, 0, '', '', 5, 4, 20, 1460302429),
+(87, 'Sys/repair', '修复表', 1, 0, '', '', 5, 4, 30, 1460302464),
+(88, 'Sys/optimize', '优化表', 1, 0, '', '', 5, 4, 40, 1460302487),
+(89, 'Sys/del', '删除操作', 1, 0, '', '', 4, 4, 15, 1460302516),
+(90, 'Sys/restore', '还原操作', 1, 0, '', '', 4, 4, 20, 1460302545),
+(91, 'Sys/excel_runexport', '导出操作', 1, 0, '', '', 42, 4, 15, 1460302639),
+(92, 'Sys/excel_runimport', '导入操作', 1, 0, '', '', 41, 4, 15, 1460302665),
+(93, 'News/news_runadd', '添加操作', 1, 0, '', '', 12, 4, 15, 1460335746),
+(94, 'News/news_edit', '编辑显示', 1, 0, '', '', 11, 4, 15, 1460335887),
+(95, 'News/news_runedit', '编辑操作', 1, 0, '', '', 11, 4, 20, 1460335925),
+(96, 'News/news_del', '删到回收站', 1, 0, '', '', 11, 4, 30, 1460335982),
+(97, 'News/news_back_open', '还原', 1, 0, '', '', 25, 4, 15, 1460336269),
+(98, 'News/news_back_del', '删除操作', 1, 0, '', '', 25, 4, 20, 1460341080),
+(99, 'News/news_back_alldel', '删除全部', 1, 0, '', '', 25, 4, 30, 1460341109),
+(100, 'News/news_alldel', '删除全部', 1, 0, '', '', 11, 4, 40, 1460341178),
+(101, 'News/news_state', '状态操作', 1, 0, '', '', 11, 4, 50, 1460341216),
+(102, 'News/news_menu_runadd', '添加操作', 1, 0, '', '', 14, 4, 15, 1460341752),
+(103, 'News/news_menu_del', '删除操作', 1, 0, '', '', 13, 4, 15, 1460341796),
+(104, 'News/news_menu_order', '排序操作', 1, 0, '', '', 13, 4, 20, 1460341845),
+(105, 'News/news_menu_edit', '编辑显示', 1, 0, '', '', 13, 4, 30, 1460341972),
+(106, 'News/news_menu_runedit', '编辑操作', 1, 0, '', '', 13, 4, 40, 1460342057),
+(107, 'News/news_menu_state', '状态操作', 1, 0, '', '', 13, 4, 50, 1460342099),
+(108, 'Member/member_add', '添加显示', 1, 0, '', '', 37, 4, 15, 1460343493),
+(109, 'Member/member_runadd', '添加操作', 1, 0, '', '', 37, 4, 20, 1460343550),
+(110, 'Member/member_edit', '编辑显示', 1, 0, '', '', 37, 4, 30, 1460343589),
+(111, 'Member/member_runedit', '编辑操作', 1, 0, '', '', 37, 4, 40, 1460343773),
+(112, 'Member/member_state', '排序操作', 1, 0, '', '', 37, 4, 50, 1460343804),
+(113, 'Member/member_del', '删除操作', 1, 0, '', '', 37, 4, 60, 1460343932),
+(114, 'Member/member_userpic', '头像上传', 1, 0, '', '', 37, 4, 70, 1460344029),
+(115, 'Member/member_group_runadd', '添加操作', 1, 0, '', '', 38, 4, 15, 1460344133),
+(116, 'Member/member_group_del', '删除操作', 1, 0, '', '', 38, 4, 20, 1460344158),
+(117, 'Member/member_group_state', '状态操作', 1, 0, '', '', 38, 4, 30, 1460344212),
+(118, 'Member/member_group_order', '排序操作', 1, 0, '', '', 38, 4, 40, 1460344255),
+(119, 'Member/member_group_edit', '编辑显示', 1, 0, '', '', 38, 4, 50, 1460344294),
+(120, 'Member/member_group_runedit', '编辑操作', 1, 0, '', '', 38, 4, 60, 1460344347),
+(121, 'We/we_menu_runadd', '添加操作', 1, 0, '', '', 39, 4, 15, 1460345046),
+(122, 'We/we_menu_state', '状态操作', 1, 0, '', '', 39, 4, 20, 1460345151),
+(123, 'We/we_menu_order', '排序操作', 1, 0, '', '', 39, 4, 30, 1460345176),
+(124, 'We/we_menu_edit', '编辑显示', 1, 0, '', '', 39, 4, 40, 1460345280),
+(125, 'We/we_menu_runedit', '编辑操作', 1, 0, '', '', 39, 4, 50, 1460345306),
+(126, 'We/we_menu_del', '删除操作', 1, 0, '', '', 39, 4, 60, 1460345332),
+(127, 'We/we_menu_make', '生成菜单', 1, 0, '', '', 39, 4, 70, 1460345377),
+(128, 'Plug/plug_link_runadd', '添加操作', 1, 0, '', '', 32, 4, 15, 1460345848),
+(130, 'Plug/plug_link_state', '状态操作', 1, 0, '', '', 32, 4, 30, 1460345976),
+(131, 'Plug/plug_link_edit', '编辑显示', 1, 0, '', '', 32, 4, 40, 1460345999),
+(132, 'Plug/plug_link_runedit', '编辑操作', 1, 0, '', '', 32, 4, 50, 1460346017),
+(133, 'Plug/plug_linktype_del', '删除操作', 1, 0, '', '', 34, 4, 15, 1460346077),
+(134, 'Plug/plug_linktype_runadd', '添加操作', 1, 0, '', '', 34, 4, 20, 1460346115),
+(135, 'Plug/plug_linktype_runedit', '编辑操作', 1, 0, '', '', 34, 4, 30, 1460346171),
+(136, 'Plug/plug_linktype_order', '排序操作', 1, 0, '', '', 34, 4, 40, 1460346207),
+(137, 'Plug/plug_sug_edit', '编辑显示', 1, 0, '', '', 49, 4, 15, 1460346468),
+(139, 'Plug/plug_ad_del', '删除操作', 1, 0, '', '', 45, 4, 20, 1460346533),
+(140, 'Plug/plug_ad_order', '排序操作', 1, 0, '', '', 45, 4, 30, 1460346549),
+(141, 'Plug/plug_ad_state', '状态操作', 1, 0, '', '', 45, 4, 40, 1460346571),
+(142, 'Plug/plug_ad_edit', '编辑显示', 1, 0, '', '', 45, 4, 50, 1460346593),
+(143, 'Plug/plug_ad_runedit', '编辑操作', 1, 0, '', '', 45, 4, 60, 1460346610),
+(144, 'Plug/plug_adtype_runadd', '添加操作', 1, 0, '', '', 46, 4, 15, 1460346640),
+(145, 'Plug/plug_adtype_edit', '编辑显示', 1, 0, '', '', 46, 4, 20, 1460346659),
+(146, 'Plug/plug_adtype_runedit', '编辑操作', 1, 0, '', '', 46, 4, 30, 1460346680),
+(147, 'Plug/plug_adtype_del', '删除操作', 1, 0, '', '', 46, 4, 40, 1460346700),
+(148, 'Plug/plug_adtype_order', '排序操作', 1, 0, '', '', 46, 4, 50, 1460346717),
+(151, 'Sys/sys', '设置显示', 1, 0, '', '', 6, 4, 10, 1460367871),
 (152, 'Sys/emailsys', '设置显示', 1, 0, '', '', 19, 4, 10, 1460367909),
 (153, 'Sys/activesys', '设置显示', 1, 0, '', '', 57, 4, 10, 1460368054),
 (154, 'Sys/wesys', '设置显示', 1, 0, '', '', 10, 4, 10, 1460368073),
@@ -288,20 +239,14 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (173, 'News/news_back', '列表显示', 1, 0, '', '', 25, 4, 10, 1460369095),
 (174, 'News/news_add', '添加显示', 1, 0, '', '', 12, 4, 10, 1460369128),
 (175, 'News/news_list', '列表显示', 1, 0, '', '', 11, 4, 10, 1460369158),
-(176, 'sys/admin_group_add', '添加显示', 1, 0, '', '', 17, 4, 15, 1460461365),
-(177, 'sys/admin_rule_copy', '复制显示', 1, 0, '', '', 18, 4, 40, 1460461557),
+(176, 'Sys/admin_group_add', '添加显示', 1, 0, '', '', 17, 4, 15, 1460461365),
+(177, 'Sys/admin_rule_copy', '复制显示', 1, 0, '', '', 18, 4, 40, 1460461557),
 (178, 'Sys/profile', '个人中心', 1, 0, '', '', 1, 2, 90, 1461395663),
 (179, 'Sys/profile', '信息显示', 1, 0, '', '', 178, 3, 10, 1461395702),
 (180, 'Sys/avatar', '头像编辑', 1, 0, '', '', 178, 3, 10, 1461395790),
 (181, 'Plug/plug_file_list', '本地文件管理', 1, 1, '', '', 28, 2, 40, 1461810174),
 (182, 'Plug/plug_file_list', '文件列表', 1, 1, '', '', 181, 3, 10, 1461810218),
 (183, 'Plug/plug_file_filter', '文件清理', 1, 1, '', '', 181, 3, 20, 1461810273);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_diyflag`
---
 
 DROP TABLE IF EXISTS `yf_diyflag`;
 CREATE TABLE IF NOT EXISTS `yf_diyflag` (
@@ -311,10 +256,6 @@ CREATE TABLE IF NOT EXISTS `yf_diyflag` (
   `diyflag_order` int(11) NOT NULL COMMENT '排序',
   PRIMARY KEY (`diyflag_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- 转存表中的数据 `yf_diyflag`
---
 
 INSERT INTO `yf_diyflag` (`diyflag_id`, `diyflag_value`, `diyflag_name`, `diyflag_order`) VALUES
 (1, 'h', '头条', 10),
@@ -327,12 +268,6 @@ INSERT INTO `yf_diyflag` (`diyflag_id`, `diyflag_value`, `diyflag_name`, `diyfla
 (8, 'd', '原创', 80),
 (9, 'cp', '产品', 90);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_member_group`
---
-
 DROP TABLE IF EXISTS `yf_member_group`;
 CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员组ID',
@@ -342,13 +277,7 @@ CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_bomlimit` int(11) NOT NULL DEFAULT '0' COMMENT '积分下限',
   `member_group_order` int(11) NOT NULL COMMENT '排序',
   PRIMARY KEY (`member_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_member_list`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `yf_member_list`;
 CREATE TABLE IF NOT EXISTS `yf_member_list` (
@@ -367,13 +296,7 @@ CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   `member_list_addtime` int(11) NOT NULL COMMENT '添加时间戳',
   PRIMARY KEY (`member_list_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_member_lvl`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `yf_member_lvl`;
 CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
@@ -381,12 +304,6 @@ CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
   `member_lvl_name` varchar(20) NOT NULL COMMENT '等级名称',
   PRIMARY KEY (`member_lvl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_menu`
---
 
 DROP TABLE IF EXISTS `yf_menu`;
 CREATE TABLE IF NOT EXISTS `yf_menu` (
@@ -408,24 +325,14 @@ CREATE TABLE IF NOT EXISTS `yf_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
---
--- 转存表中的数据 `yf_menu`
---
-
 INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`, `menu_listtpl`, `menu_newstpl`, `menu_address`, `menu_open`, `listorder`, `menu_img`, `menu_seo_title`, `menu_seo_key`, `menu_seo_des`, `menu_content`) VALUES
-(1, '公司简介', '', 4, 0, 'about', '', '', 1, 10, './data/upload/2016-05-07/572d4421ceba8.jpg', '关于我们', '关于我们', '关于我们', '<p style="white-space: normal;">&nbsp; 团队成立与于2014年,是一个专注于高端品牌网站建设的设计工作室。</p><p style="white-space: normal;">团队骨干有着丰富的网页设计和网站开发水平，为客户提供更符合搜索引擎的网站研发服务，协助构建OA网络办公信息平台，定制网站与数据库开发，并提供WAP网站建设、微网站、微商城、微信裂变式分销，网站维护、网络推广等互联网一站式服务。我们将商业与技术完美结合起来，以使我们的客户可以在快速发展的信息科技领域中获得更有效的竞争力。</p><p style="white-space: normal;">&nbsp;&nbsp;团队成立以来，先后为数十家企业提供网站建设及推广服务。我们一直秉承“只做有灵魂的设计”和“坚持原创”的核心价值观，以“为客户赢得客户”为己任，用我们的激情和智慧，勤奋与努力，帮助中小企业开展网站建设，打开互联网营销局面，深刻影响着魔酷阁的经营模式和营销思路我们坚信，中国的每一家企业都应该有一个赋有灵魂的网站，用来发布企业产品、发布企业资讯、开展网上调查、与客户进行在线交流、分析客户需求和了解市场发展等功能于一体的营销型网站。</p>'),
+(1, '公司简介', '', 4, 0, 'about', '', '', 1, 10, './data/upload/2016-05-07/572dcdefa5a36.jpg', '关于我们', '关于我们', '关于我们', '<p style="white-space: normal;">&nbsp; 团队成立与于2014年,是一个专注于高端品牌网站建设的设计工作室。</p><p style="white-space: normal;">团队骨干有着丰富的网页设计和网站开发水平，为客户提供更符合搜索引擎的网站研发服务，协助构建OA网络办公信息平台，定制网站与数据库开发，并提供WAP网站建设、微网站、微商城、微信裂变式分销，网站维护、网络推广等互联网一站式服务。我们将商业与技术完美结合起来，以使我们的客户可以在快速发展的信息科技领域中获得更有效的竞争力。</p><p style="white-space: normal;">&nbsp;&nbsp;团队成立以来，先后为数十家企业提供网站建设及推广服务。我们一直秉承“只做有灵魂的设计”和“坚持原创”的核心价值观，以“为客户赢得客户”为己任，用我们的激情和智慧，勤奋与努力，帮助中小企业开展网站建设，打开互联网营销局面，深刻影响着魔酷阁的经营模式和营销思路我们坚信，中国的每一家企业都应该有一个赋有灵魂的网站，用来发布企业产品、发布企业资讯、开展网上调查、与客户进行在线交流、分析客户需求和了解市场发展等功能于一体的营销型网站。</p>'),
 (2, '服务项目', '', 3, 0, 'list', 'news', '', 1, 20, '', '', '', '', ''),
 (9, '成功案例', '', 3, 0, 'photo_list', 'news', '', 1, 50, '', '', '', '', ''),
 (10, '联系方式', '', 4, 0, 'contact', '', '', 1, 55, '', '', '', '', '&lt;p&gt;联系方式&lt;/p&gt;'),
 (14, '新闻资讯', '', 3, 0, 'list', 'news', '', 1, 30, '', '', '', '', ''),
 (21, '合作伙伴', '', 3, 0, 'list', 'news', '', 0, 50, '', '', '', '', ''),
 (17, '首页首页', 'Home', 1, 0, '', '', '', 1, 1, '', '', '', '', '');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_news`
---
 
 DROP TABLE IF EXISTS `yf_news`;
 CREATE TABLE IF NOT EXISTS `yf_news` (
@@ -443,8 +350,8 @@ CREATE TABLE IF NOT EXISTS `yf_news` (
   `news_hits` int(11) NOT NULL DEFAULT '200' COMMENT '点击率',
   `news_img` varchar(100) DEFAULT '' COMMENT '大图地址',
   `news_pic_type` tinyint(2) NOT NULL COMMENT '1=普通模式 2=腾讯模式',
-  `news_pic_allurl` varchar(255) DEFAULT '' COMMENT '多图路径',
-  `news_pic_content` longtext NOT NULL COMMENT '多图对应文字说明',
+  `news_pic_allurl` text COMMENT '多图路径',
+  `news_pic_content` longtext COMMENT '多图对应文字说明',
   `news_time` int(11) NOT NULL,
   `news_flag` set('h','c','f','a','s','p','j','d','cp') NOT NULL DEFAULT '' COMMENT '文章属性',
   `news_zaddress` varchar(100) NOT NULL DEFAULT '' COMMENT '跳转地址',
@@ -455,15 +362,11 @@ CREATE TABLE IF NOT EXISTS `yf_news` (
   PRIMARY KEY (`n_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
---
--- 转存表中的数据 `yf_news`
---
-
 INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`, `news_columnviceid`, `news_key`, `news_tag`, `news_auto`, `news_source`, `news_content`, `news_scontent`, `news_hits`, `news_img`, `news_pic_type`, `news_pic_allurl`, `news_pic_content`, `news_time`, `news_flag`, `news_zaddress`, `news_cpprice`, `news_back`, `news_open`, `news_lvtype`) VALUES
-(8, 'ACE后台管理系统', 'ACE后台管理系统', 9, NULL, '', '', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">测试网址：<a href="http://www.rainfer.cn/ace/index.php?m=admin&c=index&a=index" target="_blank" title="http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">用户名：demo</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">密码：123456</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">下载:<a href="http://git.oschina.net/rainfer/YFCMF" target="_blank" title="http://git.oschina.net/rainfer/YFCMF" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://git.oschina.net/rainfer/YFCMF</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863689b00.jpg" title="ace后台首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637088b2.jpg" title="ace权限管理.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863773ba2.jpg" title="ace文章列表.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637d2f28.jpg" title="ace站点设置.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8638470f4.jpg" title="ace导入导出.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', 'ACE后台管理系统', 200, './data/upload/2016-05-06/572c863a03366.jpg', 2, './data/upload/2016-05-06/572c863a0db61.jpg,./data/upload/2016-05-06/572c863a0b838.jpg,./data/upload/2016-05-06/572c863a098f8.jpg,./data/upload/2016-05-06/572c863a071e7.jpg,./data/upload/2016-05-06/572c863a052a7.jpg,', '', 1462535538, 'p', '', 0, 0, '1', 0),
+(8, 'ACE后台管理系统', 'ACE后台管理系统', 9, NULL, '', '', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">测试网址：<a href="http://www.rainfer.cn/ace/index.php?m=admin&c=index&a=index" target="_blank" title="http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">用户名：demo</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">密码：123456</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">下载:<a href="http://git.oschina.net/rainfer/YFCMF" target="_blank" title="http://git.oschina.net/rainfer/YFCMF" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://git.oschina.net/rainfer/YFCMF</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863689b00.jpg" title="ace后台首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637088b2.jpg" title="ace权限管理.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863773ba2.jpg" title="ace文章列表.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637d2f28.jpg" title="ace站点设置.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8638470f4.jpg" title="ace导入导出.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', 'ACE后台管理系统', 200, './data/upload/2016-05-06/572c863a03366.jpg', 2, './data/upload/2016-05-06/572c863a0db61.jpg,./data/upload/2016-05-06/572c863a0b838.jpg,./data/upload/2016-05-06/572c863a098f8.jpg,./data/upload/2016-05-06/572c863a071e7.jpg,./data/upload/2016-05-06/572c863a052a7.jpg', '', 1462535538, 'p', '', 0, 0, '1', 0),
 (17, '设计师一日为师 终身为师', '设计师一日为师 终身为师', 14, NULL, '设计师一日为师 终身为师', '设计师一日为师 终身为师', '1', '雨飞工作室', '<p style="white-space: normal;">大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞设计师。当客户尊敬的称您为某某设计师时，我们也非常自豪而高兴。但是我希望大家明白，设计师不仅仅只是设计职业的称呼，因为他承担的角色还是设计中的师范作用，所以时刻要记得：设计师一日为师 终身为师。<br/>&nbsp;</p><p style="white-space: normal;">那么到底设计师何以为师呢？为什么要去理解“师”的这个概念呢？其实我是换位思想，即站在客户的角度，充分考虑他为什么要找你做设计的理由？如果搞清楚理由就是找到了自己的设计之师。而自己换位思想，找不到这个师之理由的话，那么自然您还不算是设计师，那就在每天别人叫你设计师的时候，多多思考设计师何以为师？而其中设计师的师，也是需要我们每天去努力工作和学习的，不断的改善提高自己的设计水平和综合素质。让自己从设计员到设计师的蜕变中，对得起设计师可以为师。<br/>&nbsp;</p><p style="white-space: normal;"><img src="/ace/data/upload/2016-05-06/572c9114b45d0.jpg"/></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>要做好设计，先别做坏设计。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">这句话是我考虑甚久得出的，虽然貌似很无聊，我却认为非常重要。创业初期的设计朋友，请时刻记得这句话，然后留点空白，让你自己去思考。因为很多人在接单子的时候，只想着是单子是利润，而忽略了这个设计本身造成的好坏。<br/>&nbsp;</p><p style="white-space: normal;">我曾经目睹上海一家策略公司，温州的一个企业找他们做品牌推广项目，该公司派人分析客户企业背景和实际情况，若达不到自己要求，就放弃操作这个项目，即使客户付再多的项目费，也坚持宁愿放弃。我当时不明白，为什么给那么多钱也不做？后来我明白他们公司为什么一直那么成功，因为他们只做好设计，不做坏设计，那是他们保持长期发展的战略和原则。<br/>&nbsp;</p><p style="white-space: normal;">所以在初期创业中，我也在选择客户上开始有了原则，尽量让好的设计找到自己。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>突出就是优势。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">一定要突出，作为设计师必须要有亮点。现在会鼠标会用软件的人都称自己是设计师，艺术系毕业和设计师人才越来越多，这个行业的竞争激烈也是这个时代的表现之一。大大小小的工作室和设计公司多如牛毛，甚至有人冷笑设计公司现在比WC还要多。这个时候设计师必须要做出自己的独特性，创业的设计师经营公司也要与其他要有差异性，突出就是优势，那非常重要。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>设计没有好与坏，只有对与错。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">以上我说的好设计和坏设计，自然是设计的前提。而设计有好和坏吗？我更希望大家用对与错来看待这个问题。作为设计师，他不是艺术家和商业师，首先应该是为业主解决实际问题，才是对的设计。不懂设计的人才会到处说这个设计好或者不好，为什么这样说？因为任何一样作品都有他的遗憾，哪怕是大师的五星级宾馆都是有遗憾的，所以不该用好不好来判定。出发点和目的性不同，自然设计的要求和本质也不同，违背了设计本意就失去意义，更何谈好坏？所以在对与错之间去思考设计，会更准确的为客户解决实际问题，找到设计的真谛！</p><p><br/></p>', '大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞', 200, './data/upload/2016-05-06/572c911b451f2.jpg', 1, '', '', 1462538523, 'p,d', '', 0, 0, '1', 0),
-(9, '高级企业网站', '高级企业网站', 9, NULL, '高级企业网站', '高级企业网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">高级企业网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/20160321/56f000acd7673.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000ca051dd.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000d3b48b9.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000db2ce83.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000e38622a.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '高级企业网站', 200, './data/upload/2016-05-06/572c8981ee1fa.jpg', 2, './data/upload/2016-05-06/572c898209da6.jpg,./data/upload/2016-05-06/572c898207e65.jpg,./data/upload/2016-05-06/572c898205b3d.jpg,./data/upload/2016-05-06/572c898203814.jpg,./data/upload/2016-05-06/572c8982020a4.jpg,./data/upload/2016-05-06/572c898200163.j', '', 1462536578, 'p', '', 0, 0, '1', 0),
-(10, '志和第三方公司网站', '志和第三方公司网站', 9, NULL, '志和第三方公司网站', '志和第三方公司网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">志和第三方公司网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d178c1.jpg" title="首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ceafe8.jpg" title="新闻.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d208f6.jpg" title="关于我们.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d06c74.jpg" title="业务.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ce4d99.jpg" title="招聘.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65cd6eab.jpg" title="contact.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '志和第三方公司网站', 200, './data/upload/2016-05-06/572c8a83ef62c.jpg', 2, './data/upload/2016-05-06/572c89f8cb1a4.jpg,./data/upload/2016-05-06/572c89f8c9e1c.jpg,./data/upload/2016-05-06/572c89f8c86ab.jpg,./data/upload/2016-05-06/572c89f8c7323.jpg,./data/upload/2016-05-06/572c89f8c6383.jpg,./data/upload/2016-05-06/572c89f8c53e3.j', '', 1462536696, 'p', '', 0, 0, '1', 0),
+(9, '高级企业网站', '高级企业网站', 9, NULL, '高级企业网站', '高级企业网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">高级企业网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/20160321/56f000acd7673.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000ca051dd.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000d3b48b9.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000db2ce83.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000e38622a.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '高级企业网站', 200, './data/upload/2016-05-06/572c8981ee1fa.jpg', 2, './data/upload/2016-05-06/572c898209da6.jpg,./data/upload/2016-05-06/572c898207e65.jpg,./data/upload/2016-05-06/572c898205b3d.jpg,./data/upload/2016-05-06/572c898203814.jpg,./data/upload/2016-05-06/572c8982020a4.jpg', '', 1462536578, 'p', '', 0, 0, '1', 0),
+(10, '志和第三方公司网站', '志和第三方公司网站', 9, NULL, '志和第三方公司网站', '志和第三方公司网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">志和第三方公司网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d178c1.jpg" title="首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ceafe8.jpg" title="新闻.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d208f6.jpg" title="关于我们.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d06c74.jpg" title="业务.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ce4d99.jpg" title="招聘.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65cd6eab.jpg" title="contact.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '志和第三方公司网站', 200, './data/upload/2016-05-06/572c8a83ef62c.jpg', 2, './data/upload/2016-05-06/572c89f8cb1a4.jpg,./data/upload/2016-05-06/572c89f8c9e1c.jpg,./data/upload/2016-05-06/572c89f8c86ab.jpg,./data/upload/2016-05-06/572c89f8c7323.jpg,./data/upload/2016-05-06/572c89f8c6383.jpg', '', 1462536696, 'p', '', 0, 0, '1', 0),
 (11, '企业网站开发设计', '企业网站开发设计', 2, NULL, '企业网站开发设计', '企业网站开发设计', '1', '雨飞工作室', '<p style="white-space: normal;"><span style="line-height: 1.75em;">-企业形象/产品网站设计开发</span><br/></p><p style="white-space: normal; line-height: 1.75em;">-集团官方网站设计开发</p><p style="white-space: normal; line-height: 1.75em;">-淘宝/天猫店铺视觉设计</p><p style="white-space: normal; line-height: 1.75em;">-html5+css3</p><p style="white-space: normal; line-height: 1.75em;">-各类型网站设计和制作</p>', '企业网站开发设计', 200, './data/upload/2016-05-06/572c8bb8d22d7.jpg', 1, '', '', 1462537144, 'c,p', '', 0, 0, '1', 0),
 (12, '网站UI设计', '网站UI设计', 2, NULL, '网站UI设计', '网站UI设计', '1', '雨飞工作室', '<p style="white-space: normal;"><strong><span style="color: rgb(0, 176, 240);">1. 用户研究</span></strong></p><p style="white-space: normal;">用户调研是综合运用现场观察、访谈、问卷调查、焦点小组等方法，获得用户需求及产品使用偏好。使用户的实际需求成为产品设计的导向，使产品更符合用户的习惯、经验和期待。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>2. 交互设计</strong></span></p><p style="white-space: normal;">产品的交互流程设计,根据可用性分析结果制定交互方式、操作与跳转流程、结构、布局、信息和其他元素。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>3. 界面设计</strong></span></p><p style="white-space: normal;">提供移动设备UI设计、APP界面设计，高品质的网站设计。</p>', '网站UI设计', 200, './data/upload/2016-05-06/572c8c016ecd9.jpg', 1, '', '', 1462537217, 'c,p', '', 0, 0, '1', 0),
 (13, 'ThinkPHP二次开发', 'ThinkPHP二次开发', 2, NULL, 'ThinkPHP二次开发', 'ThinkPHP二次开发', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">专注于ThinkPHP程序项目的二次开发，提供从架构设计、需求分析、设计策划、程序开发，到部署运维全程外包服务。公司拥有强大的技术研发实力、规范的开发流程、丰富的经验，可针对不同行业特点设计解决方案。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;">包含：</span></strong></span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">更改使用thinkphp框架开发的程序;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">使用thinkphp框架开发功能;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">基于thinkphp框架的项目;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">使用thinkphp去访网络中的网站;</span></p>', 'ThinkPHP二次开发', 200, './data/upload/2016-05-06/572c8c3643949.jpg', 1, '', '', 1462537270, 'c,p', '', 0, 0, '1', 0),
@@ -481,12 +384,6 @@ INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`,
 (26, '食品公司网站', '食品公司网站', 21, NULL, '食品公司网站', '食品公司网站', '1', '王先生', '<p>雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。</p>', '雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。', 200, './data/upload/2016-05-07/572d352a99b7b.jpg', 2, './data/upload/2016-05-07/572d352a9af03.jpg,', '', 1462580522, 'p', '', 0, 0, '1', 0),
 (27, '酒酿网', '酒酿网', 21, NULL, '酒酿网', '酒酿网', '1', '小易', '<p>雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。</p>', '雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。', 200, './data/upload/2016-05-07/572d35620784b.jpg', 2, './data/upload/2016-05-07/572d356208bd4.jpg,', '', 1462580578, 'p', '', 0, 0, '1', 0);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_options`
---
-
 DROP TABLE IF EXISTS `yf_options`;
 CREATE TABLE IF NOT EXISTS `yf_options` (
   `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -495,20 +392,7 @@ CREATE TABLE IF NOT EXISTS `yf_options` (
   `autoload` int(2) NOT NULL DEFAULT '1' COMMENT '是否自动加载',
   PRIMARY KEY (`option_id`),
   UNIQUE KEY `option_name` (`option_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=2 ;
-
---
--- 转存表中的数据 `yf_options`
---
-
-INSERT INTO `yf_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
-(1, 'site_options', '{"site_name":"YFCMF\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_host":"http:\\/\\/localhost\\/","site_tpl":"Default","site_icp":"\\u7ca4ICP\\u590711092604\\u53f7-1","site_tongji":"","site_copyright":"Copyright \\u00a9 2016 &lt;a href=&quot;\\/&quot;&gt;\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4&lt;\\/a&gt;  Powered By &lt;a href=&quot;http:\\/\\/www.rainfer.cn&quot;&gt;YFCMF&lt;\\/a&gt;","site_co_name":"\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4","site_address":"\\u5e7f\\u4e1c\\u7701\\u4e1c\\u839e\\u5e02\\u5357\\u57ce\\u533a\\u521b\\u5c55\\u4e2d\\u5fc3","site_tel":"+86 769 8888 8888","site_admin_email":"81818832@qq.com","site_qq":"81818832","site_seo_title":"YFCMF\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_seo_keywords":"YFCMF,php,\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6,cmf,cms,\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4","site_seo_description":"YFCMF\\u662f\\u96e8\\u98de\\u5de5\\u4f5c\\u5ba4\\u53d1\\u5e03\\u7684\\u4e00\\u6b3e\\u7528\\u4e8e\\u5feb\\u901f\\u5f00\\u53d1\\u7684\\u5185\\u5bb9\\u7ba1\\u7406\\u6846\\u67b6","site_logo":".\\/data\\/upload\\/2016-05-06\\/572c6855f09fc.png"}', 1);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_ad`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `yf_plug_ad`;
 CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
@@ -526,21 +410,11 @@ CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
   `plug_ad_depid` int(5) NOT NULL COMMENT '广告投放单位或个人',
   `plug_ad_butt` int(5) NOT NULL COMMENT '广告内部对接人员（自己的员工）',
   PRIMARY KEY (`plug_ad_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- 转存表中的数据 `yf_plug_ad`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 INSERT INTO `yf_plug_ad` (`plug_ad_id`, `plug_ad_name`, `plug_ad_adtypeid`, `plug_ad_checkid`, `plug_ad_js`, `plug_ad_pic`, `plug_ad_url`, `plug_ad_content`, `plug_ad_addtime`, `plug_ad_order`, `plug_ad_open`, `plug_ad_depid`, `plug_ad_butt`) VALUES
 (1, '为什么选择我们？', 1, 1, '', './data/upload/2016-05-06/572c7ea4e13c3.jpg', '', '深厚的技术力量\n丰富的行业经验\n高效的作业流程\n完善的服务体系\n众多的成功案例', 1451356484, 50, 1, 0, 0),
 (2, '我们能帮您哪些？', 1, 1, '', './data/upload/2016-05-06/572c7ec59292b.jpg', '', '企业网站开发设计\n网站UI设计\nThinkPHP二次开发\nThinkCMF二次开发\nTP插件开发定制\nThinkCMF功能定制', 1462533829, 50, 1, 0, 0);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_adtype`
---
 
 DROP TABLE IF EXISTS `yf_plug_adtype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
@@ -550,18 +424,8 @@ CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
   PRIMARY KEY (`plug_adtype_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- 转存表中的数据 `yf_plug_adtype`
---
-
 INSERT INTO `yf_plug_adtype` (`plug_adtype_id`, `plug_adtype_name`, `plug_adtype_order`) VALUES
 (1, '首页图片轮播', 50);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_files`
---
 
 DROP TABLE IF EXISTS `yf_plug_files`;
 CREATE TABLE IF NOT EXISTS `yf_plug_files` (
@@ -572,11 +436,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_files` (
   PRIMARY KEY (`id`),
   KEY `uptime` (`uptime`),
   KEY `path` (`path`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
-
---
--- 转存表中的数据 `yf_plug_files`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=144 ;
 
 INSERT INTO `yf_plug_files` (`id`, `uptime`, `filesize`, `path`) VALUES
 (63, 1462539191, 7371, './data/upload/2016-05-06/572c6855f09fc.png'),
@@ -616,7 +476,6 @@ INSERT INTO `yf_plug_files` (`id`, `uptime`, `filesize`, `path`) VALUES
 (116, 1462539191, 40500, './data/upload/2016-05-06/572c935a8d2c8.jpg'),
 (117, 1462539191, 20745, './data/upload/2016-05-06/572c935ce97da.jpg'),
 (119, 1462539191, 34425, './data/upload/2016-05-06/572c93989ab74.jpg'),
-(121, 1462539191, 9208, './data/upload/avatar/572c6841ae618.jpg'),
 (122, 1462598146, 15015, './data/upload/2016-05-07/572d31b185006.jpg'),
 (123, 1462598146, 3474, './data/upload/2016-05-07/572d31b18638e.jpg'),
 (124, 1462598146, 14924, './data/upload/2016-05-07/572d33f94e68c.jpg'),
@@ -632,13 +491,9 @@ INSERT INTO `yf_plug_files` (`id`, `uptime`, `filesize`, `path`) VALUES
 (134, 1462598146, 6853, './data/upload/2016-05-07/572d352a99b7b.jpg'),
 (135, 1462598146, 4268, './data/upload/2016-05-07/572d352a9af03.jpg'),
 (136, 1462598146, 17705, './data/upload/2016-05-07/572d35620784b.jpg'),
-(137, 1462598146, 2413, './data/upload/2016-05-07/572d356208bd4.jpg');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_link`
---
+(137, 1462598146, 2413, './data/upload/2016-05-07/572d356208bd4.jpg'),
+(142, 1462619674, 33782, './data/upload/2016-05-07/572dcdefa5a36.jpg'),
+(143, 1462703499, 9263, './data/upload/avatar/572f07fbd8b50.jpg');
 
 DROP TABLE IF EXISTS `yf_plug_link`;
 CREATE TABLE IF NOT EXISTS `yf_plug_link` (
@@ -652,22 +507,12 @@ CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_addtime` int(11) NOT NULL COMMENT '添加时间',
   `plug_link_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0禁用1启用',
   PRIMARY KEY (`plug_link_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- 转存表中的数据 `yf_plug_link`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `plug_link_target`, `plug_link_typeid`, `plug_link_qq`, `plug_link_order`, `plug_link_addtime`, `plug_link_open`) VALUES
 (1, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 1, 'eee', '50', 1460260482, 1),
 (2, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 2, '81818832', '50', 1460362536, 1),
 (3, 'YFCMF', 'http://www.rainfer.cn', '_blank', 1, '', '50', 1461909470, 1);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_linktype`
---
 
 DROP TABLE IF EXISTS `yf_plug_linktype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_linktype` (
@@ -677,19 +522,9 @@ CREATE TABLE IF NOT EXISTS `yf_plug_linktype` (
   PRIMARY KEY (`plug_linktype_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- 转存表中的数据 `yf_plug_linktype`
---
-
 INSERT INTO `yf_plug_linktype` (`plug_linktype_id`, `plug_linktype_name`, `plug_linktype_order`) VALUES
 (1, '首页', '1'),
 (2, '新闻中心', '50');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_plug_sug`
---
 
 DROP TABLE IF EXISTS `yf_plug_sug`;
 CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
@@ -701,13 +536,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   `plug_sug_ip` varchar(50) NOT NULL DEFAULT '' COMMENT '留言者IP',
   `plug_sug_content` longtext NOT NULL COMMENT '留言内容',
   PRIMARY KEY (`plug_sug_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_region`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `yf_region`;
 CREATE TABLE IF NOT EXISTS `yf_region` (
@@ -717,10 +546,6 @@ CREATE TABLE IF NOT EXISTS `yf_region` (
   `type` tinyint(1) NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3726 ;
-
---
--- 转存表中的数据 `yf_region`
---
 
 INSERT INTO `yf_region` (`id`, `pid`, `name`, `type`) VALUES
 (1, 0, '中国', 0),
@@ -4134,12 +3959,6 @@ INSERT INTO `yf_region` (`id`, `pid`, `name`, `type`) VALUES
 (3408, 3401, '肥西县', 3),
 (3409, 0, '国外', 0);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_source`
---
-
 DROP TABLE IF EXISTS `yf_source`;
 CREATE TABLE IF NOT EXISTS `yf_source` (
   `source_id` tinyint(5) NOT NULL AUTO_INCREMENT,
@@ -4148,65 +3967,9 @@ CREATE TABLE IF NOT EXISTS `yf_source` (
   PRIMARY KEY (`source_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- 转存表中的数据 `yf_source`
---
-
 INSERT INTO `yf_source` (`source_id`, `source_name`, `source_order`) VALUES
 (1, '雨飞工作室', 49),
 (2, 'ThinkPHP', 50);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_we_backtext`
---
-
-DROP TABLE IF EXISTS `yf_we_backtext`;
-CREATE TABLE IF NOT EXISTS `yf_we_backtext` (
-  `we_backtext_id` int(11) NOT NULL AUTO_INCREMENT,
-  `we_backtext_textid` varchar(11) NOT NULL COMMENT '参数匹配',
-  `we_backtext_content` varchar(255) NOT NULL DEFAULT '' COMMENT '回复文本',
-  PRIMARY KEY (`we_backtext_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
-
---
--- 转存表中的数据 `yf_we_backtext`
---
-
-INSERT INTO `yf_we_backtext` (`we_backtext_id`, `we_backtext_textid`, `we_backtext_content`) VALUES
-(1, '20001', '我是回复文本1'),
-(2, '20002', '我是回复文本2'),
-(3, '20003', '我是回复文本3'),
-(4, '20004', '我是回复文本4'),
-(5, '20005', '我是回复文本5'),
-(6, '20006', '我是回复文本6'),
-(7, '20007', '我是回复文本7'),
-(8, '20008', '我是回复文本8');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_we_driver`
---
-
-DROP TABLE IF EXISTS `yf_we_driver`;
-CREATE TABLE IF NOT EXISTS `yf_we_driver` (
-  `we_driver_id` int(11) NOT NULL AUTO_INCREMENT,
-  `we_driver_openid` varchar(50) NOT NULL COMMENT 'openid',
-  `we_driver_name` varchar(50) NOT NULL COMMENT '名称',
-  `we_driver_tel` varchar(50) NOT NULL COMMENT '电话',
-  `we_driver_plate` varchar(50) NOT NULL COMMENT '车牌号',
-  `we_driver_addtime` int(11) NOT NULL COMMENT '报名时间',
-  `we_driver_num` int(11) NOT NULL COMMENT '投票数',
-  PRIMARY KEY (`we_driver_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_we_menu`
---
 
 DROP TABLE IF EXISTS `yf_we_menu`;
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (
@@ -4220,10 +3983,6 @@ CREATE TABLE IF NOT EXISTS `yf_we_menu` (
   PRIMARY KEY (`we_menu_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
---
--- 转存表中的数据 `yf_we_menu`
---
-
 INSERT INTO `yf_we_menu` (`we_menu_id`, `we_menu_name`, `we_menu_leftid`, `we_menu_type`, `we_menu_typeval`, `we_menu_open`, `we_menu_order`) VALUES
 (1, '菜单1', 0, 1, '', 1, 0),
 (2, '公司简介', 1, 2, 'http://www.thinkphp.cn/', 1, 50),
@@ -4232,35 +3991,6 @@ INSERT INTO `yf_we_menu` (`we_menu_id`, `we_menu_name`, `we_menu_leftid`, `we_me
 (6, '二级菜单', 4, 1, '', 1, 50),
 (7, '三级菜单', 5, 1, '', 1, 50),
 (8, '联系我们', 1, 1, '', 1, 50);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_we_userlist`
---
-
-DROP TABLE IF EXISTS `yf_we_userlist`;
-CREATE TABLE IF NOT EXISTS `yf_we_userlist` (
-  `we_userlist_id` int(11) NOT NULL AUTO_INCREMENT,
-  `we_userlist_openid` varchar(100) NOT NULL DEFAULT '',
-  `we_userlist_nickname` varchar(100) NOT NULL DEFAULT '',
-  `we_userlist_addtime` int(11) NOT NULL,
-  PRIMARY KEY (`we_userlist_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `yf_we_vote`
---
-
-DROP TABLE IF EXISTS `yf_we_vote`;
-CREATE TABLE IF NOT EXISTS `yf_we_vote` (
-  `we_vote_id` int(11) NOT NULL AUTO_INCREMENT,
-  `we_vote_openid` varchar(50) NOT NULL,
-  `we_vote_driverid` int(11) NOT NULL,
-  PRIMARY KEY (`we_vote_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

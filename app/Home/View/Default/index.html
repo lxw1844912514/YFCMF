@@ -244,7 +244,7 @@
                         <li <if condition="$k eq 2">class="blog-first-el"</if>>
                         <div class="blog-showcase-thumb col-lg-4">
                            <div class="post-body">
-                              <a class="post-item-link" href="{$vo['news_img']}" data-rel="prettyPhoto"><span class="post-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img alt="" src="{$vo['news_img']}"></a>
+                              <a class="post-item-link" href="{:U('News/index',array('id'=>$vo['n_id']))}"><img alt="" src="{$vo['news_img']}"></a>
                            </div>
                         </div>
                         <div class="blog-showcase-extra-info col-lg-4">
