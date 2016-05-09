@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>登录 {$site_name} </title>
+	<meta name="keywords" content="{$site_seo_keywords}" />
+	<meta name="description" content="{$site_seo_description}">
+	<include file="Public:head" />
+</head>
+
+<body class="body-white">
+<div class="wrap">
+	<include file="Public:nav" />
+	<div id="main-cmf">
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-10 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-1 animate_afr">
+						<h2 class="text-center">用户登录</h2>
+						<div class="widget tabs">
+							<div id="horizontal-tabs">
+								<div class="contents">
+									<div class="tabscontent" id="content1" style="display: block;">
+										<form class="form-light js-ajax-form" action="{:U('Login/runlogin')}" method="post">
+											<div>
+												<input type="text" id="input_username" name="member_list_username" placeholder="手机号/邮箱/用户名" class="form-control">
+											</div>
+											<div>&nbsp;</div>
+											<div>
+												<input type="password" id="input_password" name="member_list_pwd" placeholder="密码" class="form-control">
+											</div>
+											<div>&nbsp;</div>
+											<div>
+												<div class="row">
+													<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+														<input type="text" class="form-control" placeholder="" style="height:40px;" name="verify" required>
+													</div>
+													<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+														<img class="verify_img" id="verify_img" src="{:U('Login/verify')}" onclick="this.src='{:U('Login/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
+													</div>
+												</div>
+											</div>
+											<div>&nbsp;</div>
+											<div>
+												<button class="btn btn-primary js-ajax-submit  col-lg-12 col-md-12 col-sm-12 col-xs-12" type="submit">确定</button>
+
+											</div>
+											<div>&nbsp;</div>
+											<div style="text-align: center;">
+												<div class="row">
+													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+														<a href="{:U('user/register/index')}">现在注册</a>
+													</div>
+													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+														<a href="{:U('user/login/forgot_password')}">忘记密码</a>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<include file="Public:footer"/>
+</div>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+</body>
+</html>

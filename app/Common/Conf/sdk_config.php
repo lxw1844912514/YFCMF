@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 //定义回调URL通用的URL
-define('URL_CALLBACK', 'http://wx.xmhdwonder.com/index.php?m=Admin&c=Login&a=callback&type=');
+define('URL_CALLBACK', 'http://www.rainfer.cn/ace/index.php?m=Home&c=oauth&a=callback&type=');
 
 return array(
     //支付宝登录
@@ -27,8 +27,8 @@ return array(
     ),
     //腾讯QQ登录配置
     'THINK_SDK_QQ' => array(
-        'APP_KEY' => '101260590', //应用注册成功后分配的 APP ID
-        'APP_SECRET' => 'ed1d357abe6195f393050093c88290aa', //应用注册成功后分配的KEY
+        'APP_KEY' => '203564', //应用注册成功后分配的 APP ID
+        'APP_SECRET' => 'bab1f3acc0c67b69a1f470ac5e8dc36a', //应用注册成功后分配的KEY
         'CALLBACK' => URL_CALLBACK . 'qq',
     ),
     //腾讯微博配置
@@ -39,8 +39,8 @@ return array(
     ),
     //新浪微博配置
     'THINK_SDK_SINA' => array(
-        'APP_KEY' => '', //应用注册成功后分配的 APP ID
-        'APP_SECRET' => '', //应用注册成功后分配的KEY
+        'APP_KEY' => '602735229', //应用注册成功后分配的 APP ID
+        'APP_SECRET' => '66781cbeab9fdb9b014a387ab6e943fe', //应用注册成功后分配的KEY
         'CALLBACK' => URL_CALLBACK . 'sina',
     ),
     //网易微博配置

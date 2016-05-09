@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{$site_name} </title>
+    <meta name="keywords" content="{$site_seo_keywords}" />
+    <meta name="description" content="{$site_seo_description}">
+    <include file="Public:head" />
+</head>
+<body class="body-white">
+<div class="wrap">
+    <include file="Public:nav" />
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">个人中心</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li>当前位置:</li>
+                                <li><a href="__ROOT__/">首页</a></li>
+                                <li>个人中心</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <include file="Public:usernav"/>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <div id="center-content" style="padding:20px">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <a href="{:U('profile/avatar')}">
+                                        <if condition="empty($member_list_headpic)">
+                                            <img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon"/>
+										<elseif condition="stripos($member_list_headpic,'://')"/>
+											<img src="{$member_list_headpic}" class="headicon"/>
+                                        <else />
+                                            <img src="__UPLOAD__avatar/{$member_list_headpic}" class="headicon"/>
+                                        </if>
+                                    </a>
+                                </div>
+                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                    <table class="table" style="TABLE-LAYOUT:fixed;WORD-BREAK:break-all">
+                                        <tbody>
+                                        <tr>
+                                            <td style="border:none;width:7em">昵称：</td>
+                                            <td style="border:none;">{$member_list_petname|default='未填写'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">性别：</td>
+                                            <td style="border:none;"><php>
+                                                $sexs=array("0"=>"保密","1"=>"程序猿","2"=>"程序媛");
+                                            </php>
+                                                {$sexs[$member_list_sex]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">电话：</td>
+                                            <td style="border:none;">{$member_list_tel|default='未填写'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">地址：</td>
+                                            <td style="border:none;">{$address|default='未填写'}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        <a href="{:U('user/profile/edit')}" type="submit" class="btn btn-primary js-ajax-submit  col-lg-3 col-md-3 col-sm-3 col-xs-3">编辑</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <include file="Public:footer"/>
+</div>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+</body>
+</html>

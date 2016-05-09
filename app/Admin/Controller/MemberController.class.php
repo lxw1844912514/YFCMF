@@ -51,7 +51,7 @@ class MemberController extends AuthController {
 			$sl_data=array(
 				'member_list_groupid'=>I('member_list_groupid'),
 				'member_list_username'=>I('member_list_username'),
-				'member_list_pwd'=>I('member_list_pwd'),
+				'member_list_pwd'=>md5(md5(I('member_list_pwd'))),
 				'member_list_petname'=>I('member_list_petname'),
 				'member_list_province'=>I('member_list_province'),
 				'member_list_city'=>I('member_list_city'),
@@ -92,8 +92,8 @@ class MemberController extends AuthController {
 			$sl_data['member_list_username']=I('member_list_username');
 
 			$pwd=I('member_list_pwd');
-			if (empty($pwd)){
-				$sl_data['member_list_pwd']=I('member_list_pwd','','md5');
+			if (!empty($pwd)){
+				$sl_data['member_list_pwd']=md5(md5(I('member_list_pwd')));
 			}
 
 
