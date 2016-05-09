@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
-
+use Org\Util\String;
 class MemberController extends AuthController {
 	/*
      * 用户管理
@@ -48,11 +48,13 @@ class MemberController extends AuthController {
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('member_list'),0);
 		}else{
+			$member_list_salt=String::randString(10);
 			$sl_data=array(
 				'member_list_groupid'=>I('member_list_groupid'),
 				'member_list_username'=>I('member_list_username'),
-				'member_list_pwd'=>md5(md5(I('member_list_pwd'))),
-				'member_list_petname'=>I('member_list_petname'),
+				'member_list_salt' => $member_list_salt,
+				'member_list_pwd'=>encrypt_password(I('member_list_pwd'),$member_list_salt),
+				'member_list_nickname'=>I('member_list_nickname'),
 				'member_list_province'=>I('member_list_province'),
 				'member_list_city'=>I('member_list_city'),
 				'member_list_town'=>I('member_list_town'),
@@ -124,7 +126,19 @@ class MemberController extends AuthController {
 			$this->success('状态开启',1,1);
 		}
 	}
-
+	public function member_active(){
+		$id=I('x');
+		$status=M('member_list')->where(array('member_list_id'=>$id))->getField('user_status');//判断当前状态情况
+		if($status==1){
+			$statedata = array('user_status'=>0);
+			$auth_group=M('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$this->success('未激活',1,1);
+		}else{
+			$statedata = array('user_status'=>1);
+			$auth_group=M('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$this->success('已激活',1,1);
+		}
+	}
 
 	/*
      * 会员删除

@@ -60,7 +60,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 昵称：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="member_list_petname" id="member_list_petname" placeholder="输入昵称" class="col-xs-10 col-sm-4" />
+									<input type="text" name="member_list_nickname" id="member_list_nickname" placeholder="输入昵称" class="col-xs-10 col-sm-4" />
 								</div>
 							</div>
 							<div class="space-4"></div>
@@ -197,10 +197,10 @@
 				return false;
 			}
 
-			if( '' == $.trim($('#member_list_petname').val())){
+			if( '' == $.trim($('#member_list_nickname').val())){
 				layer.alert('昵称不能为空', {icon: 5}, function(index){
 					layer.close(index);
-					$('#member_list_petname').focus();
+					$('#member_list_nickname').focus();
 				});
 				return false;
 			}
