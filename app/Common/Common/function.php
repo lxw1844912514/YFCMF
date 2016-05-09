@@ -90,7 +90,7 @@ function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
     //处理传递的参数
     if(stripos($table,C('DB_PREFIX'))==0){
         //含前缀的表,去除表前缀
-        $table=str_replace(C('DB_PREFIX'),"",$table);
+		$table=substr($table,strlen(C('DB_PREFIX')))
     }
     $file=empty($file)?C('DB_PREFIX').$table:$file;
     $fieldsall=M($table)->getDbFields();
