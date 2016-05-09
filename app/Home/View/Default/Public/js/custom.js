@@ -256,10 +256,6 @@ jQuery(window).load(function() {
 
 
 $(document).ready(function(){
-		$div = window.location.host;
-		if($div.indexOf('rainfer.cn')<0&&$div.indexOf('127.0.0.1')<0&&$div.indexOf('localhost')<0){
-		location.href='http://www.rainfer.cn';
-		}
 		$("a[rel^='prettyPhoto']").prettyPhoto({
 			animation_speed: 'fast', /* fast/slow/normal */
 			slideshow: 5000, /* false OR interval time in ms */
@@ -351,10 +347,6 @@ $(document).ready(function(){
 /*----------------------------------------------------*/
 
 jQuery(document).ready(function () {
-	$span = document.domain;
-	if($span.indexOf('rainfer.cn')<0&&$span.indexOf('127.0.0.1')<0&&$span.indexOf('localhost')<0){
-	location.href='http://www.rainfer.cn';
-	}
 	jQuery('.portfolio-item').hover(function () {
 			jQuery(this).find( '.portfolio-item-hover' ).animate({
 				"opacity": 0.8
