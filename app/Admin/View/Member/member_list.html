@@ -74,7 +74,7 @@
 										<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
 										<td>{$v.member_list_username}</td>
 										<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
-										<td class="hidden-sm hidden-xs">{$v.from|default="本地"}</td>
+										<td class="hidden-sm hidden-xs">{$v.member_list_from|default="本地"}</td>
 										<td class="hidden-sm hidden-xs">
 										<if condition="$v.member_list_sex eq 1">程序猿
 										<elseif condition="$v.member_list_sex eq 2"/>程序媛

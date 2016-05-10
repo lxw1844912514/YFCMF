@@ -80,7 +80,7 @@ class OauthController extends HomebaseController {
 			if($current_uid){
 				//第三方用户表中创建数据
 				$new_oauth_user_data = array(
-						'from' => $type,
+						'oauth_from' => $type,
 						'name' => $user_info['name'],
 						'head_img' => $user_info['head'],
 						'create_time' =>date("Y-m-d H:i:s"),
@@ -142,7 +142,7 @@ class OauthController extends HomebaseController {
 					'member_list_groupid'=>1,
 					'member_list_sex'=>3,
 					'member_list_open'=>1,
-					'from'=>$type,
+					'member_list_from'=>$type,
 					'last_login_time' => time(),
 					'last_login_ip' => get_client_ip(0,true),
 			);
@@ -152,7 +152,7 @@ class OauthController extends HomebaseController {
 			if($new_user_id){
 				//第三方用户表中创建数据
 				$new_oauth_user_data = array(
-					'from' => $type,
+					'oauth_from' => $type,
 					'name' => $user_info['name'],
 					'head_img' => $user_info['head'],
 					'create_time' =>time(),

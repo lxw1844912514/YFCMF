@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>{$site_name} </title>
+	<meta name="keywords" content="{$site_seo_keywords}" />
+	<meta name="description" content="{$site_seo_description}">
+	<include file="Public:head" />
+	<!--加载Css-->
+	<load href="__PUBLIC__/shearphoto/css/ShearPhoto_f.css" />
+</head>
+<body class="body-white">
+<div class="wrap">
+	<include file="Public:nav" />
+	<div id="main-cmf">
+		<div class="breadcrumb-wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+						<h2 class="title">个人中心</h2>
+					</div>
+					<div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+						<div class="breadcrumbs pull-right">
+							<ul>
+								<li>当前位置:</li>
+								<li><a href="__ROOT__/">首页</a></li>
+								<li><a href="{:U('Center/index')}">个人中心</a></li>
+								<li>编辑资料</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+						<include file="Public:usernav"/>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+						<div id="center-content" style="padding:20px">
+							<div class="row">
+								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<a href="{:U('profile/avatar')}">
+										<if condition="empty($member_list_headpic)">
+											<img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon" id="avatar_big" style="max-width:128px"/>
+											<else/>
+											<img src="{$member_list_headpic}" class="headicon" id="avatar_big"/>
+										</if>
+									</a>
+								</div>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<div id="shearphoto_loading">程序加载中......</div>
+									<div id="shearphoto_main">
+										<div class="Effects" id="shearphoto_Effects" autocomplete="off">
+											<strong class="EffectsStrong">截图效果</strong>
+											<a href="javascript:;" StrEvent="原图" class="Aclick"><img src="__PUBLIC__/shearphoto/images/Effects/e0.jpg"/>原图</a>
+											<a href="javascript:;" StrEvent="美肤"><img src="__PUBLIC__/shearphoto/images/Effects/e1.jpg"/>美肤效果</a>
+											<a href="javascript:;" StrEvent="素描"><img src="__PUBLIC__/shearphoto/images/Effects/e2.jpg"/>素描效果</a>
+											<a href="javascript:;" StrEvent="自然增强"><img src="__PUBLIC__/shearphoto/images/Effects/e3.jpg" />自然增强</a>
+											<a href="javascript:;" StrEvent="紫调"><img src="__PUBLIC__/shearphoto/images/Effects/e4.jpg" />紫调效果</a>
+											<a href="javascript:;" StrEvent="柔焦"><img src="__PUBLIC__/shearphoto/images/Effects/e5.jpg"/>柔焦效果</a>
+											<a href="javascript:;" StrEvent="复古"><img src="__PUBLIC__/shearphoto/images/Effects/e6.jpg"/>复古效果</a>
+											<a href="javascript:;" StrEvent="黑白"><img src="__PUBLIC__/shearphoto/images/Effects/e7.jpg"/>黑白效果</a>
+											<a href="javascript:;" StrEvent="仿lomo"><img src="__PUBLIC__/shearphoto/images/Effects/e8.jpg"/>仿lomo</a>
+											<a href="javascript:;" StrEvent="亮白增强"><img src="__PUBLIC__/shearphoto/images/Effects/e9.jpg"/>亮白增强</a>
+											<a href="javascript:;" StrEvent="灰白"><img src="__PUBLIC__/shearphoto/images/Effects/e10.jpg"/>灰白效果</a>
+											<a href="javascript:;" StrEvent="灰色"><img src="__PUBLIC__/shearphoto/images/Effects/e11.jpg"/>灰色效果</a>
+											<a href="javascript:;" StrEvent="暖秋"><img src="__PUBLIC__/shearphoto/images/Effects/e12.jpg"/>暖秋效果</a>
+											<a href="javascript:;" StrEvent="木雕"><img src="__PUBLIC__/shearphoto/images/Effects/e13.jpg"/>木雕效果</a>
+											<a href="javascript:;" StrEvent="粗糙"><img src="__PUBLIC__/shearphoto/images/Effects/e14.jpg"/>粗糙效果</a>
+										</div>
+										<div class="primary">
+											<div id="main">
+												<div class="point"></div>
+												<div id="SelectBox">
+													<form    id="ShearPhotoForm" enctype="multipart/form-data" method="post"  target="POSTiframe">
+														<a href="javascript:;" id="selectImage"><input type="file"  name="UpFile" autocomplete="off"/></a>
+													</form>
+													<a href="javascript:;" id="PhotoLoading"></a>
+												</div>
+												<div id="relat">
+													<div id="black"></div>
+													<div id="movebox">
+														<div id="smallbox">
+															<img src="__PUBLIC__/shearphoto/images/default.gif" class="MoveImg"  style="max-width:300%"/>
+														</div>
+														<i id="borderTop"></i>
+														<i id="borderLeft"></i>
+														<i id="borderRight"></i>
+														<i id="borderBottom"></i>
+														<i id="BottomRight"></i>
+														<i id="TopRight"></i>
+														<i id="Bottomleft"></i>
+														<i id="Topleft"></i>
+														<i id="Topmiddle"></i>
+														<i id="leftmiddle"></i>
+														<i id="Rightmiddle"></i>
+														<i id="Bottommiddle"></i>
+													</div>
+													<img src="__PUBLIC__/shearphoto/images/default.gif" class="BigImg" />
+												</div>
+											</div>
+											<div style="clear: both"></div>
+											<div id="Shearbar">
+												<a id="LeftRotate" href="javascript:;"><em></em>左转</a>
+												<em class="hint L"></em>
+												<div class="ZoomDist" id="ZoomDist">
+													<div id="Zoomcentre"></div>
+													<div id="ZoomBar"></div>
+													<span class="progress"></span>
+												</div>
+												<em class="hint R"></em>
+												<a id="RightRotate" href="javascript:;">右转<em></em></a>
+												<p class="Psava">
+													<a id="againIMG"  href="javascript:;">重新选择</a>
+													<a id="saveShear" href="javascript:;">保存截图</a>
+												</p>
+											</div>
+										</div>
+										<div style="clear: both"></div>
+									</div>
+									<div id="photoalbum">
+										<i id="close"></i>
+										<ul>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/1.jpg" serveUrl="file/photo/1.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/2.jpg" serveUrl="file/photo/2.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/3.jpg" serveUrl="file/photo/3.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/4.jpg" serveUrl="file/photo/4.jpg" /></li>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<include file="Public:footer"/>
+</div>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script  type="text/javascript" src="__PUBLIC__/shearphoto/js/ShearPhoto.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/alloyimage.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/handle_f.js" ></script>
+<script type="text/javascript">
+	var SHEAR = {
+		PATH_RES: '__PUBLIC__',
+		PATH_AVATAR: '__ROOT__/data/upload/avatar',
+		URL:"{:U('Center/runavatar')}",
+	};
+</script>
+</body>
+</html>

@@ -41,7 +41,7 @@
 					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 						<div id="center-content" style="padding:20px">
 							<div class="row">
-								<form class="form-light form-horizontal js-ajax-form" action="{:U('Center/runedit')}" method="post">
+								<form class="form-light form-horizontal" id="runedit" action="{:U('Center/runedit')}" method="post">
 									<div class="form-group">
 										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">昵称</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
@@ -71,7 +71,7 @@
 									<div class="form-group">
 										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">个人网站</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<input type="text" class="form-control" id="input-user_url" placeholder="http://thinkcmf.com" name="user_url" value="{$user_url}">
+											<input type="text" class="form-control" id="input-user_url" placeholder="http://www.rainfer.cn" name="user_url" value="{$user_url}">
 										</div>
 									</div>
 									<div class="form-group">
@@ -124,7 +124,7 @@
 									<div class="form-group">
 										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label"></label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+											<button class="btn btn-primary">保存</button>
 										</div>
 									</div>
 								</form>
@@ -140,5 +140,29 @@
 <include file="Public:section"/>
 <include file="Public:scripts"/>
 <script type="text/javascript" src="__PUBLIC__/assets/js/region.js"></script>
+<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script type="text/javascript">
+//添加操作
+$(function(){
+	$('#runedit').ajaxForm({
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+	function complete(data){
+		if(data.status==1){
+			layer.alert(data.info, {icon: 6}, function(index){
+				layer.close(index);
+				window.location.href=data.url;
+			});
+		}else{
+			layer.alert(data.info, {icon: 5}, function(index){
+				layer.close(index);
+			});
+		}
+		return false;
+	}
+});
+</script>
 </body>
 </html>
