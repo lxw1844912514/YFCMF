@@ -65,9 +65,15 @@ class LoginController extends HomebaseController {
             $where['member_list_username']=$member_list_username;
         }
 		$member=$users_model->where($where)->find();
-		if (!$member||md5(md5($member_list_pwd))!==$member['member_list_pwd']){
+		if (!$member||encrypt_password($member_list_pwd,$member['member_list_salt'])!==$member['member_list_pwd']){
 				$this->error('用户名或者密码错误，重新输入',0,0);
 		}else{
+			//更新字段
+			$data = array(
+				'last_login_time' => time(),
+				'last_login_ip' => get_client_ip(0,true),
+            );
+            $users_model->where(array('member_list_id'=>$member["member_list_id"]))->save($data);
 			session('hid',$member['member_list_id']);
 			session('user',$member);
 			$this->success('恭喜您，登陆成功',U('Index/index'),1);

@@ -14,7 +14,7 @@ class OauthController extends HomebaseController {
 	
 	public function login($type = null){
 		empty($type) && $this->error('参数错误');
-		session('login_http_referer',$_SERVER["HTTP_REFERER"]);
+		$_SESSION['login_http_referer']=$_SERVER["HTTP_REFERER"];
 		$sns  = ThinkOauth::getInstance($type);
 		redirect($sns->getRequestCodeURL());
 	}
@@ -33,7 +33,7 @@ class OauthController extends HomebaseController {
 		//获取当前登录用户信息
 		if(is_array($token)){
 			$user_info = A('Type', 'Event')->$type($token);
-			if(!empty(session('oauth_bang'))){
+			if(!empty($_SESSION['oauth_bang'])){
 				$this->_bang_handle($user_info, $type, $token);
 			}else{
 				$this->_login_handle($user_info, $type, $token);
@@ -48,7 +48,7 @@ class OauthController extends HomebaseController {
 		if(session('hid')){
 			empty($type) && $this->error('参数错误');
 			$sns  = ThinkOauth::getInstance($type);
-			session('oauth_bang',1);
+			$_SESSION['oauth_bang']=1;
 			redirect($sns->getRequestCodeURL());
 		}else{
 			$this->error("您还没有登录！");
@@ -58,7 +58,7 @@ class OauthController extends HomebaseController {
 	}
 	
 	private function _get_login_redirect(){
-		return empty(session('login_http_referer'))?__ROOT__."/":session('login_http_referer');
+		return empty($_SESSION['login_http_referer'])?__ROOT__."/":$_SESSION['login_http_referer'];
 	}
 	
 	//绑定第三方账号
@@ -118,6 +118,12 @@ class OauthController extends HomebaseController {
 			$find_user = M('Member_list')->where(array("member_list_id"=>$find_oauth_user['uid']))->find();
 			if($find_user){
 				$need_register=false;
+				//更新字段
+				$data = array(
+					'last_login_time' => time(),
+					'last_login_ip' => get_client_ip(0,true),
+				);
+				M('Member_list')->where(array('member_list_id'=>$find_user["member_list_id"]))->save($data);
 				session('hid',$find_user['member_list_id']);
 				session('user',$find_user);
 				redirect($this->_get_login_redirect());
@@ -130,11 +136,15 @@ class OauthController extends HomebaseController {
 			//本地用户中创建对应一条数据
 			$new_user_data = array(
 					'member_list_username' => $user_info['name'],
+					'member_list_nickname' => $user_info['name'],
 					'member_list_headpic' => $user_info['head'],
 					'member_list_addtime' => time(),
 					'member_list_groupid'=>1,
 					'member_list_sex'=>3,
 					'member_list_open'=>1,
+					'from'=>$type,
+					'last_login_time' => time(),
+					'last_login_ip' => get_client_ip(0,true),
 			);
 			$users_model=M("member_list");
 			$new_user_id = $users_model->add($new_user_data);

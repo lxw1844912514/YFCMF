@@ -12,7 +12,6 @@
 	<div class="main-content">
 		<div class="main-content-inner">
 			<div class="page-content">
-
 				<!--主题-->
 				<div class="page-header">
 					<h1>
@@ -67,6 +66,22 @@
 							<div class="space-4"></div>
 
 							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 积分：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="score" id="score" value="{$member_list_edit.score}"  placeholder="0" class="col-xs-10 col-sm-4" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 金币：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="coin" id="coin" value="{$member_list_edit.coin}"  placeholder="0" class="col-xs-10 col-sm-4" />
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所在地：  </label>
 								<div class="col-sm-10">
 									<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:U('Ajax/getRegion')}');">
@@ -104,11 +119,15 @@
 								<div class="col-sm-10">
 									<label>
 										<input name="member_list_sex" <if condition="$member_list_edit['member_list_sex'] eq 1">checked</if> type="radio" value="1" class="ace" />
-										<span class="lbl"> 男 </span>&nbsp;&nbsp;
+										<span class="lbl"> 程序猿 </span>&nbsp;&nbsp;
 									</label>
 									<label>
 										<input name="member_list_sex" <if condition="$member_list_edit['member_list_sex'] eq 2">checked</if> type="radio" value="2" class="ace" />
-										<span class="lbl"> 女 </span>
+										<span class="lbl"> 程序媛 </span>
+									</label>
+									<label>
+										<input name="member_list_sex" <if condition="$member_list_edit['member_list_sex'] eq 3">checked</if> type="radio" value="3" class="ace" />
+										<span class="lbl"> 保密 </span>
 									</label>
 								</div>
 							</div>
@@ -122,7 +141,26 @@
 								</div>
 							</div>
 							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 个人网站：  </label>
+								<div class="col-sm-10">
+									<input type="text" name="user_url" id="user_url" value="{$member_list_edit.user_url}"  placeholder="http://www.rainfer.cn" class="col-xs-10 col-sm-4" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span>http://开头</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
 
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 签名：  </label>
+								<div class="col-sm-10">
+									<textarea  name="signature" cols="20" rows="4" class="col-xs-10 col-sm-4 limitedone2"   id="form-field-12"  maxlength="125">{$member_list_edit.signature}</textarea>
+									<input type="hidden" name="maxlengthone" value="125" />
+									<span class="help-inline">&nbsp;&nbsp;还可以输入 <span class="middle charsLeftone2"></span> 个字符</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系邮箱：  </label>
 								<div class="col-sm-10">
@@ -140,7 +178,16 @@
 								</div>
 							</div>
 							<div class="space-4"></div>
-
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否激活： </label>
+								<div class="col-sm-10" style="padding-top:5px;">
+									<input name="user_status" <if condition='$member_list_edit.user_status eq 1'>checked</if> id="user_status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl">&nbsp;&nbsp;默认未激活</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
 							<div class="clearfix form-actions">
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="submit">
@@ -172,8 +219,19 @@
 
 <script type="text/javascript" src="__PUBLIC__/assets/js/region.js"></script>
 <script>
-
 	$(function(){
+		$('textarea.limited').maxlength({
+			'feedback' : '.charsLeft',
+		});
+		$('textarea.limited2').maxlength({
+			'feedback' : '.charsLeft2',
+		});
+		$('textarea.limitedone').maxlength({
+			'feedback' : '.charsLeftone',
+		});
+		$('textarea.limitedone2').maxlength({
+			'feedback' : '.charsLeftone2',
+		});
 		$('#member_list_edit').ajaxForm({
 			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
 			success: complete, // 这是提交后的方法

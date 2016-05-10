@@ -62,7 +62,12 @@ class MemberController extends AuthController {
 				'member_list_tel'=>I('member_list_tel'),
 				'member_list_email'=>I('member_list_email'),
 				'member_list_open'=>I('member_list_open'),
+				'user_url'=>I('user_url'),
 				'member_list_addtime'=>time(),
+				'user_status'=>I('user_status'),
+				'signature'=>I('signature'),
+				'score'=>I('score',0,'intval'),
+				'coin'=>I('coin',0,'intval'),
 			);
 			M('member_list')->add($sl_data);
 			$this->success('会员添加成功',U('member_list'),1);
@@ -95,18 +100,24 @@ class MemberController extends AuthController {
 
 			$pwd=I('member_list_pwd');
 			if (!empty($pwd)){
-				$sl_data['member_list_pwd']=md5(md5(I('member_list_pwd')));
+				$member_list_salt=String::randString(10);
+				$sl_data['member_list_salt']=$member_list_salt;
+				$sl_data['member_list_pwd']=encrypt_password($pwd,$member_list_salt);
 			}
 
-
-			$sl_data['member_list_petname']=I('member_list_petname');
+			$sl_data['member_list_nickname']=I('member_list_nickname');
 			$sl_data['member_list_province']=I('member_list_province');
 			$sl_data['member_list_city']=I('member_list_city');
 			$sl_data['member_list_town']=I('member_list_town');
 			$sl_data['member_list_sex']=I('member_list_sex');
 			$sl_data['member_list_tel']=I('member_list_tel');
 			$sl_data['member_list_email']=I('member_list_email');
+			$sl_data['user_status']=I('user_status');
 			$sl_data['member_list_open']=I('member_list_open');
+			$sl_data['user_url']=I('user_url');
+			$sl_data['signature']=I('signature');
+			$sl_data['score']=I('score',0,'intval');
+			$sl_data['coin']=I('coin',0,'intval');
 
 			M('member_list')->save($sl_data);
 			$this->success('会员修改成功',U('member_list'),1);

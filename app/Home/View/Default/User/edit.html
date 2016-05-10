@@ -7,11 +7,11 @@
 	<title>{$site_name} </title>
 	<meta name="keywords" content="{$site_seo_keywords}" />
 	<meta name="description" content="{$site_seo_description}">
-	<tc_include file="Public:head" />
+	<include file="Public:head" />
 </head>
 <body class="body-white">
 <div class="wrap">
-	<tc_include file="Public:nav" />
+	<include file="Public:nav" />
 	<div id="main-cmf">
 		<div class="breadcrumb-wrapper">
 			<div class="container">
@@ -24,7 +24,7 @@
 							<ul>
 								<li>当前位置:</li>
 								<li><a href="__ROOT__/">首页</a></li>
-								<li><a href="{:U('user/center/index')}">个人中心</a></li>
+								<li><a href="{:U('Center/index')}">个人中心</a></li>
 								<li>编辑资料</li>
 							</ul>
 						</div>
@@ -36,40 +36,40 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-						<tc_include file="Public:usernav"/>
+						<include file="Public:usernav"/>
 					</div>
 					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 						<div id="center-content" style="padding:20px">
 							<div class="row">
-								<form class="form-light form-horizontal js-ajax-form" action="{:U('profile/edit_post')}" method="post">
+								<form class="form-light form-horizontal js-ajax-form" action="{:U('Center/runedit')}" method="post">
 									<div class="form-group">
 										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">昵称</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<input type="text" class="form-control" id="input-user_nicename" placeholder="昵称" name="user_nicename" value="{$user_nicename}">
+											<input type="text" class="form-control" id="input-user_nicename" placeholder="昵称" name="member_list_nickname" value="{$member_list_nickname}">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">性别</label>
 										<php>
-											$sexs=array("0"=>"保密","1"=>"程序猿","2"=>"程序媛");
+											$sexs=array("1"=>"程序猿","2"=>"程序媛","3"=>"保密");
 										</php>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<select id="input-sex" name="sex" class="form-control">
+											<select id="input-sex" name="member_list_sex" class="form-control">
 												<foreach name="sexs" item="vo">
-													<php>$sexselected=$key==$sex?"selected":"";</php>
+													<php>$sexselected=$key==$member_list_sex?"selected":"";</php>
 													<option value="{$key}" {$sexselected}>{$vo}</option>
 												</foreach>
 											</select>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">生日</label>
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">电话</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<input type="text" class="form-control js-date" id="input-birthday" placeholder="2013-01-04" name="birthday" value="{$birthday}">
+											<input type="text" class="form-control" id="member_list_tel" name="member_list_tel" value="{$member_list_tel}">
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">个人网址</label>
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">个人网站</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
 											<input type="text" class="form-control" id="input-user_url" placeholder="http://thinkcmf.com" name="user_url" value="{$user_url}">
 										</div>
@@ -81,9 +81,44 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">个性签名</label>
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">省份/直辖市</label>
 										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
-											<textarea id="input-signature" placeholder="个性签名" class="form-control" name="signature">{$signature}</textarea>
+											<select name="member_list_province" class="form-control" id="province" onChange="loadRegion('province',2,'city','{:U('Admin/Ajax/getRegion')}');">
+										<option value="0">省份/直辖市</option>
+										<volist name="province" id="vo">
+											<option value="{$vo.id}" <if condition="$member_list_province eq $vo['id']">selected</if>>{$vo.name}</option>
+										</volist>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">市/县</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select name="member_list_city" class="form-control" id="city"  onchange="loadRegion('city',3,'town','{:U('Admin/Ajax/getRegion')}');">
+										<option  value="0">市/县</option>
+
+										<php>
+											$city=M('Region')->where(array('pid'=>$member_list_province))->select();
+										</php>
+										<foreach name="city" item="v">
+											<option <if condition="$member_list_city eq $v['id']">selected</if> value="{$v.id}">{$v.name}</option>
+										</foreach>
+
+									</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">镇/区</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select name="member_list_town" class="form-control" id="town">
+										<option value="0">镇/区</option>
+										<php>
+											$town=M('Region')->where(array('pid'=>$member_list_city))->select();
+										</php>
+										<volist name="town" id="vy">
+											<option <if condition="$member_list_town eq $vy['id']">selected</if> value="{$vy.id}">{$vy.name}</option>
+										</volist>
+									</select>
 										</div>
 									</div>
 									<div class="form-group">
@@ -100,9 +135,10 @@
 			</div>
 		</div>
 	</div>
-	<tc_include file="Public:footer"/>
+	<include file="Public:footer"/>
 </div>
-<tc_include file="Public:section"/>
-<tc_include file="Public:scripts"/>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+<script type="text/javascript" src="__PUBLIC__/assets/js/region.js"></script>
 </body>
 </html>

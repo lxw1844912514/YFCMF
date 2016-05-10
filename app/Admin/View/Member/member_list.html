@@ -56,6 +56,7 @@
 									<th class="hidden-xs">ID</th>
 									<th>用户名</th>
 									<th>昵称/邮箱</th>
+									<th class="hidden-sm hidden-xs">来源</th>
 									<th class="hidden-sm hidden-xs">性别</th>
 									<th class="hidden-sm hidden-xs">会员用户组</th>
 									<th class="hidden-sm hidden-xs">积分</th>
@@ -73,6 +74,7 @@
 										<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
 										<td>{$v.member_list_username}</td>
 										<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
+										<td class="hidden-sm hidden-xs">{$v.from|default="本地"}</td>
 										<td class="hidden-sm hidden-xs">
 										<if condition="$v.member_list_sex eq 1">程序猿
 										<elseif condition="$v.member_list_sex eq 2"/>程序媛
