@@ -59,13 +59,13 @@
                         <li style="height:86px">
                             <a href="#" class="sf-with-ul menu-login">
 								<if condition="empty($user['member_list_headpic'])">
-								<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="headicon" id="avatar_small"/>
+								<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="headicon"/>
 								<elseif condition="stripos($user['member_list_headpic'],'://')"/>
 								<img src="{$user['member_list_headpic']}" class="headicon" id="avatar_small"/>
 								<else />
-								<img src="__UPLOAD__avatar/{$user.member_list_headpic}" class="headicon" id="avatar_small"/>
+								<img src="__UPLOAD__avatar/{$user.member_list_headpic}" class="headicon"/>
 								</if>
-                                <span class="user-nicename"></span>
+                                <span class="user-nicename">{$member_list_username}</span>
 							<span class="sf-sub-indicator">
                            <i class="fa fa-angle-down "></i>
                            </span>

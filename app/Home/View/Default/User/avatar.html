@@ -44,15 +44,53 @@
 						<div id="center-content" style="padding:20px">
 							<div class="row">
 								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<a href="{:U('profile/avatar')}">
+									<a href="#">
+										<span class="profile-picture">
 										<if condition="empty($member_list_headpic)">
-											<img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon" id="avatar_big" style="max-width:128px"/>
+											<img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon" style="max-width:128px" data-toggle="modal" data-target="#myModal" />
 											<else/>
-											<img src="{$member_list_headpic}" class="headicon" id="avatar_big"/>
+											<img src="__UPLOAD__avatar/{$member_list_headpic}" class="headicon" data-toggle="modal" data-target="#myModal" />
 										</if>
+										</span>
 									</a>
 								</div>
 								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<include file="Public:footer"/>
+</div>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script  type="text/javascript" src="__PUBLIC__/shearphoto/js/ShearPhoto.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/alloyimage.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/handle_f.js" ></script>
+<script type="text/javascript">
+	var SHEAR = {
+		PATH_RES: '__PUBLIC__',
+		PATH_AVATAR: '__ROOT__/data/upload/avatar',
+		URL:"{:U('Center/runavatar')}",
+	};
+</script>
+        <!-- 显示模态框（Modal） -->
+        <div class="modal fade modal-avatar" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:60%;">
+                <div class="modal-content"  style="min-width:620px;">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            会员头像
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12">
 									<div id="shearphoto_loading">程序加载中......</div>
 									<div id="shearphoto_main">
 										<div class="Effects" id="shearphoto_Effects" autocomplete="off">
@@ -131,29 +169,12 @@
 											<li><img src="__PUBLIC__/shearphoto/file/photo/3.jpg" serveUrl="file/photo/3.jpg" /></li>
 											<li><img src="__PUBLIC__/shearphoto/file/photo/4.jpg" serveUrl="file/photo/4.jpg" /></li>
 									</div>
-								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<include file="Public:footer"/>
-</div>
-<include file="Public:section"/>
-<include file="Public:scripts"/>
-<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
-<script src="__PUBLIC__/layer/layer.js"></script>
-<script  type="text/javascript" src="__PUBLIC__/shearphoto/js/ShearPhoto.js" ></script>
-<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/alloyimage.js" ></script>
-<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/handle_f.js" ></script>
-<script type="text/javascript">
-	var SHEAR = {
-		PATH_RES: '__PUBLIC__',
-		PATH_AVATAR: '__ROOT__/data/upload/avatar',
-		URL:"{:U('Center/runavatar')}",
-	};
-</script>
+                        </div>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 </body>
 </html>

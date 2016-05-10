@@ -430,7 +430,7 @@
 	position:absolute;
 	width:100%;
 	z-index:250;
-	padding:10px 0 0 5px;
+	padding:10px 0 0 40px;
 	background:url(../images/bg.jpg) #CCC;
 }
 .complete .completeTxt {
