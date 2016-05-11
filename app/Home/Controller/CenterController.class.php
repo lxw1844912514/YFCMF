@@ -46,19 +46,20 @@ class CenterController extends HomebaseController {
     }
 	public function runchangepwd() {
     	if (IS_POST) {
-    		if(empty(I('old_password'))){
+			$old_password=I('old_password');
+    		$password=I('password');
+			$repassword=I('repassword');
+    		if(empty($old_password)){
     			$this->error("原始密码不能为空！",0,0);
     		}
-    		if(empty(I('password'))){
+    		if(empty($password)){
     			$this->error("新密码不能为空！",0,0);
     		}
-			if(I('password')!==I('repassword')){
+			if($password!==$repassword){
     			$this->error("2次密码不一致！",0,0);
     		}
 			$member=M('member_list');
     		$user=$member->where(array('member_list_id'=>$this->userid))->find();
-    		$old_password=I('old_password');
-    		$password=I('password');
 			$member_list_salt=$user['member_list_salt'];
     		if(encrypt_password($old_password,$member_list_salt)===$user['member_list_pwd']){
 				if(encrypt_password($password,$member_list_salt)==$user['member_list_pwd']){
@@ -78,11 +79,7 @@ class CenterController extends HomebaseController {
     		}
     	}
     }
-	function avatar(){
-		$this->assign($this->user);
-    	$this->display("User:avatar");
-    }
-	public function runavatar(){
+	public function avatar(){
         $imgurl=I('post.imgurl');
         //去'/'
         $imgurl=str_replace('/','',$imgurl);
@@ -93,9 +90,9 @@ class CenterController extends HomebaseController {
         if($rst!==false){
             session('user_avatar',$imgurl);
 			$this->user['member_list_headpic']=$imgurl;
-            $this->success ('头像更新成功',U('Center/avatar'),1);
+            $this->success ('头像更新成功',U('Center/index'),1);
         }else{
-            $this->error ('头像更新失败',U('Center/avatar'),0);
+            $this->error ('头像更新失败',U('Center/index'),0);
         }
     }
 }
