@@ -87,6 +87,12 @@ class SysController extends AuthController {
 	//发送邮件设置
 	public function emailsys(){
 		$sys=M('options')->where(array('option_name'=>'email_options'))->getField("option_value");
+		if(empty($sys)){
+			$data['option_name']='email_options';
+			$data['option_value']='{}';
+			$data['autoload']=1;
+			M('options')->add($data);
+		}
 		$sys=json_decode($sys,true);
 		$this->assign('sys',$sys)->display();
 	}
@@ -108,6 +114,12 @@ class SysController extends AuthController {
 	//帐号激活设置
 	public function activesys(){
 		$sys=M('options')->where(array('option_name'=>'active_options'))->getField("option_value");
+		if(empty($sys)){
+			$data['option_name']='active_options';
+			$data['option_value']='{}';
+			$data['autoload']=1;
+			M('options')->add($data);
+		}
 		$sys=json_decode($sys,true);
 		$this->assign('sys',$sys)->display();
 	}
@@ -117,7 +129,10 @@ class SysController extends AuthController {
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',0,0);
 		}else{
-			$rst=M('options')->where(array('option_name'=>'active_options'))->setField('option_value',json_encode(I('options')));
+			//htmlspecialchars_decode(
+			$options=I('options');
+			$options['email_tpl']=htmlspecialchars_decode($options['email_tpl']);
+			$rst=M('options')->where(array('option_name'=>'active_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
 				$this->success('帐号激活设置保存成功',1,1);
 			}else{

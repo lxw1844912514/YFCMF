@@ -26,8 +26,8 @@ class RegisterController extends HomebaseController {
         }
         $verify = new Verify (array(
             'fontSize' => 20,
-            'imageH' => 42,
-            'imageW' => 250,
+            'imageH' => 40,
+            'imageW' => 150,
             'length' => 4,
             'useCurve' => false,
         ));
@@ -73,23 +73,81 @@ class RegisterController extends HomebaseController {
 				$this->error("用户名或者该邮箱已经存在！",0,0);
 			}else{
 				$member_list_salt=String::randString(10);
+				$active_options=get_active_options();
 				$sl_data=array(
-					'member_list_groupid'=>I('member_list_groupid'),
 					'member_list_username'=>$member_list_username,
 					'member_list_salt' => $member_list_salt,
 					'member_list_pwd'=>encrypt_password($password,$member_list_salt),
 					'member_list_email'=>$member_list_email,
 					'member_list_open'=>1,
 					'member_list_addtime'=>time(),
-					'user_status'=>1,
+					'user_status'=>$active_options['email_active']?0:1,//需要激活,则为未激活状态,否则为激活状态
 				);
 				$rst=$users_model->add($sl_data);
 				if($rst!==false){
-					$this->success('会员注册成功',U('Login/index'),1);
+					if($active_options['email_active']){
+						$activekey=md5($rst.time().uniqid());//激活码
+						$result=$users_model->where(array("member_list_id"=>$rst))->save(array("user_activation_key"=>$activekey));
+						if(!$result){
+							$this->error('激活码生成失败！',0,0);
+						}
+						//生成激活链接
+						$url = U('Register/active',array("hash"=>$activekey), "", true);
+						$template = $active_options['email_tpl'];
+						$content = str_replace(array('http://#link#','#username#'), array($url,$member_list_username),$template);
+						$send_result=sendMail($member_list_email, $active_options['email_title'], $content);
+						if($send_result['error']){
+							$this->error('激活邮件发送失败，请尝试登录后，手动发送激活邮件！',0,0);
+						}else{
+							$this->success('激活邮件发送成功,请查收邮件并激活',U('Login/index'),1);
+						}
+					}else{
+						//更新字段
+						$data = array(
+							'last_login_time' => time(),
+							'last_login_ip' => get_client_ip(0,true),
+						);
+						$sl_data['last_login_time']=$data['last_login_time'];
+						$sl_data['last_login_ip']=$data['last_login_ip'];
+						$users_model->where(array('member_list_id'=>$rst))->save($data);
+						session('hid',$rst);
+						session('user',$sl_data);
+						$this->success('会员注册成功',U('Index/index'),1);				
+					}
 				}else{
 					$this->error("会员注册失败",0,0);
 				}
 			}
+		}
+	}
+	//激活
+	function active(){
+		$hash=I("get.hash","");
+		if(empty($hash)){
+			$this->error("激活码不存在",0,0);
+		}
+		$users_model=M("member_list");
+		$find_user=$users_model->where(array("user_activation_key"=>$hash))->find();
+		if($find_user){
+			$result=$users_model->where(array("user_activation_key"=>$hash))->save(array("user_activation_key"=>"","user_status"=>1));
+			if($result){
+				$find_user['user_status']=1;
+				//更新字段
+				$data = array(
+					'last_login_time' => time(),
+					'last_login_ip' => get_client_ip(0,true),
+				);
+				$find_user['last_login_time']=$data['last_login_time'];
+				$find_user['last_login_ip']=$data['last_login_ip'];
+				$users_model->where(array('member_list_id'=>$find_user["member_list_id"]))->save($data);
+				session('hid',$find_user['member_list_id']);
+				session('user',$find_user);
+				$this->success('恭喜您，登陆成功',U('Index/index'),1);
+			}else{
+				$this->error("用户激活失败!",U("Login/index"),0);
+			}
+		}else{
+			$this->error("用户激活失败，激活码无效！",U("Login/index"),0);
 		}
 	}
 }

@@ -36,7 +36,7 @@
 
 						function checkForm(){
 							if( '' == $.trim($('#email_title').val())){
-								layer.alert('发送邮箱地址不能为空', {icon: 5}, function(index){
+								layer.alert('发送邮件标题不能为空', {icon: 5}, function(index){
 									layer.close(index);
 									$('#email_title').focus();
 								});

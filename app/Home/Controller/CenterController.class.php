@@ -95,4 +95,14 @@ class CenterController extends HomebaseController {
             $this->error ('头像更新失败',U('Center/index'),0);
         }
     }
+    function bang(){
+    	$oauth_user_model=M("OauthUser");
+    	$oauths=$oauth_user_model->where(array("uid"=>$this->userid))->select();
+    	$new_oauths=array();
+    	foreach ($oauths as $oa){
+    		$new_oauths[strtolower($oa['oauth_from'])]=$oa;
+    	}
+    	$this->assign("oauths",$new_oauths);
+    	$this->display("User:bang");
+    }
 }

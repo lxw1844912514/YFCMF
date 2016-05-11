@@ -13,24 +13,48 @@ use Think\Storage;
  * @author rainfer <81818832@qq.com>
  */
 function sendMail($to, $title, $content) {
-
-    Vendor('PHPMailer.PHPMailerAutoload');
-    $mail = new PHPMailer(); //实例化
-    $mail->IsSMTP(); // 启用SMTP
-    $mail->Host=C('MAIL_HOST'); //smtp服务器的名称（这里以QQ邮箱为例）
-    $mail->SMTPAuth = C('MAIL_SMTPAUTH'); //启用smtp认证
-    $mail->Username = C('MAIL_USERNAME'); //你的邮箱名
-    $mail->Password = C('MAIL_PASSWORD') ; //邮箱密码
-    $mail->From = C('MAIL_FROM'); //发件人地址（也就是你的邮箱地址）
-    $mail->FromName = C('MAIL_FROMNAME'); //发件人姓名
-    $mail->AddAddress($to,"尊敬的客户");
-    $mail->WordWrap = 50; //设置每行字符长度
-    $mail->IsHTML(C('MAIL_ISHTML')); // 是否HTML格式邮件
-    $mail->CharSet=C('MAIL_CHARSET'); //设置邮件编码
-    $mail->Subject =$title; //邮件主题
-    $mail->Body = $content; //邮件内容
-    $mail->AltBody = ""; //邮件正文不支持HTML的备用显示
-    return($mail->Send());
+	$email_options=get_email_options();
+	if($email_options && $email_options['email_open']){
+		Vendor('PHPMailer.PHPMailerAutoload');
+		$mail = new PHPMailer(); //实例化
+		// 设置PHPMailer使用SMTP服务器发送Email
+		$mail->IsSMTP();
+		$mail->IsHTML(true);
+		// 设置邮件的字符编码，若不指定，则为'UTF-8'
+		$mail->CharSet='UTF-8';
+		// 添加收件人地址，可以多次使用来添加多个收件人
+		$mail->AddAddress($to);
+		// 设置邮件正文
+		$mail->Body=$content;
+		// 设置邮件头的From字段。
+		$mail->From=$email_options['email_name'];
+		// 设置发件人名字
+		$mail->FromName=$email_options['email_rename'];
+		// 设置邮件标题
+		$mail->Subject=$title;
+		// 设置SMTP服务器。
+		$mail->Host=$email_options['email_smtpname'];
+		//by Rainfer
+		// 设置SMTPSecure。
+		$mail->SMTPSecure=$email_options['smtpsecure'];
+		// 设置SMTP服务器端口。
+		$port=$email_options['smtp_port'];
+		$mail->Port=empty($port)?"25":$port;
+		// 设置为"需要验证"
+		$mail->SMTPAuth=true;
+		// 设置用户名和密码。
+		$mail->Username=$email_options['email_emname'];
+		$mail->Password=$email_options['email_pwd'];
+		// 发送邮件。
+		if(!$mail->Send()) {
+			$mailerror=$mail->ErrorInfo;
+			return array("error"=>1,"message"=>$mailerror);
+		}else{
+			return array("error"=>0,"message"=>"success");
+		}
+	}else{
+		return array("error"=>1,"message"=>'未开启邮件发送或未配置');
+	}
 }
 
 function subtext($text, $length)
@@ -465,6 +489,42 @@ function get_site_options(){
 	}
 	$site_options['site_tongji']=htmlspecialchars_decode($site_options['site_tongji']);
 	return $site_options;	
+}
+/**
+ * 获取后台管理设置的邮件连接
+ * @author rainfer <81818832@qq.com>
+ */
+function get_email_options(){
+	$email_options = F("email_options");
+	if(empty($email_options)){
+		$options_obj = M("Options");
+		$option = $options_obj->where("option_name='email_options'")->find();
+		if($option){
+			$email_options = json_decode($option['option_value'],true);
+		}else{
+			$email_options = array();
+		}
+		F("email_options", $email_options);
+	}
+	return $email_options;	
+}
+/**
+ * 获取后台管理设置的邮件激活连接
+ * @author rainfer <81818832@qq.com>
+ */
+function get_active_options(){
+	$active_options = F("active_options");
+	if(empty($active_options)){
+		$options_obj = M("Options");
+		$option = $options_obj->where("option_name='active_options'")->find();
+		if($option){
+			$active_options = json_decode($option['option_value'],true);
+		}else{
+			$active_options = array();
+		}
+		F("active_options", $active_options);
+	}
+	return $active_options;	
 }
 /**
  * 获取所有友情连接

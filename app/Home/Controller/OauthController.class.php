@@ -46,12 +46,12 @@ class OauthController extends HomebaseController {
 	
 	function bang($type=""){
 		if(session('hid')){
-			empty($type) && $this->error('参数错误');
+			empty($type) && $this->error('参数错误',0,0);
 			$sns  = ThinkOauth::getInstance($type);
 			$_SESSION['oauth_bang']=1;
 			redirect($sns->getRequestCodeURL());
 		}else{
-			$this->error("您还没有登录！");
+			$this->error("您还没有登录！",0,0);
 		}
 		
 		
@@ -66,13 +66,13 @@ class OauthController extends HomebaseController {
 		$current_uid=session('hid');
 		$oauth_user_model = M('OauthUser');
 		$type=strtolower($type);
-		$find_oauth_user = $oauth_user_model->where(array("from"=>$type,"openid"=>$token['openid']))->find();
+		$find_oauth_user = $oauth_user_model->where(array("oauth_from"=>$type,"openid"=>$token['openid']))->find();
 		$need_bang=true;
 		if($find_oauth_user){
 			if($find_oauth_user['uid']==$current_uid){
-				$this->error("您之前已经绑定过此账号！",U('user/profile/bang'));exit;
+				$this->error("您之前已经绑定过此账号！",U('Center/bang'),0);exit;
 			}else{
-				$this->error("该帐号已被本站其他账号绑定！",U('user/profile/bang'));exit;
+				$this->error("该帐号已被本站其他账号绑定！",U('Center/bang'),0);exit;
 			}
 		}
 		
@@ -95,13 +95,13 @@ class OauthController extends HomebaseController {
 				);
 				$new_oauth_user_id=$oauth_user_model->add($new_oauth_user_data);
 				if($new_oauth_user_id){
-					$this->success("绑定成功！",U('user/profile/bang'));
+					$this->success("绑定成功！",U('Center/bang'),1);
 				}else{
 					$users_model->where(array("member_list_id"=>$new_user_id))->delete();
-					$this->error("绑定失败！",U('user/profile/bang'));
+					$this->error("绑定失败！",U('Center/bang'),0);
 				}
 			}else{
-				$this->error("绑定失败！",U('user/profile/bang'));
+				$this->error("绑定失败！",U('Center/bang'),0);
 			}
 		}
 	}
@@ -110,7 +110,7 @@ class OauthController extends HomebaseController {
 	private function _login_handle($user_info, $type, $token){
 		$oauth_user_model = M('OauthUser');
 		$type=strtolower($type);
-		$find_oauth_user = $oauth_user_model->where(array("from"=>$type,"openid"=>$token['openid']))->find();
+		$find_oauth_user = $oauth_user_model->where(array("oauth_from"=>$type,"openid"=>$token['openid']))->find();
 		$return = array();
 		$local_username="";
 		$need_register=true;
