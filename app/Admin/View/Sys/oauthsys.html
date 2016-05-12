@@ -30,44 +30,9 @@
 
 					$(function(){
 						$('#oauthsys').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
 							success: complete, // 这是提交后的方法
 							dataType: 'json'
 						});
-
-						function checkForm(){
-							if( '' == $.trim($('#qq_appid').val())){
-								layer.alert('QQ APPID不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#qq_appid').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#qq_appkey').val())){
-								layer.alert('QQ APP KEY不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#qq_appkey').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#sina_appid').val())){
-								layer.alert('新浪微博APPID不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#sina_appid').focus();
-								});
-								return false;
-							}
-							
-							if( '' == $.trim($('#sina_appkey').val())){
-								layer.alert('新浪微博APPKEY不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#sina_appkey').focus();
-								});
-								return false;
-							}
-						}
 						function complete(data){
 							if(data.status==1){
 								layer.alert(data.info, {icon: 6}, function(index){
@@ -89,7 +54,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APPID： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[qq_appid]" id="qq_appid" value="{$sys.qq_appid}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5" required/>
+									<input type="text" name="qq_appid" id="qq_appid" value="{$oauth_qq.APP_KEY}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
@@ -101,7 +66,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APP KEY： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[qq_appkey]" id="qq_appkey" value="{$sys.qq_appkey}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5" />
+									<input type="text" name="qq_appkey" id="qq_appkey" value="{$oauth_qq.APP_SECRET}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
@@ -117,7 +82,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博APPID： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[sina_appid]" id="sina_appid" value="{$sys.sina_appid}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="sina_appid" id="sina_appid" value="{$oauth_sina.APP_KEY}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resthr"></span>
@@ -129,14 +94,14 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博 APP KEY： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[sina_appkey]" id="sina_appkey" value="{$sys.sina_appkey}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5" />
+									<input type="text" name="sina_appkey" id="sina_appkey" value="{$oauth_sina.APP_SECRET}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5" required/>
                                             <span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resfour"></span>
 											</span>
 								</div>
 							</div>
-							<div class="page-header form-group">
+							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"></label>
 								<div class="col-sm-9">
 									<a href="http://open.weibo.com/" target="_blank">点击此处</a>获取新浪微博互联APPID及APP KEY

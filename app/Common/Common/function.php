@@ -901,3 +901,58 @@ function get_menu_one($id){
 	}
     return $rst;
 }
+/**
+ * 设置全局配置到文件
+ *
+ * @param $key
+ * @param $value
+ */
+function sys_config_setbykey($key, $value)
+{
+    $file = './data/conf/config.php';
+    $cfg = array();
+    if (file_exists($file)) {
+        $cfg = (include $file);
+    }
+    $item = explode('.', $key);
+    switch (count($item)) {
+        case 0:
+            $cfg[$item[0]] = $value;
+            break;
+        case 1:
+            $cfg[$item[0]][$item[1]] = $value;
+            break;
+    }
+    file_put_contents($file, "<?php\nreturn " . var_export($cfg, true) . ";");
+}
+/**
+ * 设置全局配置到文件
+ *
+ * @param array
+ */
+function sys_config_setbyarr($data)
+{
+    $file = './data/conf/config.php';
+    if(file_exists($file)){
+        $configs=include $file;
+    }else {
+        $configs=array();
+    }
+    $configs=array_merge($configs,$data);
+    return file_put_contents($file, "<?php\treturn " . var_export($configs, true) . ";");
+}
+/**
+ * 获取全局配置
+ *
+ * @param $key
+ * @return null
+ */
+function sys_config_get($key)
+{
+    $file = './data/conf/config.php';
+    $cfg = array();
+    if (file_exists($file)) {
+        $cfg = (include $file);
+    }
+    return isset($cfg[$key]) ? $cfg[$key] : null;
+}

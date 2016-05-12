@@ -41,7 +41,8 @@ class LoginController extends HomebaseController {
      * 退出登录
      */
 	public function logout(){
-		session(null);
+		session('hid',null);
+		session('user',null);
 		redirect(__ROOT__."/");
 	}
 	

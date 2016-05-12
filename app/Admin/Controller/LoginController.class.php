@@ -86,7 +86,11 @@ class LoginController extends CommonController {
      * 退出登录
      */
 	public function logout(){
-		session(null);
+		session('aid',null);
+		session('admin_username',null);
+		session('admin_realname',null);
+		session('admin_avatar',null);
+		session('admin_last_change_pwd_time', null);
 		$this->redirect('Login/login');
 	}
 }

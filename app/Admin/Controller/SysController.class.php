@@ -86,9 +86,38 @@ class SysController extends AuthController {
 	}
 	//第三方登录设置显示
 	public function oauthsys(){
-		$sys=M('options')->where(array('option_name'=>'weixin_options'))->getField("option_value");
-		$sys=json_decode($sys,true);
-		$this->assign('sys',$sys)->display();
+		$oauth_qq=sys_config_get('THINK_SDK_QQ');
+		$oauth_sina=sys_config_get('THINK_SDK_SINA');
+		$this->assign('oauth_qq',$oauth_qq);
+		$this->assign('oauth_sina',$oauth_sina);
+		$this->display();
+	}
+	//保存第三方登录设置
+	public function runoauthsys(){
+		if (!IS_AJAX){
+			$this->error('提交方式不正确',0,0);
+		}else{
+			$host=get_host();
+			$call_back = $host.__ROOT__.'/index.php?m=Home&c=oauth&a=callback&type=';
+			$data = array(
+				'THINK_SDK_QQ' => array(
+						'APP_KEY'    => I('qq_appid'),
+						'APP_SECRET' => I('qq_appkey'),
+						'CALLBACK'   => $call_back . 'qq',
+				),
+				'THINK_SDK_SINA' => array(
+						'APP_KEY'    => I('sina_appid'),
+						'APP_SECRET' => I('sina_appkey'),
+						'CALLBACK'   => $call_back . 'sina',
+				),
+			);
+			$rst=sys_config_setbyarr($data);
+			if($rst){
+				$this->success('设置保存成功',U('oauthsys'),1);
+			}else{
+				$this->error('设置保存失败',0,0);
+			}
+		}
 	}
 	//发送邮件设置
 	public function emailsys(){
