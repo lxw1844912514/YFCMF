@@ -56,10 +56,13 @@
 									<th class="hidden-xs">ID</th>
 									<th>用户名</th>
 									<th>昵称/邮箱</th>
+									<th class="hidden-sm hidden-xs">来源</th>
 									<th class="hidden-sm hidden-xs">性别</th>
 									<th class="hidden-sm hidden-xs">会员用户组</th>
+									<th class="hidden-sm hidden-xs">积分</th>
 									<th class="hidden-sm hidden-xs">添加时间</th>
 									<th class="hidden-xs">状态</th>
+									<th class="hidden-xs">激活</th>
 									<th style="border-right:#CCC solid 1px;">操作</th>
 								</tr>
 								</thead>
@@ -70,19 +73,43 @@
 									<tr>
 										<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
 										<td>{$v.member_list_username}</td>
-										<td>{$v.member_list_petname}【{$v.member_list_email}】</td>
-										<td class="hidden-sm hidden-xs"><if condition="$v.member_list_petname eq 1">男<else/>女</if></td>
+										<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
+										<td class="hidden-sm hidden-xs">{$v.member_list_from|default="本地"}</td>
+										<td class="hidden-sm hidden-xs">
+										<if condition="$v.member_list_sex eq 1">程序猿
+										<elseif condition="$v.member_list_sex eq 2"/>程序媛
+										<else />保密
+										</if>
+										</td>
 										<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
+										<td class="hidden-sm hidden-xs">{$v.score}</td>
 										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
 										<td class="hidden-xs">
 											<if condition='$v.member_list_open eq 1'>
 												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已开启">
 													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 												</a>
-												<else/>
+											<else/>
 												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已禁用">
 													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
-												</a>														</if>														</td>
+												</a>														
+											</if>
+										</td>
+										<td class="hidden-xs">
+											<if condition='$v.user_status eq 1'>
+												<a class="red" href="javascript:;" onclick="return active({$v.member_list_id});" title="已激活">
+													<div id="jh{$v.member_list_id}">
+														<button class="btn btn-minier btn-yellow">已激活</button>
+													</div>
+												</a>
+											<else/>
+												<a class="red" href="javascript:;" onclick="return active({$v.member_list_id});" title="未激活">
+													<div id="jh{$v.member_list_id}">
+														<button class="btn btn-minier btn-danger">未激活</button>
+													</div>
+												</a>														
+											</if>
+										</td>
 										<td>
 											<div class="hidden-sm hidden-xs action-buttons">
 												<!--<a class="green" data-toggle="modal" data-target="#myModal" href="javascript:;" onclick="return model_pic({$v.member_list_id});"   title="修改头像">
@@ -130,7 +157,7 @@
 									</tr>
 								</foreach>
 								<tr>
-									<td height="50" colspan="9" align="left">{$page}</td>
+									<td height="50" colspan="12" align="left">{$page}</td>
 								</tr>
 								</tbody>
 							</table>
@@ -192,7 +219,28 @@
 					});
 			return false;
 		}
-
+		function active(val){
+			$.post('{:U("member_active")}',
+					{x:val},
+					function(data){
+						if(data.status){
+							if(data.info=='未激活'){
+								var a='<button class="btn btn-minier btn-danger">未激活</button>'
+								$('#jh'+val).html(a);
+								layer.alert(data.info, {icon: 5});
+								return false;
+							}else{
+								var b='<button class="btn btn-minier btn-yellow">已激活</button>'
+								$('#jh'+val).html(b);
+								layer.alert(data.info, {icon: 6});
+								return false;
+							}
+						}else{
+							layer.alert(data.info, {icon: 5});
+						}
+					});
+			return false;
+		}
 
 	</script>
 	<include file='Common:footer' />

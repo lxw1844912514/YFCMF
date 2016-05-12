@@ -7,12 +7,12 @@
 	<title>注册 {$site_name} </title>
 	<meta name="keywords" content="{$site_seo_keywords}" />
 	<meta name="description" content="{$site_seo_description}">
-	<tc_include file="Public:head" />
+	<include file="Public:head" />
 </head>
 
 <body class="body-white">
 <div class="wrap">
-	<tc_include file="Public:nav" />
+	<include file="Public:nav" />
 	<div id="main-cmf">
 		<div class="content">
 			<div class="container">
@@ -21,78 +21,41 @@
 						<h2 class="text-center">用户注册</h2>
 						<div class="widget tabs">
 							<div id="horizontal-tabs">
-								<!--  <ul class="tabs">
-								 <li id="tab1" class="current">邮箱注册</li>
-								 <li id="tab2">手机注册</li>
-							  </ul> -->
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form class="form-light js-ajax-form" action="{:U('user/register/doregister')}" method="post">
+										<form class="form-light" id="reg" action="{:U('Register/runregister')}" method="post">
 
 											<div>
-												<input type="text" name="email" placeholder="邮箱" class="form-control">
+												<input type="text" name="member_list_username" placeholder="用户名" class="form-control" required>
 											</div>
 											<div>&nbsp;</div>
 											<div>
-												<input type="password" name="password" placeholder="密码" class="form-control">
+												<input type="email" name="member_list_email" placeholder="邮箱" class="form-control" required>
 											</div>
 											<div>&nbsp;</div>
 											<div>
-												<input type="password" name="repassword" placeholder="重复密码" class="form-control">
+												<input type="password" name="password" placeholder="密码" class="form-control" required>
 											</div>
 											<div>&nbsp;</div>
 											<div>
-												<div class="row">
-													<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-														<input type="text" class="form-control" placeholder="" style="height:40px;" name="verify" required>
-													</div>
-													<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-														<img class="form-control" src="__ROOT__/index.php?g=api&m=checkcode&a=index&length=4&font_size=20&height=40&use_noise=1&use_curve=0" onclick="this.src='__ROOT__/index.php?g=api&m=checkcode&a=index&length=4&font_size=20&width=150&height=40&use_noise=1&use_curve=0&time='+Math.random();" style="cursor:pointer;vertical-align: top;height:40px;padding:0;" title="点击获取">
-													</div>
+												<input type="password" name="repassword" placeholder="重复密码" class="form-control" required>
+											</div>
+											<div>&nbsp;</div>
+											<div class="row">
+												<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+													<input type="text" class="form-control" placeholder="" id="verify" style="height:40px;" name="verify" required>
+												</div>
+												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+													<img class="verify_img" id="verify_img" src="{:U('Register/verify')}" onclick="this.src='{:U('Register/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
 											<div>
-												<button class="btn btn-primary js-ajax-submit  col-lg-12 col-md-12 col-sm-12 col-xs-12" type="submit"  data-wait="1500">确定注册</button></div>
+												<button class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12" type="submit"  data-wait="1500">确定注册</button></div>
 
 											<div style="text-align: center;">
 												<p>
-													已有账号? <a href="{:leuu('user/login/index')}">点击此处登录</a>
-												</p>
-											</div>
-										</form>
-									</div>
-									<div class="tabscontent" id="content2">
-										<form class="form-light js-ajax-form" action="{:U('user/register/doregister')}" method="post">
-											<div>
-												<input type="text" name="mobile" placeholder="手机号" class="form-control">
-											</div>
-											<div>&nbsp;</div>
-											<div>
-												<input type="password" name="password" placeholder="密码" class="form-control">
-											</div>
-											<div>&nbsp;</div><div>
-											<input type="password" name="repassword" placeholder="重复密码" class="form-control">
-										</div>
-											<div>&nbsp;</div>
-											<div>
-												<div class="row">
-													<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-														<input type="text" name="mobile_verify" placeholder="手机验证码" class="form-control">
-													</div>
-													<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-														<a class="btn btn-success">获取验证码</a>
-													</div>
-												</div>
-											</div>
-											<div>&nbsp;</div>
-											<div>
-												<button class="btn btn-primary js-ajax-submit  col-lg-12 col-md-12 col-sm-12 col-xs-12" type="submit"  data-wait="1500">确定注册</button>
-											</div>
-
-											<div style="text-align: center;">
-												<p>
-													已有账号? <a href="{:leuu('user/login/index')}">点击此处登录</a>
+													已有账号? <a href="{:U('Login/index')}">点击此处登录</a>
 												</p>
 											</div>
 										</form>
@@ -105,9 +68,40 @@
 			</div>
 		</div>
 	</div>
-	<tc_include file="Public:footer"/>
+	<include file="Public:footer"/>
 </div>
-<tc_include file="Public:section"/>
-<tc_include file="Public:scripts"/>
+<include file="Public:section"/>
+<include file="Public:scripts"/>
+<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script type="text/javascript">
+//添加操作
+$(function(){
+	$('#reg').ajaxForm({
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+	function complete(data){
+		if(data.status==1){
+			layer.alert(data.info, {icon: 6}, function(index){
+				layer.close(index);
+				window.location.href=data.url;
+			});
+		}else{
+			layer.alert(data.info, {icon: 5}, function(index){
+				layer.close(index);
+				if(data.info=='验证码错误'){
+					$('#verify').val("");
+				}else{
+					$(':input').val("");
+				}
+			});
+			var $verify_img=$('#verify_img');
+			$verify_img.attr("src",$verify_img.attr("src")+"&refresh="+Math.random()); 
+		}
+		return false;
+	}
+});
+</script>
 </body>
 </html>

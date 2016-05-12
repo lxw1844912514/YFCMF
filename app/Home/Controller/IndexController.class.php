@@ -10,9 +10,6 @@ namespace Home\Controller;
 use Think\Verify;
 use Home\Controller\HomebaseController;
 class IndexController extends HomebaseController {
-	Public function _initialize(){
-		parent::_initialize();
-	}
 	public function index(){
 		$this->display(':index');
 	}
