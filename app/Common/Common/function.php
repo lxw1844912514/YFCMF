@@ -19,6 +19,7 @@ function sendMail($to, $title, $content) {
 		$mail = new PHPMailer(); //实例化
 		// 设置PHPMailer使用SMTP服务器发送Email
 		$mail->IsSMTP();
+		$mail->Mailer='smtp';
 		$mail->IsHTML(true);
 		// 设置邮件的字符编码，若不指定，则为'UTF-8'
 		$mail->CharSet='UTF-8';

@@ -39,7 +39,6 @@ class OauthController extends HomebaseController {
 				$this->_login_handle($user_info, $type, $token);
 			}
 		}else{
-			
 			$this->success('登录失败！',$this->_get_login_redirect());
 		}
 	}
@@ -88,7 +87,7 @@ class OauthController extends HomebaseController {
 						'last_login_time' => date("Y-m-d H:i:s"),
 						'last_login_ip' => get_client_ip(0,true),
 						'login_times' => 1,
-						'status' => 1,
+						'user_status' => 1,
 						'access_token' => $token['access_token'],
 						'expires_date' => (int)(time()+$token['expires_in']),
 						'openid' => $token['openid'],
@@ -118,6 +117,9 @@ class OauthController extends HomebaseController {
 			$find_user = M('Member_list')->where(array("member_list_id"=>$find_oauth_user['uid']))->find();
 			if($find_user){
 				$need_register=false;
+				if($find_user['member_list_open']==0){
+					$this->error("该用户已被禁用",$this->_get_login_redirect());
+				}
 				//更新字段
 				$data = array(
 					'last_login_time' => time(),
@@ -145,6 +147,7 @@ class OauthController extends HomebaseController {
 					'member_list_from'=>$type,
 					'last_login_time' => time(),
 					'last_login_ip' => get_client_ip(0,true),
+					'user_status'=>1,//第三方默认已激活
 			);
 			$users_model=M("member_list");
 			$new_user_id = $users_model->add($new_user_data);
@@ -160,7 +163,7 @@ class OauthController extends HomebaseController {
 					'last_login_time' => time(),
 					'last_login_ip' => get_client_ip(0,true),
 					'login_times' => 1,
-					'status' => 1,
+					'user_status' => 1,
 					'access_token' => $token['access_token'],
 					'expires_date' => (int)(time()+$token['expires_in']),
 					'openid' => $token['openid'],
