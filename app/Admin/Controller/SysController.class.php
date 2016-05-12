@@ -84,6 +84,12 @@ class SysController extends AuthController {
 			}
 		}
 	}
+	//第三方登录设置显示
+	public function oauthsys(){
+		$sys=M('options')->where(array('option_name'=>'weixin_options'))->getField("option_value");
+		$sys=json_decode($sys,true);
+		$this->assign('sys',$sys)->display();
+	}
 	//发送邮件设置
 	public function emailsys(){
 		$sys=M('options')->where(array('option_name'=>'email_options'))->getField("option_value");
