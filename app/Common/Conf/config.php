@@ -6,7 +6,7 @@ if(!file_exists($file="data/conf/db.php")){
 $configs_db=include ($file);
 //默认配置
 $configs= array(
-	'LOAD_EXT_CONFIG' => 'sdk_config',//扩展第三方登录配置文件
+	'LOAD_EXT_CONFIG' => '',//扩展第三方登录配置文件
 	'SHOW_PAGE_TRACE'=>true,
 	'URL_CASE_INSENSITIVE'=>true,
 	'TMPL_ACTION_ERROR'=>'Public:dispatch_jump',//error错误提示页面

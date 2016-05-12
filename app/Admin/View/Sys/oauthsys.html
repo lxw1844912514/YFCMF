@@ -1,0 +1,141 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							第三方登录
+						</small>
+					</h1>
+				</div>
+
+				<script>
+
+					$(function(){
+						$('#oauthsys').ajaxForm({
+							success: complete, // 这是提交后的方法
+							dataType: 'json'
+						});
+						function complete(data){
+							if(data.status==1){
+								layer.alert(data.info, {icon: 6}, function(index){
+									layer.close(index);
+									window.location.href=data.url;
+								});
+							}else{
+								layer.alert(data.info, {icon: 5}, function(index){
+									layer.close(index);
+								});
+							}
+						}
+
+					});
+				</script>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" name="oauthsys" id="oauthsys" method="post" action="{:U('runoauthsys')}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="qq_appid" id="qq_appid" value="{$oauth_qq.APP_KEY}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5" required/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resone"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="text" name="qq_appkey" id="qq_appkey" value="{$oauth_qq.APP_SECRET}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5" required/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+								</div>
+							</div>
+							<div class="page-header form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="http://connect.qq.com/" target="_blank">点击此处</a>获取QQ互联APPID及APP KEY
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="sina_appid" id="sina_appid" value="{$oauth_sina.APP_KEY}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5" required/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resthr"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博 APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="text" name="sina_appkey" id="sina_appkey" value="{$oauth_sina.APP_SECRET}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5" required/>
+                                            <span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resfour"></span>
+											</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="http://open.weibo.com/" target="_blank">点击此处</a>获取新浪微博互联APPID及APP KEY
+								</div>
+							</div>
+
+							<div class="clearfix form-actions">
+								<div class="col-sm-offset-3 col-sm-9">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										保存
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										重置
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="hr hr-24"></div>
+
+				<include file='Common:header_nav' />
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+
+
+	<include file='Common:footer' />
+
+
+	</body>
+	</html>
