@@ -11,7 +11,7 @@
   ),
   'TMPL_PARSE_STRING' => array(
 	'__UPLOAD__' => __ROOT__ . '/data/upload/',
-	'__PUBLIC__'=>__ROOT__ . '/public'
+	'__PUBLIC__'=>__ROOT__ . '/public',
 	'__RES__' => __ROOT__ . '/res/',
 	'__DATA__' => __ROOT__ . '/data/',
 	'__AVATAR__' => __ROOT__ . '/data/image/avatar/',
