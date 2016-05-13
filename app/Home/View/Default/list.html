@@ -62,7 +62,7 @@
                                         <div class="blog-entry-meta">
                                             <div class="blog-entry-meta-author">
                                                 <i class="fa fa-user"></i>
-                                                <a href="{:U('user/index/index',array('id'=>$vo['post_author']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo.admin_username}</a>
+                                                <a href="{:U('user/index/index',array('id'=>$vo['post_author']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo['admin_username']}</a>
                                             </div>
                                             <div class="blog-entry-meta-comments">
                                                 <i class="fa fa-comment"></i>{$vo.comment_count}
@@ -72,7 +72,7 @@
                                                 <a href="javascript:;"></a>{$vo.news_hits}
                                             </div>
                                             <div class="blog-entry-meta-comments">
-                                                <a href="{:U('News/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i></a>{$vo.post_like}
+                                                <a href="{:U('News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i><span class="count">{$vo.news_like}</span></a>
                                             </div>
                                             <div class="blog-entry-meta-tags">
                                             </div>
@@ -100,5 +100,30 @@
 </div>
 <include file="Public:section"/>
 <include file="Public:scripts"/>
+<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script type="text/javascript">
+$(function(){
+	var $js_count_btn = $("a.js-count-btn");
+	$js_count_btn.click(function(){
+		var $url=this.href,
+			$count=$(this).find(".count"),
+			count=parseInt($count.text());
+		$.post($url,{},function(data){
+			if(data.status){
+				layer.alert(data.info, {icon: 6}, function(index){
+                	$count.text(count+1);
+					layer.close(index);
+				});
+			} else {
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+		}, "json");
+		return false;
+	});
+});
+</script>
 </body>
 </html>

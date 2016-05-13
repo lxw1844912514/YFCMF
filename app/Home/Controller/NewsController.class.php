@@ -30,6 +30,16 @@ class NewsController extends HomebaseController {
     	$this->display(":$tplname");
     }
     
-    public function do_like(){
+    public function dolike(){
+	    $this->check_login();
+    	$id=intval($_GET['id']);
+    	$news_model=M("news");
+    	$can_like=check_user_action('news'.$id,1);
+    	if($can_like){
+    		$news_model->save(array("n_id"=>$id,"news_like"=>array("exp","news_like+1")));
+    		$this->success("赞好啦！",1,1);
+    	}else{
+    		$this->error("您已赞过啦！",0,0);
+    	}
     }
 }
