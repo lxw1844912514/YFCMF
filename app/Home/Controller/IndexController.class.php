@@ -15,7 +15,8 @@ class IndexController extends HomebaseController {
 	}
 	public function verify_msg()
     {
-        $verify = new Verify (array(
+		ob_end_clean();
+		$verify = new Verify (array(
             'fontSize' => 20,
             'imageH' => 40,
             'imageW' => 150,
