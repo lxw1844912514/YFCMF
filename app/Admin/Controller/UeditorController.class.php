@@ -65,7 +65,6 @@ class UeditorController extends CommonController {
 		
 		/* 输出结果 */
 		if (isset($_GET["callback"]) && false ) {
-			//TODO 跨域上传
 			if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
 				echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
 			} else {

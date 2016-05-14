@@ -24,6 +24,7 @@ class RegisterController extends HomebaseController {
         if (session('hid')) {
             redirect(__ROOT__."/");
         }
+		ob_end_clean();
         $verify = new Verify (array(
             'fontSize' => 20,
             'imageH' => 40,

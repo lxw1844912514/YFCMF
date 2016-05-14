@@ -584,3 +584,69 @@ jQuery(document).ready(function () {
 			placement: 'bottom'
 		});
 	});
+	//点赞等
+	$(function(){
+		var $js_count_btn = $("a.js-count-btn");
+		$js_count_btn.click(function(){
+			var $url=this.href,
+				$count=$(this).next(".count"),
+				count=parseInt($count.text());
+			$.post($url,{},function(data){
+				if(data.status){
+					layer.alert(data.info, {icon: 6}, function(index){
+						$count.text(count+1);
+						layer.close(index);
+					});
+				} else {
+					layer.alert(data.info, {icon: 5}, function(index){
+						layer.close(index);
+					});
+				}
+			}, "json");
+			return false;
+		});
+	});
+    //收藏
+    $(function(){
+        var $js_favorite_btn = $("a.js-favorite-btn");
+        $js_favorite_btn.click(function(){
+            var $url=this.href,
+                id = $(this).data("id"),
+                key = $(this).data("key");
+            $.post($url,{id:id,key:key},function(data){
+                if(data.status){
+                    layer.alert(data.info, {icon: 6}, function(index){
+                        layer.close(index);
+                    });
+                } else {
+                    layer.alert(data.info, {icon: 5}, function(index){
+                        layer.close(index);
+                    });
+                }
+            }, "json");
+            return false;
+        });
+    });
+    //删除
+    $(function(){
+        var $js_delete_btn = $("a.js-delete-btn");
+        $js_delete_btn.click(function(){
+            var $url=this.href;
+            layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
+                layer.close(index);
+                $.get($url, function(data){
+                    if(data.status){
+                        layer.alert(data.info, {icon: 6}, function(index){
+                            layer.close(index);
+                            window.location.href=data.url;
+                        });
+                    } else {
+                        layer.alert(data.info, {icon: 5}, function(index){
+                            layer.close(index);
+                        });
+                    }
+                }, "json");
+            });
+            return false;
+        });
+    });

@@ -73,6 +73,7 @@ class LoginController extends CommonController {
             header('Location: ' . U('index/index'));
             return;
         }
+		ob_end_clean();
         $verify = new Verify (array(
             'fontSize' => 20,
             'imageH' => 42,

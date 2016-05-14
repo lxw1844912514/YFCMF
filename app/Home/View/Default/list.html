@@ -62,7 +62,7 @@
                                         <div class="blog-entry-meta">
                                             <div class="blog-entry-meta-author">
                                                 <i class="fa fa-user"></i>
-                                                <a href="{:U('user/index/index',array('id'=>$vo['post_author']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo.admin_username}</a>
+                                                <a href="{:U('user/index/index',array('id'=>$vo['post_author']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo['admin_username']}</a>
                                             </div>
                                             <div class="blog-entry-meta-comments">
                                                 <i class="fa fa-comment"></i>{$vo.comment_count}
@@ -72,7 +72,7 @@
                                                 <a href="javascript:;"></a>{$vo.news_hits}
                                             </div>
                                             <div class="blog-entry-meta-comments">
-                                                <a href="{:U('News/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i></a>{$vo.post_like}
+                                                <a href="{:U('News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$vo.news_like}</span>
                                             </div>
                                             <div class="blog-entry-meta-tags">
                                             </div>
@@ -98,7 +98,6 @@
     </div>
     <include file="Public:footer"/>
 </div>
-<include file="Public:section"/>
 <include file="Public:scripts"/>
 </body>
 </html>

@@ -22,6 +22,13 @@ class NewsController extends HomebaseController {
 		}
 		$tplname=$menu['menu_newstpl'];
     	$tplname=$tplname?$tplname:'news';
+		//自行根据网站需要考虑，是否需要判断
+		$can_do=check_user_action('news'.I('id'),0,false,60);
+		if($can_do){
+			//更新点击数
+			M('news')->save(array("n_id"=>I('id'),"news_hits"=>array("exp","news_hits+1")));
+			$news['news_hits']+=1;
+		}
 		$next=M('news')->where(array("news_time"=>array("egt",$news['news_time']), "n_id"=>array('neq',I('id')),"news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time asc")->find();
 		$prev=M('news')->where(array("news_time"=>array("elt",$news['news_time']), "n_id"=>array('neq',I('id')), "news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time desc")->find();
 		$this->assign($news);
@@ -30,6 +37,48 @@ class NewsController extends HomebaseController {
     	$this->display(":$tplname");
     }
     
-    public function do_like(){
+    public function dolike(){
+	    $this->check_login();
+    	$id=intval($_GET['id']);
+    	$news_model=M("news");
+    	$can_like=check_user_action('news'.$id,1);
+    	if($can_like){
+    		$news_model->save(array("n_id"=>$id,"news_like"=>array("exp","news_like+1")));
+    		$this->success("赞好啦！",1,1);
+    	}else{
+    		$this->error("您已赞过啦！",0,0);
+    	}
     }
+	function dofavorite(){
+        $this->check_login();
+		$key=I('key');
+		if($key){
+			$id=I('id');
+			if($key==encrypt_password('news-'.$id,'news')){
+				$uid=session('hid');
+				$favorites_model=M("favorites");
+				$find_favorite=$favorites_model->where(array('t_name'=>'news','t_id'=>$id,'uid'=>$uid))->find();
+				if($find_favorite){
+					$this->error("亲，您已收藏过啦！",0,0);
+				}else {
+                    $data=array(
+                        'uid'=>$uid,
+                        't_name'=>'news',
+                        't_id'=>$id,
+                        'createtime'=>time(),
+                    );
+					$result=$favorites_model->add($data);
+					if($result){
+						$this->success("收藏成功！",1,1);
+					}else {
+						$this->error("收藏失败！",0,0);
+					}
+				}
+			}else{
+				$this->error("非法操作，无合法密钥！",0,0);
+			}
+		}else{
+			$this->error("非法操作，无密钥！",0,0);
+		}
+	}
 }
