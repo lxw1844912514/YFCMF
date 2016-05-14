@@ -447,10 +447,12 @@ class PlugController extends AuthController {
 	 * @author rainfer <81818832@qq.com>
      */
 	public function plug_adtype_del(){
+		$p = I('p');
+        $rst=M('plug_ad')->where(array('plug_ad_adtypeid'=>I('plug_adtype_id')))->delete();//删除该广告位所有广告
 		if($rst!==false){
 			$rst=M('plug_adtype')->where(array('plug_adtype_id'=>I('plug_ad_adtypeid')))->delete();//删除广告位
 			if($rst!==false){
-				$this->success('广告位删除成功',U('plug_linktype_list', array('p' => $p)),1);
+				$this->success('广告位删除成功',U('plug_adtype_list', array('p' => $p)),1);
 			}else{
 				$this->error('广告位删除失败',0,0);
 			}
@@ -488,7 +490,7 @@ class PlugController extends AuthController {
 
 	public function plug_sug_edit(){
 		$plug_sug_id=I('plug_sug_id');
-		$plug_link=M('plug_sug')->where(array('plug_sug_id'=>plug_sug_id))->find();
+		$plug_link=M('plug_sug')->where(array('plug_sug_id'=>$plug_sug_id))->find();
 		$sl_data['plug_sug_id']=$plug_link['plug_sug_id'];
 		$sl_data['plug_sug_id']=$plug_link['plug_sug_title'];
 		$sl_data['plug_sug_email']=$plug_link['plug_sug_email'];

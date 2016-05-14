@@ -22,7 +22,7 @@
                             <span>{$news_time|date="Y-m-d H:i:s",###} by <a href="{:U('user/index/index',array('id'=>$vo['post_author']))}" class="blog-entry-meta-author">{$admin_realname|default=$admin_username}</a></span>
 		    		<span>
 		    			<a href="javascript:;"><i class="fa fa-eye"> </i></a>{$news_hits}
-						<a href="{:U('news/dolike',array('id'=>$n_id))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i><span class="count">{$news_like}</span></a>
+						<a href="{:U('news/dolike',array('id'=>$n_id))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$news_like}</span>
 						<a href="{:U('user/favorite/do_favorite',array('id'=>$object_id))}" class="js-favorite-btn" data-title="{$news_title}" data-url="#" data-key="#">
                             <i class="fa fa-star-o"> </i>
                         </a>
@@ -75,32 +75,6 @@
     </div>
     <include file="Public:footer"/>
 </div>
-<include file="Public:section"/>
 <include file="Public:scripts"/>
-<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
-<script src="__PUBLIC__/layer/layer.js"></script>
-<script type="text/javascript">
-$(function(){
-	var $js_count_btn = $("a.js-count-btn");
-	$js_count_btn.click(function(){
-		var $url=this.href,
-			$count=$(this).find(".count"),
-			count=parseInt($count.text());
-		$.post($url,{},function(data){
-			if(data.status){
-				layer.alert(data.info, {icon: 6}, function(index){
-                	$count.text(count+1);
-					layer.close(index);
-				});
-			} else {
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-				});
-			}
-		}, "json");
-		return false;
-	});
-});
-</script>
 </body>
 </html>

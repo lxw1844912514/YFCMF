@@ -584,3 +584,25 @@ jQuery(document).ready(function () {
 			placement: 'bottom'
 		});
 	});
+	//点赞等
+	$(function(){
+		var $js_count_btn = $("a.js-count-btn");
+		$js_count_btn.click(function(){
+			var $url=this.href,
+				$count=$(this).next(".count"),
+				count=parseInt($count.text());
+			$.post($url,{},function(data){
+				if(data.status){
+					layer.alert(data.info, {icon: 6}, function(index){
+						$count.text(count+1);
+						layer.close(index);
+					});
+				} else {
+					layer.alert(data.info, {icon: 5}, function(index){
+						layer.close(index);
+					});
+				}
+			}, "json");
+			return false;
+		});
+	});

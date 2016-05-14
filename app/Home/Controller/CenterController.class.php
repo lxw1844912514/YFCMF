@@ -83,8 +83,6 @@ class CenterController extends HomebaseController {
         $imgurl=I('post.imgurl');
         //去'/'
         $imgurl=str_replace('/','',$imgurl);
-        $user=M('member_list')->where(array('member_list_id'=>$this->userid))->find();
-        $old_img=$admin['member_list_headpic'];
         $data['member_list_headpic']=$imgurl;
         $rst=M('member_list')->where(array('member_list_id'=>$this->userid))->save($data);
         if($rst!==false){

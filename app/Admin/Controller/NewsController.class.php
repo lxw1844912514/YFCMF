@@ -353,6 +353,7 @@ class NewsController extends AuthController {
 
 	public function news_back_del(){
 		$n_id=I('n_id');
+		$p = I('p');
 		if (empty($n_id)){
 			$this->error('参数错误',U('news_back'),0);
 		}else{

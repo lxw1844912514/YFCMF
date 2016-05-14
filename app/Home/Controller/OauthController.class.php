@@ -96,7 +96,6 @@ class OauthController extends HomebaseController {
 				if($new_oauth_user_id){
 					$this->success("绑定成功！",U('Center/bang'),1);
 				}else{
-					$users_model->where(array("member_list_id"=>$new_user_id))->delete();
 					$this->error("绑定失败！",U('Center/bang'),0);
 				}
 			}else{
