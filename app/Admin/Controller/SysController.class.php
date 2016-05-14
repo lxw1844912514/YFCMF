@@ -1015,7 +1015,7 @@ class SysController extends AuthController {
 				$this->error ( '不是Excel文件，重新上传',U('excel_import'),0);
 			}
 			/*设置上传路径*/
-			$savePath = './Public/excel/';
+			$savePath = './public/excel/';
 			/*以时间来命名上传的文件*/
 			$str = time ( 'Ymdhis' );
 			$file_name = $str . "." . $file_type;
