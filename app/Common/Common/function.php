@@ -990,3 +990,12 @@ function check_user_action($object="",$count_limit=1,$ip_limit=false,$expire=0){
 	}
 	return true;
 }
+/**
+ * 用于生成收藏内容用的key
+ * @param string $table 收藏内容所在表
+ * @param int $object_id 收藏内容的id
+ */
+function get_favorite_key($table,$object_id){
+    $key=encrypt_password($table.'-'.$object_id,$table);
+    return $key;
+}

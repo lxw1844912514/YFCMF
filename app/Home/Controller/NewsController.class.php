@@ -49,4 +49,36 @@ class NewsController extends HomebaseController {
     		$this->error("您已赞过啦！",0,0);
     	}
     }
+	function dofavorite(){
+        $this->check_login();
+		$key=I('key');
+		if($key){
+			$id=I('id');
+			if($key==encrypt_password('news-'.$id,'news')){
+				$uid=session('hid');
+				$favorites_model=M("favorites");
+				$find_favorite=$favorites_model->where(array('t_name'=>'news','t_id'=>$id,'uid'=>$uid))->find();
+				if($find_favorite){
+					$this->error("亲，您已收藏过啦！",0,0);
+				}else {
+                    $data=array(
+                        'uid'=>$uid,
+                        't_name'=>'news',
+                        't_id'=>$id,
+                        'createtime'=>time(),
+                    );
+					$result=$favorites_model->add($data);
+					if($result){
+						$this->success("收藏成功！",1,1);
+					}else {
+						$this->error("收藏失败！",0,0);
+					}
+				}
+			}else{
+				$this->error("非法操作，无合法密钥！",0,0);
+			}
+		}else{
+			$this->error("非法操作，无密钥！",0,0);
+		}
+	}
 }

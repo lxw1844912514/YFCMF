@@ -8,4 +8,6 @@ body{color:#727272;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     box-shadow: 1px 1px 1px rgba(0,0,0,.15);
-}
+}.pagination {
+     margin: 0;
+ }
