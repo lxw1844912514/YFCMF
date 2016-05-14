@@ -50,7 +50,12 @@ class IndexController extends Controller {
             $data['pdo_mysql'] = '<i class="fa fa-remove error"></i> 未开启';
             $err++;
         }
-
+        if (extension_loaded('exif')) {
+            $data['exif'] = '<i class="fa fa-check correct"></i> 已开启';
+        } else {
+            $data['exif'] = '<i class="fa fa-remove error"></i> 未开启';
+            $err++;
+        }
         if (ini_get('file_uploads')) {
             $data['upload_size'] = '<i class="fa fa-check correct"></i> ' . ini_get('upload_max_filesize');
         } else {
