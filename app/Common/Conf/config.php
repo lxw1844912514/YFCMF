@@ -33,9 +33,6 @@ $configs= array(
 		'AUTH_RULE' => $configs_db['DB_PREFIX'].'auth_rule', //规则中间表
 		'AUTH_USER' => $configs_db['DB_PREFIX'].'admin'// 管理员表
 	),
-	//邮件相关
-	'MAIL_CHARSET' =>'utf-8',//设置邮件编码
-	'MAIL_ISHTML' =>TRUE, // 是否HTML格式邮件
 );
 $configs=array_merge($configs,$configs_db);
 //动态设置
