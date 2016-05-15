@@ -1,0 +1,99 @@
+<include file='Common:header' />
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+
+	<!-- #section:basics/sidebar -->
+
+	<include file='Common:left' />
+
+
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+
+
+
+				<!--主题-->
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							评论设置
+						</small>
+					</h1>
+				</div>
+
+				<script>
+
+					$(function(){
+						$('#csys').ajaxForm({
+							success: complete, // 这是提交后的方法
+							dataType: 'json'
+						});
+						function complete(data){
+							if(data.status==1){
+								layer.alert(data.info, {icon: 6}, function(index){
+									layer.close(index);
+									window.location.href=data.url;
+								});
+							}else{
+								layer.alert(data.info, {icon: 5}, function(index){
+									layer.close(index);
+								});
+							}
+						}
+
+					});
+				</script>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" name="csys" id="csys" method="post" action="{:U('runcsys')}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启评论： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="t_open" id="t_open" <if condition='$csys.T_OPEN eq 1'>checked</if>  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl"></span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 评论间隔时间： </label>
+								<div class="col-sm-9">
+									<input type="number" name="t_limit" id="t_limit" value="{$csys.T_LIMIT}"  placeholder="请输入间隔时间"  class="col-xs-10 col-sm-5" required/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>单位(秒)</span>
+									<span class="help-inline col-xs-12 col-sm-7">
+										<span class="middle" id="resone"></span>
+									</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="clearfix form-actions">
+								<div class="col-sm-offset-3 col-sm-9">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										保存
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										重置
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="hr hr-24"></div>
+				<include file='Common:header_nav' />
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+	<include file='Common:footer' />
+	</body>
+	</html>

@@ -971,6 +971,7 @@ class SysController extends AuthController {
 	}
 
 	public function admin_rule_del(){
+        //TODO 自动删除子权限
 		$rst=M('auth_rule')->where(array('id'=>I('id')))->delete();
         if($rst!==false){
             $this->success('权限删除成功',U('admin_rule_list'),1);

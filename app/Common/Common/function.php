@@ -721,6 +721,31 @@ function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=arra
     }
 }
 /**
+ * 获取评论
+ * @param string $tag
+ * @param array $where //按照thinkphp where array格式
+ */
+function get_comments($tag="field:*;limit:0,5;order:createtime desc;",$where=array()){
+    $where=is_array($where)?$where:array();
+    $tag=param2array($tag);
+	$field = !empty($tag['field']) ? $tag['field'] : '*';
+	$limit = !empty($tag['limit']) ? $tag['limit'] : '5';
+	$order = !empty($tag['order']) ? $tag['order'] : 'createtime desc';
+	
+	//根据参数生成查询条件
+	$mwhere['c_status'] = array('eq',1);
+	
+	if(is_array($where)){
+		$where=array_merge($mwhere,$where);
+	}else{
+		$where=$mwhere;
+	}
+	$join = "".C('DB_PREFIX').'member_list as b on a.uid =b.member_list_id';
+	$comments_model=M("comments");
+	$comments=$comments_model->alias("a")->join($join)->field($field)->where($where)->order($order)->limit($limit)->select();
+	return $comments;
+}
+/**
  * 获取新闻分类ids
  * @author rainfer <81818832@qq.com>
  *

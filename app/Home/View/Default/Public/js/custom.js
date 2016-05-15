@@ -650,3 +650,103 @@ jQuery(document).ready(function () {
             return false;
         });
     });
+	//评论
+	$(function(){
+		$('form.comment-form').ajaxForm({
+			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			success: complete, // 这是提交后的方法
+			dataType: 'json'
+		});
+		var $this=$('form.comment-form'),
+			$btn=$this.find('button');
+		function checkForm(){
+			$btn.text($btn.text() + '中...').prop('disabled', true).addClass('disabled');
+		}
+		function complete(data){
+			$btn.removeClass('disabled').text($btn.text().replace('中...', '')).removeProp('disabled').removeClass('disabled');
+			if(data.status==1){
+				layer.alert(data.info, {icon: 6}, function(index){
+					var $comments=$this.siblings(".comments"),
+						comment_tpl=$this.parent().find('.comment-tpl').html(),
+						$comment_tpl=$(comment_tpl),
+						$comment_postbox=$this.find(".comment-postbox"),
+						comment_content=$comment_postbox.val();
+					$comment_tpl.attr("data-id",data.id);
+					$comment_tpl.find(".comment-content .content").html(comment_content);
+                    $comments.append($comment_tpl);
+                    $comment_postbox.val("");
+					layer.close(index);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+			return false;
+		}
+	});
+//回复
+function comment_reply(obj){
+	$('.comments .comment-reply-submit').hide();
+	var $this=$(obj);
+	var $comment_body=$this.parents(".comments > .comment> .comment-body");
+	var commentid=$this.parents(".comment").data("id");
+	var $comment_reply_submit=$comment_body.find(".comment-reply-submit");
+	if($comment_reply_submit.length){
+		$comment_reply_submit.show();
+	}else{
+		var comment_reply_box_tpl=$comment_body.parents(".comment-area").find(".comment-reply-box-tpl").html();
+		$comment_reply_submit=$(comment_reply_box_tpl);
+		$comment_body.append($comment_reply_submit);
+	}
+	$comment_reply_submit.find(".textbox").focus();
+	$comment_reply_submit.data("replyid",commentid);
+}
+//取消回复
+function comment_cancel(obj){
+	$('.comments .comment-reply-submit').hide();
+}
+function comment_submit(obj){	
+	var $this=$(obj);
+	var $comment_reply_submit=$this.parents(".comment-reply-submit");
+	var $reply_textbox=$comment_reply_submit.find(".textbox");
+	var reply_content=$reply_textbox.val();
+	if(reply_content==''){
+		$reply_textbox.focus();
+		return;
+	}
+	var $comment_body=$this.parents(".comments > .comment> .comment-body");
+	var comment_tpl=$comment_body.parents(".comment-area").find(".comment-tpl").html();
+	var $comment_tpl=$(comment_tpl);
+	var replyid=$comment_reply_submit.data('replyid');
+	var $comment=$(".comments [data-id='"+replyid+"']");
+	var username=$comment.data("username");
+	$comment_tpl.find(".comment-content .toname").html("回复 "+username+" ");
+	$comment_tpl.find(".comment-content .content").html(reply_content);
+	$comment_reply_submit.before($comment_tpl);
+	var $comment_form=$this.parents(".comment-area").find(".comment-form");
+	var comment_url=$comment_form.attr("action");
+	var n_id=$comment_form.find("[name='n_id']").val();
+	var uid=$comment.data("uid");
+		$.post(comment_url,
+		{
+			n_id:n_id,
+			to_uid:uid,
+			parentid:replyid,
+			c_content:reply_content
+		},function(data){
+			if(data.status==1){
+				layer.alert(data.info, {icon: 6}, function(index){
+					$comment_tpl.attr("data-id",data.id);
+					$reply_textbox.val('');
+					layer.close(index);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5}, function(index){
+					$comment_tpl.remove();
+					layer.close(index);
+				});
+			}
+		},'json');
+		$comment_reply_submit.hide();	
+}

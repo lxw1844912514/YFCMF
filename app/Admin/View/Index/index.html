@@ -38,13 +38,13 @@
 								</div>
 								<div class="infobox infobox-pink col-xs-12 col-sm-6 col-md-6 col-lg-4">
 									<div class="infobox-icon">
-										<i class="ace-icon fa fa-book"></i>
+										<i class="ace-icon fa fa-comment"></i>
 									</div>
 									<div class="infobox-data">
-										<span class="infobox-data-number">{$tosugs_count}</span>
-										<div class="infobox-content">今日留言</div>
+										<span class="infobox-data-number">{$tocoms_count}</span>
+										<div class="infobox-content">今日评论</div>
 									</div>
-                                    <div class="stat <if condition='$difday_s lt 1'>stat-important<else />stat-success</if>">{$difday_s|round=###,0}%</div>
+                                    <div class="stat <if condition='$difday_c lt 1'>stat-important<else />stat-success</if>">{$difday_c|round=###,0}%</div>
 								</div>
 								<div class="infobox infobox-orange infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
 									<div class="infobox-icon">
@@ -67,11 +67,11 @@
 								</div>
 								<div class="infobox infobox-orange2 infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
 									<div class="infobox-icon">
-										<i class="ace-icon fa fa-book"></i>
+										<i class="ace-icon fa fa-comment"></i>
 									</div>
 									<div class="infobox-data">
-										<div class="infobox-content">总留言数</div>
-                                        <a href="{:U('Plug/plug_sug_list')}"><div class="infobox-content">{$sugs_count}</div></a>
+										<div class="infobox-content">总评论数</div>
+                                        <a href="{:U('Comment/comment_list')}"><div class="infobox-content">{$coms_count}</div></a>
 									</div>
 								</div>
 								<div class="row">
