@@ -31,6 +31,31 @@ class NewsController extends HomebaseController {
 		}
 		$next=M('news')->where(array("news_time"=>array("egt",$news['news_time']), "n_id"=>array('neq',I('id')),"news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time asc")->find();
 		$prev=M('news')->where(array("news_time"=>array("elt",$news['news_time']), "n_id"=>array('neq',I('id')), "news_open"=>1,'news_back'=>0,'news_columnid'=>$news['news_columnid']))->order("news_time desc")->find();
+		$t_open=C('COMMENT.T_OPEN');
+        if($t_open){
+            //获取评论数据
+            $join = "".C('DB_PREFIX').'member_list as b on a.uid =b.member_list_id';
+            $comment_model=M('comments');
+            $comments=$comment_model->alias("a")->join($join)->where(array("a.t_name"=>'news',"a.t_id"=>I('id'),"a.c_status"=>1))->order("a.createtime ASC")->select();
+            $count=count($comments);
+            $new_comments=array();
+            $parent_comments=array();
+            if(!empty($comments)){
+                foreach ($comments as $m){
+                    if($m['parentid']==0){
+                        $new_comments[$m['c_id']]=$m;
+                    }else{
+                        $path=explode("-", $m['path']);
+                        $new_comments[$path[1]]['children'][]=$m;
+                    }
+                    $parent_comments[$m['c_id']]=$m;
+                }
+            }
+            $this->assign("count",$count);
+            $this->assign("comments",$new_comments);
+            $this->assign("parent_comments",$parent_comments);
+        }
+        $this->assign("t_open",$t_open);
 		$this->assign($news);
 		$this->assign("next",$next);
     	$this->assign("prev",$prev);

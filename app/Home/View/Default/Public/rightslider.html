@@ -51,14 +51,22 @@
                 </div>
                 <div class="tabscontent" id="content3">
                     <ul class="posts">
-                        <php>//$last_comments=sp_get_comments("field:*;limit:0,5;order:createtime desc;");</php>
+                        <php>$last_comments=get_comments("field:*;limit:0,5;order:createtime desc;");</php>
                         <foreach name="last_comments" item="vo">
                             <li>
+								<a class="pull-left" href="{:U('News/index',array('id'=>$vo['t_id']))}" title="查看原文">
+									<if condition="empty($vo['member_list_headpic'])">
+									<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="img-thumbnail recent-post-img"/>
+									<elseif condition="stripos($vo['member_list_headpic'],'://')"/>
+									<img src="{$vo['member_list_headpic']}" class="img-thumbnail recent-post-img"/>
+									<else />
+									<img src="__UPLOAD__avatar/{$vo.member_list_headpic}" class="img-thumbnail recent-post-img"/>
+									</if>
+								</a>
                                 <i class="fa fa-comment"></i>
                                 <a href="{:U('user/index/index',array('id'=>$vo['uid']))}">{$vo.full_name}:</a>
-                                <p>{$vo.content}</p>
-                                <a href="__ROOT__/{$vo.url}#comment{$vo.id}">查看原文</a>
-                                <span class="comment-time">{:date('m月d日  H:i',strtotime($vo['createtime']))}</span>
+                                <p>{$vo.c_content}</p>
+                                <span class="comment-time">{$vo.createtime|date="Y-m-d H:i:s",###}</span>
                             </li></foreach>
                     </ul>
                 </div>

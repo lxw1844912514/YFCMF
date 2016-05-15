@@ -36,6 +36,9 @@ class IndexController extends CommonController {
         //总留言数
         $sugs_count=M('plug_sug')->count();
         $this->assign('sugs_count',$sugs_count);
+        //总评论数
+        $coms_count=M('comments')->count();
+        $this->assign('coms_count',$coms_count);
 
 		$today=strtotime(date('Y-m-d 00:00:00'));//今天开始日期
 		$todata['news_time'] = array('egt',$today);
@@ -65,6 +68,13 @@ class IndexController extends CommonController {
         $this->assign('ztsugs_count',$ztsugs_count);
         $difday_s=($ztsugs_count>0)?($tosugs_count-$ztsugs_count)/$ztsugs_count*100:0;
         $this->assign('difday_s',$difday_s);
+        //今日评论
+        $tocoms_count=M('comments')->where(array('createtime'=>array('egt',$today)))->count();
+        $this->assign('tocoms_count',$tocoms_count);
+        $ztcoms_count=M('comments')->where(array('createtime'=>array('between',array($ztday,$today))))->count();
+        $this->assign('ztcoms_count',$ztcoms_count);
+        $difday_c=($ztcoms_count>0)?($tocoms_count-$ztcoms_count)/$ztcoms_count*100:0;
+        $this->assign('difday_c',$difday_c);
 		//安全检测
 		$this->system_safe = true;
 

@@ -11,3 +11,24 @@ body{color:#727272;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:
 }.pagination {
      margin: 0;
  }
+ .pagination ul {
+    display: inline-block;
+    list-style: none;
+    margin-left: 0;
+    margin-bottom: 0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.pagination ul>li {
+    display: inline;
+}
+.pagination ul>li>a, .pagination ul>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.428571429;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}

@@ -271,7 +271,7 @@ class NewsController extends AuthController {
 		$p = I('p');
 		$ids = I('n_id');
 		if(empty($ids)){
-			$this -> error("请选择删除文章");//判断是否选择了文章ID
+			$this -> error("请选择删除文章",0,0);//判断是否选择了文章ID
 		}
 		if(is_array($ids)){//判断获取文章ID的形式是否数组
 			$where = 'n_id in('.implode(',',$ids).')';

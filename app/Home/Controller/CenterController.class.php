@@ -107,7 +107,7 @@ class CenterController extends HomebaseController {
         $join = "".C('DB_PREFIX').'news as b on a.t_id =b.n_id';
 		$favorites_model=M("favorites");
         $count= $favorites_model->alias("a")->join($join)->where(array('uid'=>$this->userid))->count();
-        $Page= new \Think\Page($count,10);// 实例化分页类 传入总记录数和每页显示的记录数
+        $Page= new \Think\Page($count,10);
         $show= $Page->show();// 分页显示输出
         $favorites=$favorites_model->alias("a")->join($join)->where(array('uid'=>$this->userid))->limit($Page->firstRow.','.$Page->listRows)->order('a.id asc')->select();
         $this->assign('page',$show);

@@ -971,6 +971,7 @@ class SysController extends AuthController {
 	}
 
 	public function admin_rule_del(){
+        //TODO 自动删除子权限
 		$rst=M('auth_rule')->where(array('id'=>I('id')))->delete();
         if($rst!==false){
             $this->success('权限删除成功',U('admin_rule_list'),1);
@@ -1015,7 +1016,7 @@ class SysController extends AuthController {
 				$this->error ( '不是Excel文件，重新上传',U('excel_import'),0);
 			}
 			/*设置上传路径*/
-			$savePath = './Public/excel/';
+			$savePath = './public/excel/';
 			/*以时间来命名上传的文件*/
 			$str = time ( 'Ymdhis' );
 			$file_name = $str . "." . $file_type;
