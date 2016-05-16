@@ -33,6 +33,17 @@ $configs= array(
 		'AUTH_RULE' => $configs_db['DB_PREFIX'].'auth_rule', //规则中间表
 		'AUTH_USER' => $configs_db['DB_PREFIX'].'admin'// 管理员表
 	),
+	//路径相关
+	  'TMPL_PARSE_STRING' => 
+	  array (
+		'__UPLOAD__' => __ROOT__.'/data/upload/',
+		'__PUBLIC__' => __ROOT__.'/public',
+		'__DATA__' => __ROOT__.'/data/',
+		'__AVATAR__' => __ROOT__.'/data/image/avatar/',
+		'__STATIC_ROOT__' => __ROOT__,
+	  ),
+	  'UPLOAD_TEMP_DIR' => './data/runtime/Data/',
+	  'UPLOAD_DIR' => './data/upload/',
 );
 $configs=array_merge($configs,$configs_db);
 //动态设置
