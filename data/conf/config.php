@@ -11,11 +11,11 @@
   ),
   'TMPL_PARSE_STRING' => 
   array (
-    '__UPLOAD__' => '/ace/data/upload/',
-    '__PUBLIC__' => '/ace/public',
-    '__DATA__' => '/ace/data/',
-    '__AVATAR__' => '/ace/data/image/avatar/',
-    '__STATIC_ROOT__' => '/ace',
+    '__UPLOAD__' => __ROOT__.'/data/upload/',
+    '__PUBLIC__' => __ROOT__.'/public',
+    '__DATA__' => __ROOT__.'/data/',
+    '__AVATAR__' => __ROOT__.'/data/image/avatar/',
+    '__STATIC_ROOT__' => __ROOT__,
   ),
   'UPLOAD_TEMP_DIR' => './data/runtime/Data/',
   'UPLOAD_DIR' => './data/upload/',
