@@ -45,8 +45,8 @@
 											</label>
 										</td>
 										<td>{$v.c_id}</td>
-										<td height="28">{$v.full_name}</td>
-										<td class="hidden-sm hidden-xs">{$v.email}</td>
+										<td height="28">{$v.member_list_username|default=$v['member_list_nickname']}</td>
+										<td class="hidden-sm hidden-xs">{$v.email|default=$v['member_list_email']}</td>
 										<td>{$v.c_content}</td>
 										<td class="hidden-xs">
 											<if condition="$v['c_status'] eq 1">

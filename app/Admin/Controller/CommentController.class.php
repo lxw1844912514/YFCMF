@@ -25,7 +25,8 @@ class CommentController extends AuthController {
 		}
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page_min',$show);
-		$comments=M('comments')->limit($Page->firstRow.','.$Page->listRows)->order('createtime desc')->select();
+		$join = "".C('DB_PREFIX').'member_list as b on a.uid =b.member_list_id';
+		$comments=M('comments')->alias("a")->join($join)->limit($Page->firstRow.','.$Page->listRows)->order('createtime desc')->select();
 		$this->assign('comments',$comments);
 		$this->display();
 	}
