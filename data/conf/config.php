@@ -9,16 +9,6 @@
     'con/:n_id' => 'Home/Index/news_content',
     'list/:c_id' => 'Home/Index/news_list',
   ),
-  'TMPL_PARSE_STRING' => 
-  array (
-    '__UPLOAD__' => __ROOT__.'/data/upload/',
-    '__PUBLIC__' => __ROOT__.'/public',
-    '__DATA__' => __ROOT__.'/data/',
-    '__AVATAR__' => __ROOT__.'/data/image/avatar/',
-    '__STATIC_ROOT__' => __ROOT__,
-  ),
-  'UPLOAD_TEMP_DIR' => './data/runtime/Data/',
-  'UPLOAD_DIR' => './data/upload/',
   'YFCMF_VERSION' => 'V1.0.0',
   'THINK_SDK_QQ' => 
   array (
