@@ -15,7 +15,7 @@ use Org\Util\String;
 class SysController extends AuthController {
 	//站点设置显示
 	public function sys(){
-		$arr=list_file(APP_PATH.'Home/view/');
+		$arr=list_file(APP_PATH.'Home/View/');
 		$tpls=array();
 		foreach($arr as $v){
 			if($v['isDir'] && strtolower($v['filename']!='public')){
