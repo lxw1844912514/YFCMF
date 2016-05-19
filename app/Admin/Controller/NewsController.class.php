@@ -14,7 +14,7 @@ class NewsController extends AuthController {
 		parent::_initialize();
         $sys=M('options')->where(array('option_name'=>'site_options'))->getField("option_value");
         $sys=json_decode($sys,true);
-		$arr=list_file(APP_PATH.'Home/view/'.$sys['site_tpl'],'*.html');
+		$arr=list_file(APP_PATH.'Home/View/'.$sys['site_tpl'],'*.html');
 		$tpls=array();
 		foreach($arr as $v){
 			$tpls[]=basename($v['filename'],'.html');
