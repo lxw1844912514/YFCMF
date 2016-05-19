@@ -680,7 +680,7 @@ function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=arra
             $catids=get_menu_byid($cid,1);
             if(!empty($catids)){
                 $catids=implode(",", $catids);
-                $catids="cid:$catids;";
+                //$catids="cid:$catids;";
             }else{
                 $catids="";
             }
