@@ -48,7 +48,7 @@
 													<a class="db-import restore" href="{:U('restore?time='.$v['time'])}" title="还原">
 														<i class="ace-icon fa fa-reply-all bigger-130"></i>
 													</a>												
-													<a class="db-import" href="__PUBLIC__/Data/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" title="下载">
+													<a class="db-import" href="__DATA__backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" title="下载">
 														<i class="ace-icon fa fa-cloud-download bigger-130"></i>
 													</a>
 													<a class="ajax-get confirm del" href="{:U('del?time='.$v['time'])}"  title="删除">
@@ -69,7 +69,7 @@
 																</a>
 															</li>
 															<li>
-																<a href="__PUBLIC__/Data/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="下载">
+																<a href="__DATA__backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="下载">
 																	<span class="green">
 																		<i class="ace-icon fa fa-cloud-download bigger-120"></i>
 																	</span>
