@@ -329,7 +329,8 @@ class NewsController extends AuthController {
 			$map[] ="FIND_IN_SET('$diyflag',news_flag)";
 		}
 		//p($map);die;
-		$count= M('news')->where($map)->count();// 查询满足要求的总记录数
+		$join1 = "".C('DB_PREFIX').'admin as b on a.news_auto =b.admin_id';
+		$count= M('news')->alias("a")->join($join1)->where($map)->count();// 查询满足要求的总记录数
 		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page',$show);
@@ -339,7 +340,7 @@ class NewsController extends AuthController {
 		}
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page_min',$show);
-		$news=D('News')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('news_time desc')->relation(true)->select();
+		$news=D('News')->alias("a")->join($join1)->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('news_time desc')->relation(true)->select();
 		$diyflag_list=M('diyflag')->select();//文章属性数据
 		$this->assign('opentype_check',$opentype_check);
 		$this->assign('keytype',$keytype);
