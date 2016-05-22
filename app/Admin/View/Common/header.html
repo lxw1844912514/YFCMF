@@ -32,25 +32,11 @@
 	<!-- inline styles related to this page -->
 	<link rel="stylesheet" href="__PUBLIC__/assets/css/yfcmf.css" />
 	<!-- ace settings handler -->
-	<script src="__PUBLIC__/assets/js/ace-extra.js"></script>
-	<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
-	<script src="__PUBLIC__/assets/js/jquery.form.js"></script>
-	<script src="__PUBLIC__/layer/layer.js"></script>
-	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
-
-	<!--[if lte IE 8]>
-	<script src="__PUBLIC__/assets/js/html5shiv.js"></script>
-	<script src="__PUBLIC__/assets/js/respond.js"></script>
-	<![endif]-->
 </head>
 
 <body class="no-skin">
 <!-- #section:basics/navbar.layout -->
 <div id="navbar" class="navbar navbar-default    navbar-collapse navbar-fixed-top">
-	<script type="text/javascript">
-		try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-	</script>
-
 	<div class="navbar-container" id="navbar-container">
 		<!-- #section:basics/sidebar.mobile.toggle -->
 		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
@@ -96,7 +82,7 @@
 					<a style="cursor:pointer;" class="dropdown-toggle" href="{:U('Home/index/index')}" target="_blank">前台首页</a>
 				</li>
 				<li class="transparent">
-					<a style="cursor:pointer;" id="cache" class="dropdown-toggle" href="{:U('Sys/clear')}">清除缓存</a>
+					<a style="cursor:pointer;" data-info="确定要清理缓存吗？" class="dropdown-toggle confirm-rst-btn" href="{:U('Sys/clear')}">清除缓存</a>
 				</li>
 				<li class="transparent" style="display: none">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -216,7 +202,7 @@
 						<li class="divider"></li>
 
 						<li>
-							<a href="javascript:;"  id="logout">
+							<a href="{:U('Login/logout')}"  data-info="你确定要退出吗？" class="confirm-btn">
 								<i class="ace-icon fa fa-power-off"></i>
 								注销
 							</a>
@@ -231,34 +217,3 @@
 		<!-- /section:basics/navbar.dropdown -->
 	</div><!-- /.navbar-container -->
 </div>
-
-<script type="text/javascript">
-var admin_ueditor_handle = "{:U('Sys/upload')}";
-var admin_ueditor_lang ='zh-cn';
-</script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("#logout").click(function(){
-			layer.confirm('你确定要退出吗？', {icon: 3}, function(index){
-				layer.close(index);
-				window.location.href="{:U('Login/logout')}";
-			});
-		});
-	});
-
-
-
-	$(function(){
-		$('#cache').click(function(){
-			var $url=this.href;
-			layer.confirm('确定要清理缓存吗？', {icon: 3}, function(index){
-			layer.close(index);
-			$.get($url, function(data){
-				layer.alert('清理缓存成功！', {icon: 6});
-			}, "json");
-			});
-			return false;
-		});
-	});
-</script>
-

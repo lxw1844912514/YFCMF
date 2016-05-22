@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div>
-							<form id="leftnav" name="leftnav" method="post" action="{:U('news_menu_order')}" >
+							<form class="ajaxForm2" name="leftnav" method="post" action="{:U('news_menu_order')}" >
 								<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 									<thead>
 									<tr>
@@ -28,11 +28,11 @@
 											<td style=padding-left:<if condition='$v.leftpin neq 0'>{$v.leftpin}</if>px; >{$v.lefthtml}{$v.menu_name}</span> <strong>(ID：{$v.id})</strong></td>
 											<td>
 												<if condition="$v['menu_open'] eq 1">
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.id});" title="已开启">
+													<a class="red open-btn" href="{:U('news_menu_state')}" data-id="{$v.id}" title="已开启">
 														<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 													</a>
 													<else/>
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.id});" title="已禁用">
+													<a class="red open-btn" href="{:U('news_menu_state')}" data-id="{$v.id}" title="已禁用">
 														<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 													</a>
 												</if>
@@ -44,7 +44,7 @@
 														<i class="ace-icon fa fa-plus-circle bigger-130"></i>																</a>
 													<a class="green" href="{:U('news_menu_edit',array('id'=>$v['id']))}" title="修改">
 														<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-													<a class="red del" href="{:U('news_menu_del',array('id'=>$v['id']))}" title="删除">
+													<a class="red del" href="{:U('news_menu_del',array('id'=>$v['id']))}" data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline position-relative">
@@ -68,7 +68,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('news_menu_del',array('id'=>$v['id']))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('news_menu_del',array('id'=>$v['id']))}"  data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -96,81 +96,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-	<script>
-		$(function(){
-			$('#leftnav').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				//空
-			}
-
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('news_menu_list')}";
-					});
-				}
-			}
-
-		});
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('若存在子菜单，则子菜单将一起被删除，你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		function stateyes(val){
-			$.post('{:U("news_menu_state")}',
-					{x:val},
-					function(data){
-						var $v=val;
-						if(data.status){
-							if(data.info=='状态禁止'){
-								var a='<button class="btn btn-minier btn-danger">禁用</button>'
-								$('#zt'+val).html(a);
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">开启</button>'
-								$('#zt'+val).html(b);
-								return false;
-							}
-
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

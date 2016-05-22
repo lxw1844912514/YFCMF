@@ -129,11 +129,11 @@
 												<td class="hidden-xs">{$v.news_hits}</td>
 												<td class="hidden-xs">
 													<if condition="$v['news_open'] eq 1">
-														<a class="red" href="javascript:;" onclick="return stateyes({$v.n_id});" title="已审">
+														<a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="已审">
 															<div id="zt{$v.n_id}"><button class="btn btn-minier btn-yellow">已审</button></div>
 														</a>
 														<else/>
-														<a class="red" href="javascript:;" onclick="return stateyes({$v.n_id});" title="未审">
+														<a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="未审">
 															<div id="zt{$v.n_id}"><button class="btn btn-minier btn-danger">未审</button></div>
 														</a>
 													</if>
@@ -144,7 +144,7 @@
 														<a class="green" href="{:U('news_edit',array('n_id'=>$v['n_id']))}" title="修改">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
-														<a class="red del" href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="回收站">
+														<a class="red del" data-info="你确定要删除到回收站吗？" href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="回收站">
 															<i class="ace-icon fa fa-trash-o bigger-130"></i>
 														</a>
 													</div>
@@ -163,7 +163,7 @@
 																	</li>
 
 																	<li>
-																		<a href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																		<a href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" data-info="你确定要删除到回收站吗？" class="tooltip-error del" data-rel="tooltip" title="" data-original-title="回收站">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>
@@ -193,108 +193,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-
-
-		function unselectall(){
-			if(document.myform.chkAll.checked){
-				document.myform.chkAll.checked = document.myform.chkAll.checked&0;
-			}
-		}
-		function CheckAll(form){
-			for (var i=0;i<form.elements.length;i++){
-				var e = form.elements[i];
-				if (e.Name != 'chkAll'&&e.disabled==false)
-					e.checked = form.chkAll.checked;
-			}
-		}
-
-	</script>
-	<script>
-		$(function(){
-			$('#alldel').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置，一般是判断为空获取其他规则
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				var chk_value =[];
-				$('input[id="navid"]:checked').each(function(){
-					chk_value.push($(this).val());
-				});
-
-				if(!chk_value.length){
-					layer.alert('至少选择一个删除项', {icon: 5});
-					return false;
-				}
-			}
-
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						//window.location.href="{:U('news_list')}";
-					});
-				}
-			}
-
-		});
-
-
-		function stateyes(val){
-			$.post('{:U("news_state")}',
-					{x:val},
-					function(data){
-						var $v=val;
-						if(data.status){
-							if(data.info=='未审'){
-								var a='<button class="btn btn-minier btn-danger">未审</button>'
-								$('#zt'+val).html(a);
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">已审</button>'
-								$('#zt'+val).html(b);
-								return false;
-							}
-
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

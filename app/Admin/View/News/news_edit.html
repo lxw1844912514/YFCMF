@@ -19,13 +19,13 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="form0" id="form0" method="post" action="{:U('news_runedit')}"  enctype="multipart/form-data">
+						<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:U('news_runedit')}"  enctype="multipart/form-data">
 							<input type="hidden" name="n_id" id="n_id" value="{$news_list.n_id}" />
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章所属主栏目： </label>
 								<div class="col-sm-10">
-									<select name="news_columnid"  class="col-sm-3 " >
+									<select name="news_columnid"  class="col-sm-3 " required>
 										<option value="">请选择所属栏目</option>
 										<foreach name="menu" item="vo">
 											<option value="{$vo.id}"  <if condition="$vo.id eq $news_list['news_columnid']">selected</if> <if condition="$vo.menu_type eq 1">disabled class="bgccc"<else/>class="bgc"</if>>{$vo.lefthtml}{$vo.menu_name} <if condition="$vo.menu_type eq 1">(频道页)</if></option>
@@ -38,7 +38,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章名称：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="news_title" id="news_title"  value="{$news_list.news_title}"   class="col-xs-10 col-sm-6"/>
+									<input type="text" name="news_title" id="news_title"  value="{$news_list.news_title}"   class="col-xs-10 col-sm-6" required/>
 									<input type="text" name="news_titleshort" id="news_titleshort"  value="{$news_list.news_titleshort}" placeholder="简短标题，建议6~12字数" class="col-xs-10 col-sm-4" style="margin-left:10px;" />
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
@@ -71,7 +71,7 @@
 							<div class="form-group" id="cpprice">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 产品价格：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="news_cpprice" id="news_cpprice"  value="{$news_list.news_cpprice}"   placeholder="输入产品价格" class="col-xs-10 col-sm-6" />
+									<input type="number" name="news_cpprice" id="news_cpprice"  value="{$news_list.news_cpprice}"   placeholder="输入产品价格" class="col-xs-10 col-sm-6" />
 								</div>
 							</div>
 							<div class="space-4"></div>
@@ -107,7 +107,7 @@
 										<input type="file" name="pic_one[]" id="file0" multiple="multiple"/>
 										选择上传文件
 									</a>
-									<span class="lbl">&nbsp;&nbsp;<img src="<if condition="$news_list.news_img neq ''">{$news_list.news_img}<else/>__PUBLIC__/img/no_img.jpg</if>" width="100" height="70" id="img0" ></span>&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$news_list.news_img eq ''">__PUBLIC__/img/no_img.jpg<else/>__UPLOAD__{$news_list.news_img}</if>');" title="还原修改前的图片" class="file">
+									<span class="lbl">&nbsp;&nbsp;<img src="<if condition="$news_list.news_img neq ''">{$news_list.news_img}<else/>__PUBLIC__/img/no_img.jpg</if>" width="100" height="70" id="img0" ></span>&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$news_list.news_img eq ''">__PUBLIC__/img/no_img.jpg<else/>{$news_list.news_img}</if>');" title="还原修改前的图片" class="file">
 									撤销修改
 									</a>
 											<span class="lbl">&nbsp;&nbsp;上传前先用PS处理成等比例图片后上传，默认比例100*70、600*420、800*560像素<br />
@@ -224,15 +224,7 @@
 
 </div><!-- /.main-container -->
 <script>
-	function backpic(picurl){
-		$("#img0").attr("src",picurl);//还原修改前的图片
-		$("input[name='file0']").val("");//清空文本框的值
-		$("input[name='oldcheckpic']").val(picurl);//清空文本框的值
-	}
-
 	$(document).ready(function(){
-
-
 		$("#news_pic_list").click(function(){
 			$("#pic_list").hide();
 		});
@@ -253,9 +245,7 @@
 		$("#news_flag_vacp").click(function(){
 			$("#cpprice").toggle(400);
 		});
-
 	});
-
 	$(function(){
 		$('#address').hide();//默认隐藏
 		$('#type2').click(function(){
@@ -265,81 +255,7 @@
 			$('#address').hide();
 		});
 	});
-
-	$(function(){
-		$('#form0').ajaxForm({
-			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-			success: complete, // 这是提交后的方法
-			dataType: 'json'
-		});
-
-		function checkForm(){
-			if( '' == $.trim($('#news_title').val())){
-				layer.alert('文章标题不能为空', {icon: 5}, function(index){
-					layer.close(index);
-					$('#news_title').focus();
-				});
-				return false;
-			}
-
-			if(isNaN($.trim($('#news_cpprice').val()))){
-				layer.alert('价格需为数字', {icon: 5}, function(index){
-					layer.close(index);
-					$('#news_cpprice').focus();
-				});
-				return false;
-			}
-		}
-		function complete(data){
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
-					layer.close(index);
-					window.location.href=data.url;
-				});
-			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-					window.location.href="{:U('news_list')}";
-				});
-				return false;
-			}
-		}
-	});
 </script>
-<script>
-	$("#file0").change(function(){
-		var objUrl = getObjectURL(this.files[0]) ;
-		console.log("objUrl = "+objUrl) ;
-		if (objUrl) {
-			$("#img0").attr("src", objUrl) ;
-		}
-	}) ;
-	//建立一個可存取到該file的url
-	function getObjectURL(file) {
-		var url = null ;
-		if (window.createObjectURL!=undefined) { // basic
-			$("#news_flag_vap").attr("checked", true);
-			$("#oldcheckpic").val("nopic");
-			url = window.createObjectURL(file) ;
-		} else if (window.URL!=undefined) { // mozilla(firefox)
-			$("#news_flag_vap").attr("checked", true);
-			$("#oldcheckpic").val("nopic");
-			url = window.URL.createObjectURL(file) ;
-		} else if (window.webkitURL!=undefined) { // webkit or chrome
-			$("#news_flag_vap").attr("checked", true);
-			$("#oldcheckpic").val("nopic");
-			url = window.webkitURL.createObjectURL(file) ;
-		}
-		return url ;
-	}
-
-	//来源
-	function souadd(val){
-		$('#news_source').val(val);
-	}
-</script>
-
-
 <!-- 显示模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" style="width:80%">
@@ -396,14 +312,5 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script>
-	function delall(id,url){
-		$('#id'+id).hide();
-		var str=$('#pic_oldlist').val();//最原始的完整路径
-		var surl=url+',';
-		var pic_newold=str.replace(surl,"");
-		$('#pic_oldlist').val(pic_newold);
-	}
-</script>
 </body>
 </html>

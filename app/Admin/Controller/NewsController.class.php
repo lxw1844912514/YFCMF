@@ -216,7 +216,7 @@ class NewsController extends AuthController {
 					}
 				}
 			}else{
-				$this->error($upload->getError());//否则就是上传错误，显示错误原因
+				$this->error($upload->getError(),U('news_list'),0);//否则就是上传错误，显示错误原因
 			}
 			$picall_list=$pic_oldlist.$picall_url;//整合新的多图字符串以及老的字符串
 		}else{
@@ -254,8 +254,12 @@ class NewsController extends AuthController {
 			$sl_data['news_img']=$img_url;
 		}
 		$sl_data['news_pic_allurl']=$picall_list;
-		$news->save($sl_data);
-		$this->success('文章修改成功,返回列表页',U('news_list'),1);
+		$rst=$news->save($sl_data);
+		if($rst!==false){
+			$this->success('文章修改成功,返回列表页',U('news_list'),1);
+		}else{
+			$this->error('文章修改失败',U('news_list'),0);
+		}
 	}
 
 	public function news_del(){
@@ -264,14 +268,14 @@ class NewsController extends AuthController {
 		if($rst){
 			$this->success('文章已转入回收站',U('news_list',array('p' => $p)),1);
 		}else{
-			$this -> error("删除文章失败！");
+			$this -> error("删除文章失败！",U('news_list',array('p'=>$p)),0);
 		}
 	}
 	public function news_alldel(){
 		$p = I('p');
 		$ids = I('n_id');
 		if(empty($ids)){
-			$this -> error("请选择删除文章",0,0);//判断是否选择了文章ID
+			$this -> error("请选择删除文章",U('news_list',array('p'=>$p)),0);//判断是否选择了文章ID
 		}
 		if(is_array($ids)){//判断获取文章ID的形式是否数组
 			$where = 'n_id in('.implode(',',$ids).')';
@@ -299,7 +303,7 @@ class NewsController extends AuthController {
 	public function news_back_open(){
 		$p=I('p');
 		$rst=M('news')->where(array('n_id'=>I('n_id')))->setField('news_back',0);//转入正常
-		if($rst){
+		if($rst!==false){
 			$this->success('文章还原成功',U('news_back',array('p' => $p)),1);
 		}else{
 			$this -> error("文章还原失败！");
@@ -576,8 +580,12 @@ class NewsController extends AuthController {
 			if ($checkpic!=$oldcheckpic){
 				$data['menu_img']=$img_url;
 			}
-			M('menu')->save($data);
-			$this->success('菜单保存成功',U('news_menu_list'),1);
+			$rst=M('menu')->save($data);
+			if($rst!==false){
+				$this->success('菜单修改成功',U('news_menu_list'),1);
+			}else{
+				$this->error('菜单修改失败',U('news_menu_list'),0);
+			}
 		}
 	}
 
