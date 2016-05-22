@@ -42,7 +42,7 @@ class PlugController extends AuthController {
      */
 	public function plug_link_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_link_list'),0);
 		}else{
 			$sl_data=array(
 				'plug_link_name'=>I('plug_link_name'),
@@ -54,8 +54,12 @@ class PlugController extends AuthController {
 				'plug_link_addtime'=>time(),
 				'plug_link_open'=>I('plug_link_open'),
 			);
-			M('plug_link')->add($sl_data);
-			$this->success('友情链接添加成功',U('plug_link_list'),1);
+			$rst=M('plug_link')->add($sl_data);
+			if($rst!==false){
+				$this->success('友情链接添加成功',U('plug_link_list'),1);
+			}else{
+				$this->error('友情链接添加失败',U('plug_link_list'),0);
+			}
 		}
 	}
 
@@ -69,7 +73,7 @@ class PlugController extends AuthController {
 		if($rst!==false){
 			$this->success('友情链接删除成功',U('plug_link_list',array('p' => $p)),1);
 		}else{
-			$this->error('友情链接删除失败',0,0);
+			$this->error('友情链接删除失败',U('plug_link_list',array('p' => $p)),0);
 		}
 	}
 
@@ -116,7 +120,7 @@ class PlugController extends AuthController {
      */
 	public function plug_link_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_link_list'),0);
 		}else{
 			$sl_data=array(
 				'plug_link_id'=>I('plug_link_id'),
@@ -151,7 +155,7 @@ class PlugController extends AuthController {
 		if($rst!==false){
 			$this->success('友链类型删除成功',U('plug_linktype_list'),1);
 		}else{
-			$this->error('友链类型删除失败',0,0);
+			$this->error('友链类型删除失败',U('plug_linktype_list'),0);
 		}
 	}
 
@@ -186,7 +190,7 @@ class PlugController extends AuthController {
      */
 	public function plug_linktype_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_linktype_list'),0);
 		}else{
 			$plug_linktype=M('plug_linktype');
 			foreach ($_POST as $plug_linktype_id => $plug_linktype_order){
@@ -223,7 +227,7 @@ class PlugController extends AuthController {
      */
 	public function plug_ad_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_ad_list'),0);
 		}else{
 			//处理图片
 			$file=I('file0');//获取图片路径
@@ -242,7 +246,7 @@ class PlugController extends AuthController {
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
 			}else{
-				$this->error($upload->getError());//否则就是上传错误，显示错误原因
+				$this->error($upload->getError(),U('plug_ad_list'),0);//否则就是上传错误，显示错误原因
 			}
 			//构建数组
 
@@ -276,7 +280,7 @@ class PlugController extends AuthController {
 		if($rst!==false){
 			$this->success('广告删除成功',U('plug_ad_list'),1);
 		}else{
-			$this->error('广告删除失败',0,0);
+			$this->error('广告删除失败',U('plug_ad_list'),0);
 		}
 	}
 
@@ -286,7 +290,7 @@ class PlugController extends AuthController {
      */
 	public function plug_ad_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_ad_list'),0);
 		}else{
 			$plug_ad=M('plug_ad');
 			foreach ($_POST as $id => $sort){
@@ -334,7 +338,7 @@ class PlugController extends AuthController {
      */
 	public function plug_ad_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_ad_list'),0);
 		}else{
 
 			$file=I('file1');//获取图片路径
@@ -354,7 +358,7 @@ class PlugController extends AuthController {
 				if($info) {
 					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
-					$this->error($upload->getError());//否则就是上传错误，显示错误原因
+					$this->error($upload->getError(),U('plug_ad_list'),0);//否则就是上传错误，显示错误原因
 				}
 			}
 
@@ -435,7 +439,7 @@ class PlugController extends AuthController {
      */
 	public function plug_adtype_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_adtype_list'),0);
 		}else{
 			M('plug_adtype')->save($_POST);
 			$this->success('广告位修改成功',U('plug_adtype_list'),1);
@@ -454,10 +458,10 @@ class PlugController extends AuthController {
 			if($rst!==false){
 				$this->success('广告位删除成功',U('plug_adtype_list', array('p' => $p)),1);
 			}else{
-				$this->error('广告位删除失败',0,0);
+				$this->error('广告位删除失败',U('plug_adtype_list', array('p' => $p)),0);
 			}
 		}else{
-			$this->error('广告位删除失败',0,0);
+			$this->error('广告位删除失败',U('plug_adtype_list', array('p' => $p)),0);
 		}
 	}
 
@@ -467,7 +471,7 @@ class PlugController extends AuthController {
      */
 	public function plug_adtype_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('plug_adtype_list'),0);
 		}else{
 			$plug_adtype=M('plug_adtype');
 			foreach ($_POST as $id => $sort){
@@ -509,7 +513,7 @@ class PlugController extends AuthController {
 		if($rst!==false){
 			$this->success('留言删除成功',U('plug_sug_list'),1);
 		}else{
-			$this->error('留言删除失败',0,0);
+			$this->error('留言删除失败',U('plug_sug_list'),0);
 		}
 	}
 	//本地文件列表
@@ -707,7 +711,7 @@ class PlugController extends AuthController {
 		$p = I('p');
 		$ids = I('id');
 		if(empty($ids)){
-			$this -> error("请选择要删除的文件",0,0);
+			$this -> error("请选择要删除的文件",U('plug_file_filter',array('p'=>$p)),0);
 		}
 		if(is_array($ids)){
 			$where = 'id in('.implode(',',$ids).')';
@@ -723,7 +727,7 @@ class PlugController extends AuthController {
 			if (M('plug_files')->where($where)->delete()!==false) {
 				$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 			} else {
-				$this->error("删除文件失败！",0,0);
+				$this->error("删除文件失败！",U('plug_file_filter',array('p'=>$p)),0);
 			}
 		}else{
 			$r=M('plug_files')->find($ids);
@@ -738,10 +742,10 @@ class PlugController extends AuthController {
 				if (M('plug_files')->delete($ids)!==false) {
 					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 				}else{
-					$this->error("删除文件失败！",0,0);
+					$this->error("删除文件失败！",U('plug_file_filter',array('p'=>$p)),0);
 				}
 			}else{
-				$this->error("删除文件失败！",0,0);
+				$this->error("删除文件失败！",U('plug_file_filter',array('p'=>$p)),0);
 			}
 		}
 	}
@@ -763,10 +767,10 @@ class PlugController extends AuthController {
 				if (M('plug_files')->delete($id)!==false) {
 					$this->success("删除文件成功！",U('plug_file_filter',array('p'=>$p)),1);
 				}else{
-					$this->error("删除文件失败！",0,0);
+					$this->error("删除文件失败！",U('plug_file_filter',array('p'=>$p)),0);
 				}
 			}else{
-				$this -> error("文件删除失败！",0,0);
+				$this->error("文件删除失败！",U('plug_file_filter',array('p'=>$p)),0);
 			}
 		}
 	}

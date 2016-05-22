@@ -119,7 +119,7 @@ class NewsController extends AuthController {
 
 
 			}else{
-				$this->error($upload->getError());//否则就是上传错误，显示错误原因
+				$this->error($upload->getError(),U('news_list'),0);//否则就是上传错误，显示错误原因
 			}
 		}
 
@@ -306,7 +306,7 @@ class NewsController extends AuthController {
 		if($rst!==false){
 			$this->success('文章还原成功',U('news_back',array('p' => $p)),1);
 		}else{
-			$this -> error("文章还原失败！");
+			$this -> error("文章还原失败！",U('news_back',array('p' => $p)),0);
 		}
 	}
 
@@ -366,7 +366,7 @@ class NewsController extends AuthController {
 			if($rst){
 				$this->success('文章彻底删除成功',U('news_back',array('p' => $p)),1);
 			}else{
-				$this -> error("文章彻底删除失败！");
+				$this -> error("文章彻底删除失败！",U('news_back',array('p' => $p)),0);
 			}
 		}
 	}
@@ -375,7 +375,7 @@ class NewsController extends AuthController {
 		$p = I('p');
 		$ids = I('n_id','',htmlspecialchars);
 		if(empty($ids)){
-			$this -> error("请选择删除文章");//判断是否选择了文章ID
+			$this -> error("请选择删除文章",U('news_back',array('p'=>$p)),0);//判断是否选择了文章ID
 		}
 		$model = D('news');
 		if(is_array($ids)){//判断获取文章ID的形式是否数组
@@ -424,7 +424,7 @@ class NewsController extends AuthController {
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
 			}else{
-				$this->error($upload->getError());//否则就是上传错误，显示错误原因
+				$this->error($upload->getError(),U('news_menu_list'),0);//否则就是上传错误，显示错误原因
 			}
 			//构建数组
 			
@@ -478,10 +478,10 @@ class NewsController extends AuthController {
                     }
                     $this->success('菜单删除成功',U('news_menu_list'),1);
 				}else{
-					$this -> error("菜单删除失败！");
+					$this -> error("菜单删除失败！",U('news_menu_list'),0);
 				}
 			}else{
-				$this -> error("菜单删除失败！");
+				$this -> error("菜单删除失败！",U('news_menu_list'),0);
 			}
 		}else{
 			$rst=M('menu')->where(array('id'=>I('id')))->delete();//无子菜单，删除自身
@@ -495,7 +495,7 @@ class NewsController extends AuthController {
                 }
                 $this->success('菜单删除成功',U('news_menu_list'),1);
 			}else{
-				$this -> error("菜单删除失败！");
+				$this -> error("菜单删除失败！",U('news_menu_list'),0);
 			}
 		}
 	}
@@ -558,7 +558,7 @@ class NewsController extends AuthController {
 				if($info) {
 					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
-					$this->error($upload->getError());//否则就是上传错误，显示错误原因
+					$this->error($upload->getError(),U('news_menu_list'),0);//否则就是上传错误，显示错误原因
 				}
 			}
 			$data=array(

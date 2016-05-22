@@ -22,17 +22,17 @@ class LoginController extends CommonController {
 	//登陆验证
 	public function runlogin(){
 		if (!IS_AJAX){
-			$this->error("提交方式错误！",0,0);
+			$this->error("提交方式错误！",U('Login/login'),0);
 		}else{
 			$admin_username=I('admin_username');
 			$password=I('admin_pwd');
 			$verify =new Verify ();
 			if (!$verify->check(I('verify'), 'aid')) {
-				$this->error('验证码错误',0,0);
+				$this->error('验证码错误',U('Login/login'),0);
 			}
 			$admin=M('admin')->where(array('admin_username'=>$admin_username))->find();
 			if (!$admin||encrypt_password($password,$admin['admin_pwd_salt'])!==$admin['admin_pwd']){
-				$this->error('用户名或者密码错误，重新输入',0,0);
+				$this->error('用户名或者密码错误，重新输入',U('Login/login'),0);
 			}else{
 				//检查是否弱密码
 				session('admin_weak_pwd', false);
@@ -62,7 +62,7 @@ class LoginController extends CommonController {
 				session('admin_realname',$admin['admin_realname']);
 				session('admin_avatar',$admin['admin_avatar']);
 				session('admin_last_change_pwd_time', $admin ['admin_changepwd']);
-				$this->success('恭喜您，登陆成功',1,1);
+				$this->success('恭喜您，登陆成功',U('Index/index'),1);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ class LoginController extends CommonController {
 	public function verify()
     {
         if (session('aid')) {
-            header('Location: ' . U('index/index'));
+            header('Location: ' . U('Index/index'));
             return;
         }
 		ob_end_clean();

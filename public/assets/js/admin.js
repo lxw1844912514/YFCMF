@@ -155,6 +155,29 @@ $(function(){
 		return false;
 	});
 });
+/* 显示状态操作 */
+$(function(){
+	$(".display-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{x:val}, function(data){
+			if(data.status){
+				if(data.info=='状态禁止'){
+					var a='<button class="btn btn-minier btn-danger">隐藏状态</button>'
+					$('#zt'+val).html(a);
+					return false;
+				}else{
+					var b='<button class="btn btn-minier btn-yellow">显示状态</button>'
+					$('#zt'+val).html(b);
+					return false;
+				}
+			} else {
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
 /* 激活状态操作 */
 $(function(){
 	$(".active-btn").click(function(){
@@ -344,3 +367,70 @@ function delall(id,url){
 function souadd(val){
 	$('#news_source').val(val);
 }
+$(function () { $("[data-toggle='tooltip']").tooltip(); });
+$(document).ready(function(){
+	$("#myModal").hide();
+	$("#gb").click(function(){
+		$("#myModal").hide(200);
+	});
+	$("#gbb").click(function(){
+		$("#myModal").hide(200);
+	});
+	$("#gbbb").click(function(){
+		$("#myModal").hide(200);
+	});
+});
+/* 友链类型 */
+function openWindow(a,b,c) {
+	$(document).ready(function(){
+		$("#myModal").show(300);
+		$("#plug_linktype_id").val(a);
+		$("#newplug_linktype_name").val(b);
+		$("#newplug_linktype_order").val(c);
+	});
+
+}
+/* 友链编辑 */
+$(function(){
+	$(".linkedit-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{plug_link_id:val}, function(data){
+			if(data.status==1){
+				$(document).ready(function(){
+					$("#myModaledit").show(300);
+					$("#editplug_link_id").val(data.plug_link_id);
+					$("#editplug_link_name").val(data.plug_link_name);
+					$("#editplug_link_url").val(data.plug_link_url);
+					$("#editplug_link_target").val(data.plug_link_target);
+					$("#editplug_link_qq").val(data.plug_link_qq);
+					$("#editplug_link_order").val(data.plug_link_order);
+					$("#editplug_link_typeid").val(data.plug_link_typeid);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
+/* 广告位编辑 */
+$(function(){
+	$(".adtypeedit-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{plug_adtype_id:val}, function(data){
+			if(data.status==1){
+				$(document).ready(function(){
+					$("#myModaledit").show(300);
+					$("#adtype_id").val(data.plug_adtype_id);
+					$("#adtype_name").val(data.plug_adtype_name);
+					$("#adtype_order").val(data.plug_adtype_order);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});

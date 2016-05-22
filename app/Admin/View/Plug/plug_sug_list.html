@@ -33,7 +33,7 @@
 										<td class="hidden-sm hidden-xs">{$v.plug_sug_addtime|date='Y-m-d',###}</td>
 										<td>
 											<div class="action-buttons">
-												<a class="red del" href="{:U('plug_sug_del',array('plug_sug_id'=>$v['plug_sug_id'],'p'=>I('p',1)))}" title="删除">
+												<a class="red del" data-info="你确定要删除吗？" href="{:U('plug_sug_del',array('plug_sug_id'=>$v['plug_sug_id'],'p'=>I('p',1)))}" title="删除">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>											</a>											</div>
 										</td>
 									</tr>
@@ -52,66 +52,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		//修改模态框状态
-		$(document).ready(function(){
-			$("#myModaledit").hide();
-			$("#gb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-			$("#gbb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-			$("#gbbb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-		});
-
-		function plug_sug_edit(val){
-			$.post('{:U("plug_sug_edit")}',
-					{plug_sug_id:val},
-					function(data){
-						if(data.status==1){
-							$(document).ready(function(){
-								$("#myModaledit").show(300);
-								$("#editplug_sug_id").val(data.plug_sug_id);
-								$("#editplug_sug_title").val(data.plug_sug_title);
-								$("#editplug_sug_email").val(data.plug_sug_email);
-								$("#editplug_sug_addtime").val(data.plug_sug_addtime);
-							});
-						}else{
-
-						}
-					});
-			return false;
-		}
-
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

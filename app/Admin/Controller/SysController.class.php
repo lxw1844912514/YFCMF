@@ -30,7 +30,7 @@ class SysController extends AuthController {
 	//保存站点设置
 	public function runsys(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('Sys/sys'),0);
 		}else{
 			$checkpic=I('checkpic');
 			$oldcheckpic=I('oldcheckpic');
@@ -47,7 +47,7 @@ class SysController extends AuthController {
 				if($info) {
 					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
-					$this->error($upload->getError(),0,0);//否则就是上传错误，显示错误原因
+					$this->error($upload->getError(),U('Sys/sys'),0);//否则就是上传错误，显示错误原因
 				}
 				$options['site_logo']=$img_url;
 			}else{
@@ -57,9 +57,9 @@ class SysController extends AuthController {
 			$rst=M('options')->where(array('option_name'=>'site_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
 				F("site_options", $$options);
-				$this->success('站点设置保存成功',1,1);
+				$this->success('站点设置保存成功',U('Sys/sys'),1);
 			}else{
-				$this->error('提交参数不正确',0,0);
+				$this->error('提交参数不正确',U('Sys/sys'),0);
 			}
 		}
 	}
@@ -74,13 +74,13 @@ class SysController extends AuthController {
 	//保存微信设置
 	public function runwesys(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('wesys'),0);
 		}else{
 			$rst=M('options')->where(array('option_name'=>'weixin_options'))->setField('option_value',json_encode(I('options')));
 			if($rst!==false){
 				$this->success('微信设置保存成功',U('wesys'),1);
 			}else{
-				$this->error('提交参数不正确',0,0);
+				$this->error('提交参数不正确',U('wesys'),0);
 			}
 		}
 	}
@@ -95,7 +95,7 @@ class SysController extends AuthController {
 	//保存第三方登录设置
 	public function runoauthsys(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('oauthsys'),0);
 		}else{
 			$host=get_host();
 			$call_back = $host.__ROOT__.'/index.php?m=Home&c=oauth&a=callback&type=';
@@ -115,7 +115,7 @@ class SysController extends AuthController {
 			if($rst){
 				$this->success('设置保存成功',U('oauthsys'),1);
 			}else{
-				$this->error('设置保存失败',0,0);
+				$this->error('设置保存失败',U('oauthsys'),0);
 			}
 		}
 	}
@@ -135,13 +135,13 @@ class SysController extends AuthController {
 	//保存邮箱设置
 	public function runemail(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('emailsys'),0);
 		}else{
 			$rst=M('options')->where(array('option_name'=>'email_options'))->setField('option_value',json_encode(I('options')));
 			if($rst!==false){
-				$this->success('邮箱设置保存成功',1,1);
+				$this->success('邮箱设置保存成功',U('emailsys'),1);
 			}else{
-				$this->error('提交参数不正确',0,0);
+				$this->error('提交参数不正确',U('emailsys'),0);
 			}
 		}
 	}
@@ -162,16 +162,16 @@ class SysController extends AuthController {
 	//保存帐号激活设置
 	public function runactive(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('Sys/activesys'),0);
 		}else{
 			//htmlspecialchars_decode(
 			$options=I('options');
 			$options['email_tpl']=htmlspecialchars_decode($options['email_tpl']);
 			$rst=M('options')->where(array('option_name'=>'active_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
-				$this->success('帐号激活设置保存成功',1,1);
+				$this->success('帐号激活设置保存成功',U('Sys/activesys'),1);
 			}else{
-				$this->error('提交参数不正确',0,0);
+				$this->error('提交参数不正确',U('Sys/activesys'),0);
 			}
 		}
 	}
@@ -196,7 +196,7 @@ class SysController extends AuthController {
      */
 	public function source_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('source_list'),0);
 		}else{
 			M('source')->add(I('post.'));
 			$this->success('来源添加成功',U('source_list'),1);
@@ -213,7 +213,7 @@ class SysController extends AuthController {
         if($rst!==false){
             $this->success('来源删除成功',U('source_list',array('p' => $p)),1);
         }else{
-            $this->error('来源删除失败',0,0);
+            $this->error('来源删除失败',U('source_list',array('p' => $p)),0);
         }
 	}
 
@@ -237,7 +237,7 @@ class SysController extends AuthController {
      */
 	public function source_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('source_list'),0);
 		}else{
 			$sl_data=array(
 				'source_id'=>I('source_id'),
@@ -248,7 +248,7 @@ class SysController extends AuthController {
             if($rst!==false){
                 $this->success('来源修改成功',U('source_list'),1);
             }else{
-                $this->error('来源修改失败',0,0);
+                $this->error('来源修改失败',U('source_list'),0);
             }
 		}
 	}
@@ -259,7 +259,7 @@ class SysController extends AuthController {
      */
 	public function source_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('source_list'),0);
 		}else{
 			$source=M('source');
 			foreach (I('post.') as $source_id => $source_order){
@@ -460,12 +460,12 @@ class SysController extends AuthController {
             $path  = realpath(C('DB_PATH')) . DIRECTORY_SEPARATOR . $name;
             array_map("unlink", glob($path));
             if(count(glob($path))){
-                $this->error('备份文件删除失败，请检查权限！',0,0);
+                $this->error('备份文件删除失败，请检查权限！',U('Sys/import'),0);
             } else {
                 $this->success('备份文件删除成功！',U('Sys/import'),1);
             }
         } else {
-            $this->error('参数错误！',0,0);
+            $this->error('参数错误！',U('Sys/import'),0);
         }
     }
     /**
@@ -648,7 +648,7 @@ class SysController extends AuthController {
 		$admin_access=M('auth_group_access');
 		$check_user=$admin->where(array('admin_username'=>I('admin_username')))->find();
 		if ($check_user){
-			$this->error('用户已存在，请重新输入用户名',0,0);
+			$this->error('用户已存在，请重新输入用户名',U('admin_list'),0);
 		}
 		$admin_pwd_salt=String::randString(10);
 		$sldata=array(
@@ -725,7 +725,7 @@ class SysController extends AuthController {
 	public function admin_state(){
 		$id=I('x');
 		if (empty($id)){
-			$this->error('用户ID不存在',U('admin_list'),1);
+			$this->error('用户ID不存在',U('admin_list'),0);
 		}
 		$status=M('admin')->where(array('admin_id'=>$id))->getField('admin_open');//判断当前状态情况
 		if($status==1){
@@ -752,7 +752,7 @@ class SysController extends AuthController {
 	}
 	public function admin_group_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('admin_group_list'),0);
 		}else{
 			$sldata=array(
 				'title'=>I('title'),
@@ -781,7 +781,7 @@ class SysController extends AuthController {
 
 	public function admin_group_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('admin_group_list'),0);
 		}else{
 			$sldata=array(
 				'id'=>I('id'),
@@ -837,7 +837,7 @@ class SysController extends AuthController {
         if($m->save($sldata)!==false){
             $this->success('权限配置成功',U('admin_group_list'),1);
         }else{
-            $this->error('权限配置失败');
+            $this->error('权限配置失败',U('admin_group_list'),0);
         }
     }
 	public function admin_rule_list(){
@@ -850,7 +850,7 @@ class SysController extends AuthController {
 	//权限添加
 	public function admin_rule_runadd(){
 		if(!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('admin_rule_list'),0);
 		}else{
 			$admin_rule=M('auth_rule');
 			$pid=$admin_rule->where(array('id'=>I('pid')))->field('level')->find();
@@ -860,7 +860,7 @@ class SysController extends AuthController {
 				//是否存在控制器
 				$class = 'Admin\\Controller\\' . I('name') . 'Controller';
 				if (!class_exists($class)) {
-					$this->error('不存在 '.I('name').' 的控制器',0,0);
+					$this->error('不存在 '.I('name').' 的控制器',U('admin_rule_list'),0);
                 }
 			}elseif($level==2){
 				//不检测
@@ -870,13 +870,13 @@ class SysController extends AuthController {
 				if(count($arr)==2){
 					$class = 'Admin\\Controller\\' . $arr[0] . 'Controller';
 					if (!class_exists($class)) {
-						$this->error('不存在 '.$arr[0].' 的控制器',0,0);
+						$this->error('不存在 '.$arr[0].' 的控制器',U('admin_rule_list'),0);
 					}
 					if (!method_exists($class, $arr[1])) {
-						$this->error('控制器'.$arr[0].'不存在方法'.$arr[1],0,0);
+						$this->error('控制器'.$arr[0].'不存在方法'.$arr[1],U('admin_rule_list'),0);
 					}
 				}else{
-					$this->error('提交名称不规范',0,0);
+					$this->error('提交名称不规范',U('admin_rule_list'),0);
 				}
 			}
 			$sldata=array(
@@ -911,7 +911,7 @@ class SysController extends AuthController {
 
 	public function admin_rule_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('admin_rule_list'),0);
 		}else{
 			$auth_rule=M('auth_rule');
 			foreach ($_POST as $id => $sort){
@@ -945,7 +945,7 @@ class SysController extends AuthController {
     }
 	public function admin_rule_runedit(){
 		if(!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('admin_rule_list'),0);
 		}else{
 			$admin_rule=M('auth_rule');
 			$pid=$admin_rule->where(array('id'=>I('pid')))->field('level')->find();

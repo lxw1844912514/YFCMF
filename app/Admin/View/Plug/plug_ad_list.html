@@ -48,7 +48,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div>
-							<form id="plug_ad_allorder" name="plug_ad_allorder" method="post" action="{:U('plug_ad_order')}" >
+							<form class="ajaxForm" name="plug_ad_allorder" method="post" action="{:U('plug_ad_order')}" >
 								<table class="table table-striped table-bordered table-hover" id="dynamic-table">
 									<thead>
 									<tr>
@@ -73,18 +73,18 @@
 											<td><input name="{$v.plug_ad_id}" value=" {$v.plug_ad_order}" class="list_order"/></td>
 											<td>
 												<if condition='$v.plug_ad_open eq 1'>
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_ad_id});" title="已开启">
+													<a class="red open-btn" href="{:U('plug_ad_state')}" data-id="{$v.plug_ad_id}" title="已开启">
 														<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 													</a>
 													<else/>
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_ad_id});" title="已禁用">
+													<a class="red open-btn" href="{:U('plug_ad_state')}" data-id="{$v.plug_ad_id}" title="已禁用">
 														<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 													</a>														</if>														</td>
 											<td>
 												<div class="hidden-sm hidden-xs action-buttons">
 													<a class="green"  href="{:U('plug_ad_edit',array('plug_ad_id'=>$v['plug_ad_id']))}" title="修改">
 														<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-													<a class="red del" href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}" title="删除">
+													<a class="red del" href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}" data-info="你确定要删除吗？" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline position-relative">
@@ -101,7 +101,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -132,7 +132,7 @@
 
 	<!-- 显示模态框（Modal） -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form class="form-horizontal" name="plug_ad_add" id="plug_ad_add" method="post" action="{:U('plug_ad_runadd')}">
+		<form class="form-horizontal ajaxForm2" name="plug_ad_add" method="post" action="{:U('plug_ad_runadd')}">
 			<div class="modal-dialog" style="width:1000px;">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -152,7 +152,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属位置： </label>
 									<div class="col-sm-11">
-										<select name="plug_ad_adtypeid"  class="col-sm-4 selector" >
+										<select name="plug_ad_adtypeid"  class="col-sm-4 selector" required>
 											<option value="">请选择所属广告位</option>
 											<foreach name="plug_adtype_list" item="v">
 												<option value="{$v.plug_adtype_id}">{$v.plug_adtype_name}</option>
@@ -165,7 +165,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告名称：  </label>
 									<div class="col-sm-11">
-										<input type="text" name="plug_ad_name" id="plug_ad_name" placeholder="输入广告名称" class="col-xs-10 col-sm-5" />
+										<input type="text" name="plug_ad_name" id="plug_ad_name" placeholder="输入广告名称" class="col-xs-10 col-sm-5" required/>
 									</div>
 								</div>
 								<div class="space-4"></div>
@@ -275,143 +275,6 @@
 
 
 	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-
-		function stateyes(val){
-			$.post('{:U("plug_ad_state")}',
-					{x:val},
-					function(data){
-						if(data.status){
-							if(data.info=='状态禁止'){
-								var a='<button class="btn btn-minier btn-danger">禁用</button>'
-								$('#zt'+val).html(a);
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">开启</button>'
-								$('#zt'+val).html(b);
-								return false;
-							}
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-
-		//添加操作
-		$(function(){
-			$('#plug_ad_add').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $(".selector").val()){
-					layer.alert('所属广告位不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('.selector').focus();
-					});
-					return false;
-				}
-
-				if( '' == $.trim($('#plug_ad_name').val())){
-					layer.alert('广告名称不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#plug_ad_name').focus();
-					});
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('plug_ad_list')}";
-					});
-					return false;
-				}
-			}
-		});
-
-
-		$("#file0").change(function(){
-			var objUrl = getObjectURL(this.files[0]) ;
-			console.log("objUrl = "+objUrl) ;
-			if (objUrl) {
-				$("#img0").attr("src", objUrl) ;
-			}
-		}) ;
-
-		//建立一個可存取到該file的url
-		function getObjectURL(file) {
-
-			var url = null ;
-			if (window.createObjectURL!=undefined) { // basic
-				url = window.createObjectURL(file) ;
-			} else if (window.URL!=undefined) { // mozilla(firefox)
-				url = window.URL.createObjectURL(file) ;
-			} else if (window.webkitURL!=undefined) { // webkit or chrome
-				url = window.webkitURL.createObjectURL(file) ;
-			}
-			return url ;
-		}
-
-
-		function backpic(picurl){
-			$("#img0").attr("src",picurl);//还原修改前的图片
-			$("input[name='file0']").val("");//清空文本框的值
-		}
-
-		//批量排序
-		$(function(){
-			$('#plug_ad_allorder').ajaxForm({
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						//window.location.href="{:U('plug_ad_list')}";
-					});
-				}
-			}
-		});
-
 		$(document).ready(function(){
 			$("#pic_jslist").hide();
 

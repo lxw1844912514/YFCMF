@@ -164,7 +164,7 @@ class MemberController extends AuthController {
 		if($rst!==false){
             $this->success('会员删除成功',U('member_list', array('p' => $p)),1);
         }else{
-            $this->error('会员删除失败',0,0);
+            $this->error('会员删除失败',U('member_list', array('p' => $p)),0);
         }
 	}
 
@@ -198,7 +198,7 @@ class MemberController extends AuthController {
      */
 	public function member_group_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('member_group_list'),0);
 		}else{
 			$rst=M('member_group')->add($_POST);
 			if($rst!==false){
@@ -221,7 +221,7 @@ class MemberController extends AuthController {
         if($rst!==false){
             $this->success('会员组删除成功',U('member_group_list'),1);
         }else{
-            $this->error('会员组删除失败',0,0);
+            $this->error('会员组删除失败',U('member_group_list'),0);
         }
 	}
 
@@ -250,7 +250,7 @@ class MemberController extends AuthController {
      */
 	public function member_group_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('member_group_list'),0);
 		}else{
 			$member_group=M('member_group');
 			foreach ($_POST as $id => $sort){
