@@ -18,8 +18,7 @@
 							<i class="ace-icon fa fa-plus bigger-110"></i>
 							添加自定义菜单
 						</button>
-						<!--<a class="red" href="javascript:;" onclick="we_menu_make();">-->
-						<a class="red" href="javascript:;" onclick="return we_menu_make();">
+						<a class="red rst-btn" href="{:U('we_menu_make')}">
 							<button class="btn btn-xs btn-info" id="we_menu_make">
 								<i class="ace-icon fa fa-bolt bigger-110"></i>
 								生成菜单
@@ -31,7 +30,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div>
-							<form id="we_menu_order" name="we_menu_order" method="post" action="{:U('we_menu_order')}" >
+							<form class="ajaxForm" name="we_menu_order" method="post" action="{:U('we_menu_order')}" >
 								<table class="table table-striped table-bordered table-hover" id="dynamic-table">
 									<thead>
 									<tr>
@@ -54,11 +53,11 @@
 											<td class="hidden-sm hidden-xs">{$v.we_menu_type}</td>
 											<td>
 												<if condition='$v.we_menu_open eq 1'>
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.we_menu_id});" title="已显示">
+													<a class="red display-btn" href="{:U('we_menu_state')}" data-id="{$v.we_menu_id}" title="已显示">
 														<div id="zt{$v.we_menu_id}"><button class="btn btn-minier btn-yellow">显示</button></div>
 													</a>
 													<else/>
-													<a class="red" href="javascript:;" onclick="return stateyes({$v.we_menu_id});" title="已隐藏">
+													<a class="red display-btn" href="{:U('we_menu_state')}" data-id="{$v.we_menu_id}" title="已隐藏">
 														<div id="zt{$v.we_menu_id}"><button class="btn btn-minier btn-danger">隐藏</button></div>
 													</a>
 												</if>
@@ -67,10 +66,10 @@
 											<td><input name="{$v.we_menu_id}" class="list_order" value=" {$v.we_menu_order}" size="3"/></td>
 											<td>
 												<div class="hidden-sm hidden-xs action-buttons">
-													<a class="green"  href="javascript:;" onclick="return we_menu_edit({$v.we_menu_id});"  title="修改">
+													<a class="green menuedit-btn"  href="{:U('we_menu_edit')}" data-id="{$v.we_menu_id}"  title="修改">
 														<i class="ace-icon fa fa-pencil bigger-130"></i>
 													</a>
-													<a class="red del" href="{:U('we_menu_del',array('we_menu_id'=>$v['we_menu_id']))}" title="删除">
+													<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:U('we_menu_del',array('we_menu_id'=>$v['we_menu_id']))}" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>
 													</a>
 												</div>
@@ -81,7 +80,7 @@
 														</button>
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<li>
-																<a href="javascript:;" onclick="return we_menu_edit({$v.we_menu_id});" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+																<a href="{:U('we_menu_edit')}" data-id="{$v.we_menu_id}" class="tooltip-success menuedit-btn" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil bigger-120"></i>
 																	</span>
@@ -89,7 +88,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('we_menu_del',array('we_menu_id'=>$v['we_menu_id']))}" class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('we_menu_del',array('we_menu_id'=>$v['we_menu_id']))}" data-info="你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -115,7 +114,7 @@
 
 				<!-- 显示添加模态框（Modal）-->
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<form class="form-horizontal" name="we_menu_runadd" id="we_menu_runadd" method="post" action="{:U('we_menu_runadd')}">
+					<form class="form-horizontal ajaxForm2" name="we_menu_runadd" method="post" action="{:U('we_menu_runadd')}">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -134,7 +133,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
 												<div class="col-sm-10">
-													<select name="we_menu_leftid"  class="col-sm-4 selector" >
+													<select name="we_menu_leftid"  class="col-sm-4 selector" required>
 														<option value="0">顶级栏目</option>
 														<foreach name="menu_top" item="v">
 															<option value="{$v.we_menu_id}">{$v.we_menu_name}</option>
@@ -147,7 +146,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单名称：  </label>
 												<div class="col-sm-10">
-													<input type="text" name="we_menu_name" id="we_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" />
+													<input type="text" name="we_menu_name" id="we_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" required/>
 												</div>
 											</div>
 											<div class="space-4"></div>
@@ -155,7 +154,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
 												<div class="col-sm-10">
-													<select name="we_menu_type"  class="col-sm-4" >
+													<select name="we_menu_type"  class="col-sm-4" required>
 														<option value="1" selected>URL菜单链接</option>
 														<option value="2">关键词回复菜单</option>
 													</select>
@@ -174,7 +173,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
 												<div class="col-sm-10">
-													<input type="text" name="we_menu_order" id="we_menu_order" value="50" class="col-xs-10 col-sm-2" />
+													<input type="number" name="we_menu_order" id="we_menu_order" value="50" class="col-xs-10 col-sm-2" required/>
 													<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
 												</div>
 											</div>
@@ -222,7 +221,7 @@
 				<!-- 修改自定义菜单模态框（Modal） -->
 				<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-					<form class="form-horizontal" name="we_menu_runedit" id="we_menu_runedit" method="post" action="{:U('we_menu_runedit')}">
+					<form class="form-horizontal ajaxForm2" name="we_menu_runedit" method="post" action="{:U('we_menu_runedit')}">
 						<input type="hidden" name="we_menu_id" id="editwe_menu_id" value="" />
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -243,7 +242,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
 												<div class="col-sm-10">
-													<select name="we_menu_leftid"  id="editwe_menu_leftid"  class="col-sm-4 selector" >
+													<select name="we_menu_leftid"  id="editwe_menu_leftid"  class="col-sm-4 selector" required>
 														<option value="0">顶级栏目</option>
 														<foreach name="menu_top" item="v">
 															<option value="{$v.we_menu_id}">{$v.we_menu_name}</option>
@@ -256,7 +255,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单名称：  </label>
 												<div class="col-sm-10">
-													<input type="text" name="we_menu_name" id="editwe_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" />
+													<input type="text" name="we_menu_name" id="editwe_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" required/>
 												</div>
 											</div>
 											<div class="space-4"></div>
@@ -264,7 +263,7 @@
 											<div class="form-group">
 												<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
 												<div class="col-sm-10">
-													<select name="we_menu_type"  class="col-sm-4" id="editwe_menu_type">
+													<select name="we_menu_type"  class="col-sm-4" id="editwe_menu_type" required>
 														<option value="1" selected>URL菜单链接</option>
 														<option value="2">关键词回复菜单</option>
 													</select>
@@ -300,196 +299,6 @@
 						</div><!-- /.modal-dialog -->
 					</form>
 				</div><!-- /.modal -->
-
-
-
-				<script>
-					$(function(){
-						//删除操作
-						var $del = $(".del");
-						$del.click(function(){
-							var $url=this.href;
-							layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-							layer.close(index);
-							$.get($url, function(data){
-								if(data.status){
-									layer.alert(data.info, {icon: 6}, function(index){
-										layer.close(index);
-										window.location.href=data.url;
-									});
-								} else {
-									layer.alert(data.info, {icon: 5}, function(index){
-										layer.close(index);
-										//window.location.href="{:U('we_menu_list')}";
-									});
-								}
-							}, "json");
-							});
-							return false;
-						});
-						//添加操作
-						$('#we_menu_runadd').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#we_menu_name').val())){
-								layer.alert('菜单名称不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#we_menu_name').focus();
-								});
-								return false;
-							}
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									window.location.href="{:U('we_menu_list')}";
-								});
-								return false;
-							}
-						}
-					});
-
-					//状态操作
-					function stateyes(val){
-						$.post('{:U("we_menu_state")}',
-								{x:val},
-								function(data){
-									var $v=val;
-									if(data.status){
-										if(data.info=='状态禁止'){
-											var a='<button class="btn btn-minier btn-danger">隐藏</button>'
-											$('#zt'+val).html(a);
-											layer.alert(data.info, {icon: 5});
-										}else{
-											var b='<button class="btn btn-minier btn-yellow">显示</button>'
-											$('#zt'+val).html(b);
-											layer.alert(data.info, {icon: 6});
-										}
-
-									}else{
-										layer.alert(data.info, {icon: 5});
-									}
-								});
-						return false;
-					}
-
-					//生成菜单
-					function we_menu_make(){
-						$.get('{:U("we_menu_make")}',
-								function(data){
-									if(data.status==1){
-										layer.alert(data.info, {icon: 6});
-									}else{
-										layer.alert(data.info, {icon: 5});
-									}
-								});
-						return false;
-					}
-
-
-
-
-					//排序提交
-					$(function(){
-						$('#we_menu_order').ajaxForm({
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									//window.location.href="{:U('we_menu_list')}";
-								});
-							}
-						}
-					});
-
-					//显示修改自定义菜单
-					function we_menu_edit(val){
-						$.post('{:U("we_menu_edit")}',
-								{we_menu_id:val},
-								function(data){
-									if(data.status==1){
-										$(document).ready(function(){
-											$("#myModaledit").show(300);
-											$("#editwe_menu_id").val(data.we_menu_id);
-											$("#editwe_menu_name").val(data.we_menu_name);
-											$("#editwe_menu_leftid").val(data.we_menu_leftid);
-											$("#editwe_menu_type").val(data.we_menu_type);
-											$("#editwe_menu_typeval").val(data.we_menu_typeval);
-										});
-									}else{
-										layer.alert(data.info, {icon: 5});
-									}
-								});
-						return false;
-					}
-
-					//修改模态框状态
-					$(document).ready(function(){
-						$("#myModaledit").hide();
-						$("#gb").click(function(){
-							$("#myModaledit").hide(200);
-						});
-						$("#gbb").click(function(){
-							$("#myModaledit").hide(200);
-						});
-						$("#gbbb").click(function(){
-							$("#myModaledit").hide(200);
-						});
-					});
-					//修改操作
-					$(function(){
-						$('#we_menu_runedit').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#editwe_menu_name').val())){
-								layer.alert('菜单名称不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#editwe_menu_name').focus();
-								});
-								return false;
-							}
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									window.location.href="{:U('we_menu_list')}";
-								});
-								return false;
-							}
-						}
-					});
-
-
-				</script>
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->

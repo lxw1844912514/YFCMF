@@ -11,13 +11,6 @@
 		<div class="main-content-inner">
 			<div class="page-content">
 
-<!-- 				<div class="col-xs-12 col-sm-12 rule-top alert alert-info top10">
-					<button type="button" class="close" data-dismiss="alert">
-						<i class="ace-icon fa fa-times"></i>
-					</button>
-					大家可以通过下载数据备份压缩包进行解压，通过mysql管理工具进行导入（暂时不提供数据还原功能，日后若更新，另行通知）
-				</div> -->
-
 				<div class="row">
 					<div class="col-xs-12">
 						<div>
@@ -45,13 +38,13 @@
 											<td class="hidden-sm hidden-xs">{$key}</td>
 											<td>
 												<div class="hidden-sm hidden-xs action-buttons">
-													<a class="db-import restore" href="{:U('restore?time='.$v['time'])}" title="还原">
+													<a class="db-import confirm-rst-url-btn" data-info="你确定要还原吗？" href="{:U('restore?time='.$v['time'])}" title="还原">
 														<i class="ace-icon fa fa-reply-all bigger-130"></i>
 													</a>												
 													<a class="db-import" href="__DATA__backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" title="下载">
 														<i class="ace-icon fa fa-cloud-download bigger-130"></i>
 													</a>
-													<a class="ajax-get confirm del" href="{:U('del?time='.$v['time'])}"  title="删除">
+													<a class="confirm-rst-url-btn" href="{:U('del?time='.$v['time'])}"  data-info="你确定要删除吗？" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>
 													</a>
 												</div>
@@ -62,7 +55,7 @@
 														</button>
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<li>
-																<a href="{:U('restore?time='.$v['time'])}"  class="tooltip-success restore" data-rel="tooltip" title="" data-original-title="还原">
+																<a href="{:U('restore?time='.$v['time'])}"  data-info="你确定要还原吗？" class="tooltip-success confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="还原">
 																	<span class="green">
 																		<i class="ace-icon fa fa-reply-all bigger-120"></i>
 																	</span>
@@ -77,7 +70,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('del?time='.$v['time'])}"  class="tooltip-error ajax-get confirm del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('del?time='.$v['time'])}"  data-info="你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -104,51 +97,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-
-    <script type="text/javascript">
-        (function($){
-            var $del = $(".del");
-            var $restore = $(".restore");
-            $del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-                    if(data.status){
-                        layer.alert(data.info, {icon: 6}, function(index){
-                            layer.close(index);
-                            window.location.href=data.url;
-                        });
-                    } else {
-                        layer.alert(data.info, {icon: 5}, function(index){
-                            layer.close(index);
-                            //window.location.href="{:U('import')}";
-                        });
-                    }
-                }, "json");
-				});
-                return false;
-            });
-            $restore.click(function(){
-                $.get(this.href, function(data){
-                    if(data.status){
-                        layer.alert(data.info, {icon: 6}, function(index){
-                            layer.close(index);
-                            window.location.href=data.url;
-                        });
-                    } else {
-                        layer.alert(data.info, {icon: 5}, function(index){
-                            layer.close(index);
-                            //window.location.href="{:U('import')}";
-                        });
-                    }
-                }, "json");
-                return false;
-            });
-        })(jQuery)
-
-	</script>
 
 	<include file='Common:footer' />
 

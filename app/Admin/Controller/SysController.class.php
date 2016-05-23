@@ -338,7 +338,7 @@ class SysController extends AuthController {
     public function import(){
         $path = realpath(C('DB_PATH'));
         $flag = \FilesystemIterator::KEY_AS_FILENAME;
-        $glob = new \FilesystemIterator($path,  $flag);
+        $glob = new \FilesystemIterator($path,$flag);
 
         $list = array();
         foreach ($glob as $name => $file) {

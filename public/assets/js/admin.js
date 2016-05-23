@@ -17,6 +17,20 @@ jQuery(function($) {
 		}
 	}).triggerHandler('settings.ace.two_menu', ['sidebar_fixed' ,$('#sidebar').hasClass('sidebar-fixed')]);
 })
+/* 点击后直接跳转并返回执行结果的按钮js */
+$(function(){
+	$('.rst-btn').click(function(){
+		var $url=this.href;
+		$.get($url,function(data){
+			if(data.status==1){
+				layer.alert(data.info, {icon: 6});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
 /* 所有带确认,点击后直接跳转的按钮的js */
 $(function(){
 	$(".confirm-btn").click(function(){
@@ -43,31 +57,9 @@ $(function(){
 		return false;
 	});
 });
+/* 所有带确认,点击后get提交并返回执行结果的按钮js */
 $(function(){
 	$('.confirm-rst-url-btn').click(function(){
-		var $url=this.href,
-			$info=$(this).data('info');
-		layer.confirm($info, {icon: 3}, function(index){
-		layer.close(index);
-		$.get($url, function(data){
-			if(data.status){
-				layer.alert(data.info, {icon: 6}, function(index){
-					layer.close(index);
-					window.location.href=data.url;
-				});
-			} else {
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-				});
-			}
-		}, "json");
-		});
-		return false;
-	});
-});
-/* 所有带确认删除操作按钮js */
-$(function(){
-	$(".del").click(function(){
 		var $url=this.href,
 			$info=$(this).data('info');
 		layer.confirm($info, {icon: 3}, function(index){
@@ -163,11 +155,11 @@ $(function(){
 		$.post($url,{x:val}, function(data){
 			if(data.status){
 				if(data.info=='状态禁止'){
-					var a='<button class="btn btn-minier btn-danger">隐藏状态</button>'
+					var a='<button class="btn btn-minier btn-danger">隐藏</button>'
 					$('#zt'+val).html(a);
 					return false;
 				}else{
-					var b='<button class="btn btn-minier btn-yellow">显示状态</button>'
+					var b='<button class="btn btn-minier btn-yellow">显示</button>'
 					$('#zt'+val).html(b);
 					return false;
 				}
@@ -244,6 +236,14 @@ $(function(){
 		dataType: 'json'
 	});
 });
+/* admin增加编辑表单 */
+$(function(){
+	$('.adminform').ajaxForm({
+		beforeSubmit: checkadminForm, // 此方法主要是提交前执行的方法，根据需要设置
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+});
 //提交后的方法,失败跳转
 function complete(data){
 	if(data.status==1){
@@ -270,6 +270,32 @@ function complete2(data){
 		layer.alert(data.info, {icon: 5}, function(index){
 			layer.close(index);
 		});
+	}
+}
+function checkadminForm(){
+	var admin_username = $.trim($('input[name="admin_username"]').val()); //获取INPUT值
+	var myReg = /^[\u4e00-\u9fa5]+$/;//验证中文
+	if(admin_username.indexOf(" ")>=0)
+	{
+		layer.alert('登录用户名包含了空格，请重新输入', {icon: 5}, function(index){
+			layer.close(index);
+			$('#admin_username').focus();
+		});
+		return false;
+	}
+	if (myReg.test(admin_username)) {
+		layer.alert('用户名必须是字母，数字，符号', {icon: 5}, function(index){
+			layer.close(index);
+			$('#admin_username').focus();
+		});
+		return false;
+	}
+	if (!$("#admin_tel").val().match(/^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/)) {
+		layer.alert('电话号码格式不正确', {icon: 5}, function(index){
+			layer.close(index);
+			$('#admin_tel').focus();
+		});
+		return false;
 	}
 }
 function checkselectForm(){
@@ -426,6 +452,185 @@ $(function(){
 					$("#adtype_id").val(data.plug_adtype_id);
 					$("#adtype_name").val(data.plug_adtype_name);
 					$("#adtype_order").val(data.plug_adtype_order);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
+/* 权限配置 */
+$(function(){
+	//动态选择框，上下级选中状态变化
+	$('input.checkbox-parent').on('change',function(){
+		var dataid=$(this).attr("dataid");
+		$('input[dataid^='+dataid+']').prop('checked',$(this).is(':checked'));
+	});
+	$('input.checkbox-child').on('change',function(){
+		var dataid=$(this).attr("dataid");
+		dataid=dataid.substring(0,dataid.lastIndexOf("-"));
+		var parent=$('input[dataid='+dataid+']');
+		if($(this).is(':checked')){
+			parent.prop('checked',true);
+			//循环到顶级
+			while(dataid.lastIndexOf("-")!=2){
+				dataid=dataid.substring(0,dataid.lastIndexOf("-"));
+				parent=$('input[dataid='+dataid+']');
+				parent.prop('checked',true);
+			}
+		}else{
+			//父级
+			if($('input[dataid^='+dataid+'-]:checked').length==0){
+				parent.prop('checked',false);
+				//循环到顶级
+				while(dataid.lastIndexOf("-")!=2){
+					dataid=dataid.substring(0,dataid.lastIndexOf("-"));
+					parent=$('input[dataid='+dataid+']');
+					if($('input[dataid^='+dataid+'-]:checked').length==0){
+						parent.prop('checked',false);
+					}
+				}
+			}
+		}
+	});
+});
+/* 来源编辑 */
+$(function(){
+	$(".sourceedit-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{source_id:val}, function(data){
+			if(data.status==1){
+				$(document).ready(function(){
+					$("#myModaledit").show(300);
+					$("#editsource_id").val(data.source_id);
+					$("#editsource_name").val(data.source_name);
+					$("#editsource_order").val(data.source_order);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
+
+/* 数据库备份、优化、修复 */
+(function($){
+	$("a[id^=optimize_]").click(function(){
+		$.get(this.href,function(data) {
+			if(data.status){
+				layer.alert(data.info, {icon: 6});                        
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		});
+		return false;
+	});
+	$("a[id^=repair_]").click(function(){
+		$.get(this.href,function(data) {
+			if(data.status){
+				layer.alert(data.info, {icon: 6});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		});
+		return false;
+	});
+	
+	var $form = $("#export-form"), $export = $("#export"), tables
+	$optimize = $("#optimize"), $repair = $("#repair");
+
+	$optimize.add($repair).click(function(){
+		$.post(this.href, $form.serialize(), function(data){
+			if(data.status){
+				layer.alert(data.info, {icon: 6}, function(index){
+					layer.close(index);
+					window.location.href=data.url;
+				});
+			} else {
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+			setTimeout(function(){
+				$('#top-alert').find('button').click();
+				$(that).removeClass('disabled').prop('disabled',false);
+			},1500);
+		}, "json");
+		return false;
+	});
+
+	$export.click(function(){
+		$export.parent().children().addClass("disabled");
+		$export.html("正在发送备份请求...");
+		$.post(
+			$form.attr("action"),
+			$form.serialize(),
+			function(data){
+				if(data.status){
+					tables = data.tables;
+					$export.html(data.info + "开始备份，请不要关闭本页面！");
+					backup(data.tab);
+					window.onbeforeunload = function(){ return "正在备份数据库，请不要关闭！" }
+				} else {
+					layer.alert(data.info, {icon: 5});
+					$export.parent().children().removeClass("disabled");
+					$export.html("立即备份");
+					setTimeout(function(){
+						$('#top-alert').find('button').click();
+						$(that).removeClass('disabled').prop('disabled',false);
+					},1500);
+				}
+			},
+			"json"
+		);
+		return false;
+	});
+
+	function backup(tab, status){
+		status && showmsg(tab.id, "开始备份...(0%)");
+		$.get($form.attr("action"), tab, function(data){
+			if(data.status){
+				showmsg(tab.id, data.info);
+				if(!$.isPlainObject(data.tab)){
+					$export.parent().children().removeClass("disabled");
+					$export.html("备份完成，点击重新备份");
+					window.onbeforeunload = function(){ return null }
+					return;
+				}
+				backup(data.tab, tab.id != data.tab.id);
+			} else {
+				updateAlert(data.info,'alert-error');
+				$export.parent().children().removeClass("disabled");
+				$export.html("立即备份");
+				setTimeout(function(){
+					$('#top-alert').find('button').click();
+					$(that).removeClass('disabled').prop('disabled',false);
+				},1500);
+			}
+		}, "json");
+
+	}
+	function showmsg(id, msg){
+	$form.find("input[value=" + tables[id] + "]").closest("tr").find(".info").html(msg);
+	}
+})(jQuery);
+/* 微信菜单编辑 */
+$(function(){
+	$(".menuedit-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{we_menu_id:val}, function(data){
+			if(data.status==1){
+				$(document).ready(function(){
+					$("#myModaledit").show(300);
+					$("#editwe_menu_id").val(data.we_menu_id);
+					$("#editwe_menu_name").val(data.we_menu_name);
+					$("#editwe_menu_leftid").val(data.we_menu_leftid);
+					$("#editwe_menu_type").val(data.we_menu_type);
+					$("#editwe_menu_typeval").val(data.we_menu_typeval);
 				});
 			}else{
 				layer.alert(data.info, {icon: 5});

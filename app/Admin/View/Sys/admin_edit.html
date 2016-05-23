@@ -26,96 +26,15 @@
 					</h1>
 				</div>
 
-				<script>
-					$(function(){
-						$('#admin_list_edit').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#admin_username').val())){
-								layer.alert('登录用户名不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_username').focus();
-								});
-								return false;
-							}
-
-							var admin_username = $.trim($('input[name="admin_username"]').val()); //获取INPUT值
-							var myReg = /^[\u4e00-\u9fa5]+$/;//验证中文
-							if(admin_username.indexOf(" ")>=0)
-							{
-								layer.alert('登录用户名包含了空格，请重新输入', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_username').focus();
-								});
-								return false;
-							}
-
-							if (myReg.test(admin_username)) {
-								layer.alert('用户名必须是字母，数字，符号', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_username').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#admin_email').val())){
-								layer.alert('用户邮箱不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_email').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#admin_tel').val())){
-								layer.alert('手机号码不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_tel').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#admin_realname').val())){
-								layer.alert('通用网名不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#admin_realname').focus();
-								});
-								return false;
-							}
-
-
-
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									window.location.href="{:U('admin_list')}";
-								});
-								return false;
-							}
-						}
-
-					});
-				</script>
-
 
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="admin_list_edit" id="admin_list_edit" method="post" action="{:U('admin_runedit')}">
+						<form class="form-horizontal adminform" name="admin_list_edit" method="post" action="{:U('admin_runedit')}">
 							<input name="admin_id" id="admin_id" type="hidden" value="{$admin_list.admin_id}" />
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
 								<div class="col-sm-10">
-									<select name="group_id"  class="col-sm-5" >
+									<select name="group_id"  class="col-sm-5" required>
 										<option value="">请选择所属用户组</option>
 										<foreach name="auth_group" item="v">
 											<option value="{$v.id}" <if condition="$v['id'] eq $auth_group_access">selected</if>>{$v.title}</option>
@@ -137,7 +56,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录密码：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="admin_pwd" id="admin_pwd" placeholder="输入登录密码" class="col-xs-10 col-sm-5" />
+									<input type="text" name="admin_pwd" id="admin_pwd" maxlength="15" minlength="6" placeholder="输入登录密码" class="col-xs-10 col-sm-5" />
 									<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>密码必须大于6位，小于15位</span>
 								</div>
 							</div>
@@ -146,7 +65,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户邮箱：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="admin_email" id="admin_email"  value="{$admin_list.admin_email}"  class="col-xs-10 col-sm-5" />
+									<input type="email" name="admin_email" id="admin_email"  value="{$admin_list.admin_email}"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于密码找回，请认真填写</span>
 								</div>
 							</div>
@@ -155,7 +74,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="admin_tel" id="admin_tel" value="{$admin_list.admin_tel}"  class="col-xs-10 col-sm-5" />
+									<input type="number" name="admin_tel" id="admin_tel" value="{$admin_list.admin_tel}"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>只能填写数字</span>
 								</div>
 							</div>
@@ -164,7 +83,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 通用网名：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="admin_realname" id="admin_realname" value="{$admin_list.admin_realname}"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="admin_realname" id="admin_realname" value="{$admin_list.admin_realname}"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于发布信息所有人，且在前端显示</span>
 								</div>
 							</div>
@@ -207,25 +126,5 @@
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->
-
-<!--下拉样式以及JS-->
-<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
-<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
-<script type="text/javascript">
-	jQuery(function($) {
-		if(!ace.vars['touch']) {
-			$('.chosen-select').chosen({allow_single_deselect:true});
-			$(window)
-					.off('resize.chosen')
-					.on('resize.chosen', function() {
-						$('.chosen-select').each(function() {
-							var $this = $(this);
-							$this.next().css({'width': $this.parent().width()});
-						})
-					}).trigger('resize.chosen');
-
-		}
-	});
-</script>
 </body>
 </html>

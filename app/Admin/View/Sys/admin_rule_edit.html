@@ -14,54 +14,14 @@
 						</small>
 					</h1>
 				</div>
-				<script>
-					$(function(){
-						$('#admin_rule_edit').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-						function checkForm(){
-							if( '' == $.trim($('#title').val())){
-								layer.alert('名称不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#title').focus();
-								});
-								return false;
-							}
-							if( '' == $.trim($('#name').val())){
-								layer.alert('控制器/方法不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#name').focus();
-								});
-								return false;
-							}
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									window.location.href="{:U('admin_rule_list')}";
-								});
-								return false;
-							}
-						}
-
-					});
-				</script>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="admin_rule_edit" id="admin_rule_edit" method="post" action="{:U('admin_rule_runedit')}">
+						<form class="form-horizontal ajaxForm2" name="admin_rule_edit" method="post" action="{:U('admin_rule_runedit')}">
 							<input type="hidden" name="id" value="{$rule.id}" />
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 父级权限： </label>
 								<div class="col-sm-9">
-									<select name="pid"  class="col-xs-10 col-sm-5" >
+									<select name="pid"  class="col-xs-10 col-sm-5" required>
 										<option value="0">--默认顶级--</option>
 										<foreach name="admin_rule" item="v">
 											<option value="{$v.id}" <if condition="$v['id'] eq $rule['pid']">selected</if>>{$v.lefthtml}{$v.title}</option>
@@ -72,7 +32,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 导航标题： </label>
 								<div class="col-sm-9">
-									<input type="text" name="title" id="title"  value="{$rule.title}"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="title" id="title"  value="{$rule.title}"  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
 											</span>
@@ -83,7 +43,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 控制器/方法： </label>
 								<div class="col-sm-9">
-									<input type="text" name="name" id="name"  value="{$rule.name}"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="name" id="name"  value="{$rule.name}"  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
 											</span>
@@ -115,7 +75,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
 								<div class="col-sm-9">
-									<input type="text" name="sort" id="sort"  value="{$rule.sort}" class="col-xs-10 col-sm-1" />
+									<input type="text" name="sort" id="sort"  value="{$rule.sort}" class="col-xs-10 col-sm-1" required/>
 								</div>
 							</div>
 							<div class="space-4"></div>

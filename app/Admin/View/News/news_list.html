@@ -144,7 +144,7 @@
 														<a class="green" href="{:U('news_edit',array('n_id'=>$v['n_id']))}" title="修改">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
-														<a class="red del" data-info="你确定要删除到回收站吗？" href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="回收站">
+														<a class="red confirm-rst-url-btn" data-info="你确定要删除到回收站吗？" href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="回收站">
 															<i class="ace-icon fa fa-trash-o bigger-130"></i>
 														</a>
 													</div>
@@ -163,7 +163,7 @@
 																	</li>
 
 																	<li>
-																		<a href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" data-info="你确定要删除到回收站吗？" class="tooltip-error del" data-rel="tooltip" title="" data-original-title="回收站">
+																		<a href="{:U('news_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" data-info="你确定要删除到回收站吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="回收站">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>

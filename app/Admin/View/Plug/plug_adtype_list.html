@@ -70,7 +70,7 @@
 												<div class="hidden-sm hidden-xs action-buttons">
 													<a class="green adtypeedit-btn"  href="{:U('plug_adtype_edit')}" data-id="{$v.plug_adtype_id}"  title="修改">
 														<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-													<a class="red del" data-info="你确定要删除吗？" href="{:U('plug_adtype_del',array('plug_adtype_id'=>$v['plug_adtype_id'],'p'=>I('p',1)))}" title="删除">
+													<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:U('plug_adtype_del',array('plug_adtype_id'=>$v['plug_adtype_id'],'p'=>I('p',1)))}" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline position-relative">
@@ -87,7 +87,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('plug_adtype_del',array('plug_adtype_id'=>$v['plug_adtype_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('plug_adtype_del',array('plug_adtype_id'=>$v['plug_adtype_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>

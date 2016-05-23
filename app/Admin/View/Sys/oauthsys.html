@@ -25,32 +25,9 @@
 						</small>
 					</h1>
 				</div>
-
-				<script>
-
-					$(function(){
-						$('#oauthsys').ajaxForm({
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-								});
-							}
-						}
-
-					});
-				</script>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="oauthsys" id="oauthsys" method="post" action="{:U('runoauthsys')}">
+						<form class="form-horizontal ajaxForm" name="oauthsys" method="post" action="{:U('runoauthsys')}">
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APPID： </label>
 								<div class="col-sm-9">

@@ -25,65 +25,13 @@
 						</small>
 					</h1>
 				</div>
-
-				<script>
-
-					$(function(){
-						$('#wesys').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#wesys_name').val())){
-								layer.alert('公众号名称不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#wesys_name').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#wesys_id').val())){
-								layer.alert('公众号原始ID不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#wesys_id').focus();
-								});
-								return false;
-							}
-
-							if( '' == $.trim($('#wesys_number').val())){
-								layer.alert('微信号不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#wesys_number').focus();
-								});
-								return false;
-							}
-
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href=data.url;
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-									layer.close(index);
-									//window.location.href={:U('Sys/wesys')};
-								});
-							}
-						}
-
-					});
-				</script>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="wesys" id="wesys" method="post" action="{:U('runwesys')}">
+						<form class="form-horizontal ajaxForm" name="wesys" method="post" action="{:U('runwesys')}">
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公众号名称： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[wesys_name]" id="wesys_name" value="{$sys.wesys_name}"  placeholder="请输入公众号名称"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[wesys_name]" id="wesys_name" value="{$sys.wesys_name}"  placeholder="请输入公众号名称"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
@@ -95,7 +43,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公众号原始id： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[wesys_id]" id="wesys_id" value="{$sys.wesys_id}" placeholder="请输入公众号原始id"   class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[wesys_id]" id="wesys_id" value="{$sys.wesys_id}" placeholder="请输入公众号原始id"   class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
@@ -107,7 +55,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信号： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[wesys_number]" id="wesys_number" value="{$sys.wesys_number}"  placeholder="请输入微信号"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[wesys_number]" id="wesys_number" value="{$sys.wesys_number}"  placeholder="请输入微信号"  class="col-xs-10 col-sm-5" required/>
 									<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resthr"></span>
@@ -119,7 +67,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AppID（公众号）： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[wesys_appid]" id="wesys_appid" value="{$sys.wesys_appid}" placeholder="请输入AppID（公众号）"   class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[wesys_appid]" id="wesys_appid" value="{$sys.wesys_appid}" placeholder="请输入AppID（公众号）"   class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resthr"></span>
 											</span>
@@ -130,7 +78,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AppSecret： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[wesys_appsecret]" id="wesys_appsecret" value="{$sys.wesys_appsecret}"  placeholder="请输入AppSecret（公众号）"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[wesys_appsecret]" id="wesys_appsecret" value="{$sys.wesys_appsecret}"  placeholder="请输入AppSecret（公众号）"  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resthr"></span>
 											</span>
@@ -141,7 +89,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信号类型： </label>
 								<div class="col-sm-9">
-									<select name="options[wesys_type]"  class="col-sm-4" >
+									<select name="options[wesys_type]"  class="col-sm-4" required>
 										<option value="">请选择公众号类型</option>
 										<option value="1" <if condition="$sys['wesys_type'] eq 1">selected</if>>普通订阅号</option>
 										<option value="2" <if condition="$sys['wesys_type'] eq 2">selected</if>>普通服务号</option>
