@@ -1093,7 +1093,47 @@ class SysController extends AuthController {
 		file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 		$this->success ('清理缓存成功',1,1);
 	}
-
+    public function maintain()
+    {
+        $action=I('get.action');
+		switch ($action) {
+            case 'download_log' :
+            case 'view_log':
+                $logs = array();
+                foreach (list_file(LOG_PATH) as $f) {
+                    if ($f ['isDir']) {
+                        foreach (list_file($f ['pathname'] . '/', '*.log') as $ff) {
+                            if ($ff ['isFile']) {
+                                $spliter = '==========================';
+                                $logs [] = $spliter . '  ' . $f ['filename'] . '/' . $ff ['filename'] . '  ' . $spliter . "\n\n" . file_get_contents($ff ['pathname']);
+                            }
+                        }
+                    }
+                }
+                if ('download_log' == $action) {
+                    force_download_content('log_' . date('Ymd_His') . '.log', join("\n\n\n\n", $logs));
+                } else {
+                    echo '<pre>' . htmlspecialchars(join("\n\n\n\n", $logs)) . '</pre>';
+                }
+                break;
+            case 'clear_log' :
+                remove_dir(LOG_PATH);
+                $this->success ('清除日志成功',U('Index/index'),1);
+                break;
+			case 'debug_on' :
+				if (!file_exists($file = './data/conf/debug.lock')) {
+					@file_put_contents($file, 'lock');
+				}
+				$this->success('已打开调试',U('Index/index'),1);
+                break;
+			case 'debug_off' :
+				if (file_exists($file = './data/conf/debug.lock')) {
+					@unlink($file);
+				}
+				$this->success('已关闭调试',U('Index/index'),1);
+                break;
+        }
+    }
 	public function profile(){
         $admin=array();
         if(session('aid')){

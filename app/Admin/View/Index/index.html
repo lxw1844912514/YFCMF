@@ -152,8 +152,34 @@
 									</p>
 									<![endif]-->
 								</div>
-							</div>
+								</div>
 							<!-- 安全检测结束 -->
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<i class="ace-icon fa fa-wrench"></i>
+									<span class="icon-desktop"></span> 日常维护                    
+								</div>
+								<table class="table">
+									<tbody>
+										<tr>
+											<td colspan="2">
+												<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default">下载日志</a>
+												<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default">查看日志</a>
+												<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn">清除日志</a>
+												<if condition="$debug">
+												<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn">关闭调试</a>
+												<else />
+												<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn">打开调试</a>
+												</if>
+											</td>
+										</tr>
+										<tr>
+											<td>日志大小 : {$log_size|format_bytes}</td>
+											<td>日志数 : {$log_file_cnt}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 							<!-- 文章排行开始 -->
 							<div class="widget-box widget-color-blue">
 								<div class="widget-header">
