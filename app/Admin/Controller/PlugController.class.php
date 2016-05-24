@@ -535,9 +535,17 @@ class PlugController extends AuthController {
 		$count=M('plug_files')->where($map)->count();
 		$Page= new \Think\Page($count,8);// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
+		$this->assign('page',$show);
+		$listRows=(intval(C('DB_PAGENUM'))>0)?C('DB_PAGENUM'):20;
+		if($count>$listRows){
+			$Page->setConfig('theme','<div class=pagination><ul> %upPage% %downPage% %first%  %prePage%  %linkPage%  %nextPage% %end%</ul></div>');
+		}
+		$show= $Page->show();// 分页显示输出
+		$this->assign('page_min',$show);
 		$plug_files=M('plug_files')->where($map)->order('id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
 		$this->assign('plug_files',$plug_files);
-		$this->assign('page',$show);
+		$this->assign('sldate',$sldate);
+		$this->assign('val',$val);
 		$this->display();
 	}
 	public function plug_file_filter(){

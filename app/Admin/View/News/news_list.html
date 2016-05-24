@@ -8,15 +8,6 @@
 		<div class="main-content-inner">
 			<div class="page-content">
 				<link rel="stylesheet" type="text/css" media="all" href="__PUBLIC__/sldate/daterangepicker-bs3.css" />
-				<script type="text/javascript" src="__PUBLIC__/sldate/moment.js"></script>
-				<script type="text/javascript" src="__PUBLIC__/sldate/daterangepicker.js"></script>
-				<script type="text/javascript">
-					$(document).ready(function() {
-						$('#reservation').daterangepicker(null, function(start, end, label) {
-							console.log(start.toISOString(), end.toISOString(), label);
-						});
-					});
-				</script>
 				<form name="admin_list_sea" class="form-search form-horizontal" method="post" action="{:U('news_list')}">
 					<div class="row maintop">
 						<div class="col-xs-12 col-sm-4">
@@ -196,5 +187,14 @@
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->
+<script type="text/javascript" src="__PUBLIC__/sldate/moment.js"></script>
+<script type="text/javascript" src="__PUBLIC__/sldate/daterangepicker.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#reservation').daterangepicker(null, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	});
+</script>
 </body>
 </html>

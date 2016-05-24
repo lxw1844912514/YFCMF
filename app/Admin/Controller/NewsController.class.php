@@ -57,7 +57,7 @@ class NewsController extends AuthController {
 		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
 		$show= $Page->show();// 分页显示输出
 		$this->assign('page',$show);
-				$listRows=(intval(C('DB_PAGENUM'))>0)?C('DB_PAGENUM'):20;
+		$listRows=(intval(C('DB_PAGENUM'))>0)?C('DB_PAGENUM'):20;
 		if($count>$listRows){
 			$Page->setConfig('theme','<div class=pagination><ul> %upPage% %downPage% %first%  %prePage%  %linkPage%  %nextPage% %end%</ul></div>');
 		}
