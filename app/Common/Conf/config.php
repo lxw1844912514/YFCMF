@@ -23,7 +23,7 @@ $configs= array(
 	'DB_COMPRESS' => '1',         //压缩备份文件需要PHP环境支持gzopen,gzwrite函数        0:不压缩 1:启用压缩
 	'DB_LEVEL'    => '9',         //压缩级别   1:普通   4:一般   9:最高
 	'DB_CHARSET'=> 'utf8', // 数据库编码
-	'DB_DEBUG'  =>  false, // 是否开启调试模式
+	'DB_DEBUG' => DB_DEBUG ? true : false,
 	//权限认证
 	'AUTH_CONFIG' => array(
 		'AUTH_ON' => true, //是否开启权限

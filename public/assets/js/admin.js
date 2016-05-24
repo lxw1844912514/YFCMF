@@ -1,16 +1,4 @@
-/*************************************************************************** 所有带确认的ajax提交btn ********************************************************/
-/* 直接跳转 */
-$(function(){
-	$(".confirm-btn").click(function(){
-		var $url=this.href,
-			$info=$(this).data('info');
-		layer.confirm($info, {icon: 3}, function(index){
-			layer.close(index);
-			window.location.href=$url;
-		});
-		return false;
-	});
-});
+/************************************************************* 所有带确认的ajax提交btn ********************************************************/
 /* get执行并返回结果，执行后不带跳转 */
 $(function(){
 	$('.rst-btn').click(function(){
@@ -22,6 +10,37 @@ $(function(){
 				layer.alert(data.info, {icon: 5});
 			}
 		}, "json");
+		return false;
+	});
+});
+/* get执行并返回结果，执行后带跳转 */
+$(function(){
+	$('.rst-url-btn').click(function(){
+		var $url=this.href;
+		$.get($url, function(data){
+			if(data.status){
+				layer.alert(data.info, {icon: 6}, function(index){
+					layer.close(index);
+					window.location.href=data.url;
+				});
+			} else {
+				layer.alert(data.info, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+		}, "json");
+		return false;
+	});
+});
+/* 直接跳转 */
+$(function(){
+	$(".confirm-btn").click(function(){
+		var $url=this.href,
+			$info=$(this).data('info');
+		layer.confirm($info, {icon: 3}, function(index){
+			layer.close(index);
+			window.location.href=$url;
+		});
 		return false;
 	});
 });
@@ -62,7 +81,6 @@ $(function(){
 		return false;
 	});
 });
-
 /*************************************************************************** 所有状态类的ajax提交btn ********************************************************/
 /* 审核状态操作 */
 $(function(){

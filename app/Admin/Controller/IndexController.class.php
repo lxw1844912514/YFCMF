@@ -106,6 +106,22 @@ class IndexController extends CommonController {
         if ($this->weak_setting_admin_last_change_password) {
             $this->system_safe = false;
         }
+		$debug=APP_DEBUG;
+		$this->assign('debug',$debug);
+		$log_size = 0;
+        $log_file_cnt = 0;
+        foreach (list_file(LOG_PATH) as $f) {
+            if ($f ['isDir']) {
+                foreach (list_file($f ['pathname'] . '/', '*.log') as $ff) {
+                    if ($ff ['isFile']) {
+                        $log_size += $ff ['size'];
+                        $log_file_cnt++;
+                    }
+                }
+            }
+        }
+		$this->assign('log_size',$log_size);
+		$this->assign('log_file_cnt',$log_file_cnt);
 		//渲染模板
 		$this->display();
 	}
