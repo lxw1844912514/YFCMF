@@ -69,8 +69,12 @@ class MemberController extends AuthController {
 				'score'=>I('score',0,'intval'),
 				'coin'=>I('coin',0,'intval'),
 			);
-			M('member_list')->add($sl_data);
-			$this->success('会员添加成功',U('member_list'),1);
+			$rst=M('member_list')->add($sl_data);
+			if($rst!==false){
+				$this->success('会员添加成功',U('member_list'),1);
+			}else{
+				$this->error('会员添加失败',U('member_list'),0);
+			}
 		}
 	}
 
@@ -160,7 +164,7 @@ class MemberController extends AuthController {
 		if($rst!==false){
             $this->success('会员删除成功',U('member_list', array('p' => $p)),1);
         }else{
-            $this->error('会员删除失败',0,0);
+            $this->error('会员删除失败',U('member_list', array('p' => $p)),0);
         }
 	}
 
@@ -194,10 +198,14 @@ class MemberController extends AuthController {
      */
 	public function member_group_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('member_group_list'),0);
 		}else{
-			M('member_group')->add($_POST);
-			$this->success('会员组添加成功',U('member_group_list'),1);
+			$rst=M('member_group')->add($_POST);
+			if($rst!==false){
+				$this->success('会员组添加成功',U('member_group_list'),1);
+			}else{
+				$this->error('会员组添加失败',U('member_group_list'),0);
+			}
 		}
 	}
 
@@ -213,7 +221,7 @@ class MemberController extends AuthController {
         if($rst!==false){
             $this->success('会员组删除成功',U('member_group_list'),1);
         }else{
-            $this->error('会员组删除失败',0,0);
+            $this->error('会员组删除失败',U('member_group_list'),0);
         }
 	}
 
@@ -242,7 +250,7 @@ class MemberController extends AuthController {
      */
 	public function member_group_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('member_group_list'),0);
 		}else{
 			$member_group=M('member_group');
 			foreach ($_POST as $id => $sort){
@@ -275,7 +283,7 @@ class MemberController extends AuthController {
      */
 	public function member_group_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('member_group_list'),0);
 		}else{
 			$sl_data=array(
 				'member_group_id'=>I('member_group_id'),
@@ -285,8 +293,12 @@ class MemberController extends AuthController {
 				'member_group_order'=>I('member_group_order'),
 
 			);
-			M('member_group')->save($sl_data);
-			$this->success('用户组修改成功',U('member_group_list'),1);
+			$rst=M('member_group')->save($sl_data);
+			if($rst!==false){
+				$this->success('会员组修改成功',U('member_group_list'),1);
+			}else{
+				$this->error('会员组修改失败',U('member_group_list'),0);
+			}
 		}
 	}
 }

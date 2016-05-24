@@ -29,7 +29,7 @@ class WeController extends AuthController {
      */
 	public function we_menu_runadd(){
 		if(!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('we_menu_list'),0);
 		}else{
 			$we_menu=M('we_menu');
 			$sldata=array(
@@ -68,7 +68,7 @@ class WeController extends AuthController {
      */
 	public function we_menu_order(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('we_menu_list'),0);
 		}else{
 			$we_menu=M('we_menu');
 			foreach ($_POST as $id => $sort){
@@ -99,7 +99,7 @@ class WeController extends AuthController {
      */
 	public function we_menu_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',0,0);
+			$this->error('提交方式不正确',U('we_menu_list'),0);
 		}else{
 			$sl_data=array(
 				'we_menu_id'=>I('we_menu_id'),
@@ -123,7 +123,7 @@ class WeController extends AuthController {
 		if($rst!==false){
             $this->success('自定义菜单删除成功',U('we_menu_list'),1);
         }else{
-            $this->error('自定义菜单删除失败',0,0);
+            $this->error('自定义菜单删除失败',U('we_menu_list'),0);
         }
 	}
 

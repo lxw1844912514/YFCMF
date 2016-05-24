@@ -23,12 +23,12 @@
 
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="excel_runimport" id="excel_runimport" method="post" action="{:U('excel_runimport')}"  enctype="multipart/form-data">
+						<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:U('excel_runimport')}"  enctype="multipart/form-data">
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 【文章】选择上传的EXCEL文件： </label>
 								<div class="col-sm-4">
 									<a href="javascript:;" class="file">
-										<input type="file" name="file_stu" id="file_stu"  class="file" multiple="multiple"/>
+										<input type="file" name="file_stu" id="file_stu"  class="file" multiple="multiple" required/>
 										选择上传文件
 									</a>
 												<span class="input-group-btn" style="float:inherit; left:140px; top:2px;">
@@ -53,44 +53,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-
-	<script>
-
-		$(function(){
-
-			$('#excel_runimport').ajaxForm({
-				beforeSubmit: checkForm,
-				success: complete,
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $.trim($('#file_stu').val())){
-					layer.alert('上传文件不能为空不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#file_stu').focus();
-					});
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-						return false;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('excel_import')}";
-						return false;
-					});
-				}
-			}
-		});
-	</script>
 	<include file='Common:footer' />
 
 

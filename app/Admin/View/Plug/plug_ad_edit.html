@@ -19,12 +19,12 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="plug_ad_runedit" id="plug_ad_runedit" method="post" action="{:U('plug_ad_runedit')}">
+						<form class="form-horizontal ajaxForm2" name="plug_ad_runedit" method="post" action="{:U('plug_ad_runedit')}">
 							<input type="hidden" name="plug_ad_id" id="plug_ad_id" value="{$plug_ad.plug_ad_id}" />
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属位置： </label>
 								<div class="col-sm-11">
-									<select name="plug_ad_adtypeid"  class="col-sm-4 selector" >
+									<select name="plug_ad_adtypeid"  class="col-sm-4 selector" required>
 										<option value="" >请选择所属广告位</option>
 										<foreach name="plug_adtype_list" item="v">
 											<option value="{$v.plug_adtype_id}" <if condition="$plug_ad['plug_ad_adtypeid'] eq $v['plug_adtype_id']">selected</if>>{$v.plug_adtype_name}</option>
@@ -37,7 +37,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告名称：  </label>
 								<div class="col-sm-11">
-									<input type="text" name="plug_ad_name" id="plug_ad_name" value="{$plug_ad.plug_ad_name}" placeholder="输入广告名称" class="col-xs-10 col-sm-5" />
+									<input type="text" name="plug_ad_name" id="plug_ad_name" value="{$plug_ad.plug_ad_name}" placeholder="输入广告名称" class="col-xs-10 col-sm-5" required/>
 								</div>
 							</div>
 							<div class="space-4"></div>
@@ -139,89 +139,13 @@
 <include file='Common:footer' />
 
 </div><!-- /.main-container -->
-
-<script type="text/javascript" src="__PUBLIC__/assets/js/region.js"></script>
 <script>
-
-	function backpic(picurl){
-		$("#img0").attr("src",picurl);//还原修改前的图片
-		$("input[name='file0']").val("");//清空文本框的值
-		$("input[name='oldcheckpic']").val(picurl);//清空文本框的值
-	}
-	$("#file0").change(function(){
-		var objUrl = getObjectURL(this.files[0]) ;
-		console.log("objUrl = "+objUrl) ;
-		if (objUrl) {
-			$("#img0").attr("src", objUrl) ;
-		}
-	}) ;
-
-	//建立一個可存取到該file的url
-	function getObjectURL(file) {
-		var url = null ;
-		if (window.createObjectURL!=undefined) { // basic
-			$("#oldcheckpic").val("nopic");
-			url = window.createObjectURL(file) ;
-		} else if (window.URL!=undefined) { // mozilla(firefox)
-			$("#oldcheckpic").val("nopic");
-			url = window.URL.createObjectURL(file) ;
-		} else if (window.webkitURL!=undefined) { // webkit or chrome
-			$("#oldcheckpic").val("nopic");
-			url = window.webkitURL.createObjectURL(file) ;
-		}
-		return url ;
-	}
-
-
-
-	//添加操作
-	$(function(){
-		$('#plug_ad_runedit').ajaxForm({
-			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-			success: complete, // 这是提交后的方法
-			dataType: 'json'
-		});
-
-		function checkForm(){
-			if( '' == $(".selector").val()){
-				layer.alert('所属广告位不能为空', {icon: 5}, function(index){
-					layer.close(index);
-					$('.selector').focus();
-				});
-				return false;
-			}
-
-			if( '' == $.trim($('#plug_ad_name').val())){
-				layer.alert('广告名称不能为空', {icon: 5}, function(index){
-					layer.close(index);
-					$('#plug_ad_name').focus();
-				});
-				return false;
-			}
-		}
-		function complete(data){
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
-					layer.close(index);
-					window.location.href=data.url;
-				});
-			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-					window.location.href="{:U('plug_ad_list')}";
-				});
-				return false;
-			}
-		}
-	});
 	$(document).ready(function(){
-
 		$("#plug_ad_checkjsid").click(function(){
 			$("#pic_jslist").show();
 			$("#pic_list").hide();
 			$("#pic_listurl").hide();
 		});
-
 		$("#plug_ad_checkid").click(function(){
 			$("#pic_jslist").hide();
 			$("#pic_list").show();

@@ -25,60 +25,6 @@
 						</small>
 					</h1>
 				</div>
-
-				<script>
-					$(function(){
-						$('textarea.limited').maxlength({
-							'feedback' : '.charsLeft',
-						});
-						$('textarea.limited2').maxlength({
-							'feedback' : '.charsLeft2',
-						});
-						$('textarea.limitedone').maxlength({
-							'feedback' : '.charsLeftone',
-						});
-						$('textarea.limitedone2').maxlength({
-							'feedback' : '.charsLeftone2',
-						});
-						$('#sys').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#site_name').val())){
-								$('#resone').attr("class", "middle highmsg");//ID为resone 重新class赋值
-								$('#resone').html('网站名称不能为空').show();//id为resone 赋值html值
-								$('#site_name').focus();
-								return false;
-							}
-
-							if( '' == $.trim($('#site_host').val())){
-								$('#restwo').attr("class", "middle highmsg");//ID为resone 重新class赋值
-								$('#resone').html('').show();//id为resone 赋值html值
-								$('#restwo').html('网址不能为空').show();//id为resone 赋值html值
-								$('#site_host').focus();
-								return false;
-							}
-
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href="{:U('Sys/sys')}";
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-								layer.close(index);
-								//window.location.href="{:U('Sys/sys')}";
-								});
-								return false;
-							}
-						}
-					});
-				</script>
 				<div class="row">
 					
 					<div class="tabbable">
@@ -101,14 +47,14 @@
 			</a>
 		</li>
 	</ul>
-<form class="form-horizontal" name="sys" id="sys" method="post" action="{:U('runsys')}">
+<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:U('runsys')}">
 <fieldset>
 	<div class="tab-content">
 		<div id="basic" class="tab-pane fade in active">
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点名称 </label>
 					<div class="col-sm-9">
-						<input type="text" name="options[site_name]" id="site_name" value="{$sys.site_name}" class="col-xs-10 col-sm-5" />
+						<input type="text" name="options[site_name]" id="site_name" value="{$sys.site_name}" class="col-xs-10 col-sm-5" required/>
 								<span class="help-inline col-xs-12 col-sm-7">
 									<span class="middle" id="resone">*</span>
 								</span>
@@ -119,7 +65,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点网址 </label>
 					<div class="col-sm-9">
-						<input type="text" name="options[site_host]" id="site_host" value="{$sys.site_host}"  class="col-xs-10 col-sm-5" />
+						<input type="text" name="options[site_host]" id="site_host" value="{$sys.site_host}"  class="col-xs-10 col-sm-5" required/>
 								<span class="help-inline col-xs-12 col-sm-7">
 									<span class="middle" id="restwo">*</span>
 								</span>
@@ -130,7 +76,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题 </label>
 					<div class="col-sm-9">
-						<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-5">
+						<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-5" required>
 							<foreach name="templates" item="vo">
 							<option value="{$vo}" <if condition="$sys.site_tpl eq $vo">selected="selected"</if>>{$vo}</option>
 							</foreach>
@@ -186,10 +132,10 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 版权信息 </label>
 					<div class="col-sm-9">
-						<textarea  name="options[site_copyright]" cols="20" rows="3" class="col-xs-10 col-sm-7 limitedone"   id="form-field-10"  maxlength="150">{$sys.site_copyright}</textarea>
+						<textarea  name="options[site_copyright]" cols="20" rows="3" class="col-xs-10 col-sm-7 limited1"   id="form-field-10"  maxlength="150">{$sys.site_copyright}</textarea>
 						<input type="hidden" name="maxlengthone" value="150" />
 								<span class="help-inline col-xs-5 col-sm-5">
-									还可以输入 <span class="middle charsLeftone"></span> 个字符
+									还可以输入 <span class="middle charsLeft1"></span> 个字符
 								</span>
 					</div>
 				</div>
@@ -233,7 +179,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长邮箱 </label>
 					<div class="col-sm-9">
-						<input type="text" name="options[site_admin_email]" id="site_admin_email" value="{$sys.site_admin_email}"  class="col-xs-10 col-sm-5" />
+						<input type="email" name="options[site_admin_email]" id="site_admin_email" value="{$sys.site_admin_email}"  class="col-xs-10 col-sm-5" />
 								<span class="help-inline col-xs-12 col-sm-7">
 									<span class="middle" id="restwo"></span>
 								</span>
@@ -244,7 +190,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长QQ </label>
 					<div class="col-sm-9">
-						<input type="text" name="options[site_qq]" id="site_qq" value="{$sys.site_qq}"  class="col-xs-10 col-sm-5" />
+						<input type="number" name="options[site_qq]" id="site_qq" value="{$sys.site_qq}"  class="col-xs-10 col-sm-5" />
 								<span class="help-inline col-xs-12 col-sm-7">
 									<span class="middle" id="restwo"></span>
 								</span>
@@ -280,10 +226,10 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO描述 </label>
 					<div class="col-sm-9">
-						<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limitedone2"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
+						<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limited3"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
 						<input type="hidden" name="maxlengthone" value="200" />
 								<span class="help-inline col-xs-5 col-sm-5">
-									还可以输入 <span class="middle charsLeftone2"></span> 个字符
+									还可以输入 <span class="middle charsLef3"></span> 个字符
 								</span>
 					</div>
 				</div>
@@ -318,37 +264,5 @@
 
 
 	<include file='Common:footer' />
-	<script>
-		//还原之前图片
-		function backpic(picurl){
-			$("#img0").attr("src",picurl);//还原修改前的图片
-			$("input[name='file0']").val("");//清空文本框的值
-			$("input[name='oldcheckpic']").val(picurl);//清空文本框的值
-		}
-		//图片变更
-		$("#file0").change(function(){
-			var objUrl = getObjectURL(this.files[0]) ;
-			console.log("objUrl = "+objUrl) ;
-			if (objUrl) {
-				$("#img0").attr("src", objUrl) ;
-			}
-		}) ;
-
-		//建立一個可存取到該file的url
-		function getObjectURL(file) {
-			var url = null ;
-			if (window.createObjectURL!=undefined) { // basic
-				$("#oldcheckpic").val("nopic");
-				url = window.createObjectURL(file) ;
-			} else if (window.URL!=undefined) { // mozilla(firefox)
-				$("#oldcheckpic").val("nopic");
-				url = window.URL.createObjectURL(file) ;
-			} else if (window.webkitURL!=undefined) { // webkit or chrome
-				$("#oldcheckpic").val("nopic");
-				url = window.webkitURL.createObjectURL(file) ;
-			}
-			return url ;
-		}
-	</script>
 	</body>
 	</html>

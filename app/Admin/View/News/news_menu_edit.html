@@ -19,7 +19,7 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="runnews_menuedit" id="runnews_menuedit" method="post" action="{:U('news_menu_runedit')}">
+						<form class="form-horizontal ajaxForm2" name="runnews_menuedit" method="post" action="{:U('news_menu_runedit')}">
 							<input type="hidden" name="id" value="{$menu.id}" />
 							<input type="hidden" name="parentid" value="{$menu.parentid}" />
 							<div class="form-group">
@@ -253,66 +253,6 @@
                 checkType();
 			});
 		});
-
-		$(function(){
-			$('#runnews_menuedit').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $.trim($('#menu_name').val())){
-					$('#resone').attr("class", "middle highmsg");//ID为resone 重新class赋值
-					$('#resone').html('菜单名称不能为空').show();//id为resone 赋值html值
-					$('#menu_name').focus();
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('news_menu_list')}";
-					});
-					return false;
-				}
-			}
-
-		});
-	function backpic(picurl){
-		$("#img0").attr("src",picurl);//还原修改前的图片
-		$("input[name='file0']").val("");//清空文本框的值
-		$("input[name='oldcheckpic']").val(picurl);//清空文本框的值
-	}
-	$("#file0").change(function(){
-		var objUrl = getObjectURL(this.files[0]) ;
-		console.log("objUrl = "+objUrl) ;
-		if (objUrl) {
-			$("#img0").attr("src", objUrl) ;
-		}
-	}) ;
-
-	//建立一個可存取到該file的url
-	function getObjectURL(file) {
-		var url = null ;
-		if (window.createObjectURL!=undefined) { // basic
-			$("#oldcheckpic").val("nopic");
-			url = window.createObjectURL(file) ;
-		} else if (window.URL!=undefined) { // mozilla(firefox)
-			$("#oldcheckpic").val("nopic");
-			url = window.URL.createObjectURL(file) ;
-		} else if (window.webkitURL!=undefined) { // webkit or chrome
-			$("#oldcheckpic").val("nopic");
-			url = window.webkitURL.createObjectURL(file) ;
-		}
-		return url ;
-	}
 	</script>
 
 </div><!-- /.main-container -->

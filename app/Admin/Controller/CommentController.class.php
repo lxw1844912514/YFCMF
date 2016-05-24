@@ -43,19 +43,19 @@ class CommentController extends AuthController {
 			//所有以$path开头的都删除
 			$rst=M('comments')->where(array('path'=>array('like',$path.'%')))->delete();
 			if($rst!==false){
-				$this->success('留言删除成功',U('comment_list',array('p'=>$p)),1);
+				$this->success('评论删除成功',U('comment_list',array('p'=>$p)),1);
 			}else{
-				$this->error('评论删除失败',0,0);
+				$this->error('评论删除失败',U('comment_list',array('p'=>$p)),0);
 			}
 		}else{
-			$this->error('评论不存在',0,0);
+			$this->error('评论不存在',U('comment_list',array('p'=>$p)),0);
 		}
 	}
 	public function comment_alldel(){
 		$p = I('p');
 		$ids = I('c_id');
 		if(empty($ids)){
-			$this -> error("请选择删除的评论",0,0);
+			$this -> error("请选择删除的评论",U('comment_list',array('p'=>$p)),0);
 		}
 		if(!is_array($ids)){
 			$ids[]=$ids;
@@ -105,7 +105,7 @@ class CommentController extends AuthController {
 		if($rst){
 			$this->success('评论设置成功',U('comment_setting'),1);
 		}else{
-			$this->error('评论设置失败',0,0);
+			$this->error('评论设置失败',U('comment_setting'),0);
 		}
 	}
 }

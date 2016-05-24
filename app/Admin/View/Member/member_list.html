@@ -86,24 +86,24 @@
 										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
 										<td class="hidden-xs">
 											<if condition='$v.member_list_open eq 1'>
-												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已开启">
+												<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已开启">
 													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 												</a>
 											<else/>
-												<a class="red" href="javascript:;" onclick="return stateyes({$v.member_list_id});" title="已禁用">
+												<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已禁用">
 													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 												</a>														
 											</if>
 										</td>
 										<td class="hidden-xs">
 											<if condition='$v.user_status eq 1'>
-												<a class="red" href="javascript:;" onclick="return active({$v.member_list_id});" title="已激活">
+												<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="已激活">
 													<div id="jh{$v.member_list_id}">
 														<button class="btn btn-minier btn-yellow">已激活</button>
 													</div>
 												</a>
 											<else/>
-												<a class="red" href="javascript:;" onclick="return active({$v.member_list_id});" title="未激活">
+												<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="未激活">
 													<div id="jh{$v.member_list_id}">
 														<button class="btn btn-minier btn-danger">未激活</button>
 													</div>
@@ -112,13 +112,10 @@
 										</td>
 										<td>
 											<div class="hidden-sm hidden-xs action-buttons">
-												<!--<a class="green" data-toggle="modal" data-target="#myModal" href="javascript:;" onclick="return model_pic({$v.member_list_id});"   title="修改头像">
-                                                <i class="ace-icon fa fa-file-picture-o bigger-130"></i>
-                                                </a>-->
 												<a class="green"  href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" title="修改">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>
-												<a class="red del" href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}" title="删除">
+												<a class="red confirm-rst-url-btn" href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}" data-info="你确定要删除吗？" title="删除">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>
 												</a>
 											</div>
@@ -128,13 +125,6 @@
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-														<!-- 	<li>
-																<a class="green" data-toggle="modal" data-target="#myModal" href="javascript:;" onclick="return model_pic({$v.member_list_id});"   title="修改头像">
-																	<span class="green">
-																		<i class="ace-icon fa fa-file-picture-o bigger-120"></i>
-																	</span>
-																</a>
-															</li> -->
 															<li>
 																<a href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
@@ -144,7 +134,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -171,276 +161,7 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		function stateyes(val){
-			$.post('{:U("member_state")}',
-					{x:val},
-					function(data){
-						if(data.status){
-							if(data.info=='状态禁止'){
-								var a='<button class="btn btn-minier btn-danger">禁用</button>'
-								$('#zt'+val).html(a);
-								layer.alert(data.info, {icon: 5});
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">开启</button>'
-								$('#zt'+val).html(b);
-								layer.alert(data.info, {icon: 6});
-								return false;
-							}
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-		function active(val){
-			$.post('{:U("member_active")}',
-					{x:val},
-					function(data){
-						if(data.status){
-							if(data.info=='未激活'){
-								var a='<button class="btn btn-minier btn-danger">未激活</button>'
-								$('#jh'+val).html(a);
-								layer.alert(data.info, {icon: 5});
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">已激活</button>'
-								$('#jh'+val).html(b);
-								layer.alert(data.info, {icon: 6});
-								return false;
-							}
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-
-	</script>
 	<include file='Common:footer' />
-
-
-	<link href="__PUBLIC__/shearphoto_common/css/ShearPhoto.css" rel="stylesheet" type="text/css" media="all">
-	<script  type="text/javascript" src="__PUBLIC__/shearphoto_common/js/ShearPhoto.js" ></script>
-	<script  type="text/javascript"  src="__PUBLIC__/shearphoto_common/js/webcam_ShearPhoto.js" ></script>
-	<script  type="text/javascript"  src="__PUBLIC__/shearphoto_common/js/alloyimage.js" ></script>
-	<script  type="text/javascript"  src="__PUBLIC__/shearphoto_common/js/handle.js" ></script>
-	<!-- 显示模态框（Modal） -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width:70%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
-					</button>
-					<h4 class="modal-title" id="myModalLabel">
-						添加会员头像
-					</h4>
-				</div>
-				<div class="modal-body">
-
-
-					<div class="row">
-						<div class="col-xs-12">
-
-
-
-							<div id="shearphoto_loading">程序加载中......</div><!--这是2.2版本加入的缓冲效果，JS方法加载前显示的等待效果-->
-							<div id="shearphoto_main">
-								<!--效果开始.............如果你不要特效，可以直接删了........-->
-								<div class="Effects" id="shearphoto_Effects" autocomplete="off">
-									<strong class="EffectsStrong">截图效果</strong>
-									<a href="javascript:;" StrEvent="原图" class="Aclick"><img src="__PUBLIC__/shearphoto_common/images/Effects/e0.jpg"/>原图</a>
-									<a href="javascript:;" StrEvent="美肤"><img src="__PUBLIC__/shearphoto_common/images/Effects/e1.jpg"/>美肤效果</a>
-									<a href="javascript:;" StrEvent="素描"><img src="__PUBLIC__/shearphoto_common/images/Effects/e2.jpg"/>素描效果</a>
-									<a href="javascript:;" StrEvent="自然增强"><img src="__PUBLIC__/shearphoto_common/images/Effects/e3.jpg" />自然增强</a>
-									<a href="javascript:;" StrEvent="紫调"><img src="__PUBLIC__/shearphoto_common/images/Effects/e4.jpg" />紫调效果</a>
-									<a href="javascript:;" StrEvent="柔焦"><img src="__PUBLIC__/shearphoto_common/images/Effects/e5.jpg"/>柔焦效果</a>
-									<a href="javascript:;" StrEvent="复古"><img src="__PUBLIC__/shearphoto_common/images/Effects/e6.jpg"/>复古效果</a>
-									<a href="javascript:;" StrEvent="黑白"><img src="__PUBLIC__/shearphoto_common/images/Effects/e7.jpg"/>黑白效果</a>
-									<a href="javascript:;" StrEvent="仿lomo"><img src="__PUBLIC__/shearphoto_common/images/Effects/e8.jpg"/>仿lomo</a>
-									<a href="javascript:;" StrEvent="亮白增强"><img src="__PUBLIC__/shearphoto_common/images/Effects/e9.jpg"/>亮白增强</a>
-									<a href="javascript:;" StrEvent="灰白"><img src="__PUBLIC__/shearphoto_common/images/Effects/e10.jpg"/>灰白效果</a>
-									<a href="javascript:;" StrEvent="灰色"><img src="__PUBLIC__/shearphoto_common/images/Effects/e11.jpg"/>灰色效果</a>
-									<a href="javascript:;" StrEvent="暖秋"><img src="__PUBLIC__/shearphoto_common/images/Effects/e12.jpg"/>暖秋效果</a>
-									<a href="javascript:;" StrEvent="木雕"><img src="__PUBLIC__/shearphoto_common/images/Effects/e13.jpg"/>木雕效果</a>
-									<a href="javascript:;" StrEvent="粗糙"><img src="__PUBLIC__/shearphoto_common/images/Effects/e14.jpg"/>粗糙效果</a>
-								</div>
-								<!--效果结束...........................如果你不要特效，可以直接删了.....................................................-->
-								<!--primary范围开始-->
-								<div class="primary">
-									<!--main范围开始-->
-									<div id="main">
-										<div class="point">
-										</div>
-										<!--选择加载图片方式开始-->
-
-										<div id="SelectBox">
-											<form id="ShearPhotoForm" enctype="multipart/form-data" method="post"  target="POSTiframe">
-												<input name="shearphoto" type="hidden" value="123" autocomplete="off">
-												<!--示例传参数到服务端，后端文件UPLOAD.php用$_POST['shearphoto']接收,注意：HTML5切图时，这个参数是不会传的-->
-												<a href="javascript:;" id="selectImage"><input type="file"  name="UpFile" autocomplete="off"/></a>
-											</form>
-											<a href="javascript:;" id="PhotoLoading"></a>
-											<a href="javascript:;" id="camerasImage"></a>
-										</div>
-										<!--选择加载图片方式结束--->
-										<div id="relat">
-											<div id="black">
-											</div>
-											<div id="movebox">
-												<div id="smallbox">
-													<img src="shearphoto_common/images/default.gif" class="MoveImg" /><!--截框上的小图-->
-												</div>
-												<!--动态边框开始-->
-												<i id="borderTop">
-												</i>
-
-												<i id="borderLeft">
-												</i>
-
-												<i id="borderRight">
-												</i>
-
-												<i id="borderBottom">
-												</i>
-												<!--动态边框结束-->
-												<i id="BottomRight">
-												</i>
-												<i id="TopRight">
-												</i>
-												<i id="Bottomleft">
-												</i>
-												<i id="Topleft">
-												</i>
-												<i id="Topmiddle">
-												</i>
-												<i id="leftmiddle">
-												</i>
-												<i id="Rightmiddle">
-												</i>
-												<i id="Bottommiddle">
-												</i>
-											</div>
-											<img src="shearphoto_common/images/default.gif" class="BigImg" /><!--MAIN上的大图-->
-										</div>
-									</div>
-									<!--main范围结束-->
-									<div style="clear: both"></div>
-									<!--工具条开始-->
-									<div id="Shearbar">
-										<a id="LeftRotate" href="javascript:;">
-											<em>
-											</em>
-											向左旋转
-										</a>
-										<em class="hint L">
-										</em>
-										<div class="ZoomDist" id="ZoomDist">
-											<div id="Zoomcentre">
-											</div>
-											<div id="ZoomBar">
-											</div>
-                        <span class="progress">
-                        </span>
-										</div>
-										<em class="hint R">
-										</em>
-										<a id="RightRotate" href="javascript:;">
-											向右旋转
-											<em>
-											</em>
-										</a>
-										<p class="Psava">
-											<a id="againIMG"  href="javascript:;">重新选择</a>
-											<a id="saveShear" href="javascript:;">保存截图</a>
-										</p>
-									</div>
-									<!--工具条结束-->
-								</div>
-								<!--primary范围结束-->
-								<div style="clear: both"></div>
-							</div>
-							<!--shearphoto_main范围结束-->
-
-							<!--主功能部份 主功能部份的标签请勿随意删除，除非你对shearphoto的原理了如指掌，否则JS找不到DOM对象，会给你抱出错误-->
-							<!--相册-->
-							<div id="photoalbum"><!--假如你不要这个相册功能。把相册标签删除了，JS会抱出一个console.log()给你，注意查收，console.log的内容是告诉，某个DOM对象找不到-->
-								<h1>假如：这是一个相册--------试试点击图片</h1>
-								<i id="close"></i>
-								<ul>
-									<li><img src="shearphoto_common/file/photo/1.jpg" serveUrl="file/photo/1.jpg" /></li>  <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/2.jpg" serveUrl="file/photo/2.jpg" /></li>   <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/3.jpg" serveUrl="file/photo/3.jpg" /></li>  <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/4.jpg" serveUrl="file/photo/4.jpg" /></li> <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/5.jpg" serveUrl="file/photo/5.jpg" /></li> <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/6.jpg" serveUrl="file/photo/6.jpg" /></li> <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/7.jpg" serveUrl="file/photo/7.jpg" /></li> <!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-									<li><img src="shearphoto_common/file/photo/8.jpg" serveUrl="file/photo/8.jpg" /></li><!--serveUrl 是对于服务器路径而言，一般不需要改动，如果index.html位置改变时，你只需要改动 src就可以-->
-								</ul>
-							</div>
-							<!--相册-->
-							<!--拍照-->
-							<div id="CamBox">
-								<p class="lens"></p>
-								<div id="CamFlash"></div>
-								<p class="cambar">
-									<a href="javascript:;" id="CamOk"  >拍照</a>
-									<a href="javascript:;" id="setCam">设置</a>
-									<a href="javascript:;" id="camClose">关闭</a>
-									<span style="clear:both;"></span>
-								</p>
-								<div id="timing"></div>
-							</div>
-							<!--拍照-->
-
-
-
-
-
-
-
-
-
-
-
-						</div>
-					</div>
-				</div>
-
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	<script>
-		function model_pic(id){
-			$('#userid').val(id);
-		}
-	</script>
 </div><!-- /.main-container -->
 </body>
 </html>

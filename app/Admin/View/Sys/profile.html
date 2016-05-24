@@ -323,7 +323,7 @@
         <!-- 显示修改资料模态框（Modal） -->
         <div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-            <form class="form-horizontal" name="admin_runedit" id="admin_runedit" method="post" action="{:U('admin_runedit')}">
+            <form class="form-horizontal ajaxForm2" name="admin_runedit" method="post" action="{:U('admin_runedit')}">
                 <input type="hidden" name="admin_id" value="{$admin.admin_id}" />
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -345,7 +345,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户邮箱：  </label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="admin_email" id="admin_email" value="{$admin.admin_email}" class="col-xs-10 col-sm-5" />
+                                            <input type="email" name="admin_email" id="admin_email" value="{$admin.admin_email}" class="col-xs-10 col-sm-5" required/>
                                             <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于密码找回，请认真填写</span>
                                         </div>
                                     </div>
@@ -353,7 +353,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录密码：  </label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="admin_pwd" id="admin_pwd" placeholder="为空不修改密码" class="col-xs-10 col-sm-5" />
+                                            <input type="text" name="admin_pwd" id="admin_pwd" maxlength="15" minlength="6" placeholder="为空不修改密码" class="col-xs-10 col-sm-5" />
                                             <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>密码必须大于6位，小于15位</span>
                                         </div>
                                     </div>
@@ -361,7 +361,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="admin_tel" id="admin_tel" value="{$admin.admin_tel}" class="col-xs-10 col-sm-5" />
+                                            <input type="number" name="admin_tel" id="admin_tel" value="{$admin.admin_tel}" class="col-xs-10 col-sm-5" required/>
                                             <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>只能填写数字</span>
                                         </div>
                                     </div>
@@ -369,7 +369,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 通用网名：  </label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="admin_realname" id="admin_realname" value="{$admin.admin_realname}"  class="col-xs-10 col-sm-5" />
+                                            <input type="text" name="admin_realname" id="admin_realname" value="{$admin.admin_realname}"  class="col-xs-10 col-sm-5" required/>
                                             <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于发布信息所有人，且在前端显示</span>
                                         </div>
                                     </div>
@@ -397,70 +397,5 @@
                 </div><!-- /.modal-dialog -->
             </form>
         </div><!-- /.modal -->
-        <script>
-            //修改模态框状态
-            $(document).ready(function(){
-                $("#myModaledit").hide();
-                $("#gb").click(function(){
-                    $("#myModaledit").hide(300);
-                });
-                $("#gbb").click(function(){
-                    $("#myModaledit").hide(300);
-                });
-				$("#edit").click(function(){
-                    $("#myModaledit").show(300);
-					return false;
-                });
-            });
-        </script>
-        <script>
-            $(function(){
-                $('#admin_runedit').ajaxForm({
-                    beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-                    success: complete, // 这是提交后的方法
-                    dataType: 'json'
-                });
-
-                function checkForm(){
-                    if( '' == $.trim($('#admin_email').val())){
-                        layer.alert('用户邮箱不能为空', {icon: 5}, function(index){
-                            layer.close(index);
-                            $('#admin_email').focus();
-                        });
-                        return false;
-                    }
-
-                    if( '' == $.trim($('#admin_tel').val())){
-                        layer.alert('手机号码不能为空', {icon: 5}, function(index){
-                            layer.close(index);
-                            $('#admin_tel').focus();
-                        });
-                        return false;
-                    }
-
-                    if( '' == $.trim($('#admin_realname').val())){
-                        layer.alert('通用网名不能为空', {icon: 5}, function(index){
-                            layer.close(index);
-                            $('#admin_realname').focus();
-                        });
-                        return false;
-                    }
-                }
-                function complete(data){
-                    if(data.status==1){
-                        layer.alert(data.info, {icon: 6}, function(index){
-                            layer.close(index);
-                            window.location.href="{:U('profile')}";
-                        });
-                    }else{
-                        layer.alert(data.info, {icon: 5}, function(index){
-                            layer.close(index);
-                            window.location.href="{:U('profile')}";
-                        });
-                        return false;
-                    }
-                }
-            });
-        </script>
         </body>
         </html>

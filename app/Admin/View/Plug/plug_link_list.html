@@ -92,18 +92,18 @@
 										<td class="hidden-sm hidden-xs">{$v.plug_link_addtime|date='Y-m-d',###}</td>
 										<td class="hidden-xs">
 											<if condition='$v.plug_link_open eq 1'>
-												<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_link_id});" title="已开启">
+												<a class="red open-btn" href="{:U('plug_link_state')}" data-id="{$v.plug_link_id}" title="已开启">
 													<div id="zt{$v.plug_link_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 												</a>
 												<else/>
-												<a class="red" href="javascript:;" onclick="return stateyes({$v.plug_link_id});" title="已禁用">
+												<a class="red open-btn" href="{:U('plug_link_state')}" data-id="{$v.plug_link_id}" title="已禁用">
 													<div id="zt{$v.plug_link_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 												</a>														</if>														</td>
 										<td>
 											<div class="hidden-sm hidden-xs action-buttons">
-												<a class="green"  href="javascript:;" onclick="return plug_link_edit({$v.plug_link_id});"  title="修改">
+												<a class="green linkedit-btn"  href="{:U('plug_link_edit')}" data-id="{$v.plug_link_id}"  title="修改">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-												<a class="red del" href="{:U('plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}" title="删除">
+												<a class="red del" data-info="你确定要删除吗？" href="{:U('plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}" title="删除">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>										</div>
 											<div class="hidden-md hidden-lg">
 													<div class="inline position-relative">
@@ -112,7 +112,7 @@
 														</button>
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<li>
-																<a href="javascript:;" onclick="return plug_link_edit({$v.plug_link_id});" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+																<a href="{:U('plug_link_edit')}" data-id="{$v.plug_link_id}" class="tooltip-success linkedit-btn" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil bigger-120"></i>
 																	</span>
@@ -120,7 +120,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																<a href="{:U('plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -146,7 +146,7 @@
 
 	<!-- 显示模态框（Modal） -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form class="form-horizontal" name="plug_link_add" id="plug_link_add" method="post" action="{:U('plug_link_runadd')}">
+		<form class="form-horizontal ajaxForm2" name="plug_link_add" method="post" action="{:U('plug_link_runadd')}">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -166,7 +166,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属栏目： </label>
 									<div class="col-sm-10">
-										<select name="plug_link_typeid"  class="col-sm-4 selector" >
+										<select name="plug_link_typeid"  class="col-sm-4 selector" required>
 											<option value="">请选择所属栏目</option>
 											<foreach name="link_type" item="v">
 												<option value="{$v.plug_linktype_id}">{$v.plug_linktype_name}</option>
@@ -179,7 +179,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
 									<div class="col-sm-10">
-										<input type="text" name="plug_link_name" id="plug_link_name" placeholder="输入链接名称" class="col-xs-10 col-sm-5" />
+										<input type="text" name="plug_link_name" id="plug_link_name" placeholder="输入链接名称" class="col-xs-10 col-sm-5" required/>
 										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
 									</div>
 								</div>
@@ -188,7 +188,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
 									<div class="col-sm-10">
-										<input type="text" name="plug_link_url" id="plug_link_url" placeholder="输入链接URL" class="col-xs-10 col-sm-8" />
+										<input type="url" name="plug_link_url" id="plug_link_url" placeholder="输入链接URL" class="col-xs-10 col-sm-8" required/>
 										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
 									</div>
 								</div>
@@ -197,7 +197,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
 									<div class="col-sm-10">
-										<select name="plug_link_target" class="col-xs-10 col-sm-5">
+										<select name="plug_link_target" class="col-xs-10 col-sm-5" required>
 											<option value="_blank">新标签页打开</option>
 											<option value="_self">本窗口打开</option>
 										</select>
@@ -262,7 +262,7 @@
 	<!-- 显示模态框（Modal） -->
 	<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-		<form class="form-horizontal" name="plug_link_runedit" id="plug_link_runedit" method="post" action="{:U('plug_link_runedit')}">
+		<form class="form-horizontal ajaxForm2" name="plug_link_runedit" method="post" action="{:U('plug_link_runedit')}">
 			<input type="hidden" name="plug_link_id" id="editplug_link_id" value="" />
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -283,7 +283,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属栏目： </label>
 									<div class="col-sm-10">
-										<select name="plug_link_typeid" id="editplug_link_typeid"  class="col-sm-4" >
+										<select name="plug_link_typeid" id="editplug_link_typeid"  class="col-sm-4" required>
 											<option value="">请选择所属栏目</option>
 											<foreach name="link_type" item="v">
 												<option value="{$v.plug_linktype_id}">{$v.plug_linktype_name}</option>
@@ -296,7 +296,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
 									<div class="col-sm-10">
-										<input type="text" name="plug_link_name" id="editplug_link_name" value="" class="col-xs-10 col-sm-5" />
+										<input type="text" name="plug_link_name" id="editplug_link_name" value="" class="col-xs-10 col-sm-5" required/>
 										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
 									</div>
 								</div>
@@ -305,7 +305,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
 									<div class="col-sm-10">
-										<input type="text" name="plug_link_url" id="editplug_link_url" value="" class="col-xs-10 col-sm-8" />
+										<input type="url" name="plug_link_url" id="editplug_link_url" value="" class="col-xs-10 col-sm-8" required/>
 										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
 									</div>
 								</div>
@@ -313,7 +313,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
 									<div class="col-sm-10">
-										<select name="plug_link_target" id="editplug_link_target" class="col-xs-10 col-sm-5">
+										<select name="plug_link_target" id="editplug_link_target" class="col-xs-10 col-sm-5" required>
 											<option value="_blank">新标签页打开</option>
 											<option value="_self">本窗口打开</option>
 										</select>
@@ -356,190 +356,6 @@
 			</div><!-- /.modal-dialog -->
 		</form>
 	</div><!-- /.modal -->
-
-
-
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		function stateyes(val){
-			$.post('{:U("plug_link_state")}',
-					{x:val},
-					function(data){
-						if(data.status){
-							if(data.info=='状态禁止'){
-								var a='<button class="btn btn-minier btn-danger">禁用</button>'
-								$('#zt'+val).html(a);
-								return false;
-							}else{
-								var b='<button class="btn btn-minier btn-yellow">开启</button>'
-								$('#zt'+val).html(b);
-								return false;
-							}
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-
-		//修改模态框状态
-		$(document).ready(function(){
-			$("#myModaledit").hide();
-			$("#gb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-			$("#gbb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-			$("#gbbb").click(function(){
-				$("#myModaledit").hide(200);
-			});
-		});
-
-		function plug_link_edit(val){
-			$.post('{:U("plug_link_edit")}',
-					{plug_link_id:val},
-					function(data){
-						if(data.status==1){
-							$(document).ready(function(){
-								$("#myModaledit").show(300);
-								$("#editplug_link_id").val(data.plug_link_id);
-								$("#editplug_link_name").val(data.plug_link_name);
-								$("#editplug_link_url").val(data.plug_link_url);
-								$("#editplug_link_target").val(data.plug_link_target);
-								$("#editplug_link_qq").val(data.plug_link_qq);
-								$("#editplug_link_order").val(data.plug_link_order);
-								$("#editplug_link_typeid").val(data.plug_link_typeid);
-							});
-						}else{
-							layer.alert(data.info, {icon: 5});
-						}
-					});
-			return false;
-		}
-
-
-		$(function(){
-			$('#plug_link_add').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $(".selector").val()){
-					layer.alert('链接所属栏目不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('.selector').focus();
-					});
-					return false;
-				}
-
-				if( '' == $.trim($('#plug_link_name').val())){
-					layer.alert('友情链接名称不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#plug_link_name').focus();
-					});
-					return false;
-				}
-
-				if( '' == $.trim($('#plug_link_url').val())){
-					layer.alert('友情链接URL不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#plug_link_url').focus();
-					});
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('plug_link_list')}";
-					});
-					return false;
-				}
-			}
-		});
-
-
-		$(function(){
-			$('#plug_link_runedit').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $("#editplug_link_typeid").val()){
-					layer.alert('链接所属栏目不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#editplug_link_typeid').focus();
-					});
-					return false;
-				}
-
-				if( '' == $.trim($('#editplug_link_name').val())){
-					layer.alert('友情链接名称不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#editplug_link_name').focus();
-					});
-					return false;
-				}
-
-				if( '' == $.trim($('#editplug_link_url').val())){
-					layer.alert('友情链接URL不能为空', {icon: 5}, function(index){
-						layer.close(index);
-						$('#editplug_link_url').focus();
-					});
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('plug_link_list')}";
-					});
-					return false;
-				}
-			}
-
-		});
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

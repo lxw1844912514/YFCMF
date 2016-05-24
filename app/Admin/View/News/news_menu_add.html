@@ -19,12 +19,12 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="menuadd" id="menuadd" method="post" action="{:U('news_menu_runadd')}">
+						<form class="form-horizontal ajaxForm2" name="menuadd" method="post" action="{:U('news_menu_runadd')}">
 							<input type="hidden" name="parentid" value="{$parentid}" />
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
 								<div class="col-sm-9">
-									<input type="text" name="menu_name" id="menu_name"  placeholder="必填：菜单名称"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="menu_name" id="menu_name"  placeholder="必填：菜单名称"  class="col-xs-10 col-sm-5"  required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
 											</span>
@@ -243,66 +243,6 @@
                 $('#menu_content').show();
 				$('#pic_list').show();
             });
-		});
-		
-		$("#file0").change(function(){
-			var objUrl = getObjectURL(this.files[0]) ;
-			console.log("objUrl = "+objUrl) ;
-			if (objUrl) {
-				$("#img0").attr("src", objUrl) ;
-			}
-		}) ;
-
-		//建立一個可存取到該file的url
-		function getObjectURL(file) {
-
-			var url = null ;
-			if (window.createObjectURL!=undefined) { // basic
-				url = window.createObjectURL(file) ;
-			} else if (window.URL!=undefined) { // mozilla(firefox)
-				url = window.URL.createObjectURL(file) ;
-			} else if (window.webkitURL!=undefined) { // webkit or chrome
-				url = window.webkitURL.createObjectURL(file) ;
-			}
-			return url ;
-		}
-
-
-		function backpic(picurl){
-			$("#img0").attr("src",picurl);//还原修改前的图片
-			$("input[name='file0']").val("");//清空文本框的值
-		}
-		
-		$(function(){
-			$('#menuadd').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				if( '' == $.trim($('#menu_name').val())){
-					$('#resone').attr("class", "middle highmsg");//ID为resone 重新class赋值
-					$('#resone').html('菜单标题不能为空').show();//id为resone 赋值html值
-					$('#menu_name').focus();
-					return false;
-				}
-			}
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						window.location.href="{:U('news_menu_list')}";
-					});
-					return false;
-				}
-			}
-
 		});
 	</script>
 

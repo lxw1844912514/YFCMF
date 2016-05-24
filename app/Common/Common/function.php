@@ -278,7 +278,7 @@ function db_get_insert_sqls($table)
             $data_values = array();
             foreach ($data_rows as &$v) {
                 foreach ($v as &$vv) {
-                    $vv = "'" . mysql_real_escape_string($vv) . "'";
+                    $vv = "'" . mysql_escape_string($vv) . "'";
                 }
                 $data_values [] = '(' . join(',', $v) . ')';
             }

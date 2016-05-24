@@ -19,12 +19,12 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="form0" id="form0"  method="post" action="{:U('news_runadd')}"  enctype="multipart/form-data">
+						<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:U('news_runadd')}"  enctype="multipart/form-data">
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章所属主栏目： </label>
 								<div class="col-sm-10">
-									<select name="news_columnid"  class="col-sm-3 selector">
+									<select name="news_columnid"  class="col-sm-3 selector" required>
 										<option value="">请选择所属栏目</option>
 										<foreach name="menu" item="vo">
 											<option value="{$vo.id}" <if condition="$vo.menu_type eq 1">disabled class="bgccc"<else/>class="bgc"</if>>{$vo.lefthtml}{$vo.menu_name} <if condition="$vo.menu_type eq 1">(频道页)</if></option>
@@ -37,7 +37,7 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章名称：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="news_title" id="news_title"  placeholder="必填：文章标题"  class="col-xs-10 col-sm-6"/>
+									<input type="text" name="news_title" id="news_title"  placeholder="必填：文章标题"  class="col-xs-10 col-sm-6" required/>
 									<input type="text" name="news_titleshort" id="news_titleshort"  placeholder="简短标题，建议6~12字数"  class="col-xs-10 col-sm-4" style="margin-left:10px;" />
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
@@ -71,7 +71,7 @@
 							<div class="form-group" id="cpprice">
 								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 产品价格：  </label>
 								<div class="col-sm-10">
-									<input type="text" name="news_cpprice" id="news_cpprice" placeholder="产品价格" class="col-xs-10 col-sm-6" />
+									<input type="number" name="news_cpprice" id="news_cpprice" placeholder="产品价格" class="col-xs-10 col-sm-6" />
 								</div>
 							</div>
 							<div class="space-4"></div>
@@ -206,108 +206,25 @@
 
 </div><!-- /.main-container -->
 <script>
-	function backpic(picurl){
-		$("#img0").attr("src",picurl);//还原修改前的图片
-		$("input[name='file0']").val("");//清空文本框的值
-	}
-
-	$(document).ready(function(){
-
-//多图设置
+$(document).ready(function(){
+	//多图设置
+	$("#pic_list").hide();
+	$("#news_pic_list").click(function(){
 		$("#pic_list").hide();
-		$("#news_pic_list").click(function(){
-			$("#pic_list").hide();
-		});
-		$("#news_pic_qqlist").click(function(){
-			$("#pic_list").show();
-		});
-		//跳转额外属性
-		$("#pptaddress").hide();
-		$("#news_flag_vaj").click(function(){
-			$("#pptaddress").toggle(400);
-		});
-		$("#cpprice").hide();
-		$("#news_flag_vacp").click(function(){
-			$("#cpprice").toggle(400);
-		});
 	});
-
-
-	$(function(){
-		$('#form0').ajaxForm({
-			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-			success: complete, // 这是提交后的方法
-			dataType: 'json'
-		});
-
-		function checkForm(){
-			if( '' == $(".selector").val()){
-				layer.alert('文章所属栏目不能为空', {icon: 5}, function(index){
-					layer.close(index);
-					$('.selector').focus();
-				});
-				return false;
-			}
-
-			if( '' == $.trim($('#news_title').val())){
-				layer.alert('文章标题不能为空', {icon: 5}, function(index){
-					layer.close(index);
-					$('#news_title').focus();
-				});
-				return false;
-			}
-			
-			if(isNaN($.trim($('#news_cpprice').val()))){
-				layer.alert('价格需为数字', {icon: 5}, function(index){
-					layer.close(index);
-					$('#news_cpprice').focus();
-				});
-				return false;
-			}
-		}
-		function complete(data){
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
-					layer.close(index);
-					window.location.href=data.url;
-				});
-			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-					window.location.href="{:U('news_list')}";
-				});
-			}
-		}
-
+	$("#news_pic_qqlist").click(function(){
+		$("#pic_list").show();
 	});
-
-	$("#file0").change(function(){
-		var objUrl = getObjectURL(this.files[0]) ;
-		console.log("objUrl = "+objUrl) ;
-		if (objUrl) {
-			$("#img0").attr("src", objUrl) ;
-		}
-	}) ;
-	//建立一個可存取到該file的url
-	function getObjectURL(file) {
-		var url = null ;
-		if (window.createObjectURL!=undefined) { // basic
-			$("#news_flag_vap").attr("checked", true);
-			url = window.createObjectURL(file) ;
-		} else if (window.URL!=undefined) { // mozilla(firefox)
-			$("#news_flag_vap").attr("checked", true);
-			url = window.URL.createObjectURL(file) ;
-		} else if (window.webkitURL!=undefined) { // webkit or chrome
-			$("#news_flag_vap").attr("checked", true);
-			url = window.webkitURL.createObjectURL(file) ;
-		}
-		return url ;
-	}
-	//来源
-	function souadd(val){
-		$('#news_source').val(val);
-	}
-
+	//跳转额外属性
+	$("#pptaddress").hide();
+	$("#news_flag_vaj").click(function(){
+		$("#pptaddress").toggle(400);
+	});
+	$("#cpprice").hide();
+	$("#news_flag_vacp").click(function(){
+		$("#cpprice").toggle(400);
+	});
+});
 </script>
 </body>
 </html>

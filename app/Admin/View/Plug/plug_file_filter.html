@@ -60,7 +60,7 @@
 										</td>
 										<td>
 											<div class="action-buttons">
-												<a class="red del" href="{:U('plug_file_del',array('id'=>$v['id'],'p'=>I('p',1)))}" title="删除">
+												<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:U('plug_file_del',array('id'=>$v['id'],'p'=>I('p',1)))}" title="删除">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>
 												</a>
 											</div>
@@ -83,75 +83,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		$(function(){
-			$('#alldel').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置，一般是判断为空获取其他规则
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				var chk_value =[];
-				$('input[id="navid"]:checked').each(function(){
-					chk_value.push($(this).val());
-				});
-
-				if(!chk_value.length){
-					layer.alert('至少选择一个删除项', {icon: 5});
-					return false;
-				}
-			}
-
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-					});
-				}
-			}
-		});
-		function unselectall(){
-			if(document.myform.chkAll.checked){
-				document.myform.chkAll.checked = document.myform.chkAll.checked&0;
-			}
-		}
-		function CheckAll(form){
-			for (var i=0;i<form.elements.length;i++){
-				var e = form.elements[i];
-				if (e.Name != 'chkAll'&&e.disabled==false)
-					e.checked = form.chkAll.checked;
-			}
-		}
-	</script>
 	<include file='Common:footer' />
 
 </div><!-- /.main-container -->

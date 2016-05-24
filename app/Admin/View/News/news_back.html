@@ -126,17 +126,12 @@
 													<if condition="strstr($v['news_flag'],'d') eq true"><span style="color:#630">原</span></if>														</td>
 												<td class="hidden-xs">{$v.news_hits}</td>
 												<td class="hidden-xs">
-													<!--<if condition="$v['news_open'] eq 1">-->
-														<!--<button class="btn btn-minier btn-yellow">开启</button>-->
-														<!--<else/>-->
-														<!--<button class="btn btn-minier btn-danger">禁用</button>-->
-													<!--</if>	-->
                                                     <if condition="$v['news_open'] eq 1">
-                                                        <a class="red" href="javascript:;" onclick="return stateyes({$v.n_id});" title="已审">
+                                                        <a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="已审">
                                                             <div id="zt{$v.n_id}"><button class="btn btn-minier btn-yellow">已审</button></div>
                                                         </a>
                                                         <else/>
-                                                        <a class="red" href="javascript:;" onclick="return stateyes({$v.n_id});" title="未审">
+                                                        <a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="未审">
                                                             <div id="zt{$v.n_id}"><button class="btn btn-minier btn-danger">未审</button></div>
                                                         </a>
                                                     </if>
@@ -144,9 +139,9 @@
 												<td class="hidden-xs">{$v.news_time|date='Y-m-d',###}</td>
 												<td>
 													<div class="action-buttons">
-														<a class="red backopen" href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="还原">
+														<a class="red confirm-rst-url-btn" data-info="你确定要还原文章到文章列表吗？" href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="还原">
 															<i class="ace-icon fa fa-check bigger-130"></i>																</a>
-														<a class="red del" href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="删除">
+														<a class="red confirm-rst-url-btn" data-info="你确定要彻底删除文章吗？" href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="删除">
 															<i class="ace-icon fa fa-close bigger-130"></i>																</a>												</div>
 													<div class="hidden-md hidden-lg hidden-sm hidden-xs">
 															<div class="inline position-relative">
@@ -155,7 +150,7 @@
 																</button>
 																<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 																	<li>
-																		<a href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" class="tooltip-success backopen" data-rel="tooltip" title="" data-original-title="还原">
+																		<a href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" class="tooltip-success confirm-rst-url-btn" data-info="你确定要还原文章到文章列表吗？" data-rel="tooltip" title="" data-original-title="还原">
 																			<span class="green">
 																				<i class="ace-icon fa fa-check bigger-120"></i>
 																			</span>
@@ -163,7 +158,7 @@
 																	</li>
 
 																	<li>
-																		<a href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}"  class="tooltip-error del" data-rel="tooltip" title="" data-original-title="删除">
+																		<a href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要彻底删除文章吗？" data-rel="tooltip" title="" data-original-title="删除">
 																			<span class="red">
 																				<i class="ace-icon fa fa-close bigger-120"></i>
 																			</span>
@@ -193,126 +188,6 @@
 			</div><!-- /.page-content -->
 		</div>
 	</div><!-- /.main-content -->
-
-	<script>
-		$(function(){
-			//删除操作
-			var $del = $(".del");
-			$del.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要完全删除文章吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		$(function(){
-			//还原操作
-			var $backopen = $(".backopen");
-			$backopen.click(function(){
-				var $url=this.href;
-				layer.confirm('你确定要还原文章到文章列表吗？', {icon: 3}, function(index){
-				layer.close(index);
-				$.get($url, function(data){
-					if(data.status){
-						layer.alert(data.info, {icon: 6}, function(index){
-							layer.close(index);
-							window.location.href=data.url;
-						});
-					} else {
-						layer.alert(data.info, {icon: 5}, function(index){
-							layer.close(index);
-							//window.location.href="{:U('we_menu_list')}";
-						});
-					}
-				}, "json");
-				});
-				return false;
-			});
-		});
-		function unselectall(){
-			if(document.myform.chkAll.checked){
-				document.myform.chkAll.checked = document.myform.chkAll.checked&0;
-			}
-		}
-		function CheckAll(form){
-			for (var i=0;i<form.elements.length;i++){
-				var e = form.elements[i];
-				if (e.Name != 'chkAll'&&e.disabled==false)
-					e.checked = form.chkAll.checked;
-			}
-		}
-        function stateyes(val){
-            $.post('{:U("news_state")}',
-                    {x:val},
-                    function(data){
-                        var $v=val;
-                        if(data.status){
-                            if(data.info=='未审'){
-                                var a='<button class="btn btn-minier btn-danger">未审</button>'
-                                $('#zt'+val).html(a);
-                                return false;
-                            }else{
-                                var b='<button class="btn btn-minier btn-yellow">已审</button>'
-                                $('#zt'+val).html(b);
-                                return false;
-                            }
-
-                        }else{
-                            layer.alert(data.info, {icon: 5});
-                        }
-                    });
-            return false;
-        }
-		$(function(){
-			$('#alldel').ajaxForm({
-				beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置，一般是判断为空获取其他规则
-				success: complete, // 这是提交后的方法
-				dataType: 'json'
-			});
-
-			function checkForm(){
-				var chk_value =[];
-				$('input[id="navid"]:checked').each(function(){
-					chk_value.push($(this).val());
-				});
-
-				if(!chk_value.length){
-					layer.alert('至少选择一个删除项', {icon: 5});
-					return false;
-				}
-			}
-
-			function complete(data){
-				if(data.status==1){
-					layer.alert(data.info, {icon: 6}, function(index){
-						layer.close(index);
-						window.location.href=data.url;
-					});
-				}else{
-					layer.alert(data.info, {icon: 5}, function(index){
-						layer.close(index);
-						//window.location.href="{:U('news_back')}";
-					});
-				}
-			}
-
-		});
-
-	</script>
 
 	<include file='Common:footer' />
 

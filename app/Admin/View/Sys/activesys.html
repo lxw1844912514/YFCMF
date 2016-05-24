@@ -24,44 +24,9 @@
 						</small>
 					</h1>
 				</div>
-
-				<script>
-
-					$(function(){
-						$('#sys').ajaxForm({
-							beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-							success: complete, // 这是提交后的方法
-							dataType: 'json'
-						});
-
-						function checkForm(){
-							if( '' == $.trim($('#email_title').val())){
-								layer.alert('发送邮件标题不能为空', {icon: 5}, function(index){
-									layer.close(index);
-									$('#email_title').focus();
-								});
-							}
-						}
-						function complete(data){
-							if(data.status==1){
-								layer.alert(data.info, {icon: 6}, function(index){
-									layer.close(index);
-									window.location.href="{:U('Sys/activesys')}";
-								});
-							}else{
-								layer.alert(data.info, {icon: 5}, function(index){
-								layer.close(index);
-								//window.location.href="{:U('Sys/activesys')}";
-								});
-								return false;
-							}
-						}
-
-					});
-				</script>
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" name="sys" id="sys" method="post" action="{:U('runactive')}">
+						<form class="form-horizontal ajaxForm" name="sys" method="post" action="{:U('runactive')}">
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启邮箱激活： </label>
 								<div class="col-sm-9" style="padding-top:5px;">
@@ -74,7 +39,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮件标题： </label>
 								<div class="col-sm-9">
-									<input type="text" name="options[email_title]" id="email_title" value="{$sys.email_title}"  class="col-xs-10 col-sm-5" />
+									<input type="text" name="options[email_title]" id="email_title" value="{$sys.email_title}"  class="col-xs-10 col-sm-5" required/>
 											<span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
 											</span>
