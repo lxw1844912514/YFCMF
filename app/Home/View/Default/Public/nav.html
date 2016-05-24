@@ -42,8 +42,8 @@
                 </a>
             </div>
             <nav class="collapse navbar-collapse menu">
-                <?php
-				$user['member_list_id']=(!empty($user))?$user['member_list_id']:0;				
+                <php>
+				$user['member_list_id']=session('hid');				
 				$effected_id="";
 				$childtpl="<a href='\$href' class='sf-with-ul'>\$menu_name</a>";
                 $parenttpl="<a href='#' class='sf-with-ul'>\$menu_name<span class='sf-sub-indicator'>&nbsp;<i class='fa fa-angle-down'></i></span></a>";
@@ -53,7 +53,7 @@
                 $showlevel=6;
                 $dropdown='';
                 echo get_menu("main",$effected_id,$childtpl,$parenttpl,$ul_class,$li_class,$style,$showlevel,$dropdown);
-                ?>
+                </php>
                 <ul class="nav navbar-nav sf-menu">
                     <if condition="$user['member_list_id'] gt 0">
                         <li style="height:86px">
