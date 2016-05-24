@@ -23,7 +23,18 @@
 	</span>
 	</if>
 	<script class="comment-tpl" type="text/html">
-		<div class="comment" data-username="{$user['member_list_username']|default=$user['member_list_nickname']}" data-uid="{$user.member_list_id}">
+		<php>
+		if(empty($user['member_list_username'])){
+			if(empty($user['member_list_nickname'])){
+				$username='匿名人';
+			}else{
+				$username=$user['member_list_nickname'];
+			}
+		}else{
+			$username=$user['member_list_username'];
+		}
+		</php>
+		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
 			<a class="pull-left" href="{:U('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
 				<if condition="empty($user['member_list_headpic'])">
 				<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
@@ -34,7 +45,7 @@
 				</if>
 			</a>
 			<div class="comment-body">
-				<div class="comment-content"><a href="{:U('Index/visit',array('id'=>$user['id']))}">{$user['member_list_username']|default=$user['member_list_nickname']}:</a><sapn class="toname"></sapn><span class="time">刚刚</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+				<div class="comment-content"><a href="{:U('Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">刚刚</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
 				<div class="comment-content"><span class="content"></span></div>
 			</div>
 			<div class="clearfix"></div>

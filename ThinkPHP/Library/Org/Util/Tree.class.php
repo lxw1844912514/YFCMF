@@ -40,6 +40,7 @@ class Tree {
     public function init($arr=array()) {
         $this->arr = $arr;
         $this->ret = '';
+		$this->str='';
         return is_array($arr);
     }
 
