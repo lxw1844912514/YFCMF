@@ -41,6 +41,8 @@ $configs= array(
 		'__DATA__' => __ROOT__.'/data/',
 		'__AVATAR__' => __ROOT__.'/data/image/avatar/',
 		'__STATIC_ROOT__' => __ROOT__,
+        '__JS_SUFFIX__' => (APP_DEBUG ? '.src.js' : '.js'),
+        '__CSS_SUFFIX__' => (APP_DEBUG ? '.src.css' : '.css')
 	  ),
 	  'UPLOAD_TEMP_DIR' => './data/runtime/Data/',
 	  'UPLOAD_DIR' => './data/upload/',
