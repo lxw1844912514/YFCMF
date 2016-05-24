@@ -13,6 +13,16 @@ class IndexController extends HomebaseController {
 	public function index(){
 		$this->display(':index');
 	}
+	public function visit(){
+		$id=I("get.id");
+		$users_model=M("member_list");
+		$user=$users_model->where(array("member_list_id"=>$id))->find();
+		if(empty($user)){
+			$this->error("查无此人！",0,0);
+		}
+		$this->assign($user);
+		$this->display("User:index");
+    }
 	public function verify_msg()
     {
 		ob_end_clean();

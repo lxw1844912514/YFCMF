@@ -64,7 +64,7 @@
 									</if>
 								</a>
                                 <i class="fa fa-comment"></i>
-                                <a href="{:U('user/index/index',array('id'=>$vo['uid']))}">{$vo.full_name}:</a>
+                                <a href="{:U('Index/visit',array('id'=>$vo['uid']))}">{$vo['member_list_username']|default=$vo['member_list_nickname']}:</a>
                                 <p>{$vo.c_content}</p>
                                 <span class="comment-time">{$vo.createtime|date="Y-m-d H:i:s",###}</span>
                             </li></foreach>
