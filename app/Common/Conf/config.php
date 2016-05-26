@@ -10,9 +10,6 @@ $configs= array(
 	'SHOW_PAGE_TRACE'=>true,
 	'URL_CASE_INSENSITIVE'=>true,
 	'TMPL_ACTION_ERROR'=>'Public:dispatch_jump',//error错误提示页面
-	'URL_ROUTER_ON'   => true,
-	'URL_ROUTE_RULES'=>array(
-	),
 	//数据库
 	'DB_FIELD_CACHE'=>false,
 	'HTML_CACHE_ON'=>false,

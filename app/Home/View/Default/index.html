@@ -142,7 +142,7 @@
                                        </a>
 									</if>
                                        <div class="portfolio-item-title">
-                                          <a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
+                                          <a href="{:UU('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
                                           <p>
                                              {$vo.news_scontent}
                                           </p>
@@ -162,7 +162,7 @@
                                        </a>
 									</if>
                                        <div class="portfolio-item-title">
-                                          <a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
+                                          <a href="{:UU('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
                                           <p>
                                              {$vo.news_scontent}
                                           </p>
@@ -198,7 +198,7 @@
                                     <div class="cn-content">
                                        <h4>{$vo.news_title}</h4>
                                        <p>{$vo.news_content|html_trim=420}</p>
-                                       <a href="{:U('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
+                                       <a href="{:UU('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
                                        <div class="clearfix"></div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -244,14 +244,14 @@
                         <li <if condition="$k eq 2">class="blog-first-el"</if>>
                         <div class="blog-showcase-thumb col-lg-4">
                            <div class="post-body">
-                              <a class="post-item-link" href="{:U('News/index',array('id'=>$vo['n_id']))}"><img alt="" src="__ROOT__{$vo['news_img']}"></a>
+                              <a class="post-item-link" href="{:UU('News/index',array('id'=>$vo['n_id']))}"><img alt="" src="__ROOT__{$vo['news_img']}"></a>
                            </div>
                         </div>
                         <div class="blog-showcase-extra-info col-lg-4">
                            <i class="fa fa-clock-o">{$vo.news_time|date="Y-m-d H:i:s",###}</i>
-                           <h5><a href="{:U('News/index',array('id'=>$vo['n_id']))}" class="title">{$vo.news_title}</a></h5>
+                           <h5><a href="{:UU('News/index',array('id'=>$vo['n_id']))}" class="title">{$vo.news_title}</a></h5>
                            <p>{:msubstr($vo['news_scontent'],0,45)}</p>
-                           <a href="{:U('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-double-right"></i></a>
+                           <a href="{:UU('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-double-right"></i></a>
                         </div>
                         </li>
                      </foreach>
@@ -329,7 +329,7 @@
                                              <div class="author">
                                                 <div class="testimonial-image "><img alt="" src="__ROOT__{$vo['news_img']}"></div>
                                                 <div class="testimonial-author-info">
-                                                   <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
+                                                   <a href="{:UU('News/index',array('id'=>$vo['n_id']))}"><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
                                                 </div>
                                              </div>
                                           </div>
