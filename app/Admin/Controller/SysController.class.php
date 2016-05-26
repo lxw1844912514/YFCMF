@@ -45,7 +45,7 @@ class SysController extends AuthController {
 				$upload->saveRule  =     'time';
 				$info   =   $upload->upload();
 				if($info) {
-					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
 					$this->error($upload->getError(),U('Sys/sys'),0);//否则就是上传错误，显示错误原因
 				}

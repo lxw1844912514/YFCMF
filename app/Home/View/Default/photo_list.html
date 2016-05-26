@@ -46,22 +46,22 @@
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 item">
                                         <div class="gallery portfolio-item">
 											<if condition="!empty($vo['news_img'])">
-                                                <a href="{$vo['news_img']}" rel="prettyPhoto[a{$i}]">
+                                                <a href="__ROOT__{$vo['news_img']}" rel="prettyPhoto[a{$i}]">
                                                     <span class="portfolio-item-hover"></span>
 													<span class="fullscreen"><i class="fa fa-search"></i></span>
-													<img src="{$vo['news_img']}" alt=" "/>
+													<img src="__ROOT__{$vo['news_img']}" alt=" "/>
                                                 </a>											
                                             <foreach name="imgs" item="voo" key="k">
-                                                <a href="{$voo}" rel="prettyPhoto[a{$i}]">
-                                                    <img src="{$voo}" alt=" " style="display:none;"/>
+                                                <a href="__ROOT__{$voo}" rel="prettyPhoto[a{$i}]">
+                                                    <img src="__ROOT__{$voo}" alt=" " style="display:none;"/>
                                                 </a>
                                             </foreach>											
 											<else />
                                             <foreach name="imgs" item="voo" key="k">
-                                                <a href="{$voo}" rel="prettyPhoto[a{$i}]">
+                                                <a href="__ROOT__{$voo}" rel="prettyPhoto[a{$i}]">
                                                     <span class="portfolio-item-hover"></span>
 													<span class="fullscreen"><i class="fa fa-search"></i></span>
-													<img src="{$voo}" alt=" "/ <if condition="$k neq 0">style="display:none;"</if>>
+													<img src="__ROOT__{$voo}" alt=" "/ <if condition="$k neq 0">style="display:none;"</if>>
                                                 </a>
                                             </foreach>											
 											</if>

@@ -46,7 +46,7 @@
                                     <a href="#">
 										<span class="profile-picture">
                                         <if condition="empty($member_list_headpic)">
-                                            <img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon" style="max-width:128px" data-toggle="modal" data-target="#myModal" title="点击上传头像"/>
+                                            <img src="{$yf_theme_path}Public/images/headicon_128.png" class="headicon" style="max-width:128px" data-toggle="modal" data-target="#myModal" title="点击上传头像"/>
 										<elseif condition="stripos($member_list_headpic,'://')"/>
 											<img src="{$member_list_headpic}" class="headicon" data-toggle="modal" data-target="#myModal"  title="点击上传头像"/>
                                         <else />

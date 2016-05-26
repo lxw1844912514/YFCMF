@@ -52,7 +52,7 @@
                                 <if condition="!empty($next)">
                                     <a href="{:U('News/index',array('id'=>$next['n_id']))}" class="btn btn-primary pull-right">下一篇</a>
                                 </if>
-                                <script type="text/javascript" src="{$Think.const.THEME_PATH}Public/js/qrcode.min.js"></script>
+                                <script type="text/javascript" src="{$yf_theme_path}Public/js/qrcode.min.js"></script>
                                 <div id="qrcode" style="width: 100px;margin:0 auto"></div>
                                 <script type="text/javascript">
                                     var qrcode = new QRCode(document.getElementById("qrcode"), {

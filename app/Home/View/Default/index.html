@@ -21,7 +21,7 @@
             <ul>
                <foreach name="home_slides" item="vo">
                   <li data-delay="6000" data-masterspeed="300" data-transition="fade">
-                     <div class="slotholder"><a href="{$vo.plug_ad_url}"><img class="img-responsive" src="{$vo.plug_ad_pic}" data-fullwidthcentering="on" alt="{$vo.plug_ad_name}"></a></div>
+                     <div class="slotholder"><a href="{$vo.plug_ad_url}"><img class="img-responsive" src="__ROOT__{$vo.plug_ad_pic}" data-fullwidthcentering="on" alt="{$vo.plug_ad_name}"></a></div>
                      <div class="caption list_slide lfb tp-caption start"
                           data-x="40"
                           data-y="85"
@@ -136,9 +136,9 @@
                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item animate_afc d{$k+1}">
                                     <div class="portfolio-item">
 									<if condition="!empty($vo['news_img'])">
-                                       <a href="{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
+                                       <a href="__ROOT__{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
                                           <span class="portfolio-item-hover"></span>
-                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']}" alt=" "/>
+                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="__ROOT__{$vo['news_img']}" alt=" "/>
                                        </a>
 									</if>
                                        <div class="portfolio-item-title">
@@ -157,8 +157,8 @@
                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item">
                                     <div class="portfolio-item">
 									<if condition="!empty($smeta['thumb'])">
-                                       <a href="{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
-                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']}" alt=" "/>
+                                       <a href="__ROOT__{$vo['news_img']}" class="portfolio-item-link" data-rel="prettyPhoto" >
+                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="__ROOT__{$vo['news_img']}" alt=" "/>
                                        </a>
 									</if>
                                        <div class="portfolio-item-title">
@@ -244,7 +244,7 @@
                         <li <if condition="$k eq 2">class="blog-first-el"</if>>
                         <div class="blog-showcase-thumb col-lg-4">
                            <div class="post-body">
-                              <a class="post-item-link" href="{:U('News/index',array('id'=>$vo['n_id']))}"><img alt="" src="{$vo['news_img']}"></a>
+                              <a class="post-item-link" href="{:U('News/index',array('id'=>$vo['n_id']))}"><img alt="" src="__ROOT__{$vo['news_img']}"></a>
                            </div>
                         </div>
                         <div class="blog-showcase-extra-info col-lg-4">
@@ -288,7 +288,7 @@
                                     <volist name="client" id="vo" key="k" offset="0" length='4'>
 									<php>$imgs=explode(",",$vo['news_pic_allurl']);</php>
                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item animate_afc d1">
-                                          <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="{$imgs[0]}"></a></div>
+                                          <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="__ROOT__{$imgs[0]}"></a></div>
                                        </div>
                                     </volist>
                                  </div>
@@ -296,7 +296,7 @@
                                     <volist name="client" id="vo" key="k" offset="4" length='4'>
                                        <php>$imgs=explode(",",$vo['news_pic_allurl']);</php>									       
 									   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
-                                       <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="{$imgs[0]}"></a></div>
+                                       <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="__ROOT__{$imgs[0]}"></a></div>
                                     </div>
                                     </volist>
                                  </div>
@@ -327,7 +327,7 @@
                                              <div class="testimonials-arrow">
                                              </div>
                                              <div class="author">
-                                                <div class="testimonial-image "><img alt="" src="{$vo['news_img']}"></div>
+                                                <div class="testimonial-image "><img alt="" src="__ROOT__{$vo['news_img']}"></div>
                                                 <div class="testimonial-author-info">
                                                    <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
                                                 </div>

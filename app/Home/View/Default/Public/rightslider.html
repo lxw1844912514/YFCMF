@@ -27,7 +27,7 @@
                         </php>
 						<foreach name="hot_articles" item="vo">
                         <li>
-                            <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="{$vo['news_img']}"></a>
+                            <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="__ROOT__{$vo['news_img']}"></a>
                             <p><a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title|msubstr=0,20}</a></p>
                             <span class="color">{$vo.news_time||date="Y-m-d",###}</span>
                         </li>
@@ -42,7 +42,7 @@
                         </php>
 						<foreach name="last_post" item="vo">
                         <li>
-                            <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="{$vo['news_img']}"></a>
+                            <a href="{:U('News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="__ROOT__{$vo['news_img']}"></a>
                             <p><a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title|msubstr=0,20}</a></p>
                             <span class="color">{$vo.news_time|date="Y-m-d",###}</span>
                         </li>
@@ -56,7 +56,7 @@
                             <li>
 								<a class="pull-left" href="{:U('News/index',array('id'=>$vo['t_id']))}" title="查看原文">
 									<if condition="empty($vo['member_list_headpic'])">
-									<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="img-thumbnail recent-post-img"/>
+									<img src="{$yf_theme_path}Public/images/headicon.png" class="img-thumbnail recent-post-img"/>
 									<elseif condition="stripos($vo['member_list_headpic'],'://')"/>
 									<img src="{$vo['member_list_headpic']}" class="img-thumbnail recent-post-img"/>
 									<else />
@@ -77,18 +77,18 @@
         <h3 class="title">广告赞助</h3>
         <div class="ads-img row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <img class="img-thumbnail" alt="" src="{$Think.const.THEME_PATH}Public/images/ads-small.jpg">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}Public/images/ads-small.jpg">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <img class="img-thumbnail" alt="" src="{$Think.const.THEME_PATH}Public/images/ads-small.jpg">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}Public/images/ads-small.jpg">
             </div>
         </div>
         <div class="ads-img row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <img class="img-thumbnail" alt="" src="{$Think.const.THEME_PATH}Public/images/ads-small.jpg">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}Public/images/ads-small.jpg">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <img class="img-thumbnail" alt="" src="{$Think.const.THEME_PATH}Public/images/ads-small.jpg">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}Public/images/ads-small.jpg">
             </div>
         </div>
     </div>

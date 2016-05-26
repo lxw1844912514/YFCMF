@@ -37,7 +37,7 @@
 		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
 			<a class="pull-left" href="{:U('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
 				<if condition="empty($user['member_list_headpic'])">
-				<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+				<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 				<elseif condition="stripos($user['member_list_headpic'],'://')"/>
 				<img src="{$user['member_list_headpic']}" class="media-object avatar"/>
 				<else />
@@ -66,7 +66,7 @@
 			<div class="comment" data-id="{$vo.c_id}" data-uid="{$vo.uid}" data-username="{$vo.member_list_username|default=$vo['member_list_nickname']}"  id="comment{$vo.c_id}">
 				<a class="pull-left" href="{:U('Index/visit',array('id'=>$vo['uid']))}">
 				<if condition="empty($vo['member_list_headpic'])">
-				<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+				<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 				<elseif condition="stripos($vo['member_list_headpic'],'://')"/>
 				<img src="{$vo['member_list_headpic']}" class="media-object avatar"/>
 				<else />
@@ -84,7 +84,7 @@
 							<div class="comment" data-id="{$voo.c_id}" data-uid="{$voo.uid}" data-username="{$voo.member_list_username|default=$voo['member_list_nickname']}" id="comment{$voo.c_id}" style="margin-left: 80px">
 								<a class="pull-left" href="{:U('Index/visit',array('id'=>$voo['uid']))}">
 								<if condition="empty($voo['member_list_headpic'])">
-								<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+								<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 								<elseif condition="stripos($voo['member_list_headpic'],'://')"/>
 								<img src="{$voo['member_list_headpic']}" class="media-object avatar"/>
 								<else />

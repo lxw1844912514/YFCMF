@@ -2,12 +2,12 @@
   'SHOW_PAGE_TRACE' => true,
   'URL_CASE_INSENSITIVE' => true,
   'DB_LIKE_FIELDS' => 'news_title|news_content|news_flag|news_open',
-  'URL_MODEL' => '0',
+  'URL_MODEL' => '1',
   'URL_ROUTER_ON' => true,
   'URL_ROUTE_RULES' => 
   array (
-    'con/:n_id' => 'Home/Index/news_content',
-    'list/:c_id' => 'Home/Index/news_list',
+    'contacts' => 'home/list/index?id=10',
+    'about' => 'home/list/index?id=1',
   ),
   'YFCMF_VERSION' => 'V1.0.0',
   'THINK_SDK_QQ' => 
