@@ -16,7 +16,7 @@
     'list/:id\\d' => 'home/list/index',
     'news/:id\\d' => 'home/news/index',
   ),
-  'YFCMF_VERSION' => 'V1.0.0',
+  'YFCMF_VERSION' => 'V1.1.0',
   'THINK_SDK_QQ' => 
   array (
     'APP_KEY' => '203564',
