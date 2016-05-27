@@ -942,10 +942,10 @@ function sys_config_setbykey($key, $value)
     }
     $item = explode('.', $key);
     switch (count($item)) {
-        case 0:
+        case 1:
             $cfg[$item[0]] = $value;
             break;
-        case 1:
+        case 2:
             $cfg[$item[0]][$item[1]] = $value;
             break;
     }

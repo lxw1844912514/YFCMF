@@ -67,7 +67,7 @@
                                         <div class="blog-entry-meta">
                                             <div class="blog-entry-meta-author">
                                                 <i class="fa fa-user"></i>
-                                                <a href="{:U('Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo['admin_username']}</a>
+                                                <a href="{:UU('Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo['admin_username']}</a>
                                             </div>
                                             <div class="blog-entry-meta-comments">
                                                 <a href="{:UU('News/index',array('id'=>$vo['n_id']))}#comments"><i class="fa fa-comment"></i></a>{$vo.comment_count}
@@ -77,7 +77,7 @@
                                                 {$vo.news_hits}
                                             </div>
                                             <div class="blog-entry-meta-comments">
-                                                <a href="{:U('News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$vo.news_like}</span>
+                                                <a href="{:UU('News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$vo.news_like}</span>
                                             </div>
                                             <div class="blog-entry-meta-tags">
                                             </div>

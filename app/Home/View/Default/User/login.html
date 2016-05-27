@@ -23,7 +23,7 @@
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form id="login" class="form-light" action="{:U('Login/runlogin')}" method="post">
+										<form id="login" class="form-light" action="{:UU('Login/runlogin')}" method="post">
 											<div>
 												<input type="text" id="input_username" name="member_list_username" placeholder="手机号/邮箱/用户名" class="form-control">
 											</div>
@@ -37,7 +37,7 @@
 													<input type="text" class="form-control" id="verify" placeholder="" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:U('Login/verify')}" onclick="this.src='{:U('Login/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:UU('Login/verify')}" onclick="this.src='{:UU('Login/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -49,10 +49,10 @@
 											<div style="text-align: center;">
 												<div class="row">
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:U('Register/index')}">现在注册</a>
+														<a href="{:UU('Register/index')}">现在注册</a>
 													</div>
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:U('Login/forgot_pwd')}">忘记密码</a>
+														<a href="{:UU('Login/forgot_pwd')}">忘记密码</a>
 													</div>
 												</div>
 											</div>

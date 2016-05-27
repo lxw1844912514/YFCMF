@@ -63,7 +63,19 @@ class SysController extends AuthController {
 			}
 		}
 	}
-
+	//url设置显示
+	public function urlsys(){
+		$routes=M('route')->select();
+		$this->assign('routes',$routes);
+		$this->display();
+	}
+	public function runurlsys(){
+		$url_model=I('url_model',0,'intval');
+		$url_suffix=I('suffix');
+		sys_config_setbykey('URL_MODEL',$url_model);
+		sys_config_setbykey('URL_HTML_SUFFIX',$url_suffix);
+		$this->success('URL基本设置成功',U('Sys/urlsys'),1);
+	}
 	//微信设置显示
 	public function wesys(){
 		$sys=M('options')->where(array('option_name'=>'weixin_options'))->getField("option_value");

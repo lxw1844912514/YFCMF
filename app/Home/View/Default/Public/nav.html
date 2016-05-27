@@ -10,7 +10,7 @@
                     <ul class="social pull-left">
                     </ul>
                     <div id="search-form" class="pull-right">
-                        <form action="{:U('List/search')}" method="post">
+                        <form action="{:UU('List/search')}" method="post">
                             <input type="text" class="search-text-box" name="keyword" value="{:I('keyword')}"/>
                         </form>
                     </div>
@@ -71,8 +71,8 @@
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:U('Center/index')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
-                                <li><a href="{:U('Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
+                                <li><a href="{:UU('Center/index')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
+                                <li><a href="{:UU('Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
                             </ul>
                         </li>
                         <else />
@@ -84,10 +84,10 @@
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:U('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;微博登录</a></li>
-                                <li><a href="{:U('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;QQ登录</a></li>
-                                <li><a href="{:U('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
-                                <li><a href="{:U('Register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
+                                <li><a href="{:UU('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;微博登录</a></li>
+                                <li><a href="{:UU('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;QQ登录</a></li>
+                                <li><a href="{:UU('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
+                                <li><a href="{:UU('Register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
                             </ul>
                         </li>
                     </if>

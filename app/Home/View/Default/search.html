@@ -56,27 +56,27 @@
                                         <div class="post-date">
                                             <a class="date" href="#"><strong>{$vo.news_time|date="d",###}</strong><i>{$vo.news_time|date="M",###}</i></a>
                                         </div>
-                                        <h3 class="content-title"><a href="{:U('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a></h3>
+                                        <h3 class="content-title"><a href="{:UU('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a></h3>
                                         <div class="blog-entry-meta">
                                             <div class="blog-entry-meta-author">
                                                 <i class="fa fa-user"></i>
-                                                <a href="{:U('Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo.admin_username}</a>
+                                                <a href="{:UU('Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.admin_realname|default=$vo.admin_username}</a>
                                             </div>
                                             <div class="blog-entry-meta-comments">
-                                                <a href="{:U('News/index',array('id'=>$vo['n_id']))}#comments"><i class="fa fa-comment"></i></a>{$vo.comment_count}
+                                                <a href="{:UU('News/index',array('id'=>$vo['n_id']))}#comments"><i class="fa fa-comment"></i></a>{$vo.comment_count}
                                             </div>
                                             <div class="blog-entry-meta-comments">
                                                 <i class="fa fa-eye"></i>
                                                 {$vo.news_hits}
                                             </div>
                                             <div class="blog-entry-meta-comments">
-                                                <a href="{:U('article/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i></a>{$vo.post_like}
+                                                <a href="{:UU('article/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i></a>{$vo.post_like}
                                             </div>
                                         </div>
                                     </header>
                                     <div class="post-content">
                                         <p>{$vo.news_content|html_trim=100}</p>
-										<a href="{:U('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
+										<a href="{:UU('News/index',array('id'=>$vo['n_id']))}">查看 <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
