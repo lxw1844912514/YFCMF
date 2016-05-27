@@ -12,6 +12,7 @@ class HomebaseController extends CommonController{
 	protected $user_model;
 	protected $user;
 	protected $userid;
+	protected $yf_theme_path;
 	protected function _initialize(){
 		parent::_initialize();
 		$site_options=get_site_options();
@@ -38,7 +39,9 @@ class HomebaseController extends CommonController{
 				$address.=$rst?$rst['name']:'';
 			}
 		}
+		$this->yf_theme_path=__ROOT__."/app/".MODULE_NAME.'/'.C('DEFAULT_V_LAYER').'/'.C('DEFAULT_THEME').'/';
 		$this->user['address']=$address;
+		$this->assign("yf_theme_path",$this->yf_theme_path);
 		$this->assign("user",$this->user);
 	}
 	/**

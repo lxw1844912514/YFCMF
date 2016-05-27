@@ -15,7 +15,7 @@ class AuthController extends CommonController {
 	protected function _initialize(){
         parent::_initialize();
 		//未登陆，不允许直接访问
-		if(!$_SESSION['aid']){
+		if(empty($_SESSION['aid'])){
 			$this->error('还没有登录，正在跳转到登录页',U('Admin/Login/login'));
 		}
 		//已登录，不需要验证的权限

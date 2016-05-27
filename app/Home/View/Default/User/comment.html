@@ -24,7 +24,7 @@
 							<ul>
 								<li>当前位置:</li>
 								<li><a href="__ROOT__/">首页</a></li>
-								<li><a href="{:U('Center/index')}">个人中心</a></li>
+								<li><a href="{:UU('Center/index')}">个人中心</a></li>
 								<li>我的评论</li>
 							</ul>
 						</div>
@@ -54,7 +54,7 @@
 									<foreach name="comments" item="vo">
 										<tr>
 											<td>{$vo.c_id}</td>
-											<td><a href="{:U('News/index',array('id'=>$vo['t_id']))}">{$vo.news_title}</a></td>
+											<td><a href="{:UU('News/index',array('id'=>$vo['t_id']))}">{$vo.news_title}</a></td>
 											<td>{$vo.c_content}</td>
 											<td>{$vo.createtime|date='Y-m-d H:i:s',###}</td>
 										</tr>

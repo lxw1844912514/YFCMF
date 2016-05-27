@@ -2,14 +2,21 @@
   'SHOW_PAGE_TRACE' => true,
   'URL_CASE_INSENSITIVE' => true,
   'DB_LIKE_FIELDS' => 'news_title|news_content|news_flag|news_open',
-  'URL_MODEL' => '0',
+  'URL_MODEL' => 3,
+  'URL_HTML_SUFFIX' => 'html',
   'URL_ROUTER_ON' => true,
+  'URL_MAP_RULES' => 
+  array (
+    'about' => 'home/list/index?id=1',
+    'contacts' => 'home/list/index?id=10',
+    'index' => 'home/index/index',
+  ),
   'URL_ROUTE_RULES' => 
   array (
-    'con/:n_id' => 'Home/Index/news_content',
-    'list/:c_id' => 'Home/Index/news_list',
+    'list/:id\\d' => 'home/list/index',
+    'news/:id\\d' => 'home/news/index',
   ),
-  'YFCMF_VERSION' => 'V1.0.0',
+  'YFCMF_VERSION' => 'V1.1.0',
   'THINK_SDK_QQ' => 
   array (
     'APP_KEY' => '203564',

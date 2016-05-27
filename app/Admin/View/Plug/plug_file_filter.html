@@ -47,13 +47,13 @@
 										<td>{$v.uptime|date="Y-m-d H:i:s",###}</td>
 										<td>
 										<php>
-											$is_img=exif_imagetype($v['path']);
+											$is_img=exif_imagetype('.'.$v['path']);
 											if(!$is_img){
 												$suff=pathinfo($v['path'], PATHINFO_EXTENSION);
 											}
 										</php>
 										<if condition="$is_img gt 0">
-										<img src="{$v.path}" style="max-width:40px;max-height:40px;"/>
+										<img src="__ROOT__{$v.path}" style="max-width:40px;max-height:40px;"/>
 										<else />
 										{$suff}文件
 										</if>

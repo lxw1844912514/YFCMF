@@ -23,7 +23,7 @@
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form class="form-light" id="reg" action="{:U('Register/runregister')}" method="post">
+										<form class="form-light" id="reg" action="{:UU('Register/runregister')}" method="post">
 
 											<div>
 												<input type="text" name="member_list_username" placeholder="用户名" class="form-control" required>
@@ -46,7 +46,7 @@
 													<input type="text" class="form-control" placeholder="" id="verify" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:U('Register/verify')}" onclick="this.src='{:U('Register/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:UU('Register/verify')}" onclick="this.src='{:UU('Register/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -55,7 +55,7 @@
 
 											<div style="text-align: center;">
 												<p>
-													已有账号? <a href="{:U('Login/index')}">点击此处登录</a>
+													已有账号? <a href="{:UU('Login/index')}">点击此处登录</a>
 												</p>
 											</div>
 										</form>

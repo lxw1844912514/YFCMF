@@ -461,6 +461,32 @@ $(function(){
 		return false;
 	});
 });
+/* 路由规则编辑 */
+$(function(){
+	$(".routeedit-btn").click(function(){
+		var $url=this.href,
+			val=$(this).data('id');
+		$.post($url,{id:val}, function(data){
+			if(data.status==1){
+				$(document).ready(function(){
+					$("#myModaledit").show(300);
+					$("#editroute_id").val(data.id);
+					$("#editroute_full_url").val(data.full_url);
+					$("#editroute_url").val(data.url);
+					if(data.r_status==1){
+						$("#editroute_status").attr("checked", true);
+					}else{
+						$("#editroute_status").attr("checked", false);
+					}
+					$("#editroute_listorder").val(data.listorder);
+				});
+			}else{
+				layer.alert(data.info, {icon: 5});
+			}
+		}, "json");
+		return false;
+	});
+});
 /* 来源编辑 */
 $(function(){
 	$(".sourceedit-btn").click(function(){

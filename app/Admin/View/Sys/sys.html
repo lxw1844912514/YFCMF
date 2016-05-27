@@ -101,7 +101,7 @@
 						&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$sys.site_logo eq ''">__PUBLIC__/img/no_img.jpg<else/>{$sys.site_logo}</if>');" title="还原修改前的图片" class="file">
 						撤销上传
 						</a>
-						<div><img src="<if condition="$sys.site_logo neq ''">{$sys.site_logo}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
+						<div><img src="<if condition="$sys.site_logo neq ''">__ROOT__{$sys.site_logo}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
 					</div>
 				</div>
 				<div class="space-4"></div>

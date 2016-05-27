@@ -4,7 +4,7 @@
 <div class="comment-area" id="comments">
 	<if condition="$user['member_list_id'] gt 0">
 	<hr>
-	<form class="form-horizontal comment-form" action="{:U('Comment/runcomment')}" method="post">
+	<form class="form-horizontal comment-form" action="{:UU('Comment/runcomment')}" method="post">
 		<div class="control-group">
 			<div class="comment-postbox-wraper">
 				<textarea class="form-control comment-postbox" placeholder="Write your comment here" style="min-height:60px;"  name="c_content" required></textarea>
@@ -19,7 +19,7 @@
 	</form>
 	<else />
 	<span>
-	您需要登录后才可以评论 <a href="{:U('Login/index')}">登录</a> | <a href="{:U('Register/index')}">立即注册</a>
+	您需要登录后才可以评论 <a href="{:UU('Login/index')}">登录</a> | <a href="{:UU('Register/index')}">立即注册</a>
 	</span>
 	</if>
 	<script class="comment-tpl" type="text/html">
@@ -35,9 +35,9 @@
 		}
 		</php>
 		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
-			<a class="pull-left" href="{:U('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
+			<a class="pull-left" href="{:UU('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
 				<if condition="empty($user['member_list_headpic'])">
-				<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+				<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 				<elseif condition="stripos($user['member_list_headpic'],'://')"/>
 				<img src="{$user['member_list_headpic']}" class="media-object avatar"/>
 				<else />
@@ -45,7 +45,7 @@
 				</if>
 			</a>
 			<div class="comment-body">
-				<div class="comment-content"><a href="{:U('Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">刚刚</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+				<div class="comment-content"><a href="{:UU('Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">刚刚</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
 				<div class="comment-content"><span class="content"></span></div>
 			</div>
 			<div class="clearfix"></div>
@@ -64,9 +64,9 @@
 	<div class="comments" style="margin-top:50px;">
 		<foreach name="comments" item="vo">
 			<div class="comment" data-id="{$vo.c_id}" data-uid="{$vo.uid}" data-username="{$vo.member_list_username|default=$vo['member_list_nickname']}"  id="comment{$vo.c_id}">
-				<a class="pull-left" href="{:U('Index/visit',array('id'=>$vo['uid']))}">
+				<a class="pull-left" href="{:UU('Index/visit',array('id'=>$vo['uid']))}">
 				<if condition="empty($vo['member_list_headpic'])">
-				<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+				<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 				<elseif condition="stripos($vo['member_list_headpic'],'://')"/>
 				<img src="{$vo['member_list_headpic']}" class="media-object avatar"/>
 				<else />
@@ -75,16 +75,16 @@
 				</a>
 				<div class="comment-body">
 					<div>
-						<a href="{:U('Index/visit',array('id'=>$vo['uid']))}">{$vo.member_list_username|default=$vo['member_list_nickname']}:</a><span class="time">{:date('m月d日  H:i',$vo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+						<a href="{:UU('Index/visit',array('id'=>$vo['uid']))}">{$vo.member_list_username|default=$vo['member_list_nickname']}:</a><span class="time">{:date('m月d日  H:i',$vo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
 					<div class="comment-content">
 						<span>{$vo.c_content}</span>
 					</div>
 					<if condition="!empty($vo['children'])">
 						<foreach name="vo.children" item="voo">
 							<div class="comment" data-id="{$voo.c_id}" data-uid="{$voo.uid}" data-username="{$voo.member_list_username|default=$voo['member_list_nickname']}" id="comment{$voo.c_id}" style="margin-left: 80px">
-								<a class="pull-left" href="{:U('Index/visit',array('id'=>$voo['uid']))}">
+								<a class="pull-left" href="{:UU('Index/visit',array('id'=>$voo['uid']))}">
 								<if condition="empty($voo['member_list_headpic'])">
-								<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="media-object avatar"/>
+								<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
 								<elseif condition="stripos($voo['member_list_headpic'],'://')"/>
 								<img src="{$voo['member_list_headpic']}" class="media-object avatar"/>
 								<else />
@@ -93,7 +93,7 @@
 								</a>
 								<div class="comment-body">
 									<div>
-										<a href="{:U('Index/visit',array('id'=>$voo['uid']))}">{$voo.member_list_username|default=$voo['member_list_nickname']}:</a><span>回复 <a href="{:U('Index/visit',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['member_list_username']|default=$parent_comments[$voo['parentid']]['member_list_nickname']}</a></span><span class="time">{:date('m月d日  H:i',$voo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a>
+										<a href="{:UU('Index/visit',array('id'=>$voo['uid']))}">{$voo.member_list_username|default=$voo['member_list_nickname']}:</a><span>回复 <a href="{:UU('Index/visit',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['member_list_username']|default=$parent_comments[$voo['parentid']]['member_list_nickname']}</a></span><span class="time">{:date('m月d日  H:i',$voo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a>
 									</div>
 									<div class="comment-content">
 										{$voo.c_content}

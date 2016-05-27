@@ -24,7 +24,7 @@
 							<ul>
 								<li>当前位置:</li>
 								<li><a href="__ROOT__/">首页</a></li>
-								<li><a href="{:U('Center/index')}">个人中心</a></li>
+								<li><a href="{:UU('Center/index')}">个人中心</a></li>
 								<li>绑定帐号</li>
 							</ul>
 						</div>
@@ -44,12 +44,12 @@
 								<if condition="!empty($oauths['qq'])">
 									<button class="btn" style="margin:0 20px;"> 已绑定腾讯QQ账号</button>
 									<else/>
-									<a class="btn btn-primary" href="{:U('Oauth/bang',array('type'=>'qq'))}"  style="margin:0 20px;"> 绑定腾讯QQ账号</a>
+									<a class="btn btn-primary" href="{:UU('Oauth/bang',array('type'=>'qq'))}"  style="margin:0 20px;"> 绑定腾讯QQ账号</a>
 								</if>
 								<if condition="!empty($oauths['sina'])">
 									<button class="btn"> 已绑定新浪微博账号</button>
 									<else/>
-									<a class="btn btn-primary" href="{:U('Oauth/bang',array('type'=>'sina'))}"> 绑定新浪微博账号</a>
+									<a class="btn btn-primary" href="{:UU('Oauth/bang',array('type'=>'sina'))}"> 绑定新浪微博账号</a>
 								</if>
 							</div>
 						</div>

@@ -46,7 +46,7 @@
                                     <a href="#">
 										<span class="profile-picture">
                                         <if condition="empty($member_list_headpic)">
-                                            <img src="{$Think.const.THEME_PATH}Public/images/headicon_128.png" class="headicon" style="max-width:128px" data-toggle="modal" data-target="#myModal" title="点击上传头像"/>
+                                            <img src="{$yf_theme_path}Public/images/headicon_128.png" class="headicon" style="max-width:128px" data-toggle="modal" data-target="#myModal" title="点击上传头像"/>
 										<elseif condition="stripos($member_list_headpic,'://')"/>
 											<img src="{$member_list_headpic}" class="headicon" data-toggle="modal" data-target="#myModal"  title="点击上传头像"/>
                                         <else />
@@ -96,7 +96,7 @@
                                         </tbody>
                                     </table>
                                     <div>
-                                        <a href="{:U('Center/edit')}" type="submit" class="btn btn-primary js-ajax-submit  col-lg-3 col-md-3 col-sm-3 col-xs-3">编辑</a>
+                                        <a href="{:UU('Center/edit')}" type="submit" class="btn btn-primary js-ajax-submit  col-lg-3 col-md-3 col-sm-3 col-xs-3">编辑</a>
 
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@
 	var SHEAR = {
 		PATH_RES: '__PUBLIC__',
 		PATH_AVATAR: '__ROOT__/data/upload/avatar',
-		URL:"{:U('Center/avatar')}",
+		URL:"{:UU('Center/avatar')}",
 	};
 </script>
         <!-- 显示模态框（Modal） -->

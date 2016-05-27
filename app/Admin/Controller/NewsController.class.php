@@ -110,9 +110,9 @@ class NewsController extends AuthController {
 			if($info) {
 				foreach($info as $file){
 					if ($file['key']=='pic_one'){//单图路径数组
-						$img_url=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$img_url=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 					}else{
-						$picall=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$picall=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 						$picall_url=$picall.','.$picall_url;
 					}
 				}
@@ -209,9 +209,9 @@ class NewsController extends AuthController {
 			if($info) {
 				foreach($info as $file){//获取全部的上传数据
 					if ($file['key']=='pic_one'){//单图路径数组，通过key来判断是单图还是多图
-						$img_url=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$img_url=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 					}else{//多图上传路径
-						$picall=C('UPLOAD_DIR').$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						$picall=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
 						$picall_url=$picall.','.$picall_url;//循环拼凑成字符串
 					}
 				}
@@ -420,7 +420,7 @@ class NewsController extends AuthController {
 			$upload->saveRule  =     'time';
 			$info   =   $upload->upload();
 			if($info) {
-				$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+				$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
 			}else{
@@ -556,7 +556,7 @@ class NewsController extends AuthController {
 				$info   =   $upload->upload();
 
 				if($info) {
-					$img_url=C('UPLOAD_DIR').$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
 				}else{
 					$this->error($upload->getError(),U('news_menu_list'),0);//否则就是上传错误，显示错误原因
 				}

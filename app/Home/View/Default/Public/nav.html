@@ -10,7 +10,7 @@
                     <ul class="social pull-left">
                     </ul>
                     <div id="search-form" class="pull-right">
-                        <form action="{:U('List/search')}" method="post">
+                        <form action="{:UU('List/search')}" method="post">
                             <input type="text" class="search-text-box" name="keyword" value="{:I('keyword')}"/>
                         </form>
                     </div>
@@ -29,9 +29,9 @@
                 <h1>
                     <a href="__ROOT__/">
 						<if condition="!empty($site_logo)">
-						<img src="{$site_logo}" alt="logo" style="margin-top:-14px;height:86px;">
+						<img src="__ROOT__{$site_logo}" alt="logo" style="margin-top:-14px;height:86px;">
 						<else />
-						<img src="{$Think.const.THEME_PATH}Public/images/logo.png" alt="logo" style="margin-top:-14px;height:86px;">
+						<img src="{$yf_theme_path}Public/images/logo.png" alt="logo" style="margin-top:-14px;height:86px;">
                         </if>
                     </a>
                 </h1>
@@ -59,7 +59,7 @@
                         <li style="height:86px">
                             <a href="#" class="sf-with-ul menu-login">
 								<if condition="empty($user['member_list_headpic'])">
-								<img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="img-thumbnail headicon"/>
+								<img src="{$yf_theme_path}Public/images/headicon.png" class="img-thumbnail headicon"/>
 								<elseif condition="stripos($user['member_list_headpic'],'://')"/>
 								<img src="{$user['member_list_headpic']}" class="img-thumbnail headicon" id="avatar_small"/>
 								<else />
@@ -71,23 +71,23 @@
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:U('Center/index')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
-                                <li><a href="{:U('Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
+                                <li><a href="{:UU('Center/index')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
+                                <li><a href="{:UU('Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
                             </ul>
                         </li>
                         <else />
                         <li>
                             <a href="#" class="sf-with-ul menu-login">
-                                <img src="{$Think.const.THEME_PATH}Public/images/headicon.png" class="headicon"/>登录
+                                <img src="{$yf_theme_path}Public/images/headicon.png" class="headicon"/>登录
 						<span class="sf-sub-indicator">
                            <i class="fa fa-angle-down "></i>
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:U('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;微博登录</a></li>
-                                <li><a href="{:U('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;QQ登录</a></li>
-                                <li><a href="{:U('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
-                                <li><a href="{:U('Register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
+                                <li><a href="{:UU('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;微博登录</a></li>
+                                <li><a href="{:UU('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;QQ登录</a></li>
+                                <li><a href="{:UU('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
+                                <li><a href="{:UU('Register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
                             </ul>
                         </li>
                     </if>
