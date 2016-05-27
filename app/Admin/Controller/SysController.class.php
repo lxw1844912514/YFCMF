@@ -69,12 +69,120 @@ class SysController extends AuthController {
 		$this->assign('routes',$routes);
 		$this->display();
 	}
+	/*
+     * 路由规则设置
+	 * @author rainfer <81818832@qq.com>
+     */
 	public function runurlsys(){
 		$url_model=I('url_model',0,'intval');
 		$url_suffix=I('suffix');
 		sys_config_setbykey('URL_MODEL',$url_model);
 		sys_config_setbykey('URL_HTML_SUFFIX',$url_suffix);
 		$this->success('URL基本设置成功',U('Sys/urlsys'),1);
+	}
+	/*
+     * 添加路由规则操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_runadd(){
+		if (!IS_AJAX){
+			$this->error('提交方式不正确',U('Sys/urlsys'),0);
+		}else{
+			M('route')->add(I('post.'));
+			F('routes',NULL);
+			$this->success('路由规则添加成功',U('Sys/urlsys'),1);
+		}
+	}
+	/*
+     * 路由规则修改返回值操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_edit(){
+		$id=I('id');
+		$route=M('route')->where(array('id'=>$id))->find();
+		$sl_data['id']=$route['id'];
+		$sl_data['full_url']=$route['full_url'];
+		$sl_data['url']=$route['url'];
+		$sl_data['r_status']=$route['status'];
+		$sl_data['status']=1;
+		$sl_data['listorder']=$route['listorder'];
+		$this->ajaxReturn($sl_data,'json');
+	}
+	/*
+     * 修改路由规则操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_runedit(){
+		if (!IS_AJAX){
+			$this->error('提交方式不正确',U('urlsys'),0);
+		}else{
+			$sl_data=array(
+				'id'=>I('id'),
+				'full_url'=>I('full_url'),
+				'url'=>I('url'),
+				'status'=>I('status'),
+				'listorder'=>I('listorder'),
+			);
+			$rst=M('route')->save($sl_data);
+            if($rst!==false){
+				F('routes',NULL);
+                $this->success('路由规则修改成功',U('urlsys'),1);
+            }else{
+                $this->error('路由规则修改失败',U('urlsys'),0);
+            }
+		}
+	}
+	/*
+     * 修改路由规则状态
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_state(){
+		$id=I('x');
+		if (empty($id)){
+			$this->error('规则ID不存在',U('urlsys'),0);
+		}
+		$status=M('route')->where(array('id'=>$id))->getField('status');//判断当前状态情况
+		if($status==1){
+			$statedata = array('status'=>0);
+			M('route')->where(array('id'=>$id))->setField($statedata);
+			F('routes',NULL);
+			$this->success('状态禁止',1,1);
+		}else{
+			$statedata = array('status'=>1);
+			M('route')->where(array('id'=>$id))->setField($statedata);
+			F('routes',NULL);
+			$this->success('状态开启',1,1);
+		}
+
+	}
+	/*
+     * 路由规则删除操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_del(){
+		$rst=M('route')->where(array('id'=>I('id')))->delete();
+        if($rst!==false){
+			F('routes',NULL);
+            $this->success('路由规则删除成功',U('urlsys'),1);
+        }else{
+            $this->error('路由规则删除失败',U('urlsys'),0);
+        }
+	}
+	/*
+     * 路由规则排序
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_order(){
+		if (!IS_AJAX){
+			$this->error('提交方式不正确',U('urlsys'),0);
+		}else{
+			$route=M('route');
+			foreach (I('post.') as $id => $listorder){
+				$route->where(array('id' => $id ))->setField('listorder' , $listorder);
+			}
+			F('routes',NULL);
+			$this->success('排序更新成功',U('urlsys'),1);
+		}
 	}
 	//微信设置显示
 	public function wesys(){

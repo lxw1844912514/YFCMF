@@ -6,8 +6,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+CREATE DATABASE IF NOT EXISTS `yfcmf` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `yfcmf`;
 
-DROP TABLE IF EXISTS `yf_action_log`;
 CREATE TABLE IF NOT EXISTS `yf_action_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) DEFAULT '0' COMMENT '用户id',
@@ -21,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `yf_action_log` (
   KEY `user_object_action_ip` (`uid`,`object`,`action`,`ip`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='访问记录表' AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_admin`;
 CREATE TABLE IF NOT EXISTS `yf_admin` (
   `admin_id` tinyint(4) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
   `admin_username` varchar(20) NOT NULL COMMENT '管理员用户名',
@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
   PRIMARY KEY (`admin_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_auth_group`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` char(100) NOT NULL DEFAULT '',
@@ -57,7 +56,6 @@ INSERT INTO `yf_auth_group` (`id`, `title`, `status`, `rules`, `addtime`) VALUES
 (1, '超级管理员', 1, '1,2,6,59,151,10,62,154,19,60,152,26,43,63,64,65,66,67,155,57,61,153,3,4,89,90,159,5,85,86,87,88,160,15,16,68,69,70,71,72,73,156,17,55,56,74,75,76,77,78,157,18,79,80,81,82,83,84,158,40,41,92,162,42,91,161,7,8,11,94,95,96,100,101,175,12,93,174,25,97,98,99,173,9,13,103,104,105,106,107,172,14,102,171,22,23,24,27,29,37,108,109,110,111,112,113,114,170,38,115,116,117,118,119,120,169,30,28,31,32,129,128,130,131,132,167,34,133,134,135,136,166,44,45,138,139,140,141,142,143,165,46,144,145,146,147,148,164,48,49,137,163,35,36,39,121,122,123,124,125,126,127,168,', 1212451252),
 (2, '管理员', 1, '1,2,6,151,10,154,19,152,43,65,155,57,153,3,4,159,5,160,15,16,68,70,156,17,74,77,157,176,18,82,158,177,40,41,162,42,161,7,8,11,94,175,12,174,25,173,9,13,105,172,14,171,22,23,24,27,29,37,108,110,170,38,119,169,28,31,32,131,167,34,166,44,45,142,165,46,145,164,48,49,137,163,35,36,39,124,168,', 1212451252);
 
-DROP TABLE IF EXISTS `yf_auth_group_access`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
   `uid` mediumint(8) unsigned NOT NULL,
   `group_id` mediumint(8) unsigned NOT NULL,
@@ -69,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
 INSERT INTO `yf_auth_group_access` (`uid`, `group_id`) VALUES
 (1, 1);
 
-DROP TABLE IF EXISTS `yf_auth_rule`;
 CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(80) NOT NULL DEFAULT '',
@@ -83,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=190 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=191 ;
 
 INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES
 (1, 'Sys', '系统设置', 1, 1, 'fa-tachometer', '', 0, 1, 10, 1446535750),
@@ -263,9 +260,9 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (183, 'Plug/plug_file_filter', '文件清理', 1, 1, '', '', 181, 3, 20, 1461810273),
 (184, 'Sys/oauthsys', '第三方登录', 1, 1, '', '', 2, 3, 40, 1463045567),
 (185, 'Comment', '评论管理', 1, 1, 'fa-comment', '', 0, 1, 27, 1463305461),
-(186, 'Comment/comment_list', '评论列表', 1, 1, '', '', 185, 2, 10, 1463305496);
+(186, 'Comment/comment_list', '评论列表', 1, 1, '', '', 185, 2, 10, 1463305496),
+(190, 'Sys/urlsys', 'URL设置', 1, 1, '', '', 2, 3, 15, 1464341076);
 
-DROP TABLE IF EXISTS `yf_comments`;
 CREATE TABLE IF NOT EXISTS `yf_comments` (
   `c_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `t_name` varchar(100) NOT NULL COMMENT '评论内容所在表，不带表前缀',
@@ -288,7 +285,6 @@ CREATE TABLE IF NOT EXISTS `yf_comments` (
   KEY `createtime` (`createtime`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='评论表' AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_diyflag`;
 CREATE TABLE IF NOT EXISTS `yf_diyflag` (
   `diyflag_id` int(2) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `diyflag_value` char(2) NOT NULL COMMENT '值',
@@ -308,7 +304,6 @@ INSERT INTO `yf_diyflag` (`diyflag_id`, `diyflag_value`, `diyflag_name`, `diyfla
 (8, 'd', '原创', 80),
 (9, 'cp', '产品', 90);
 
-DROP TABLE IF EXISTS `yf_favorites`;
 CREATE TABLE IF NOT EXISTS `yf_favorites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) DEFAULT NULL COMMENT '用户 id',
@@ -319,7 +314,6 @@ CREATE TABLE IF NOT EXISTS `yf_favorites` (
   KEY `uid` (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户收藏表' AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_member_group`;
 CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员组ID',
   `member_group_name` varchar(30) NOT NULL COMMENT '会员组名',
@@ -331,9 +325,8 @@ CREATE TABLE IF NOT EXISTS `yf_member_group` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `yf_member_group` (`member_group_id`, `member_group_name`, `member_group_open`, `member_group_toplimit`, `member_group_bomlimit`, `member_group_order`) VALUES
-(1, 'asdfs', 1, 22, 11, 50);
+(1, '会员', 1, 11, 22, 50);
 
-DROP TABLE IF EXISTS `yf_member_list`;
 CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_id` int(11) NOT NULL AUTO_INCREMENT,
   `member_list_username` varchar(60) NOT NULL COMMENT '登录用户名',
@@ -363,14 +356,12 @@ CREATE TABLE IF NOT EXISTS `yf_member_list` (
   PRIMARY KEY (`member_list_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_member_lvl`;
 CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
   `member_lvl_id` tinyint(3) NOT NULL AUTO_INCREMENT COMMENT '等级ID',
   `member_lvl_name` varchar(20) NOT NULL COMMENT '等级名称',
   PRIMARY KEY (`member_lvl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_menu`;
 CREATE TABLE IF NOT EXISTS `yf_menu` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
   `menu_name` varchar(36) NOT NULL,
@@ -388,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `yf_menu` (
   `menu_seo_des` varchar(200) NOT NULL,
   `menu_content` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`, `menu_listtpl`, `menu_newstpl`, `menu_address`, `menu_open`, `listorder`, `menu_img`, `menu_seo_title`, `menu_seo_key`, `menu_seo_des`, `menu_content`) VALUES
 (1, '公司简介', '', 4, 0, 'about', '', '', 1, 10, './data/upload/2016-05-07/572dcdefa5a36.jpg', '关于我们', '关于我们', '关于我们', '<p style="white-space: normal;">&nbsp; 团队成立与于2014年,是一个专注于高端品牌网站建设的设计工作室。</p><p style="white-space: normal;">团队骨干有着丰富的网页设计和网站开发水平，为客户提供更符合搜索引擎的网站研发服务，协助构建OA网络办公信息平台，定制网站与数据库开发，并提供WAP网站建设、微网站、微商城、微信裂变式分销，网站维护、网络推广等互联网一站式服务。我们将商业与技术完美结合起来，以使我们的客户可以在快速发展的信息科技领域中获得更有效的竞争力。</p><p style="white-space: normal;">&nbsp;&nbsp;团队成立以来，先后为数十家企业提供网站建设及推广服务。我们一直秉承“只做有灵魂的设计”和“坚持原创”的核心价值观，以“为客户赢得客户”为己任，用我们的激情和智慧，勤奋与努力，帮助中小企业开展网站建设，打开互联网营销局面，深刻影响着魔酷阁的经营模式和营销思路我们坚信，中国的每一家企业都应该有一个赋有灵魂的网站，用来发布企业产品、发布企业资讯、开展网上调查、与客户进行在线交流、分析客户需求和了解市场发展等功能于一体的营销型网站。</p>'),
@@ -397,9 +388,8 @@ INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`
 (10, '联系方式', '', 4, 0, 'contact', '', '', 1, 55, '', '', '', '', '&lt;p&gt;联系方式&lt;/p&gt;'),
 (14, '新闻资讯', '', 3, 0, 'list', 'news', '', 1, 30, '', '', '', '', ''),
 (21, '合作伙伴', '', 3, 0, 'list', 'news', '', 0, 50, '', '', '', '', ''),
-(17, '首页首页', 'Home', 1, 0, '', '', '', 1, 1, '', '', '', '', '');
+(17, '首页', 'Home', 1, 0, '', '', '', 1, 1, '', '', '', '', '');
 
-DROP TABLE IF EXISTS `yf_news`;
 CREATE TABLE IF NOT EXISTS `yf_news` (
   `n_id` int(36) NOT NULL AUTO_INCREMENT,
   `news_title` varchar(255) NOT NULL COMMENT '文章标题',
@@ -434,27 +424,26 @@ CREATE TABLE IF NOT EXISTS `yf_news` (
 
 INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`, `news_columnviceid`, `news_key`, `news_tag`, `news_auto`, `news_source`, `news_content`, `news_scontent`, `news_hits`, `news_like`, `news_img`, `news_pic_type`, `news_pic_allurl`, `news_pic_content`, `news_time`, `news_modified`, `news_flag`, `news_zaddress`, `news_cpprice`, `news_back`, `news_open`, `news_lvtype`, `comment_status`, `comment_count`, `news_extra`) VALUES
 (8, 'ACE后台管理系统', 'ACE后台管理系统', 9, NULL, '', '', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">测试网址：<a href="http://www.rainfer.cn/ace/index.php?m=admin&c=index&a=index" target="_blank" title="http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://www.rainfer.cn/ace/index.php?m=admin&amp;c=index&amp;a=index</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">用户名：demo</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">密码：123456</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">下载:<a href="http://git.oschina.net/rainfer/YFCMF" target="_blank" title="http://git.oschina.net/rainfer/YFCMF" style="box-sizing: border-box; color: rgb(4, 136, 205); text-decoration: none;">http://git.oschina.net/rainfer/YFCMF</a></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863689b00.jpg" title="ace后台首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637088b2.jpg" title="ace权限管理.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c863773ba2.jpg" title="ace文章列表.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8637d2f28.jpg" title="ace站点设置.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="/ace/data/upload/2016-05-06/572c8638470f4.jpg" title="ace导入导出.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', 'ACE后台管理系统', 200, 0, './data/upload/2016-05-06/572c863a03366.jpg', 2, './data/upload/2016-05-06/572c863a0db61.jpg,./data/upload/2016-05-06/572c863a0b838.jpg,./data/upload/2016-05-06/572c863a098f8.jpg,./data/upload/2016-05-06/572c863a071e7.jpg,./data/upload/2016-05-06/572c863a052a7.jpg', '', 1462535538, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
-(17, '设计师一日为师 终身为师', '设计师一日为师 终身为师', 14, NULL, '设计师一日为师 终身为师', '设计师一日为师 终身为师', '1', '雨飞工作室', '<p style="white-space: normal;">大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞设计师。当客户尊敬的称您为某某设计师时，我们也非常自豪而高兴。但是我希望大家明白，设计师不仅仅只是设计职业的称呼，因为他承担的角色还是设计中的师范作用，所以时刻要记得：设计师一日为师 终身为师。<br/>&nbsp;</p><p style="white-space: normal;">那么到底设计师何以为师呢？为什么要去理解“师”的这个概念呢？其实我是换位思想，即站在客户的角度，充分考虑他为什么要找你做设计的理由？如果搞清楚理由就是找到了自己的设计之师。而自己换位思想，找不到这个师之理由的话，那么自然您还不算是设计师，那就在每天别人叫你设计师的时候，多多思考设计师何以为师？而其中设计师的师，也是需要我们每天去努力工作和学习的，不断的改善提高自己的设计水平和综合素质。让自己从设计员到设计师的蜕变中，对得起设计师可以为师。<br/>&nbsp;</p><p style="white-space: normal;"><img src="/ace/data/upload/2016-05-06/572c9114b45d0.jpg"/></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>要做好设计，先别做坏设计。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">这句话是我考虑甚久得出的，虽然貌似很无聊，我却认为非常重要。创业初期的设计朋友，请时刻记得这句话，然后留点空白，让你自己去思考。因为很多人在接单子的时候，只想着是单子是利润，而忽略了这个设计本身造成的好坏。<br/>&nbsp;</p><p style="white-space: normal;">我曾经目睹上海一家策略公司，温州的一个企业找他们做品牌推广项目，该公司派人分析客户企业背景和实际情况，若达不到自己要求，就放弃操作这个项目，即使客户付再多的项目费，也坚持宁愿放弃。我当时不明白，为什么给那么多钱也不做？后来我明白他们公司为什么一直那么成功，因为他们只做好设计，不做坏设计，那是他们保持长期发展的战略和原则。<br/>&nbsp;</p><p style="white-space: normal;">所以在初期创业中，我也在选择客户上开始有了原则，尽量让好的设计找到自己。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>突出就是优势。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">一定要突出，作为设计师必须要有亮点。现在会鼠标会用软件的人都称自己是设计师，艺术系毕业和设计师人才越来越多，这个行业的竞争激烈也是这个时代的表现之一。大大小小的工作室和设计公司多如牛毛，甚至有人冷笑设计公司现在比WC还要多。这个时候设计师必须要做出自己的独特性，创业的设计师经营公司也要与其他要有差异性，突出就是优势，那非常重要。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>设计没有好与坏，只有对与错。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">以上我说的好设计和坏设计，自然是设计的前提。而设计有好和坏吗？我更希望大家用对与错来看待这个问题。作为设计师，他不是艺术家和商业师，首先应该是为业主解决实际问题，才是对的设计。不懂设计的人才会到处说这个设计好或者不好，为什么这样说？因为任何一样作品都有他的遗憾，哪怕是大师的五星级宾馆都是有遗憾的，所以不该用好不好来判定。出发点和目的性不同，自然设计的要求和本质也不同，违背了设计本意就失去意义，更何谈好坏？所以在对与错之间去思考设计，会更准确的为客户解决实际问题，找到设计的真谛！</p><p><br/></p>', '大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞', 211, 2, './data/upload/2016-05-06/572c911b451f2.jpg', 1, '', '', 1462538523, 0, 'p,d', '', 0, 0, '1', 0, 1, 0, NULL),
+(17, '设计师一日为师 终身为师', '设计师一日为师 终身为师', 14, NULL, '设计师一日为师 终身为师', '设计师一日为师 终身为师', '1', '雨飞工作室', '<p style="white-space: normal;">大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞设计师。当客户尊敬的称您为某某设计师时，我们也非常自豪而高兴。但是我希望大家明白，设计师不仅仅只是设计职业的称呼，因为他承担的角色还是设计中的师范作用，所以时刻要记得：设计师一日为师 终身为师。<br/>&nbsp;</p><p style="white-space: normal;">那么到底设计师何以为师呢？为什么要去理解“师”的这个概念呢？其实我是换位思想，即站在客户的角度，充分考虑他为什么要找你做设计的理由？如果搞清楚理由就是找到了自己的设计之师。而自己换位思想，找不到这个师之理由的话，那么自然您还不算是设计师，那就在每天别人叫你设计师的时候，多多思考设计师何以为师？而其中设计师的师，也是需要我们每天去努力工作和学习的，不断的改善提高自己的设计水平和综合素质。让自己从设计员到设计师的蜕变中，对得起设计师可以为师。<br/>&nbsp;</p><p style="white-space: normal;"><img src="/ace/data/upload/2016-05-06/572c9114b45d0.jpg"/></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>要做好设计，先别做坏设计。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">这句话是我考虑甚久得出的，虽然貌似很无聊，我却认为非常重要。创业初期的设计朋友，请时刻记得这句话，然后留点空白，让你自己去思考。因为很多人在接单子的时候，只想着是单子是利润，而忽略了这个设计本身造成的好坏。<br/>&nbsp;</p><p style="white-space: normal;">我曾经目睹上海一家策略公司，温州的一个企业找他们做品牌推广项目，该公司派人分析客户企业背景和实际情况，若达不到自己要求，就放弃操作这个项目，即使客户付再多的项目费，也坚持宁愿放弃。我当时不明白，为什么给那么多钱也不做？后来我明白他们公司为什么一直那么成功，因为他们只做好设计，不做坏设计，那是他们保持长期发展的战略和原则。<br/>&nbsp;</p><p style="white-space: normal;">所以在初期创业中，我也在选择客户上开始有了原则，尽量让好的设计找到自己。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>突出就是优势。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">一定要突出，作为设计师必须要有亮点。现在会鼠标会用软件的人都称自己是设计师，艺术系毕业和设计师人才越来越多，这个行业的竞争激烈也是这个时代的表现之一。大大小小的工作室和设计公司多如牛毛，甚至有人冷笑设计公司现在比WC还要多。这个时候设计师必须要做出自己的独特性，创业的设计师经营公司也要与其他要有差异性，突出就是优势，那非常重要。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>设计没有好与坏，只有对与错。</strong></p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">以上我说的好设计和坏设计，自然是设计的前提。而设计有好和坏吗？我更希望大家用对与错来看待这个问题。作为设计师，他不是艺术家和商业师，首先应该是为业主解决实际问题，才是对的设计。不懂设计的人才会到处说这个设计好或者不好，为什么这样说？因为任何一样作品都有他的遗憾，哪怕是大师的五星级宾馆都是有遗憾的，所以不该用好不好来判定。出发点和目的性不同，自然设计的要求和本质也不同，违背了设计本意就失去意义，更何谈好坏？所以在对与错之间去思考设计，会更准确的为客户解决实际问题，找到设计的真谛！</p><p><br/></p>', '大家都有这样的感受，在未成为设计师之前，都对“设计师”职业的这三个字非常羡慕，都希望大家称我们为东莞', 212, 2, './data/upload/2016-05-06/572c911b451f2.jpg', 1, '', '', 1462538523, 0, 'p,d', '', 0, 0, '1', 0, 1, 0, NULL),
 (9, '高级企业网站', '高级企业网站', 9, NULL, '高级企业网站', '高级企业网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">高级企业网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/20160321/56f000acd7673.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000c07643c.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000ca051dd.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000d3b48b9.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000db2ce83.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/20160321/56f000e38622a.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '高级企业网站', 200, 0, './data/upload/2016-05-06/572c8981ee1fa.jpg', 2, './data/upload/2016-05-06/572c898209da6.jpg,./data/upload/2016-05-06/572c898207e65.jpg,./data/upload/2016-05-06/572c898205b3d.jpg,./data/upload/2016-05-06/572c898203814.jpg,./data/upload/2016-05-06/572c8982020a4.jpg', '', 1462536578, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
-(10, '志和第三方公司网站', '志和第三方公司网站', 9, NULL, '志和第三方公司网站', '志和第三方公司网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">志和第三方公司网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d178c1.jpg" title="首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ceafe8.jpg" title="新闻.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d208f6.jpg" title="关于我们.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d06c74.jpg" title="业务.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ce4d99.jpg" title="招聘.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65cd6eab.jpg" title="contact.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '志和第三方公司网站', 200, 0, './data/upload/2016-05-06/572c8a83ef62c.jpg', 2, './data/upload/2016-05-06/572c89f8cb1a4.jpg,./data/upload/2016-05-06/572c89f8c9e1c.jpg,./data/upload/2016-05-06/572c89f8c86ab.jpg,./data/upload/2016-05-06/572c89f8c7323.jpg,./data/upload/2016-05-06/572c89f8c6383.jpg', '', 1462536696, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
+(10, '志和第三方公司网站', '志和第三方公司网站', 9, NULL, '志和第三方公司网站', '志和第三方公司网站', '1', '雨飞工作室', '<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);">志和第三方公司网站</p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(114, 114, 114); font-family: &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; white-space: normal; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d178c1.jpg" title="首页.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ceafe8.jpg" title="新闻.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d208f6.jpg" title="关于我们.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65d06c74.jpg" title="业务.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65ce4d99.jpg" title="招聘.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/><img src="http://www.rainfer.cn/data/upload/ueditor/20160322/56f0f65cd6eab.jpg" title="contact.jpg" style="box-sizing: border-box; border: 0px; vertical-align: middle; max-width: 100%;"/></p><p><br/></p>', '志和第三方公司网站', 204, 0, './data/upload/2016-05-06/572c8a83ef62c.jpg', 2, './data/upload/2016-05-06/572c89f8cb1a4.jpg,./data/upload/2016-05-06/572c89f8c9e1c.jpg,./data/upload/2016-05-06/572c89f8c86ab.jpg,./data/upload/2016-05-06/572c89f8c7323.jpg,./data/upload/2016-05-06/572c89f8c6383.jpg', '', 1462536696, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
 (11, '企业网站开发设计', '企业网站开发设计', 2, NULL, '企业网站开发设计', '企业网站开发设计', '1', '雨飞工作室', '<p style="white-space: normal;"><span style="line-height: 1.75em;">-企业形象/产品网站设计开发</span><br/></p><p style="white-space: normal; line-height: 1.75em;">-集团官方网站设计开发</p><p style="white-space: normal; line-height: 1.75em;">-淘宝/天猫店铺视觉设计</p><p style="white-space: normal; line-height: 1.75em;">-html5+css3</p><p style="white-space: normal; line-height: 1.75em;">-各类型网站设计和制作</p>', '企业网站开发设计', 200, 0, './data/upload/2016-05-06/572c8bb8d22d7.jpg', 1, '', '', 1462537144, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
 (12, '网站UI设计', '网站UI设计', 2, NULL, '网站UI设计', '网站UI设计', '1', '雨飞工作室', '<p style="white-space: normal;"><strong><span style="color: rgb(0, 176, 240);">1. 用户研究</span></strong></p><p style="white-space: normal;">用户调研是综合运用现场观察、访谈、问卷调查、焦点小组等方法，获得用户需求及产品使用偏好。使用户的实际需求成为产品设计的导向，使产品更符合用户的习惯、经验和期待。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>2. 交互设计</strong></span></p><p style="white-space: normal;">产品的交互流程设计,根据可用性分析结果制定交互方式、操作与跳转流程、结构、布局、信息和其他元素。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>3. 界面设计</strong></span></p><p style="white-space: normal;">提供移动设备UI设计、APP界面设计，高品质的网站设计。</p>', '网站UI设计', 200, 0, './data/upload/2016-05-06/572c8c016ecd9.jpg', 1, '', '', 1462537217, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
 (13, 'ThinkPHP二次开发', 'ThinkPHP二次开发', 2, NULL, 'ThinkPHP二次开发', 'ThinkPHP二次开发', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">专注于ThinkPHP程序项目的二次开发，提供从架构设计、需求分析、设计策划、程序开发，到部署运维全程外包服务。公司拥有强大的技术研发实力、规范的开发流程、丰富的经验，可针对不同行业特点设计解决方案。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;">包含：</span></strong></span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">更改使用thinkphp框架开发的程序;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">使用thinkphp框架开发功能;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">基于thinkphp框架的项目;</span></p><p style="white-space: normal;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;">使用thinkphp去访网络中的网站;</span></p>', 'ThinkPHP二次开发', 200, 0, './data/upload/2016-05-06/572c8c3643949.jpg', 1, '', '', 1462537270, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
 (14, 'ThinkCMF的二次开发', 'ThinkCMF的二次开发', 2, NULL, 'ThinkCMF的二次开发', 'ThinkCMF的二次开发', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">ThinkCMF是一款基于PHP+MYSQL开发的中文内容管理框架。ThinkCMF提出灵活的应用机制，框架自身提供基础的管理功能，而开发者可以根据自身的需求以应用的形式进行扩展。每个应用都能独立的完成自己的任务，也可通过系统调用其他应用进行协同工作。在这种运行机制下，开发商场应用的用户无需关心开发SNS应用时如何工作的，但他们之间又可通过系统本身进行协调，大大的降低了开发成本和沟通成本。</p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(0, 176, 240);"><strong>包含：</strong></span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">基于thinkcmf框架开发项目的程序修改</p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">完善thinkcmf框架的功能</p><p style="white-space: normal;"><span style="color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">增加thinkcmf的功能模块</span></p><p style="white-space: normal;"><span style="color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;"><span style="font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);">使用thinkcmf重写网站项目</span></span></p>', 'ThinkCMF的二次开发', 200, 0, './data/upload/2016-05-06/572c8c64dc8e4.jpg', 1, '', '', 1462537316, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
-(15, 'ThinkPHP、ThinkCMF项目插件定制', '插件定制', 2, NULL, '插件定制', '插件定制', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">插件是用于实现简单的显示及数据处理的功能扩展。插件是可以开启关闭的，但不会影响原有系统的代码；</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">通过插件，很方便通过后台安装卸载来达到某种功能，之前WP的成功，很多原因是丰富的主题，功能众多的插件选择。</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(0, 176, 240);"><strong><span style="font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">包含：</span></strong></span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">ThinkPHP项目的插件定制</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">ThinkCMF项目的插件定制</span></p>', '插件定制', 200, 1, './data/upload/2016-05-06/572c8c954de58.jpg', 1, '', '', 1462537365, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
-(16, 'ThinkCMF功能定制', 'ThinkCMF功能定制', 2, NULL, 'ThinkCMF功能定制', 'ThinkCMF功能定制', '1', '雨飞工作室', '<p style="white-space: normal;">针对不同的行业，不同的企业，利用ThinkCMF框架进行开发，根据客户提出的功能需求进行分析，进行设计并开发出专用的功能，用于解决特定的方案。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>包含：</strong></span></p><p style="white-space: normal;">已有功能的改进</p><p style="white-space: normal;">增加新的功能</p>', 'ThinkCMF功能定制', 206, 1, './data/upload/2016-05-06/572c8cc249a02.jpg', 1, '', '', 1462537410, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
+(15, 'ThinkPHP、ThinkCMF项目插件定制', '插件定制', 2, NULL, '插件定制', '插件定制', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">插件是用于实现简单的显示及数据处理的功能扩展。插件是可以开启关闭的，但不会影响原有系统的代码；</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">通过插件，很方便通过后台安装卸载来达到某种功能，之前WP的成功，很多原因是丰富的主题，功能众多的插件选择。</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(0, 176, 240);"><strong><span style="font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">包含：</span></strong></span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">ThinkPHP项目的插件定制</span></p><p style="margin-top: 0px; margin-bottom: 10px; white-space: normal; color: rgb(85, 85, 85); font-family: &#39;Microsoft YaHei&#39;, Lato, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; background-color: rgb(255, 255, 255);"><span style="color: rgb(51, 51, 51); font-family: &#39;Microsoft YaHei&#39;, Arial, Helvetica, sans-serif, Simsun;">ThinkCMF项目的插件定制</span></p>', '插件定制', 204, 1, './data/upload/2016-05-06/572c8c954de58.jpg', 1, '', '', 1462537365, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
+(16, 'ThinkCMF功能定制', 'ThinkCMF功能定制', 2, NULL, 'ThinkCMF功能定制', 'ThinkCMF功能定制', '1', '雨飞工作室', '<p style="white-space: normal;">针对不同的行业，不同的企业，利用ThinkCMF框架进行开发，根据客户提出的功能需求进行分析，进行设计并开发出专用的功能，用于解决特定的方案。</p><p style="white-space: normal;"><span style="color: rgb(0, 176, 240);"><strong>包含：</strong></span></p><p style="white-space: normal;">已有功能的改进</p><p style="white-space: normal;">增加新的功能</p>', 'ThinkCMF功能定制', 207, 1, './data/upload/2016-05-06/572c8cc249a02.jpg', 1, '', '', 1462537410, 0, 'c,p', '', 0, 0, '1', 0, 1, 0, NULL),
 (18, '品牌价值的核心与精髓是品牌设计的灵魂', '品牌价值的核心与精髓是品牌设计的灵魂', 14, NULL, '品牌价值的核心与精髓是品牌设计的灵魂', '品牌价值的核心与精髓是品牌设计的灵魂', '1', '雨飞工作室', '<p style="white-space: normal;">在现代，甭管大的还是小的<strong>东莞设计公司</strong>，大都十分注重<strong>东莞品牌设计</strong>，但放眼看去，市场上的精品又有多少。精品寥寥无几的原因是什么呢？无非两点：1、在进行品牌设计之前，对于品牌的定位不明确；2、有模糊的品牌定位概念后，设计公司的品牌设计作品由公司人员的主观喜好作为判断。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp; &nbsp; 设计本身必须有思想，有灵魂，有目的。产品是卖给谁的，他们的常规生活方式是什么？希望传达给他们一个什么样的信息？希望他们怎么看这个品牌？我们希望引导他们如何去做？我们如何贴近其真实的内心需求等等。这些问题，不是你喜欢与不喜欢的问题。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><img src="/ace/data/upload/2016-05-06/572c935a8d2c8.jpg"/>&nbsp;</p><p style="white-space: normal;">&nbsp; &nbsp; 1、明确品牌定位：品牌设计的定位解决的是品牌是什么与不是什么的问题。这个是什么与不是什么，并不是指产品属性，而是指你的品牌代表了什么与不代表什么。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;">&nbsp; &nbsp; &nbsp;2、突显品牌核心价值：品牌核心价值是品牌设计的精髓与核心，也是品牌的内在驱动力与凝聚力。在产品日渐同质化的趋势下，对消费者最重要的影响因素往往不再是产品实体，而是品牌核心价值所折射出的目标消费者所具有或是向往的生活方式和精神追求，这也是促使消费者保持品牌忠诚的核心力量。</p><p><br/></p>', '在现代，甭管大的还是小的东莞设计公司，大都十分注重东莞品牌设计，但放眼看去，市场上的精品又有多少。精', 202, 4, './data/upload/2016-05-06/572c935ce97da.jpg', 1, '', '', 1462539100, 0, 'c,p', '', 0, 0, '1', 0, 1, 3, NULL),
-(19, '东莞品牌设计是冰山一角，却至关重要！', '东莞品牌设计是冰山一角，却至关重要！', 14, NULL, '东莞品牌设计是冰山一角，却至关重要！', '东莞品牌设计是冰山一角，却至关重要！', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。有人统计说企业每投在品牌形象设计上1美元，所获得的收益是227美元。如此诱人的投资回报率，无怪乎企业界对品牌设计趋之若鹜。那么，品牌设计究竟是什么？其魅力来自何处？<br/>&nbsp;</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">1、设计是冰山一角，却至关重要！如果我们把品牌理解成一座冰山。品牌或企业所属的文化制度、员工行为、组织结构、核心技术、营销方式等要素是构成这座冰山的主体，尽管隐于水下，却是品牌发展最强有力的支撑与原动力。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">但这一切都必须通过一系列完整有效的视觉设计与品牌推广来被大众所认知。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);"><strong>想想设计究竟有多重要！</strong></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">2、回归原点，发掘项目或产品的本质所在!设计大师深泽直人的沙发设计原理告诉我们，抛开沙发表象的坐垫、靠背等等，其实本质上它只是一张凳子。设计者则要尽可能单纯的思考，根据所需进行相应的设计。所以我们的建议是凡事不要急于动手，不妨先静下心来，好好想想这个项目或者产品最为显著的特点是什么，它们的目标客户与消费群又是什么……</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; text-align: center; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/20160322/56f0946922065.jpg"/></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);"><br/><strong>&nbsp;做什么样的设计？</strong></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">3、简洁、清晰、概念是我们的设计原则！简洁、清晰是以最为简洁直观的方式，达成有效的视觉沟通和传播，拒绝一切不切实际的象征意义与所谓内涵。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">概念则是以巧妙独到的设计理念和应用，给人以意外惊喜，使人印象深刻从而有力提升企业形象及文化内涵。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">4、为客户做合适的设计！鲁迅先生说穿衣：“……人瘦不要穿黑衣裳，人胖不要穿白衣裳；脚长的女人一定要穿黑鞋子，脚短就一定要穿白鞋子；方格子的衣裳胖人不能穿，但比横格子的还好；横格子的胖人穿上，就把胖子更往两边裂着，更横宽了，胖子要穿竖条子的，竖的把人显得长，横的把人显的宽……”设计亦是如此，合适才好！合适就好！</p><p><br/></p>', '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。', 268, 4, './data/upload/2016-05-06/572c93989ab74.jpg', 1, '', '', 1462539160, 0, 'a,p', '', 0, 0, '1', 0, 1, 43, NULL),
+(19, '东莞品牌设计是冰山一角，却至关重要！', '东莞品牌设计是冰山一角，却至关重要！', 14, NULL, '东莞品牌设计是冰山一角，却至关重要！', '东莞品牌设计是冰山一角，却至关重要！', '1', '雨飞工作室', '<p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。有人统计说企业每投在品牌形象设计上1美元，所获得的收益是227美元。如此诱人的投资回报率，无怪乎企业界对品牌设计趋之若鹜。那么，品牌设计究竟是什么？其魅力来自何处？<br/>&nbsp;</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">1、设计是冰山一角，却至关重要！如果我们把品牌理解成一座冰山。品牌或企业所属的文化制度、员工行为、组织结构、核心技术、营销方式等要素是构成这座冰山的主体，尽管隐于水下，却是品牌发展最强有力的支撑与原动力。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">但这一切都必须通过一系列完整有效的视觉设计与品牌推广来被大众所认知。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);"><strong>想想设计究竟有多重要！</strong></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">2、回归原点，发掘项目或产品的本质所在!设计大师深泽直人的沙发设计原理告诉我们，抛开沙发表象的坐垫、靠背等等，其实本质上它只是一张凳子。设计者则要尽可能单纯的思考，根据所需进行相应的设计。所以我们的建议是凡事不要急于动手，不妨先静下心来，好好想想这个项目或者产品最为显著的特点是什么，它们的目标客户与消费群又是什么……</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; text-align: center; background-color: rgb(255, 255, 255);"><img src="http://www.rainfer.cn/data/upload/20160322/56f0946922065.jpg"/></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);"><br/><strong>&nbsp;做什么样的设计？</strong></p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">3、简洁、清晰、概念是我们的设计原则！简洁、清晰是以最为简洁直观的方式，达成有效的视觉沟通和传播，拒绝一切不切实际的象征意义与所谓内涵。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">概念则是以巧妙独到的设计理念和应用，给人以意外惊喜，使人印象深刻从而有力提升企业形象及文化内涵。</p><p style="margin-top: 0px; margin-bottom: 0px; white-space: normal; padding: 0px; line-height: 25.2px; font-size: 14px; color: rgb(102, 102, 102); font-family: AppleGothic, Arial, &#39;Microsoft Yahei&#39;, Simsun; background-color: rgb(255, 255, 255);">4、为客户做合适的设计！鲁迅先生说穿衣：“……人瘦不要穿黑衣裳，人胖不要穿白衣裳；脚长的女人一定要穿黑鞋子，脚短就一定要穿白鞋子；方格子的衣裳胖人不能穿，但比横格子的还好；横格子的胖人穿上，就把胖子更往两边裂着，更横宽了，胖子要穿竖条子的，竖的把人显得长，横的把人显的宽……”设计亦是如此，合适才好！合适就好！</p><p><br/></p>', '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。', 278, 4, './data/upload/2016-05-06/572c93989ab74.jpg', 1, '', '', 1462539160, 0, 'a,p', '', 0, 0, '1', 0, 1, 43, NULL),
 (20, '东莞某五金厂', '东莞某五金厂', 21, NULL, '东莞某五金厂', '东莞某五金厂', '1', '程小姐', '<p>感谢雨飞工作室按时保证质量的完成了我公司的网站建设,通过此次合作充分体现了雨飞工作室的项目团队在技术上对项目的把握程度,也为今后的合作奠定了基础.雨飞工作室是非常理想的合作伙伴。</p>', '感谢雨飞工作室按时保证质量的完成了我公司的网站建设,通过此次合作充分体现了雨飞工作室的项目团队在技术上对项目的把握程度,也为今后的合作奠定了基础.雨飞工作室是非常理想的合作伙伴。', 200, 0, './data/upload/2016-05-07/572d31b185006.jpg', 2, './data/upload/2016-05-07/572d31b18638e.jpg,', '', 1462579633, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
-(21, '志和第三方', '志和第三方', 21, NULL, '志和第三方', '志和第三方', '1', '孙先生', '<p>雨飞工作室是一支年轻的团队,充满朝气的团队,设计实力雄厚的团队,客户精神至上的团队。</p>', '雨飞工作室是一支年轻的团队,充满朝气的团队,设计实力雄厚的团队,客户精神至上的团队。', 200, 0, './data/upload/2016-05-07/572d33f94e68c.jpg', 2, './data/upload/2016-05-07/572d33f94fa14.jpg,', '', 1462580217, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
+(21, '志和第三方', '志和第三方', 21, NULL, '志和第三方', '志和第三方', '1', '孙先生', '<p>雨飞工作室是一支年轻的团队,充满朝气的团队,设计实力雄厚的团队,客户精神至上的团队。</p>', '雨飞工作室是一支年轻的团队,充满朝气的团队,设计实力雄厚的团队,客户精神至上的团队。', 200, 0, './data/upload/2016-05-07/572d33f94e68c.jpg', 2, './data/upload/2016-05-07/572d33f94fa14.jpg,', '', 1462580217, 0, 'p', '', 0, 1, '1', 0, 1, 0, NULL),
 (22, '学吧网', '学吧网', 21, NULL, '学吧网', '学吧网', '1', '彭先生', '<p>能顺应客户的需求变化而及时提供合适的解决方法，高效快捷，拥有优秀的服务团队。</p>', '能顺应客户的需求变化而及时提供合适的解决方法，高效快捷，拥有优秀的服务团队。', 200, 0, './data/upload/2016-05-07/572d344792659.jpg', 2, './data/upload/2016-05-07/572d3447939e2.jpg,', '', 1462580295, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
-(23, '石龙E家', '石龙E家', 21, NULL, '石龙E家', '石龙E家', '1', '张先生', '<p>在整个项目中尽心尽责,项目团队负责人负责的开发任务均顺利如约完成,院里的领导也都非常满意,感谢雨飞工作室。</p>', '在整个项目中尽心尽责,项目团队负责人负责的开发任务均顺利如约完成,院里的领导也都非常满意,感谢雨飞工作室。', 200, 0, './data/upload/2016-05-07/572d3488b6380.jpg', 2, './data/upload/2016-05-07/572d3488b7af0.jpg,', '', 1462580360, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
+(23, '石龙E家', '石龙E家', 21, NULL, '石龙E家', '石龙E家', '1', '张先生', '<p>在整个项目中尽心尽责,项目团队负责人负责的开发任务均顺利如约完成,院里的领导也都非常满意,感谢雨飞工作室。</p>', '在整个项目中尽心尽责,项目团队负责人负责的开发任务均顺利如约完成,院里的领导也都非常满意,感谢雨飞工作室。', 200, 0, './data/upload/2016-05-07/572d3488b6380.jpg', 2, './data/upload/2016-05-07/572d3488b7af0.jpg,', '', 1462580360, 0, 'p', '', 0, 1, '1', 0, 1, 0, NULL),
 (24, '东莞某餐饮公司', '东莞某餐饮公司', 21, NULL, '东莞某餐饮公司', '东莞某餐饮公司', '1', '谢先生', '<p>雨飞工作室是一支年轻、积极向上的团队，为我公司提供的各类网站服务真正做到了细致周到，让我们感觉很放心。</p>', '雨飞工作室是一支年轻、积极向上的团队，为我公司提供的各类网站服务真正做到了细致周到，让我们感觉很放心。', 200, 0, './data/upload/2016-05-07/572d34bbf33cb.jpg', 2, './data/upload/2016-05-07/572d34bc00513.jpg,', '', 1462580412, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
 (25, '广州洁具公司', '广州洁具公司', 21, NULL, '广州洁具公司', '广州洁具公司', '1', '吴小姐', '<p>雨飞工作室是前期制作还是后期维护，都能做到尽心尽责，是我们满意的合作伙伴。</p>', '雨飞工作室是前期制作还是后期维护，都能做到尽心尽责，是我们满意的合作伙伴。', 200, 0, './data/upload/2016-05-07/572d34f147213.jpg', 2, './data/upload/2016-05-07/572d34f14859b.jpg,', '', 1462580465, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
 (26, '食品公司网站', '食品公司网站', 21, NULL, '食品公司网站', '食品公司网站', '1', '王先生', '<p>雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。</p>', '雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。', 200, 0, './data/upload/2016-05-07/572d352a99b7b.jpg', 2, './data/upload/2016-05-07/572d352a9af03.jpg,', '', 1462580522, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
-(27, '酒酿网', '酒酿网', 21, NULL, '酒酿网', '酒酿网', '1', '小易', '<p>雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。</p>', '雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。', 200, 0, './data/upload/2016-05-07/572d35620784b.jpg', 2, './data/upload/2016-05-07/572d356208bd4.jpg,', '', 1462580578, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL);
+(27, '酒酿网', '酒酿网', 21, NULL, '酒酿网', '酒酿网', '1', '小易', '<p>雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。</p>', '雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。', 200, 0, './data/upload/2016-05-07/572d35620784b.jpg', 2, './data/upload/2016-05-07/572d356208bd4.jpg,', '', 1462580578, 0, 'p', '', 0, 1, '1', 0, 1, 0, NULL);
 
-DROP TABLE IF EXISTS `yf_oauth_user`;
 CREATE TABLE IF NOT EXISTS `yf_oauth_user` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `oauth_from` varchar(20) NOT NULL COMMENT '用户来源key',
@@ -472,7 +461,6 @@ CREATE TABLE IF NOT EXISTS `yf_oauth_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='第三方用户表' AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_options`;
 CREATE TABLE IF NOT EXISTS `yf_options` (
   `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `option_name` varchar(64) NOT NULL COMMENT '配置名',
@@ -482,7 +470,6 @@ CREATE TABLE IF NOT EXISTS `yf_options` (
   UNIQUE KEY `option_name` (`option_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_plug_ad`;
 CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
   `plug_ad_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_ad_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告名称',
@@ -498,13 +485,12 @@ CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
   `plug_ad_depid` int(5) NOT NULL COMMENT '广告投放单位或个人',
   `plug_ad_butt` int(5) NOT NULL COMMENT '广告内部对接人员（自己的员工）',
   PRIMARY KEY (`plug_ad_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 INSERT INTO `yf_plug_ad` (`plug_ad_id`, `plug_ad_name`, `plug_ad_adtypeid`, `plug_ad_checkid`, `plug_ad_js`, `plug_ad_pic`, `plug_ad_url`, `plug_ad_content`, `plug_ad_addtime`, `plug_ad_order`, `plug_ad_open`, `plug_ad_depid`, `plug_ad_butt`) VALUES
 (1, '为什么选择我们？', 1, 1, '', './data/upload/2016-05-06/572c7ea4e13c3.jpg', '', '深厚的技术力量\n丰富的行业经验\n高效的作业流程\n完善的服务体系\n众多的成功案例', 1451356484, 50, 1, 0, 0),
 (2, '我们能帮您哪些？', 1, 1, '', './data/upload/2016-05-06/572c7ec59292b.jpg', '', '企业网站开发设计\n网站UI设计\nThinkPHP二次开发\nThinkCMF二次开发\nTP插件开发定制\nThinkCMF功能定制', 1462533829, 50, 1, 0, 0);
 
-DROP TABLE IF EXISTS `yf_plug_adtype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
   `plug_adtype_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `plug_adtype_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告位名称',
@@ -515,7 +501,6 @@ CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
 INSERT INTO `yf_plug_adtype` (`plug_adtype_id`, `plug_adtype_name`, `plug_adtype_order`) VALUES
 (1, '首页图片轮播', 50);
 
-DROP TABLE IF EXISTS `yf_plug_files`;
 CREATE TABLE IF NOT EXISTS `yf_plug_files` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uptime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -524,74 +509,8 @@ CREATE TABLE IF NOT EXISTS `yf_plug_files` (
   PRIMARY KEY (`id`),
   KEY `uptime` (`uptime`),
   KEY `path` (`path`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=152 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-INSERT INTO `yf_plug_files` (`id`, `uptime`, `filesize`, `path`) VALUES
-(63, 1462539191, 7371, './data/upload/2016-05-06/572c6855f09fc.png'),
-(64, 1462539191, 170326, './data/upload/2016-05-06/572c7ea4e13c3.jpg'),
-(65, 1462539191, 88035, './data/upload/2016-05-06/572c7ec59292b.jpg'),
-(66, 1462539191, 106192, './data/upload/2016-05-06/572c863689b00.jpg'),
-(67, 1462539191, 119096, './data/upload/2016-05-06/572c8637088b2.jpg'),
-(68, 1462539191, 110923, './data/upload/2016-05-06/572c863773ba2.jpg'),
-(69, 1462539191, 77757, './data/upload/2016-05-06/572c8637d2f28.jpg'),
-(70, 1462539191, 112054, './data/upload/2016-05-06/572c8638470f4.jpg'),
-(71, 1462539191, 56430, './data/upload/2016-05-06/572c863a03366.jpg'),
-(72, 1462539191, 112054, './data/upload/2016-05-06/572c863a052a7.jpg'),
-(73, 1462539191, 77757, './data/upload/2016-05-06/572c863a071e7.jpg'),
-(74, 1462539191, 110923, './data/upload/2016-05-06/572c863a098f8.jpg'),
-(75, 1462539191, 119096, './data/upload/2016-05-06/572c863a0b838.jpg'),
-(76, 1462539191, 106192, './data/upload/2016-05-06/572c863a0db61.jpg'),
-(84, 1462539191, 97523, './data/upload/2016-05-06/572c8981ee1fa.jpg'),
-(88, 1462539191, 82277, './data/upload/2016-05-06/572c8982020a4.jpg'),
-(89, 1462539191, 82277, './data/upload/2016-05-06/572c898203814.jpg'),
-(90, 1462539191, 88179, './data/upload/2016-05-06/572c898205b3d.jpg'),
-(91, 1462539191, 119730, './data/upload/2016-05-06/572c898207e65.jpg'),
-(92, 1462539191, 98131, './data/upload/2016-05-06/572c898209da6.jpg'),
-(101, 1462539191, 44611, './data/upload/2016-05-06/572c89f8c6383.jpg'),
-(102, 1462539191, 80615, './data/upload/2016-05-06/572c89f8c7323.jpg'),
-(103, 1462539191, 93911, './data/upload/2016-05-06/572c89f8c86ab.jpg'),
-(104, 1462539191, 91645, './data/upload/2016-05-06/572c89f8c9e1c.jpg'),
-(105, 1462539191, 94652, './data/upload/2016-05-06/572c89f8cb1a4.jpg'),
-(107, 1462539191, 28610, './data/upload/2016-05-06/572c8a83ef62c.jpg'),
-(108, 1462539191, 32939, './data/upload/2016-05-06/572c8bb8d22d7.jpg'),
-(109, 1462539191, 46435, './data/upload/2016-05-06/572c8c016ecd9.jpg'),
-(110, 1462539191, 31920, './data/upload/2016-05-06/572c8c3643949.jpg'),
-(111, 1462539191, 30126, './data/upload/2016-05-06/572c8c64dc8e4.jpg'),
-(112, 1462539191, 11696, './data/upload/2016-05-06/572c8c954de58.jpg'),
-(113, 1462539191, 26811, './data/upload/2016-05-06/572c8cc249a02.jpg'),
-(114, 1462539191, 76602, './data/upload/2016-05-06/572c9114b45d0.jpg'),
-(115, 1462539191, 26348, './data/upload/2016-05-06/572c911b451f2.jpg'),
-(116, 1462539191, 40500, './data/upload/2016-05-06/572c935a8d2c8.jpg'),
-(117, 1462539191, 20745, './data/upload/2016-05-06/572c935ce97da.jpg'),
-(119, 1462539191, 34425, './data/upload/2016-05-06/572c93989ab74.jpg'),
-(144, 1463050406, 9269, './data/upload/avatar/5731df7d8dcf7.jpg'),
-(122, 1462598146, 15015, './data/upload/2016-05-07/572d31b185006.jpg'),
-(123, 1462598146, 3474, './data/upload/2016-05-07/572d31b18638e.jpg'),
-(124, 1462598146, 14924, './data/upload/2016-05-07/572d33f94e68c.jpg'),
-(125, 1462598146, 4811, './data/upload/2016-05-07/572d33f94fa14.jpg'),
-(126, 1462598146, 12043, './data/upload/2016-05-07/572d344792659.jpg'),
-(127, 1462598146, 5835, './data/upload/2016-05-07/572d3447939e2.jpg'),
-(128, 1462598146, 13619, './data/upload/2016-05-07/572d3488b6380.jpg'),
-(129, 1462598146, 12976, './data/upload/2016-05-07/572d3488b7af0.jpg'),
-(130, 1462598146, 14924, './data/upload/2016-05-07/572d34bbf33cb.jpg'),
-(131, 1462598146, 2991, './data/upload/2016-05-07/572d34bc00513.jpg'),
-(132, 1462598146, 12492, './data/upload/2016-05-07/572d34f147213.jpg'),
-(133, 1462598146, 3116, './data/upload/2016-05-07/572d34f14859b.jpg'),
-(134, 1462598146, 6853, './data/upload/2016-05-07/572d352a99b7b.jpg'),
-(135, 1462598146, 4268, './data/upload/2016-05-07/572d352a9af03.jpg'),
-(136, 1462598146, 17705, './data/upload/2016-05-07/572d35620784b.jpg'),
-(137, 1462598146, 2413, './data/upload/2016-05-07/572d356208bd4.jpg'),
-(142, 1462619674, 33782, './data/upload/2016-05-07/572dcdefa5a36.jpg'),
-(143, 1462703499, 9263, './data/upload/avatar/572f07fbd8b50.jpg'),
-(145, 1463050406, 9855, './data/upload/avatar/5731dfb42d256.jpg'),
-(146, 1463050406, 7538, './data/upload/avatar/5731e0fe52ae3.jpg'),
-(147, 1463050406, 7879, './data/upload/avatar/5731e1be880fd.jpg'),
-(148, 1463050406, 9257, './data/upload/avatar/5731e4596ba85.jpg'),
-(149, 1463050406, 9223, './data/upload/avatar/5731e4bdce349.jpg'),
-(150, 1463050406, 9761, './data/upload/avatar/5731e541aa609.jpg'),
-(151, 1463050406, 9251, './data/upload/avatar/5731e81056839.jpg');
-
-DROP TABLE IF EXISTS `yf_plug_link`;
 CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_id` int(5) NOT NULL AUTO_INCREMENT,
   `plug_link_name` varchar(50) NOT NULL COMMENT '链接名称',
@@ -603,26 +522,25 @@ CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_addtime` int(11) NOT NULL COMMENT '添加时间',
   `plug_link_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0禁用1启用',
   PRIMARY KEY (`plug_link_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `plug_link_target`, `plug_link_typeid`, `plug_link_qq`, `plug_link_order`, `plug_link_addtime`, `plug_link_open`) VALUES
 (1, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 1, 'eee', '50', 1460260482, 1),
 (2, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 2, '81818832', '50', 1460362536, 1),
 (3, 'YFCMF', 'http://www.rainfer.cn', '_blank', 1, '', '50', 1461909470, 1);
 
-DROP TABLE IF EXISTS `yf_plug_linktype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_linktype` (
   `plug_linktype_id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `plug_linktype_name` varchar(30) NOT NULL COMMENT '所属栏目名称',
   `plug_linktype_order` varchar(10) NOT NULL COMMENT '排序',
   PRIMARY KEY (`plug_linktype_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 INSERT INTO `yf_plug_linktype` (`plug_linktype_id`, `plug_linktype_name`, `plug_linktype_order`) VALUES
 (1, '首页', '1'),
-(2, '新闻中心', '50');
+(2, '新闻中心', '50'),
+(3, '首页', '50');
 
-DROP TABLE IF EXISTS `yf_plug_sug`;
 CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   `plug_sug_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_sug_name` varchar(200) NOT NULL DEFAULT '' COMMENT '留言人姓名',
@@ -634,7 +552,6 @@ CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   PRIMARY KEY (`plug_sug_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-DROP TABLE IF EXISTS `yf_region`;
 CREATE TABLE IF NOT EXISTS `yf_region` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `pid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -4055,7 +3972,22 @@ INSERT INTO `yf_region` (`id`, `pid`, `name`, `type`) VALUES
 (3408, 3401, '肥西县', 3),
 (3409, 0, '国外', 0);
 
-DROP TABLE IF EXISTS `yf_source`;
+CREATE TABLE IF NOT EXISTS `yf_route` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '路由id',
+  `full_url` varchar(255) DEFAULT NULL COMMENT '完整url， 如：portal/list/index?id=1',
+  `url` varchar(255) DEFAULT NULL COMMENT '实际显示的url',
+  `listorder` int(5) DEFAULT '0' COMMENT '排序，优先级，越小优先级越高',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态，1：启用 ;0：不启用',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='url路由表' AUTO_INCREMENT=6 ;
+
+INSERT INTO `yf_route` (`id`, `full_url`, `url`, `listorder`, `status`) VALUES
+(1, 'home/list/index?id=1', 'about', 1, 1),
+(2, 'home/list/index?id=10', 'contacts', 2, 1),
+(3, 'home/list/index', 'list/:id\\d', 3, 1),
+(4, 'home/news/index', 'news/:id\\d', 4, 1),
+(5, 'home/index/index', 'index', 5, 1);
+
 CREATE TABLE IF NOT EXISTS `yf_source` (
   `source_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `source_name` varchar(30) NOT NULL,
@@ -4067,7 +3999,6 @@ INSERT INTO `yf_source` (`source_id`, `source_name`, `source_order`) VALUES
 (1, '雨飞工作室', 44),
 (2, 'ThinkPHP', 50);
 
-DROP TABLE IF EXISTS `yf_we_menu`;
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (
   `we_menu_id` tinyint(11) NOT NULL AUTO_INCREMENT,
   `we_menu_name` varchar(20) NOT NULL COMMENT '菜单名称',

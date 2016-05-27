@@ -1,20 +1,20 @@
-<?php
-return array (
+<?php	return array (
   'SHOW_PAGE_TRACE' => true,
   'URL_CASE_INSENSITIVE' => true,
   'DB_LIKE_FIELDS' => 'news_title|news_content|news_flag|news_open',
-  'URL_MODEL' => 2,
+  'URL_MODEL' => 3,
+  'URL_HTML_SUFFIX' => 'html',
   'URL_ROUTER_ON' => true,
   'URL_MAP_RULES' => 
   array (
-    'index' => 'home/index/index',
-    'contacts' => 'home/list/index?id=10',
     'about' => 'home/list/index?id=1',
+    'contacts' => 'home/list/index?id=10',
+    'index' => 'home/index/index',
   ),
   'URL_ROUTE_RULES' => 
   array (
-    'news/:id\\d' => 'home/news/index',
     'list/:id\\d' => 'home/list/index',
+    'news/:id\\d' => 'home/news/index',
   ),
   'YFCMF_VERSION' => 'V1.0.0',
   'THINK_SDK_QQ' => 
@@ -34,5 +34,4 @@ return array (
     'T_OPEN' => '1',
     'T_LIMIT' => 60,
   ),
-  'URL_HTML_SUFFIX' => 'html',
 );

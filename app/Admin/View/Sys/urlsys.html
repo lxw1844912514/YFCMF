@@ -29,20 +29,20 @@
 					
 					<div class="tabbable">
 	<ul class="nav nav-tabs" id="myTab">
-		<li class="active">
+		<li>
 			<a data-toggle="tab" href="#basic">
 				基本设置
 			</a>
 		</li>
 
-		<li>
+		<li class="active">
 			<a data-toggle="tab" href="#urllist">
 				URL美化
 			</a>
 		</li>
 	</ul>
 	<div class="tab-content">
-		<div id="basic" class="tab-pane fade in active">
+		<div id="basic" class="tab-pane fade">
 			<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:U('runurlsys')}">
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> URL模式 </label>
@@ -89,7 +89,7 @@
 			</form>
 		</div>
 
-		<div id="urllist" class="tab-pane fade">
+		<div id="urllist" class="tab-pane fade in active">
 			<div class="row maintop">
 					<div class="col-xs-12 col-sm-1">
 						<!-- 点击添加模态框（Modal） -->
@@ -127,12 +127,12 @@
 											<td>{$v.url}</td>
 											<td class="hidden-xs">
 												<if condition="$v['status'] eq 1">
-													<a class="red state-btn" href="{:U('route_state')}" data-id="{$v.id}" title="启用">
-														<div id="zt{$v.n_id}"><button class="btn btn-minier btn-yellow">启用</button></div>
+													<a class="red open-btn" href="{:U('route_state')}" data-id="{$v.id}" title="启用">
+														<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">启用</button></div>
 													</a>
 													<else/>
-													<a class="red state-btn" href="{:U('route_state')}" data-id="{$v.id}" title="禁用">
-														<div id="zt{$v.n_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+													<a class="red open-btn" href="{:U('route_state')}" data-id="{$v.id}" title="禁用">
+														<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 													</a>
 												</if>
 											</td>
@@ -142,7 +142,7 @@
 													<a class="green routeedit-btn"  href="{:U('route_edit')}" data-id="{$v.id}"  title="修改">
 														<i class="ace-icon fa fa-pencil bigger-130"></i>
 													</a>
-													<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:U('source_del',array('source_id'=>$v['source_id'],'p'=>I('p',1)))}" title="删除">
+													<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:U('route_del',array('id'=>$v['id']))}" title="删除">
 														<i class="ace-icon fa fa-trash-o bigger-130"></i>
 													</a>
 												</div>
@@ -153,7 +153,7 @@
 														</button>
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<li>
-																<a href="{:U('source_edit')}" data-id="{$v.source_id}" class="tooltip-success sourceedit-btn" data-rel="tooltip" title="" data-original-title="修改">
+																<a href="{:U('route_edit')}" data-id="{$v.id}" class="tooltip-success sourceedit-btn" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																	</span>
@@ -161,7 +161,7 @@
 															</li>
 
 															<li>
-																<a href="{:U('source_del',array('source_id'=>$v['source_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
+																<a href="{:U('route_del',array('id'=>$v['id']))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -273,8 +273,8 @@
 	<!-- 显示修改模态框（Modal） -->
 	<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-		<form class="form-horizontal ajaxForm2" name="source_runedit" method="post" action="{:U('source_runedit')}">
-			<input type="hidden" name="source_id" id="editsource_id" value="" />
+		<form class="form-horizontal ajaxForm2" name="route_runedit" method="post" action="{:U('route_runedit')}">
+			<input type="hidden" name="id" id="editroute_id" value="" />
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -282,7 +282,7 @@
 								aria-hidden="true">×
 						</button>
 						<h4 class="modal-title" id="myModalLabel">
-							修改来源
+							修改规则
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -293,17 +293,31 @@
 
 
 								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 来源名称：  </label>
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 原始地址：  </label>
 									<div class="col-sm-10">
-										<input type="text" name="source_name" id="editsource_name" placeholder="输入链接名称" class="col-xs-10 col-sm-5" required/>
+										<input type="text" name="full_url" id="editroute_full_url" placeholder="输入原始地址" class="col-xs-10 col-sm-5" required/>
 									</div>
 								</div>
 								<div class="space-4"></div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示地址：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="url" id="editroute_url" placeholder="输入显示地址" class="col-xs-10 col-sm-5" required/>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
+									<div class="col-sm-10" style="padding-top:5px;">
+										<input name="status" id="editroute_status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox"/>
+										<span class="lbl">&nbsp;&nbsp;默认启用</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
 									<div class="col-sm-10">
-										<input type="number" name="source_order" id="editsource_order" value="50" class="col-xs-10 col-sm-3" required/>
+										<input type="number" name="listorder" id="editroute_listorder" value="50" class="col-xs-10 col-sm-3" required/>
 										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
 									</div>
 								</div>
