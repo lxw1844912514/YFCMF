@@ -106,7 +106,7 @@ function update_site_configs($db,$table_prefix){
             		"site_name":"$sitename",
             		"site_host":"$siteurl",
             		"site_root":"",
-            		"site_logo":"./data/upload/2016-05-06/572c6855f09fc.png",
+            		"site_logo":"/data/upload/2016-05-06/572c6855f09fc.png",
             		"site_icp":"",
             		"site_tpl":"Default",
             		"site_admin_email":"$email",
