@@ -65,7 +65,11 @@ class SysController extends AuthController {
 	}
 	//url设置显示
 	public function urlsys(){
-		$routes=M('route')->select();
+		$count=M('route')->count();
+		$Page= new \Think\Page($count,C('DB_PAGENUM'));// 实例化分页类 传入总记录数和每页显示的记录数
+		$show= $Page->show();// 分页显示输出
+		$routes=M('route')->limit($Page->firstRow.','.$Page->listRows)->order('listorder')->select();
+		$this->assign('page',$show);		
 		$this->assign('routes',$routes);
 		$this->display();
 	}
@@ -86,11 +90,12 @@ class SysController extends AuthController {
      */
 	public function route_runadd(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',U('Sys/urlsys'),0);
+			$this->error('提交方式不正确',U('Sys/urlsys',array('p'=>$p)),0);
 		}else{
 			M('route')->add(I('post.'));
+			$p=I('p',1,'intval');
 			F('routes',NULL);
-			$this->success('路由规则添加成功',U('Sys/urlsys'),1);
+			$this->success('路由规则添加成功',U('Sys/urlsys',array('p'=>$p)),1);
 		}
 	}
 	/*
@@ -114,8 +119,9 @@ class SysController extends AuthController {
      */
 	public function route_runedit(){
 		if (!IS_AJAX){
-			$this->error('提交方式不正确',U('urlsys'),0);
+			$this->error('提交方式不正确',U('Sys/urlsys'),0);
 		}else{
+			$p=I('p',1,'intval');
 			$sl_data=array(
 				'id'=>I('id'),
 				'full_url'=>I('full_url'),
@@ -126,9 +132,9 @@ class SysController extends AuthController {
 			$rst=M('route')->save($sl_data);
             if($rst!==false){
 				F('routes',NULL);
-                $this->success('路由规则修改成功',U('urlsys'),1);
+                $this->success('路由规则修改成功',U('Sys/urlsys',array('p'=>$p)),1);
             }else{
-                $this->error('路由规则修改失败',U('urlsys'),0);
+                $this->error('路由规则修改失败',U('Sys/urlsys',array('p'=>$p)),0);
             }
 		}
 	}
@@ -163,7 +169,8 @@ class SysController extends AuthController {
 		$rst=M('route')->where(array('id'=>I('id')))->delete();
         if($rst!==false){
 			F('routes',NULL);
-            $this->success('路由规则删除成功',U('urlsys'),1);
+			$p=I('p',1,'intval');
+            $this->success('路由规则删除成功',U('Sys/urlsys',array('p'=>$p)),1);
         }else{
             $this->error('路由规则删除失败',U('urlsys'),0);
         }

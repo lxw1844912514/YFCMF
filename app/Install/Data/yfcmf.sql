@@ -6,9 +6,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
-CREATE DATABASE IF NOT EXISTS `yfcmf` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `yfcmf`;
-
+DROP TABLE IF EXISTS `yf_action_log`;
 CREATE TABLE IF NOT EXISTS `yf_action_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) DEFAULT '0' COMMENT '用户id',
@@ -22,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `yf_action_log` (
   KEY `user_object_action_ip` (`uid`,`object`,`action`,`ip`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='访问记录表' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_admin`;
 CREATE TABLE IF NOT EXISTS `yf_admin` (
   `admin_id` tinyint(4) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
   `admin_username` varchar(20) NOT NULL COMMENT '管理员用户名',
@@ -43,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `yf_admin` (
   PRIMARY KEY (`admin_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_auth_group`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` char(100) NOT NULL DEFAULT '',
@@ -56,6 +56,7 @@ INSERT INTO `yf_auth_group` (`id`, `title`, `status`, `rules`, `addtime`) VALUES
 (1, '超级管理员', 1, '1,2,6,59,151,10,62,154,19,60,152,26,43,63,64,65,66,67,155,57,61,153,3,4,89,90,159,5,85,86,87,88,160,15,16,68,69,70,71,72,73,156,17,55,56,74,75,76,77,78,157,18,79,80,81,82,83,84,158,40,41,92,162,42,91,161,7,8,11,94,95,96,100,101,175,12,93,174,25,97,98,99,173,9,13,103,104,105,106,107,172,14,102,171,22,23,24,27,29,37,108,109,110,111,112,113,114,170,38,115,116,117,118,119,120,169,30,28,31,32,129,128,130,131,132,167,34,133,134,135,136,166,44,45,138,139,140,141,142,143,165,46,144,145,146,147,148,164,48,49,137,163,35,36,39,121,122,123,124,125,126,127,168,', 1212451252),
 (2, '管理员', 1, '1,2,6,151,10,154,19,152,43,65,155,57,153,3,4,159,5,160,15,16,68,70,156,17,74,77,157,176,18,82,158,177,40,41,162,42,161,7,8,11,94,175,12,174,25,173,9,13,105,172,14,171,22,23,24,27,29,37,108,110,170,38,119,169,28,31,32,131,167,34,166,44,45,142,165,46,145,164,48,49,137,163,35,36,39,124,168,', 1212451252);
 
+DROP TABLE IF EXISTS `yf_auth_group_access`;
 CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
   `uid` mediumint(8) unsigned NOT NULL,
   `group_id` mediumint(8) unsigned NOT NULL,
@@ -67,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_group_access` (
 INSERT INTO `yf_auth_group_access` (`uid`, `group_id`) VALUES
 (1, 1);
 
+DROP TABLE IF EXISTS `yf_auth_rule`;
 CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(80) NOT NULL DEFAULT '',
@@ -263,6 +265,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (186, 'Comment/comment_list', '评论列表', 1, 1, '', '', 185, 2, 10, 1463305496),
 (190, 'Sys/urlsys', 'URL设置', 1, 1, '', '', 2, 3, 15, 1464341076);
 
+DROP TABLE IF EXISTS `yf_comments`;
 CREATE TABLE IF NOT EXISTS `yf_comments` (
   `c_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `t_name` varchar(100) NOT NULL COMMENT '评论内容所在表，不带表前缀',
@@ -285,6 +288,7 @@ CREATE TABLE IF NOT EXISTS `yf_comments` (
   KEY `createtime` (`createtime`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='评论表' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_diyflag`;
 CREATE TABLE IF NOT EXISTS `yf_diyflag` (
   `diyflag_id` int(2) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `diyflag_value` char(2) NOT NULL COMMENT '值',
@@ -304,6 +308,7 @@ INSERT INTO `yf_diyflag` (`diyflag_id`, `diyflag_value`, `diyflag_name`, `diyfla
 (8, 'd', '原创', 80),
 (9, 'cp', '产品', 90);
 
+DROP TABLE IF EXISTS `yf_favorites`;
 CREATE TABLE IF NOT EXISTS `yf_favorites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) DEFAULT NULL COMMENT '用户 id',
@@ -314,6 +319,7 @@ CREATE TABLE IF NOT EXISTS `yf_favorites` (
   KEY `uid` (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户收藏表' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_member_group`;
 CREATE TABLE IF NOT EXISTS `yf_member_group` (
   `member_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员组ID',
   `member_group_name` varchar(30) NOT NULL COMMENT '会员组名',
@@ -327,6 +333,7 @@ CREATE TABLE IF NOT EXISTS `yf_member_group` (
 INSERT INTO `yf_member_group` (`member_group_id`, `member_group_name`, `member_group_open`, `member_group_toplimit`, `member_group_bomlimit`, `member_group_order`) VALUES
 (1, '会员', 1, 11, 22, 50);
 
+DROP TABLE IF EXISTS `yf_member_list`;
 CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_id` int(11) NOT NULL AUTO_INCREMENT,
   `member_list_username` varchar(60) NOT NULL COMMENT '登录用户名',
@@ -356,12 +363,14 @@ CREATE TABLE IF NOT EXISTS `yf_member_list` (
   PRIMARY KEY (`member_list_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_member_lvl`;
 CREATE TABLE IF NOT EXISTS `yf_member_lvl` (
   `member_lvl_id` tinyint(3) NOT NULL AUTO_INCREMENT COMMENT '等级ID',
   `member_lvl_name` varchar(20) NOT NULL COMMENT '等级名称',
   PRIMARY KEY (`member_lvl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_menu`;
 CREATE TABLE IF NOT EXISTS `yf_menu` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
   `menu_name` varchar(36) NOT NULL,
@@ -390,6 +399,7 @@ INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `parentid`
 (21, '合作伙伴', '', 3, 0, 'list', 'news', '', 0, 50, '', '', '', '', ''),
 (17, '首页', 'Home', 1, 0, '', '', '', 1, 1, '', '', '', '', '');
 
+DROP TABLE IF EXISTS `yf_news`;
 CREATE TABLE IF NOT EXISTS `yf_news` (
   `n_id` int(36) NOT NULL AUTO_INCREMENT,
   `news_title` varchar(255) NOT NULL COMMENT '文章标题',
@@ -444,6 +454,7 @@ INSERT INTO `yf_news` (`n_id`, `news_title`, `news_titleshort`, `news_columnid`,
 (26, '食品公司网站', '食品公司网站', 21, NULL, '食品公司网站', '食品公司网站', '1', '王先生', '<p>雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。</p>', '雨飞工作室是一只优秀的团队，他们有优良的技术和高品质的服务，在和我公司合作工程中，体现了他们制作大公司网站的实力。', 200, 0, './data/upload/2016-05-07/572d352a99b7b.jpg', 2, './data/upload/2016-05-07/572d352a9af03.jpg,', '', 1462580522, 0, 'p', '', 0, 0, '1', 0, 1, 0, NULL),
 (27, '酒酿网', '酒酿网', 21, NULL, '酒酿网', '酒酿网', '1', '小易', '<p>雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。</p>', '雨飞工作室在项目前期策划和实施的过程中，一贯都表现出高水准的专业能力。我们对这个团队所提供的高品质服务以及所展现的业务能力深信不疑。', 200, 0, './data/upload/2016-05-07/572d35620784b.jpg', 2, './data/upload/2016-05-07/572d356208bd4.jpg,', '', 1462580578, 0, 'p', '', 0, 1, '1', 0, 1, 0, NULL);
 
+DROP TABLE IF EXISTS `yf_oauth_user`;
 CREATE TABLE IF NOT EXISTS `yf_oauth_user` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `oauth_from` varchar(20) NOT NULL COMMENT '用户来源key',
@@ -461,6 +472,7 @@ CREATE TABLE IF NOT EXISTS `yf_oauth_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='第三方用户表' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_options`;
 CREATE TABLE IF NOT EXISTS `yf_options` (
   `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `option_name` varchar(64) NOT NULL COMMENT '配置名',
@@ -470,6 +482,7 @@ CREATE TABLE IF NOT EXISTS `yf_options` (
   UNIQUE KEY `option_name` (`option_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='全站配置表' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_plug_ad`;
 CREATE TABLE IF NOT EXISTS `yf_plug_ad` (
   `plug_ad_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_ad_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告名称',
@@ -491,6 +504,7 @@ INSERT INTO `yf_plug_ad` (`plug_ad_id`, `plug_ad_name`, `plug_ad_adtypeid`, `plu
 (1, '为什么选择我们？', 1, 1, '', './data/upload/2016-05-06/572c7ea4e13c3.jpg', '', '深厚的技术力量\n丰富的行业经验\n高效的作业流程\n完善的服务体系\n众多的成功案例', 1451356484, 50, 1, 0, 0),
 (2, '我们能帮您哪些？', 1, 1, '', './data/upload/2016-05-06/572c7ec59292b.jpg', '', '企业网站开发设计\n网站UI设计\nThinkPHP二次开发\nThinkCMF二次开发\nTP插件开发定制\nThinkCMF功能定制', 1462533829, 50, 1, 0, 0);
 
+DROP TABLE IF EXISTS `yf_plug_adtype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
   `plug_adtype_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `plug_adtype_name` varchar(50) NOT NULL DEFAULT '' COMMENT '广告位名称',
@@ -501,6 +515,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_adtype` (
 INSERT INTO `yf_plug_adtype` (`plug_adtype_id`, `plug_adtype_name`, `plug_adtype_order`) VALUES
 (1, '首页图片轮播', 50);
 
+DROP TABLE IF EXISTS `yf_plug_files`;
 CREATE TABLE IF NOT EXISTS `yf_plug_files` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uptime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -511,6 +526,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_files` (
   KEY `path` (`path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_plug_link`;
 CREATE TABLE IF NOT EXISTS `yf_plug_link` (
   `plug_link_id` int(5) NOT NULL AUTO_INCREMENT,
   `plug_link_name` varchar(50) NOT NULL COMMENT '链接名称',
@@ -529,6 +545,7 @@ INSERT INTO `yf_plug_link` (`plug_link_id`, `plug_link_name`, `plug_link_url`, `
 (2, '雨飞工作室', 'http://www.rainfer.cn', '_blank', 2, '81818832', '50', 1460362536, 1),
 (3, 'YFCMF', 'http://www.rainfer.cn', '_blank', 1, '', '50', 1461909470, 1);
 
+DROP TABLE IF EXISTS `yf_plug_linktype`;
 CREATE TABLE IF NOT EXISTS `yf_plug_linktype` (
   `plug_linktype_id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `plug_linktype_name` varchar(30) NOT NULL COMMENT '所属栏目名称',
@@ -541,6 +558,7 @@ INSERT INTO `yf_plug_linktype` (`plug_linktype_id`, `plug_linktype_name`, `plug_
 (2, '新闻中心', '50'),
 (3, '首页', '50');
 
+DROP TABLE IF EXISTS `yf_plug_sug`;
 CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   `plug_sug_id` int(11) NOT NULL AUTO_INCREMENT,
   `plug_sug_name` varchar(200) NOT NULL DEFAULT '' COMMENT '留言人姓名',
@@ -552,6 +570,7 @@ CREATE TABLE IF NOT EXISTS `yf_plug_sug` (
   PRIMARY KEY (`plug_sug_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_region`;
 CREATE TABLE IF NOT EXISTS `yf_region` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `pid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -3972,6 +3991,7 @@ INSERT INTO `yf_region` (`id`, `pid`, `name`, `type`) VALUES
 (3408, 3401, '肥西县', 3),
 (3409, 0, '国外', 0);
 
+DROP TABLE IF EXISTS `yf_route`;
 CREATE TABLE IF NOT EXISTS `yf_route` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '路由id',
   `full_url` varchar(255) DEFAULT NULL COMMENT '完整url， 如：portal/list/index?id=1',
@@ -3988,6 +4008,7 @@ INSERT INTO `yf_route` (`id`, `full_url`, `url`, `listorder`, `status`) VALUES
 (4, 'home/news/index', 'news/:id\\d', 4, 1),
 (5, 'home/index/index', 'index', 5, 1);
 
+DROP TABLE IF EXISTS `yf_source`;
 CREATE TABLE IF NOT EXISTS `yf_source` (
   `source_id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `source_name` varchar(30) NOT NULL,
@@ -3999,6 +4020,7 @@ INSERT INTO `yf_source` (`source_id`, `source_name`, `source_order`) VALUES
 (1, '雨飞工作室', 44),
 (2, 'ThinkPHP', 50);
 
+DROP TABLE IF EXISTS `yf_we_menu`;
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (
   `we_menu_id` tinyint(11) NOT NULL AUTO_INCREMENT,
   `we_menu_name` varchar(20) NOT NULL COMMENT '菜单名称',
