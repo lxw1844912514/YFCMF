@@ -74,7 +74,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <label>&nbsp;<span></span></label>
-                            <img class="verify_img form-control" id="verify_img" src="{:UU('index/verify_msg')}" onclick="this.src='{:UU('index/verify_msg')}'" style="cursor:pointer;width:150px;height:48px;padding:0;" title="点击获取">
+                            <img class="verify_img form-control" id="verify_img" src="{:UU('index/verify_msg')}" onClick="this.src='{:UU('index/verify_msg')}'+<in name='Think.config.url_model' value='1,2'>'?'<else />'&'</in>+Math.random()" style="cursor:pointer;width:150px;height:48px;padding:0;" title="点击获取">
                         </div>
                     </div>
                 </fieldset>
@@ -149,7 +149,13 @@ $(function(){
 			});
 		}
 		var $verify_img=$('#verify_img');
-		$verify_img.attr("src",$verify_img.attr("src")+"&refresh="+Math.random()); 
+		var $url=$verify_img.attr("src");
+		if($url.indexOf('?')>0){
+			$url=$url+'&'+Math.random();
+		}else{
+			$url=$url+'?'+Math.random();
+		}
+		$verify_img.attr("src",$url); 
 		return false;
 	}
 });

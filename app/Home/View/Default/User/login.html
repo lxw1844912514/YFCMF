@@ -37,7 +37,7 @@
 													<input type="text" class="form-control" id="verify" placeholder="" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:UU('Login/verify')}" onclick="this.src='{:UU('Login/verify')}'" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:UU('Login/verify')}" onClick="this.src='{:UU('Login/verify')}'+<in name='Think.config.url_model' value='1,2'>'?'<else />'&'</in>+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -92,7 +92,13 @@ $(function(){
 				}
 			});
 			var $verify_img=$('#verify_img');
-			$verify_img.attr("src",$verify_img.attr("src")); 
+			var $url=$verify_img.attr("src");
+			if($url.indexOf('?')>0){
+				$url=$url+'&'+Math.random();
+			}else{
+				$url=$url+'?'+Math.random();
+			}
+			$verify_img.attr("src",$url); 
 		}
 		return false;
 	}
