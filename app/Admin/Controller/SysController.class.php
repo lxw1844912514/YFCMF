@@ -46,6 +46,11 @@ class SysController extends AuthController {
 				$info   =   $upload->upload();
 				if($info) {
 					$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					//写入数据库
+					$data['uptime']=time();
+					$data['filesize']=$info[file0][size];
+					$data['path']=$img_url;
+					M('plug_files')->add($data);
 				}else{
 					$this->error($upload->getError(),U('Sys/sys'),0);//否则就是上传错误，显示错误原因
 				}
@@ -56,7 +61,7 @@ class SysController extends AuthController {
 			}
 			$rst=M('options')->where(array('option_name'=>'site_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
-				F("site_options", $$options);
+				F("site_options", $options);
 				$this->success('站点设置保存成功',U('Sys/sys'),1);
 			}else{
 				$this->error('提交参数不正确',U('Sys/sys'),0);
@@ -82,6 +87,7 @@ class SysController extends AuthController {
 		$url_suffix=I('suffix');
 		sys_config_setbykey('URL_MODEL',$url_model);
 		sys_config_setbykey('URL_HTML_SUFFIX',$url_suffix);
+		clear_cache();
 		$this->success('URL基本设置成功',U('Sys/urlsys'),1);
 	}
 	/*
@@ -240,6 +246,7 @@ class SysController extends AuthController {
 			);
 			$rst=sys_config_setbyarr($data);
 			if($rst){
+				clear_cache();
 				$this->success('设置保存成功',U('oauthsys'),1);
 			}else{
 				$this->error('设置保存失败',U('oauthsys'),0);
@@ -266,6 +273,7 @@ class SysController extends AuthController {
 		}else{
 			$rst=M('options')->where(array('option_name'=>'email_options'))->setField('option_value',json_encode(I('options')));
 			if($rst!==false){
+				F("email_options",null);
 				$this->success('邮箱设置保存成功',U('emailsys'),1);
 			}else{
 				$this->error('提交参数不正确',U('emailsys'),0);
@@ -296,6 +304,7 @@ class SysController extends AuthController {
 			$options['email_tpl']=htmlspecialchars_decode($options['email_tpl']);
 			$rst=M('options')->where(array('option_name'=>'active_options'))->setField('option_value',json_encode($options));
 			if($rst!==false){
+				F("active_options",null);
 				$this->success('帐号激活设置保存成功',U('Sys/activesys'),1);
 			}else{
 				$this->error('提交参数不正确',U('Sys/activesys'),0);
@@ -1214,10 +1223,7 @@ class SysController extends AuthController {
 	}
 
 	public function clear(){
-		remove_dir(TEMP_PATH);
-		remove_dir(CACHE_PATH);
-		remove_dir(DATA_PATH);
-		file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
+		clear_cache();
 		$this->success ('清理缓存成功',1,1);
 	}
     public function maintain()
@@ -1284,7 +1290,13 @@ class SysController extends AuthController {
         $rst=M('admin')->where(array('admin_id'=>session('aid')))->save($data);
         if($rst!==false){
             session('admin_avatar',$imgurl);
-            $this->success ('头像更新成功',U('profile'),1);
+			$url=substr(C('UPLOAD_DIR'),1).'avatar/'.$imgurl;
+			//写入数据库
+			$data['uptime']=time();
+			$data['filesize']=filesize('./'.$url);
+			$data['path']=$url;
+			M('plug_files')->add($data);
+			$this->success ('头像更新成功',U('profile'),1);
         }else{
             $this->error ('头像更新失败',U('profile'),0);
         }

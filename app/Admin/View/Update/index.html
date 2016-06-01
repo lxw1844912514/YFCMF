@@ -1,0 +1,63 @@
+<include file='Common:header' />
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+	<!-- #section:basics/sidebar -->
+	<include file='Common:left' />
+	<!-- /section:basics/sidebar -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<div class="page-content">
+				<div class="page-header">
+					<h1>
+						您当前操作
+						<small>
+							<i class="ace-icon fa fa-angle-double-right"></i>
+							在线更新
+						</small>
+					</h1>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div>
+							<form class="form-horizontal" method="post" action="{:UU()}" >
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否需要备份重要文件： </label>
+								<div class="col-sm-10" style="padding-top:5px;">
+									<input name="backupfile" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+									<span class="lbl"></span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="clearfix form-actions">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button class="btn btn-info" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										开始更新
+									</button>
+								</div>
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div id="show-list" class="col-sm-offset-1 col-sm-11">
+				</div>
+				<!-- <include file='Common:header_nav' /> -->
+
+			</div><!-- /.page-content -->
+		</div>
+	</div><!-- /.main-content -->
+	<include file='Common:footer' />
+<script type="text/javascript">
+var list   = document.getElementById('show-list');
+function showmsg(msg, classname){
+	var li = document.createElement('p');
+	li.innerHTML = msg;
+	classname && li.setAttribute('class', classname);
+	list.appendChild(li);
+	document.scrollTop += 30;
+}
+</script>
+</div><!-- /.main-container -->
+</body>
+</html>

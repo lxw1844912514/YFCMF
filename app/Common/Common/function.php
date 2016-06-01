@@ -8,6 +8,7 @@
 // +----------------------------------------------------------------------
 use Think\Db;
 use Think\Storage;
+use OT\File;
 /**
  * 发送邮件
  * @author rainfer <81818832@qq.com>
@@ -949,7 +950,7 @@ function sys_config_setbykey($key, $value)
             $cfg[$item[0]][$item[1]] = $value;
             break;
     }
-    file_put_contents($file, "<?php\nreturn " . var_export($cfg, true) . ";");
+    return file_put_contents($file, "<?php\nreturn " . var_export($cfg, true) . ";");
 }
 /**
  * 设置全局配置到文件
@@ -1280,4 +1281,200 @@ function get_routes($refresh=false){
 	$data = array('URL_ROUTE_RULES' => $all_routes_d);
 	sys_config_setbyarr($data);
 	return $cache_routes;
+}
+function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $cert_info = array()){
+	$type = strtoupper($type);
+    if ($type == 'GET' && is_array($data)) {
+        $data = http_build_query($data);
+    }
+    $option = array();
+    if ( $type == 'POST' ) {
+        $option[CURLOPT_POST] = 1;
+    }
+    if ($data) {
+        if ($type == 'POST') {
+            $option[CURLOPT_POSTFIELDS] = $data;
+        } elseif ($type == 'GET') {
+            $url = strpos($url, '?') !== false ? $url.'&'.$data :  $url.'?'.$data;
+        }
+    }
+    $option[CURLOPT_URL]            = $url;
+    $option[CURLOPT_FOLLOWLOCATION] = TRUE;
+    $option[CURLOPT_MAXREDIRS]      = 4;
+    $option[CURLOPT_RETURNTRANSFER] = TRUE;
+    $option[CURLOPT_TIMEOUT]        = $timeout;
+    //设置证书信息
+    if(!empty($cert_info) && !empty($cert_info['cert_file'])) {
+        $option[CURLOPT_SSLCERT]       = $cert_info['cert_file'];
+        $option[CURLOPT_SSLCERTPASSWD] = $cert_info['cert_pass'];
+        $option[CURLOPT_SSLCERTTYPE]   = $cert_info['cert_type'];
+    }
+    //设置CA
+    if(!empty($cert_info['ca_file'])) {
+        // 对认证证书来源的检查，0表示阻止对证书的合法性的检查。1需要设置CURLOPT_CAINFO
+        $option[CURLOPT_SSL_VERIFYPEER] = 1;
+        $option[CURLOPT_CAINFO] = $cert_info['ca_file'];
+    } else {
+        // 对认证证书来源的检查，0表示阻止对证书的合法性的检查。1需要设置CURLOPT_CAINFO
+        $option[CURLOPT_SSL_VERIFYPEER] = 0;
+    }
+    $ch = curl_init();
+    curl_setopt_array($ch, $option);
+    $response = curl_exec($ch);
+    $curl_no  = curl_errno($ch);
+    $curl_err = curl_error($ch);
+    curl_close($ch);
+    // error_log
+    if($curl_no > 0) {
+        if($err_msg !== null) {
+            $err_msg = '('.$curl_no.')'.$curl_err;
+        }
+    }
+    return $response;
+}
+function checkVersion(){
+	if(extension_loaded('curl')){
+		$url = 'http://localhost/yfcmf/index.php?m=home&c=upgrade&a=check';
+		$params = array(
+				'version' => C('YFCMF_VERSION'),
+				'domain'  => $_SERVER['HTTP_HOST'],
+		);
+		$vars = http_build_query($params);
+		//获取版本数据
+		$data = go_curl($url, 'post', $vars);
+		if(!empty($data) && strlen($data)<400){
+			return $data;
+		}else{
+			return '';
+		}
+	}else{
+		return '';
+	}
+}
+/**
+ * 实时显示提示信息
+ * @param  string $msg 提示信息
+ * @param  string $class 输出样式（success:成功，error:失败）
+ * @author huajie <banhuajie@163.com>
+ */
+function showMsg($msg, $class = ''){
+	echo "<script type=\"text/javascript\">showmsg(\"{$msg}\",\"{$class}\")</script>";
+	flush();
+	ob_flush();
+}
+/**
+ * 在线更新
+ * @author huajie <banhuajie@163.com>
+ */
+function update($version,$backup=0){
+	//检查是否有正在执行的任务
+	$lock = './data/backup/update.lock';
+	if(is_file($lock)){
+		showMsg('检测到有一个升级任务正在执行，请稍后再试！','error');
+		exit;
+	} else {
+		//创建锁文件
+		@touch($lock);
+	}
+	//PclZip类库不支持命名空间
+	import('OT/PclZip');
+	$date  = date('YmdHis');
+	sleep(1);
+	//初始化信息
+	showMsg('系统原始版本:'.C('YFCMF_VERSION'));
+	showMsg('YFCMF在线更新日志：');
+	showMsg('更新开始时间:'.date('Y-m-d H:i:s'));
+	sleep(1);
+	G('start1');
+	if($backup){
+		//备份重要文件
+		showMsg('开始备份重要程序文件...');
+		$backupallPath = 'data/backup/backupall_'.$date.'.zip';
+		$zip = new \PclZip($backupallPath);
+		$zip->create('app,public,ThinkPHP,.htaccess,admin.php,index.php');
+		showMsg('成功完成重要程序备份,备份文件路径:<a href=\''.__ROOT__.'/'.$backupallPath.'\'>/'.$backupallPath.'</a>, 耗时:'.G('start1','stop1').'s','success');
+	}
+	/* 获取更新包 */
+	$updatedUrl = 'http://localhost/yfcmf/index.php?m=home&c=upgrade&a=get_updates';
+	$params = array('version' => $version);
+	$updates = go_curl($updatedUrl, 'post', http_build_query($params));
+	if(empty($updates)){
+		$this->showMsg('未获取到更新包的下载地址', 'error');
+		exit;
+	}
+	$updates=json_decode($updates,true);
+	foreach($updates as $v){
+		if(!empty($v['ver_downurl'])){
+			showMsg('开始获取'.$v['ver_curr'].'->'.$v['ver_nextname'].'远程更新包...');
+			sleep(1);
+			$zipPath = 'data/backup/update.zip';
+			$downZip = go_curl($v['ver_downurl']);
+			if(empty($downZip)){
+			showMsg('下载更新包出错，请重试或手动下载更新！', 'error');
+			exit;
+			}
+			File::write_file($zipPath, $downZip);
+			showMsg('获取'.$v['ver_curr'].'->'.$v['ver_nextname'].'远程更新包成功,更新包路径：<a href=\''.__ROOT__.'/'.ltrim($zipPath,'.').'\'>/'.$zipPath.'</a>', 'success');
+			sleep(1);
+			showMsg($v['ver_curr'].'->'.$v['ver_nextname'].'更新包解压缩...');
+			sleep(1);
+			$zip = new \PclZip($zipPath);
+			$res = $zip->extract(PCLZIP_OPT_PATH,'./');
+			if($res === 0){
+				showMsg('解压缩失败：'.$zip->errorInfo(true).'------更新终止', 'error');
+				exit;
+			}
+			showMsg($v['ver_curr'].'->'.$v['ver_nextname'].'更新包解压缩成功', 'success');
+			sleep(1);
+			/* 更新数据库 */
+			$updatesql = './update.sql';
+			if(is_file($updatesql))
+			{
+				showMsg('更新数据库开始...');
+				if(file_exists($updatesql))
+				{
+					$Model = M();
+					$sql = File::read_file($updatesql);
+					$sql = str_replace("\r\n", "\n", $sql);
+					//替换表前缀
+					$default_tablepre = "yf_";
+					$tablepre=C('DB_PREFIX');
+					$sql = str_replace(" `{$default_tablepre}", " `{$tablepre}", $sql);
+					foreach(explode(";\n", trim($sql)) as $query)
+					{
+						$Model->query(trim($query));
+					}
+				}
+				@unlink($updatesql);
+				showMsg('更新数据库完毕', 'success');
+			}
+			/* 系统版本号更新 */ //TODO
+			$data = array('YFCMF_VERSION'=>$v['ver_nextname']);
+			$res=sys_config_setbyarr($data);
+			if($res === false){
+				showMsg($v['ver_curr'].'->'.$v['ver_nextname'].'更新系统版本号失败', 'error');
+			}else{
+				showMsg($v['ver_curr'].'->'.$v['ver_nextname'].'更新系统版本号成功', 'success');
+			}
+			sleep(1);
+			showMsg($v['ver_curr'].'->'.$v['ver_nextname'].'更新完成');
+		}
+	}
+	sleep(1);
+	@unlink($lock);
+	@unlink('./data/backup/update.zip');
+	//清理缓存
+	clear_cache();
+	showMsg('##################################################################');
+	showMsg('在线更新全部完成，如有备份，请及时将备份文件移动至非web目录下！', 'success');
+}
+/**
+ * 清除缓存
+ * @author rainfer <81818832@qq.com>
+ */
+function clear_cache(){
+	remove_dir(TEMP_PATH);
+	remove_dir(CACHE_PATH);
+	remove_dir(DATA_PATH);
+	file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 }

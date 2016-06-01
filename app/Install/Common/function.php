@@ -81,16 +81,6 @@ function execute_sql($db,$file,$tablepre){
     
     }
 }
-
-/*
-*	显示提示信息
-*	rainfer <81818832@qq.com>
-*/
-function show_msg($msg, $class = ''){
-    echo "<script type=\"text/javascript\">showmsg(\"{$msg}\", \"{$class}\")</script>";
-    flush();
-    ob_flush();
-}
 /*
 *	更新系统设置
 *	rainfer <81818832@qq.com>
