@@ -7,16 +7,16 @@
   'URL_ROUTER_ON' => true,
   'URL_MAP_RULES' => 
   array (
-    'about' => 'home/list/index?id=1',
-    'contacts' => 'home/list/index?id=10',
     'index' => 'home/index/index',
+    'contacts' => 'home/list/index?id=10',
+    'about' => 'home/list/index?id=1',
   ),
   'URL_ROUTE_RULES' => 
   array (
-    'list/:id\\d' => 'home/list/index',
     'news/:id\\d' => 'home/news/index',
+    'list/:id\\d' => 'home/list/index',
   ),
-  'YFCMF_VERSION' => 'V1.1.0',
+  'YFCMF_VERSION' => 'V1.1.1',
   'THINK_SDK_QQ' => 
   array (
     'APP_KEY' => '203564',

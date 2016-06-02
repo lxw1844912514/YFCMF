@@ -111,8 +111,18 @@ class NewsController extends AuthController {
 				foreach($info as $file){
 					if ($file['key']=='pic_one'){//单图路径数组
 						$img_url=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						//写入数据库
+						$data['uptime']=time();
+						$data['filesize']=$file[size];
+						$data['path']=$img_url;
+						M('plug_files')->add($data);
 					}else{
 						$picall=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						//写入数据库
+						$data['uptime']=time();
+						$data['filesize']=$file[size];
+						$data['path']=$picall;
+						M('plug_files')->add($data);
 						$picall_url=$picall.','.$picall_url;
 					}
 				}
@@ -210,8 +220,18 @@ class NewsController extends AuthController {
 				foreach($info as $file){//获取全部的上传数据
 					if ($file['key']=='pic_one'){//单图路径数组，通过key来判断是单图还是多图
 						$img_url=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						//写入数据库
+						$data['uptime']=time();
+						$data['filesize']=$file[size];
+						$data['path']=$img_url;
+						M('plug_files')->add($data);
 					}else{//多图上传路径
 						$picall=substr(C('UPLOAD_DIR'),1).$file[savepath].$file[savename];//如果上传成功则完成路径拼接
+						//写入数据库
+						$data['uptime']=time();
+						$data['filesize']=$file[size];
+						$data['path']=$picall;
+						M('plug_files')->add($data);
 						$picall_url=$picall.','.$picall_url;//循环拼凑成字符串
 					}
 				}
@@ -421,6 +441,11 @@ class NewsController extends AuthController {
 			$info   =   $upload->upload();
 			if($info) {
 				$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+				//写入数据库
+				$data['uptime']=time();
+				$data['filesize']=$info[file0][size];
+				$data['path']=$img_url;
+				M('plug_files')->add($data);
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
 			}else{
@@ -450,6 +475,7 @@ class NewsController extends AuthController {
                 if(I('menu_type')==3 && $arr['menu_type']==3){
                     M('menu')->where(array('id'=>I('parentid')))->setField('menu_type' , 1);
                 }
+				F('site_nav_main',null);
                 $this->success('菜单添加成功',U('news_menu_list'),1);
             }else{
                 $this->error('菜单添加失败',U('news_menu_list'),0);
@@ -476,6 +502,7 @@ class NewsController extends AuthController {
                             M('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
                         }
                     }
+					F('site_nav_main',null);
                     $this->success('菜单删除成功',U('news_menu_list'),1);
 				}else{
 					$this -> error("菜单删除失败！",U('news_menu_list'),0);
@@ -493,6 +520,7 @@ class NewsController extends AuthController {
                         M('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
                     }
                 }
+				F('site_nav_main',null);
                 $this->success('菜单删除成功',U('news_menu_list'),1);
 			}else{
 				$this -> error("菜单删除失败！",U('news_menu_list'),0);
@@ -510,6 +538,7 @@ class NewsController extends AuthController {
 			foreach ($_POST as $id => $sort){
 				$menu->where(array('id' => $id ))->setField('listorder' , $sort);
 			}
+			F('site_nav_main',null);
 			$this->success('排序更新成功',U('news_menu_list'),1);
 		}
 	}
@@ -521,10 +550,12 @@ class NewsController extends AuthController {
 		if($status==1){
 			$statedata = array('menu_open'=>0);
 			$auth_group=M('menu')->where(array('id'=>$id))->setField($statedata);
+			F('site_nav_main',null);
 			$this->success('状态禁止',1,1);
 		}else{
 			$statedata = array('menu_open'=>1);
 			$auth_group=M('menu')->where(array('id'=>$id))->setField($statedata);
+			F('site_nav_main',null);
 			$this->success('状态开启',1,1);
 		}
 	}
@@ -557,6 +588,11 @@ class NewsController extends AuthController {
 
 				if($info) {
 					$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					//写入数据库
+					$data['uptime']=time();
+					$data['filesize']=$info[file0][size];
+					$data['path']=$img_url;
+					M('plug_files')->add($data);
 				}else{
 					$this->error($upload->getError(),U('news_menu_list'),0);//否则就是上传错误，显示错误原因
 				}
@@ -582,6 +618,7 @@ class NewsController extends AuthController {
 			}
 			$rst=M('menu')->save($data);
 			if($rst!==false){
+				F('site_nav_main',null);
 				$this->success('菜单修改成功',U('news_menu_list'),1);
 			}else{
 				$this->error('菜单修改失败',U('news_menu_list'),0);

@@ -168,20 +168,6 @@ class MemberController extends AuthController {
         }
 	}
 
-	/*
-     * 头像上传，目前不能用
-     */
-	public function member_userpic(){
-		$member_list_id=I('member_list_id');
-		$cm1=I('cm1');
-		$member_list=M('member_list');
-		$sl_date=array(
-			'member_list_id'=>$member_list_id,
-			'member_list_headpic'=>$cm1,
-		);
-		$member_list->save($sl_date);
-	}
-
 	/************************************************会员组列表管理**************************************************/
 	/*
      *会员组显示列表

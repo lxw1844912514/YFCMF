@@ -102,6 +102,7 @@ class CommentController extends AuthController {
 			),
 		);
 		$rst=sys_config_setbyarr($data);
+		clear_cache();
 		if($rst){
 			$this->success('评论设置成功',U('comment_setting'),1);
 		}else{

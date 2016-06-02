@@ -88,6 +88,11 @@ class CenterController extends HomebaseController {
         if($rst!==false){
             session('user_avatar',$imgurl);
 			$this->user['member_list_headpic']=$imgurl;
+			//写入数据库
+			$data['uptime']=time();
+			$data['filesize']=filesize('./'.$url);
+			$data['path']=$url;
+			M('plug_files')->add($data);
             $this->success ('头像更新成功',U('Center/index'),1);
         }else{
             $this->error ('头像更新失败',U('Center/index'),0);

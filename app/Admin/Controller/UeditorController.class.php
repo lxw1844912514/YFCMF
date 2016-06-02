@@ -183,6 +183,11 @@ class UeditorController extends CommonController {
 				$url=$info['upfile']['url'];
 			}else{
 				$url = C("TMPL_PARSE_STRING.__UPLOAD__")."$date/".$info['upfile']['savename'];
+				//写入数据库
+				$data['uptime']=time();
+				$data['filesize']=$size;
+				$data['path']=substr($url,strlen(__ROOT__));// "/data"开头
+				M('plug_files')->add($data);
 			}
 		} else {
 			$state = $upload->getError();
@@ -210,6 +215,11 @@ class UeditorController extends CommonController {
 			if ($savepath) {
 				$state = 'SUCCESS';
 				$url = __ROOT__.'/'.$savepath;
+				//写入数据库
+ 				$file['uptime']=time();
+				$file['filesize']=strlen($img);
+				$file['path']='/'.$savepath;
+				M('plug_files')->add($file); 
 			} else {
 				$state = 'Save scrawl file error!';
 			}
@@ -249,6 +259,11 @@ class UeditorController extends CommonController {
 									'original' => '',
 									'source' => htmlspecialchars($f)
 								);
+								//写入数据库
+								$data['uptime']=time();
+								$data['filesize']=strlen($img);
+								$data['path']='/'.$savepath;
+								M('plug_files')->add($data); 
 							} else {
 								$savelist [] = array(
 								'state' => 'Save remote file error!',

@@ -98,7 +98,13 @@
 									<div class="widget-body">
 										<div class="widget-main">
 											<p class="alert alert-danger sl-line-height25">
-                                                YFCMF版本：{$Think.config.YFCMF_VERSION}<br />
+                                                YFCMF版本：{$Think.config.YFCMF_VERSION} &nbsp;
+												<if condition="empty($ver_last)">
+												<button class="btn btn-xs btn-info">{$ver_str}</button>
+												<else />
+												<a href="{:UU('Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger">{$ver_str}</button></a>
+												</if>
+												<br />
 												框架版本：ThinkPHP{$info.ThinkPHPTYE}&nbsp;&nbsp;上传附件限制：{$info.ONLOAD}<br />
 												系统版本：{$info.RUNTYPE}<br />
 											</p>

@@ -122,6 +122,22 @@ class IndexController extends CommonController {
         }
 		$this->assign('log_size',$log_size);
 		$this->assign('log_file_cnt',$log_file_cnt);
+		//版本检查
+ 		$version=F('ver_last');
+		if(empty($version)){
+			$version = checkVersion();
+			F('ver_last',$version);
+		}
+		$ver_curr=substr(C('YFCMF_VERSION'),1);
+		$ver_last=substr($version,1);
+		if(version_compare($ver_curr,$ver_last)===-1){
+			$ver_str='最新版本V'.$ver_last;
+		}else{
+			$ver_str='已经是最新版本';
+			$ver_last='';
+		}
+		$this->assign('ver_str',$ver_str);
+		$this->assign('ver_last',$ver_last);
 		//渲染模板
 		$this->display();
 	}

@@ -241,7 +241,11 @@ class PlugController extends AuthController {
 			$info   =   $upload->upload();
 			if($info) {
 				$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
-
+				//写入数据库
+				$data['uptime']=time();
+				$data['filesize']=$info[file0][size];
+				$data['path']=$img_url;
+				M('plug_files')->add($data);
 			}elseif(!$file){
 				$img_url='';//否则如果字段为空，表示没有上传任何文件，赋值空
 			}else{
@@ -356,6 +360,11 @@ class PlugController extends AuthController {
 
 				if($info) {
 					$img_url=substr(C('UPLOAD_DIR'),1).$info[file0][savepath].$info[file0][savename];//如果上传成功则完成路径拼接
+					//写入数据库
+					$data['uptime']=time();
+					$data['filesize']=$info[file0][size];
+					$data['path']=$img_url;
+					M('plug_files')->add($data);
 				}else{
 					$this->error($upload->getError(),U('plug_ad_list'),0);//否则就是上传错误，显示错误原因
 				}
