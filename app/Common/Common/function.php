@@ -1334,7 +1334,7 @@ function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $c
 }
 function checkVersion(){
 	if(extension_loaded('curl')){
-		$url = 'http://localhost/yfcmf/index.php?m=home&c=upgrade&a=check';
+		$url = 'http://www.yfcmf.net/index.php?m=home&c=upgrade&a=check';
 		$params = array(
 				'version' => C('YFCMF_VERSION'),
 				'domain'  => $_SERVER['HTTP_HOST'],
@@ -1395,7 +1395,7 @@ function update($version,$backup=0){
 		showMsg('成功完成重要程序备份,备份文件路径:<a href=\''.__ROOT__.'/'.$backupallPath.'\'>/'.$backupallPath.'</a>, 耗时:'.G('start1','stop1').'s','success');
 	}
 	/* 获取更新包 */
-	$updatedUrl = 'http://localhost/yfcmf/index.php?m=home&c=upgrade&a=get_updates';
+	$updatedUrl = 'http://www.yfcmf.net/index.php?m=home&c=upgrade&a=get_updates';
 	$params = array('version' => $version);
 	$updates = go_curl($updatedUrl, 'post', http_build_query($params));
 	if(empty($updates)){
@@ -1442,7 +1442,7 @@ function update($version,$backup=0){
 					$sql = str_replace(" `{$default_tablepre}", " `{$tablepre}", $sql);
 					foreach(explode(";\n", trim($sql)) as $query)
 					{
-						$Model->query(trim($query));
+						$Model->execute(trim($query));
 					}
 				}
 				@unlink($updatesql);
