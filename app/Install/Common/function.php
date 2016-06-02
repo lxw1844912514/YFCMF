@@ -62,7 +62,7 @@ function execute_sql($db,$file,$tablepre){
     $sql = str_replace(" `{$default_tablepre}", " `{$tablepre}", $sql);
     
     //开始安装
-    show_msg('开始安装数据库...');
+    showMsg('开始安装数据库...');
     foreach ($sql as $item) {
         $item = trim($item);
         if(empty($item)) continue;
@@ -71,9 +71,9 @@ function execute_sql($db,$file,$tablepre){
             $table_name = $matches[1];
             $msg  = "创建数据表{$table_name}";
             if(false !== $db->execute($item)){
-                show_msg($msg . ' 完成');
+                showMsg($msg . ' 完成');
             } else {
-                show_msg($msg . ' 失败！', 'error');
+                showMsg($msg . ' 失败！', 'error');
             }
         } else {
             $db->execute($item);
@@ -109,7 +109,7 @@ function update_site_configs($db,$table_prefix){
 helllo;
     $sql="INSERT INTO `{$table_prefix}options` (option_value,option_name) VALUES ('$site_options','site_options')";
     $db->execute($sql);
-    show_msg("网站信息配置成功!");
+    showMsg("网站信息配置成功!");
 }
 /*
 *	创建管理员
@@ -128,7 +128,7 @@ function create_admin_account($db,$table_prefix){
     ('1', '{$username}', '{$password}','{$admin_pwd_salt}','{$create_date}','{$email}', '','',1,'{$ip}', {$create_date}, '', 1);;
 hello;
     $db->execute($sql);
-    show_msg("管理员账号创建成功!");
+    showMsg("管理员账号创建成功!");
 }
 
 
@@ -146,9 +146,9 @@ function create_config($config){
         }
         //写入应用配置文件
         if(file_put_contents( 'data/conf/db.php', $conf)){
-            show_msg('配置文件写入成功');
+            showMsg('配置文件写入成功');
         } else {
-            show_msg('配置文件写入失败！', 'error');
+            showMsg('配置文件写入失败！', 'error');
         }
         return '';
     }
