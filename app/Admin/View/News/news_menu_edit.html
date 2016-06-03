@@ -138,7 +138,7 @@
 										<input type="file" name="file0" id="file0" multiple="multiple"/>
 										选择上传文件
 									</a>
-									&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$menu.menu_img eq ''">__PUBLIC__/img/no_img.jpg<else/>{$menu.menu_img}</if>');" title="还原修改前的图片" class="file">
+									&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$menu.menu_img eq ''">__PUBLIC__/img/no_img.jpg<else/>__ROOT__{$menu.menu_img}</if>');" title="还原修改前的图片" class="file">
 									撤销上传
 									</a>
 

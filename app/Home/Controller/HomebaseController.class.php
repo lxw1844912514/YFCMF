@@ -17,6 +17,7 @@ class HomebaseController extends CommonController{
 		parent::_initialize();
 		$site_options=get_site_options();
 		C('DEFAULT_THEME', $site_options['site_tpl']);
+		$site_options['site_copyright']=htmlspecialchars_decode($site_options['site_copyright']);
 		$this->assign($site_options);
 		$this->theme(C('DEFAULT_THEME'));
 		$this->userid=0;
