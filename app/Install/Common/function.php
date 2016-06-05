@@ -94,17 +94,17 @@ function update_site_configs($db,$table_prefix){
     $site_options=<<<helllo
             {
             		"site_name":"$sitename",
-            		",","site_host":"$siteurl",
-            		",","site_root":"",
-            		":"",":"","site_logo":"/data/upload/2016-05-06/572c6855f09fc.png",
-            		",","site_icp":"",
-            		":"",":"","site_tpl":"Default",
-            		",","site_admin_email":"$email",
-            		",","site_tongji":"",
-            		":"",":"","site_copyright":"",
-            		":"",":"","site_seo_title":"$sitename",
-            		",","site_seo_keywords":"$seo_keywords",
-            		",","site_seo_description":"$seo_description"
+            		"site_host":"$siteurl",
+            		"site_root":"",
+            		"site_logo":"/data/upload/2016-05-06/572c6855f09fc.png",
+            		"site_icp":"",
+            		"site_tpl":"Default",
+            		"site_admin_email":"$email",
+            		"site_tongji":"",
+            		"site_copyright":"",
+            		"site_seo_title":"$sitename",
+            		"site_seo_keywords":"$seo_keywords",
+            		"site_seo_description":"$seo_description"
         }
 helllo;
     $sql="INSERT INTO `{$table_prefix}options` (option_value,option_name) VALUES ('$site_options','site_options')";
@@ -125,7 +125,7 @@ function create_admin_account($db,$table_prefix){
     $sql =<<<hello
     INSERT INTO `{$table_prefix}admin` 
     (admin_id, admin_username, admin_pwd, admin_pwd_salt,admin_changepwd, admin_email, admin_realname, admin_tel, admin_hits, admin_ip, admin_addtime, admin_mdemail, admin_open) VALUES
-    ('1', '1','1','{$username}', ',','{$password}','{$admin_pwd_salt}','{$create_date}','{$email}', ',','','',1,'{$ip}', {$create_date}, '', 1);;
+    ('1', '{$username}', '{$password}','{$admin_pwd_salt}','{$create_date}','{$email}', '','',1,'{$ip}', {$create_date}, '', 1);;
 hello;
     $db->execute($sql);
     showMsg("管理员账号创建成功!");
