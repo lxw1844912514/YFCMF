@@ -601,7 +601,6 @@ function delall(id,url){
 			if(data.status){
 				layer.alert(data.info, {icon: 6}, function(index){
 					layer.close(index);
-					window.location.href=data.url;
 				});
 			} else {
 				layer.alert(data.info, {icon: 5}, function(index){
@@ -617,21 +616,21 @@ function delall(id,url){
 	});
 
 	$export.click(function(){
-		$export.parent().children().addClass("disabled");
-		$export.html("正在发送备份请求...");
+		$export.children().addClass("disabled");
+		$export.children().text("正在发送备份请求...");
 		$.post(
 			$form.attr("action"),
 			$form.serialize(),
 			function(data){
 				if(data.status){
 					tables = data.tables;
-					$export.html(data.info + "开始备份，请不要关闭本页面！");
+					$export.children().text(data.info + "开始备份，请不要关闭本页面！");
 					backup(data.tab);
 					window.onbeforeunload = function(){ return "正在备份数据库，请不要关闭！" }
 				} else {
 					layer.alert(data.info, {icon: 5});
-					$export.parent().children().removeClass("disabled");
-					$export.html("立即备份");
+					$export.children().removeClass("disabled");
+					$export.children().text("立即备份");
 					setTimeout(function(){
 						$('#top-alert').find('button').click();
 						$(that).removeClass('disabled').prop('disabled',false);
@@ -649,16 +648,15 @@ function delall(id,url){
 			if(data.status){
 				showmsg(tab.id, data.info);
 				if(!$.isPlainObject(data.tab)){
-					$export.parent().children().removeClass("disabled");
-					$export.html("备份完成，点击重新备份");
-					window.onbeforeunload = function(){ return null }
-					return;
+					$export.children().removeClass("disabled");
+					$export.children().text("备份完成，点击重新备份");
+					window.onbeforeunload = null;
 				}
 				backup(data.tab, tab.id != data.tab.id);
 			} else {
 				updateAlert(data.info,'alert-error');
-				$export.parent().children().removeClass("disabled");
-				$export.html("立即备份");
+				$export.children().removeClass("disabled");
+				$export.children().text("立即备份");
 				setTimeout(function(){
 					$('#top-alert').find('button').click();
 					$(that).removeClass('disabled').prop('disabled',false);
