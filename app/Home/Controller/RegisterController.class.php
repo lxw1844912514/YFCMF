@@ -9,7 +9,7 @@
 namespace Home\Controller;
 use Home\Controller\HomebaseController;
 use Think\Verify;
-use Org\Util\String;
+use Org\Util\Stringnew;
 class RegisterController extends HomebaseController {
 	
 	function index(){
@@ -73,7 +73,7 @@ class RegisterController extends HomebaseController {
 			if($result){
 				$this->error("用户名或者该邮箱已经存在！",0,0);
 			}else{
-				$member_list_salt=String::randString(10);
+				$member_list_salt=Stringnew::randString(10);
 				$active_options=get_active_options();
 				$sl_data=array(
 					'member_list_username'=>$member_list_username,

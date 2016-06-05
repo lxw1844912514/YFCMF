@@ -9,7 +9,7 @@
 namespace Home\Controller;
 use Home\Controller\HomebaseController;
 use Think\Verify;
-use Org\Util\String;
+use Org\Util\Stringnew;
 class LoginController extends HomebaseController {
 	
 	function index(){
@@ -206,7 +206,7 @@ hello;
 			}else{
 				$password=I('password');
 				$hash=I('hash');
-				$member_list_salt=String::randString(10);
+				$member_list_salt=Stringnew::randString(10);
 				$member_list_pwd=encrypt_password($password,$member_list_salt);
 				$result=$users_model->where(array("user_activation_key"=>$hash))->save(array('member_list_pwd'=>$member_list_pwd,'user_activation_key'=>'','member_list_salt'=>$member_list_salt));
 				if($result){

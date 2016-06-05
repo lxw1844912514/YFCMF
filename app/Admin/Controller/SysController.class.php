@@ -11,7 +11,7 @@ use Common\Controller\AuthController;
 use Think\Db;
 use Think\Auth;
 use OT\Database;
-use Org\Util\String;
+use Org\Util\Stringnew;
 class SysController extends AuthController {
 	//站点设置显示
 	public function sys(){
@@ -786,7 +786,7 @@ class SysController extends AuthController {
 		if ($check_user){
 			$this->error('用户已存在，请重新输入用户名',U('admin_list'),0);
 		}
-		$admin_pwd_salt=String::randString(10);
+		$admin_pwd_salt=Stringnew::randString(10);
 		$sldata=array(
 			'admin_username'=>I('admin_username'),
 			'admin_pwd_salt' => $admin_pwd_salt,
@@ -824,7 +824,8 @@ class SysController extends AuthController {
 		$group_id=I('group_id');
 		$admindata['admin_id']=I('admin_id');
 		if ($admin_pwd){
-			$admin_pwd_salt=String::randString(10);
+			$admin_pwd_salt=Stringnew::randString(10);
+			$admindata['admin_pwd_salt']=$admin_pwd_salt;
 			$admindata['admin_pwd']=encrypt_password(I('admin_pwd'),$admin_pwd_salt);
             $admindata['admin_changepwd']=time();
 		}

@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
 use Common\Controller\AuthController;
-use Org\Util\String;
+use Org\Util\Stringnew;
 class MemberController extends AuthController {
 	/*
      * 用户管理
@@ -48,7 +48,7 @@ class MemberController extends AuthController {
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('member_list'),0);
 		}else{
-			$member_list_salt=String::randString(10);
+			$member_list_salt=Stringnew::randString(10);
 			$sl_data=array(
 				'member_list_groupid'=>I('member_list_groupid'),
 				'member_list_username'=>I('member_list_username'),
@@ -104,7 +104,7 @@ class MemberController extends AuthController {
 
 			$pwd=I('member_list_pwd');
 			if (!empty($pwd)){
-				$member_list_salt=String::randString(10);
+				$member_list_salt=Stringnew::randString(10);
 				$sl_data['member_list_salt']=$member_list_salt;
 				$sl_data['member_list_pwd']=encrypt_password($pwd,$member_list_salt);
 			}
