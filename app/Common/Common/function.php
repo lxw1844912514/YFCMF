@@ -1483,7 +1483,7 @@ function clear_cache(){
  * $str String '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
  * @author rainfer <81818832@qq.com>
  */
- function get_menus_admin($str){
+ function get_menus_admin($str=''){
 	$str=empty($str)?CONTROLLER_NAME.'/'.ACTION_NAME:$str;
 	if(strpos($str,'/')===false){
 		$str.=CONTROLLER_NAME;
