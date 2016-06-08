@@ -3,32 +3,22 @@
 		<div class="">
 			<div id="sidebar2" class="sidebar h-sidebar navbar-collapse collapse collapse_btn">
 				<ul class="nav nav-list header-nav" id="header-nav">
-					<php>
-						$m = M('auth_rule');
-						$dataaa = $m->where(array('pid'=>$id_3['pid'],'status'=>1))->order('sort')->select();
-						foreach ($dataaa as $kkk=>$vvv){
-							if(!$auth->check($vvv['name'], $_SESSION['aid']) && $_SESSION['aid']!= 1){
-							unset($dataaa[$kkk]);
-							}
-						}
-						//无下级菜单,则找兄弟菜单
-						if(empty($dataaa)){
-							$dataaa = $m->where(array('id'=>$id_3['pid']))->order('sort')->find();
-							$dataaa = $m->where(array('pid'=>$dataaa['pid'],'status'=>1))->order('sort')->select();
-							if(!$auth->check($vvv['name'], $_SESSION['aid']) && $_SESSION['aid']!= 1){
-							unset($dataaa[$kkk]);
-							}
-						}
-					</php>
-					<foreach name="dataaa" item="k">
-						<li>
-							<a href="{:U(''.$k['name'].'')}">
-								<o class="font12 <if condition="strtolower(CONTROLLER_NAME.'/'.ACTION_NAME) eq strtolower($k['name'])">rigbg</if>">{$k.title}</o>
-							</a>
-
-							<b class="arrow"></b>
-						</li>
+					<if condition="$id_curr neq ''">
+						<foreach name="menus_child" item="k">
+					<li>
+								<a href="{:U(''.$k['name'].'')}">
+									<o class="font12 <if condition="$id_curr eq $k['id']">rigbg</if>">{$k.title}</o>
+					</a>
+					<b class="arrow"></b>
+					</li>
 					</foreach>
+					<else />
+					<li>
+						<a href="{:U('Index/index')}">
+							<o class="font12">欢迎使用YFCMF后台系统管理</o>
+						</a>
+					</li>
+					</if>
 				</ul><!-- /.nav-list -->
 			</div><!-- .sidebar -->
 		</div>

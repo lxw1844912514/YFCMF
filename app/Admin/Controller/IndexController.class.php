@@ -7,8 +7,8 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
-use Common\Controller\CommonController;
-class IndexController extends CommonController {
+use Common\Controller\AuthController;
+class IndexController extends AuthController {
 	public function index(){
 		//未登录
 		if (empty($_SESSION['aid'])){

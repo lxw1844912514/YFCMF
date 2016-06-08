@@ -1478,3 +1478,28 @@ function clear_cache(){
 	remove_dir(DATA_PATH);
 	file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 }
+/**
+ * 倒推后台菜单数组
+ * $str String '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
+ * @author rainfer <81818832@qq.com>
+ */
+ function get_menus_admin($str){
+	$str=empty($str)?CONTROLLER_NAME.'/'.ACTION_NAME:$str;
+	if(strpos($str,'/')===false){
+		$str.=CONTROLLER_NAME;
+	}
+	$ids=array();
+	$rst=M('auth_rule')->where(array('status'=>1,'name'=>$str))->order('level desc,sort')->limit(1)->select();
+	if($rst){
+		$rst=$rst[0];
+		$ids[]=$rst['id'];
+		$pid=$rst['pid'];
+		while(intval($pid)!=0) {
+			//非顶级
+			$rst=M('auth_rule')->where(array('id'=>$pid))->find();
+			$ids[]=$rst['id'];
+			$pid=$rst['pid'];	
+		} 
+	}
+	return array_reverse($ids);
+}

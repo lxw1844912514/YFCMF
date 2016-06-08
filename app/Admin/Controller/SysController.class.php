@@ -972,6 +972,7 @@ class SysController extends AuthController {
             'rules'=>$imp_rules,
         );
         if($m->save($sldata)!==false){
+			clear_cache();
             $this->success('权限配置成功',U('admin_group_list'),1);
         }else{
             $this->error('权限配置失败',U('admin_group_list'),0);
@@ -1027,6 +1028,7 @@ class SysController extends AuthController {
 				'level'=>$level,
 			);
 			$admin_rule->add($sldata);
+			clear_cache();
 			$this->success('权限添加成功',U('admin_rule_list'),1);
 		}
 	}
@@ -1037,10 +1039,12 @@ class SysController extends AuthController {
 		if($statusone==1){
 			$statedata = array('status'=>0);
 			$auth_group=M('auth_rule')->where(array('id'=>$id))->setField($statedata);
+			clear_cache();
 			$this->success('状态禁止',1,1);
 		}else{
 			$statedata = array('status'=>1);
 			$auth_group=M('auth_rule')->where(array('id'=>$id))->setField($statedata);
+			clear_cache();
 			$this->success('状态开启',1,1);
 		}
 
@@ -1054,6 +1058,7 @@ class SysController extends AuthController {
 			foreach ($_POST as $id => $sort){
 				$auth_rule->where(array('id' => $id ))->setField('sort' , $sort);
 			}
+			clear_cache();
 			$this->success('排序更新成功',U('admin_rule_list'),1);
 		}
 	}
@@ -1100,6 +1105,7 @@ class SysController extends AuthController {
 			//dump($sldata);
 			$rst=$admin_rule->save($sldata);
 			if($rst!==false){
+				clear_cache();
 				$this->success('权限修改成功',U('admin_rule_list'),1);
 			}else{
 				$this->error('权限修改失败',U('admin_rule_list'),0);
@@ -1111,6 +1117,7 @@ class SysController extends AuthController {
         //TODO 自动删除子权限
 		$rst=M('auth_rule')->where(array('id'=>I('id')))->delete();
         if($rst!==false){
+			clear_cache();
             $this->success('权限删除成功',U('admin_rule_list'),1);
         }else{
             $this->error('权限删除失败',U('admin_rule_list'),0);

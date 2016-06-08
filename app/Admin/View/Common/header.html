@@ -35,10 +35,10 @@
 </head>
 
 <body class="no-skin">
-<!-- #section:basics/navbar.layout -->
-<div id="navbar" class="navbar navbar-default    navbar-collapse navbar-fixed-top">
+<!-- 导航栏开始 -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
 	<div class="navbar-container" id="navbar-container">
-		<!-- #section:basics/sidebar.mobile.toggle -->
+		<!-- 导航左侧按钮手机样式开始 -->
 		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 			<span class="sr-only">Toggle sidebar</span>
 
@@ -47,143 +47,43 @@
 			<span class="icon-bar"></span>
 
 			<span class="icon-bar"></span>
-		</button>
-
-		<!-- /section:basics/sidebar.mobile.toggle -->
+		</button><!-- 导航左侧按钮手机样式结束 -->
+		<!-- 导航左侧正常样式开始 -->
 		<div class="navbar-header pull-left">
-			<!-- #section:basics/navbar.layout.brand -->
+			<!-- logo -->
 			<a href="{:U('Index/index')}" class="navbar-brand">
 				<small>
 					<i class="fa fa-leaf"></i>
 					YFCMF系统
 				</small>
 			</a>
+		</div><!-- 导航左侧正常样式结束 -->
 
-			<!-- /section:basics/navbar.layout.brand -->
-
-			<!-- #section:basics/navbar.toggle -->
-			<button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons">
-				<span class="sr-only">Toggle user menu</span>
-                <if condition="$_SESSION['admin_avatar'] neq ''">
-                    <img class="nav-user-photo" src="__UPLOAD__avatar/{$_SESSION['admin_avatar']}" alt="{$_SESSION['admin_username']}" />
-                    <else />
-                    <img class="nav-user-photo" src="__PUBLIC__/img/girl.jpg" alt="{$_SESSION['admin_username']}" />
-                </if>
-			</button>
-
-			<!-- /section:basics/navbar.toggle -->
-		</div>
-
-		<!-- #section:basics/navbar.dropdown -->
-		<div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
+		<!-- 导航栏开始 -->
+		<div class="navbar-buttons navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<li class="transparent"></li>
-				<li class="transparent">
-					<a style="cursor:pointer;" class="dropdown-toggle" href="{:U('Home/index/index')}" target="_blank">前台首页</a>
-				</li>
-				<li class="transparent">
-					<a style="cursor:pointer;" data-info="确定要清理缓存吗？" class="dropdown-toggle confirm-rst-btn" href="{:U('Sys/clear')}">清除缓存</a>
-				</li>
-				<li class="transparent" style="display: none">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="ace-icon fa fa-bell icon-animated-bell"></i>
+				<li class="grey">
+					<a href="{:U('Home/index/index')}" target="_blank">
+						前台首页
 					</a>
-
-					<div class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<div class="tabbable">
-							<ul class="nav nav-tabs">
-								<li class="active">
-									<a data-toggle="tab" href="#navbar-tasks">
-										Tasks
-										<span class="badge badge-danger">4</span>
-									</a>
-								</li>
-
-								<li>
-									<a data-toggle="tab" href="#navbar-messages">
-										Messages
-										<span class="badge badge-danger">5</span>
-									</a>
-								</li>
-							</ul><!-- .nav-tabs -->
-
-							<div class="tab-content">
-								<div id="navbar-tasks" class="tab-pane in active">
-									<ul class="dropdown-menu-right dropdown-navbar dropdown-menu">
-										<li class="dropdown-content">
-											<ul class="dropdown-menu dropdown-navbar">
-												<li>
-													<a href="#">
-														<div class="clearfix">
-															<span class="pull-left">Software Update</span>
-															<span class="pull-right">65%</span>
-														</div>
-
-														<div class="progress progress-mini">
-															<div style="width:65%" class="progress-bar"></div>
-														</div>
-													</a>
-												</li>
-
-											</ul>
-										</li>
-
-										<li class="dropdown-footer">
-											<a href="#">
-												See tasks with details
-												<i class="ace-icon fa fa-arrow-right"></i>
-											</a>
-										</li>
-									</ul>
-								</div><!-- /.tab-pane -->
-
-								<div id="navbar-messages" class="tab-pane">
-									<ul class="dropdown-menu-right dropdown-navbar dropdown-menu">
-										<li class="dropdown-content">
-											<ul class="dropdown-menu dropdown-navbar">
-												<li>
-													<a href="#">
-														<img src="" class="msg-photo" alt="Fred's Avatar" />
-																<span class="msg-body">
-																	<span class="msg-title">
-																		<span class="blue">Fred:</span>
-																		Vestibulum id penatibus et auctor  ...
-																	</span>
-
-																	<span class="msg-time">
-																		<i class="ace-icon fa fa-clock-o"></i>
-																		<span>10:09 am</span>
-																	</span>
-																</span>
-													</a>
-												</li>
-											</ul>
-										</li>
-
-										<li class="dropdown-footer">
-											<a href="inbox.html">
-												See all messages
-												<i class="ace-icon fa fa-arrow-right"></i>
-											</a>
-										</li>
-									</ul>
-								</div><!-- /.tab-pane -->
-							</div><!-- /.tab-content -->
-						</div><!-- /.tabbable -->
-					</div><!-- /.dropdown-menu -->
 				</li>
 
+				<li class="purple">
+					<a data-info="确定要清理缓存吗？" class="confirm-rst-btn" href="{:U('Sys/clear')}">
+						清除缓存
+					</a>
+				</li>
 
-				<!-- #section:basics/navbar.user_menu -->
-				<li class="light-blue">
+				<!-- 用户菜单开始 -->
+				<li class="light-blue dropdown-modal">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 						<if condition="$_SESSION['admin_avatar'] neq ''">
-                            <img class="nav-user-photo" src="__UPLOAD__avatar/{$_SESSION['admin_avatar']}" alt="{$_SESSION['admin_username']}" />
-                        <else />
-                            <img class="nav-user-photo" src="__PUBLIC__/img/girl.jpg" alt="{$_SESSION['admin_username']}" />
-                        </if>
+							<img class="nav-user-photo" src="__UPLOAD__avatar/{$_SESSION['admin_avatar']}" alt="{$_SESSION['admin_username']}" />
+							<else />
+							<img class="nav-user-photo" src="__PUBLIC__/img/girl.jpg" alt="{$_SESSION['admin_username']}" />
+						</if>
 								<span class="user-info">
-									<small>Welcome,</small>
+									<small>欢迎,</small>
 									{$_SESSION['admin_username']}
 								</span>
 
@@ -191,7 +91,6 @@
 					</a>
 
 					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-
 						<li>
 							<a href="{:U('Sys/profile')}">
 								<i class="ace-icon fa fa-user"></i>
@@ -208,12 +107,8 @@
 							</a>
 						</li>
 					</ul>
-				</li>
-
-				<!-- /section:basics/navbar.user_menu -->
+				</li><!-- 用户菜单结束 -->
 			</ul>
-		</div>
-
-		<!-- /section:basics/navbar.dropdown -->
-	</div><!-- /.navbar-container -->
-</div>
+		</div><!-- 导航栏结束 -->
+	</div><!-- 导航栏容器结束 -->
+</div><!-- 导航栏结束 -->

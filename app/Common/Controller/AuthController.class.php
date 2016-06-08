@@ -31,5 +31,49 @@ class AuthController extends CommonController {
 		if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,$_SESSION['aid']) && $_SESSION['aid']!= 1){
 			$this->error('没有权限',0,0);
 		}
+		//获取有权限的菜单tree
+		$menus=F('menus_admin_'.session('aid'));
+		if(empty($menus)){
+			$m = M('auth_rule');
+			$data = $m->where(array('status'=>1))->order('sort')->select();
+			foreach ($data as $k=>$v){
+				if(!$auth->check($v['name'], session('aid')) && session('aid') != 1){
+					unset($data[$k]);
+				}
+			}
+			$menus=node_merge($data);
+			F('menus_admin_'.session('aid'),$menus);
+		}
+		$this->assign('menus',$menus);
+		//当前方法倒推到顶级菜单数组
+		$menus_curr=get_menus_admin();
+		//如果$menus_curr为空,则根据'控制器/方法'取status=0的menu
+		if(empty($menus_curr)){
+			$rst=M('auth_rule')->where(array('status'=>0,'name'=>CONTROLLER_NAME.'/'.ACTION_NAME))->order('level desc,sort')->limit(1)->select();
+			if($rst){
+				$pid=$rst[0]['pid'];
+				//再取父级
+				$rst=M('auth_rule')->where(array('id'=>$pid))->find();
+				$menus_curr=get_menus_admin($rst['name']);
+				$pid=$rst['pid'];
+				$id_curr=$rst['id'];
+			}
+		}
+		$this->assign('menus_curr',$menus_curr);
+		//取当前操作菜单父ID
+		if(count($menus_curr)>=4){
+			$pid=$menus_curr[1];
+			$id_curr=$menus_curr[2];
+		}elseif(count($menus_curr)>=2){
+			$pid=$menus_curr[count($menus_curr)-2];
+			$id_curr=end($menus_curr);
+		}else{
+			$pid='0';
+			$id_curr=(count($menus_curr)>0)?end($menus_curr):'';
+		}
+		//取$pid下子菜单
+		$menus_child=M('auth_rule')->where(array('status'=>1,'pid'=>$pid))->order('sort')->select();
+		$this->assign('menus_child',$menus_child);
+		$this->assign('id_curr',$id_curr);
 	}
 }
