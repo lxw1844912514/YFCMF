@@ -835,8 +835,16 @@ class SysController extends AuthController {
 		$admindata['admin_open']=I('admin_open',0,'intval');
 		$admin_list->save($admindata);
         if($group_id){
-            //修改
-            $rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+			$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->find();
+			if($rst){
+				//修改
+				$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+			}else{
+				//增加
+				$data['uid']=I('admin_id');
+				$data['group_id']=$group_id;
+				$rst=M('auth_group_access')->add($data);
+			}
         }
         if($rst!==false){
             $this->success('管理员修改成功',U('admin_list'),1);
