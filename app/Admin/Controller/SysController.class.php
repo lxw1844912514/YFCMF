@@ -95,6 +95,7 @@ class SysController extends AuthController {
 	 * @author rainfer <81818832@qq.com>
      */
 	public function route_runadd(){
+		$p=I('p',1,'intval');
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('Sys/urlsys',array('p'=>$p)),0);
 		}else{
