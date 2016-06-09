@@ -292,7 +292,7 @@ function checkselectForm(){
 }
 /*************************************************************************** 所有css操作 ********************************************************/
 /* 菜单样式 */
-jQuery(function($) {
+$(function(){
 	//插入header-nav
 	$('#sidebar2').insertBefore('.page-content');
 	$('.navbar-toggle[data-target="#sidebar2"]').insertAfter('#menu-toggler');
@@ -309,7 +309,7 @@ jQuery(function($) {
 			}
 		}
 	}).triggerHandler('settings.ace.two_menu', ['sidebar_fixed' ,$('#sidebar').hasClass('sidebar-fixed')]);
-})
+});
 /* 多选判断 */
 function unselectall(){
 	if(document.myform.chkAll.checked){
