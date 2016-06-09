@@ -199,8 +199,15 @@ class SysController extends AuthController {
 	}
 	//微信设置显示
 	public function wesys(){
-		$sys=M('options')->where(array('option_name'=>'weixin_options'))->getField("option_value");
-		$sys=json_decode($sys,true);
+		$sys=M('options')->where(array('option_name'=>'weixin_options'))->find();
+		if(empty($sys)){
+			$data['option_name']='weixin_options';
+			$data['option_value']='';
+			$data['autoload']=1;
+			M('options')->add($data);
+		}else{
+			$sys=json_decode($sys['option_value'],true);
+		}
 		$this->assign('sys',$sys)->display();
 	}
 
@@ -255,14 +262,14 @@ class SysController extends AuthController {
 	}
 	//发送邮件设置
 	public function emailsys(){
-		$sys=M('options')->where(array('option_name'=>'email_options'))->getField("option_value");
+		$sys=M('options')->where(array('option_name'=>'email_options'))->find();
 		if(empty($sys)){
 			$data['option_name']='email_options';
-			$data['option_value']='{}';
+			$data['option_value']='';
 			$data['autoload']=1;
 			M('options')->add($data);
 		}
-		$sys=json_decode($sys,true);
+		$sys=json_decode($sys['option_value'],true);
 		$this->assign('sys',$sys)->display();
 	}
 
@@ -283,14 +290,14 @@ class SysController extends AuthController {
 
 	//帐号激活设置
 	public function activesys(){
-		$sys=M('options')->where(array('option_name'=>'active_options'))->getField("option_value");
+		$sys=M('options')->where(array('option_name'=>'active_options'))->find();
 		if(empty($sys)){
 			$data['option_name']='active_options';
-			$data['option_value']='{}';
+			$data['option_value']='';
 			$data['autoload']=1;
 			M('options')->add($data);
 		}
-		$sys=json_decode($sys,true);
+		$sys=json_decode($sys['option_value'],true);
 		$this->assign('sys',$sys)->display();
 	}
 
