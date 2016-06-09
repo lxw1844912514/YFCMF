@@ -1,250 +1,228 @@
-<include file='Common:header' />
-<div class="main-container" id="main-container">
-	<include file='Common:left' />
-	<div class="main-content">
-		<div class="main-content-inner">
-			<div class="page-content">
+<extend name="Public/base" />
+<block name="main-content">
+	<div class="page-content">
+		<div class="row">
+			<div class="col-xs-12">
+				<!-- 提示 -->
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+					<i class="ace-icon fa fa-check green"></i>
+					为了您更好的使用本系统，建议屏幕分辨率1280*768以上，并且安装chrome谷歌浏览器 ——— <a href="{:U('Help/soft')}">进入软件下载专区</a>
+				</div>
 				<div class="row">
-					<div class="col-xs-12">
-						<div class="alert alert-block alert-success">
-							<button type="button" class="close" data-dismiss="alert">
-								<i class="ace-icon fa fa-times"></i>
-							</button>
-							<i class="ace-icon fa fa-check green"></i>
-							为了您更好的使用本系统，建议屏幕分辨率1280*768以上，并且安装chrome谷歌浏览器 ——— <a href="{:U('Help/soft')}">进入软件下载专区</a>
+					<div class="space-6"></div>
+					<div class="col-sm-7 infobox-container">
+						<div class="infobox infobox-green col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-folder"></i>
+							</div>
+							<div class="infobox-data">
+								<span class="infobox-data-number">{$tonews_count}</span>
+								<div class="infobox-content">今日普通文章数</div>
+							</div>
+							<div class="stat <if condition='$difday lt 1'>stat-important<else />stat-success</if>">{$difday|round=###,0}%</div>
+						</div>
+						<div class="infobox infobox-blue col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-user"></i>
+							</div>
+							<div class="infobox-data">
+								<span class="infobox-data-number">{$tomembers_count}</span>
+								<div class="infobox-content">今日增加会员</div>
+							</div>
+							<div class="stat <if condition='$difday_m lt 1'>stat-important<else />stat-success</if>">{$difday_m|round=###,0}%</div>
+						</div>
+						<div class="infobox infobox-pink col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-comment"></i>
+							</div>
+							<div class="infobox-data">
+								<span class="infobox-data-number">{$tocoms_count}</span>
+								<div class="infobox-content">今日评论</div>
+							</div>
+							<div class="stat <if condition='$difday_c lt 1'>stat-important<else />stat-success</if>">{$difday_c|round=###,0}%</div>
+						</div>
+						<div class="infobox infobox-orange infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-folder"></i>
+							</div>
+
+							<div class="infobox-data">
+								<div class="infobox-content">总文章数</div>
+								<a href="{:U('News/news_list')}"><div class="infobox-content">{$news_count}</div></a>
+							</div>
+						</div>
+						<div class="infobox infobox-green infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-users"></i>
+							</div>
+							<div class="infobox-data">
+								<div class="infobox-content">总会员数</div>
+								<a href="{:U('Member/member_list')}"><div class="infobox-content">{$members_count}</div></a>
+							</div>
+						</div>
+						<div class="infobox infobox-orange2 infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
+							<div class="infobox-icon">
+								<i class="ace-icon fa fa-comment"></i>
+							</div>
+							<div class="infobox-data">
+								<div class="infobox-content">总评论数</div>
+								<a href="{:U('Comment/comment_list')}"><div class="infobox-content">{$coms_count}</div></a>
+							</div>
 						</div>
 						<div class="row">
-							<div class="space-6"></div>
-							<div class="col-sm-7 infobox-container">
-								<div class="infobox infobox-green col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-folder"></i>
-                                    </div>
-									<div class="infobox-data">
-                                        <span class="infobox-data-number">{$tonews_count}</span>
-                                        <div class="infobox-content">今日普通文章数</div>
-									</div>
-									<div class="stat <if condition='$difday lt 1'>stat-important<else />stat-success</if>">{$difday|round=###,0}%</div>
-								</div>
-								<div class="infobox infobox-blue col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-user"></i>
-									</div>
-									<div class="infobox-data">
-										<span class="infobox-data-number">{$tomembers_count}</span>
-										<div class="infobox-content">今日增加会员</div>
-									</div>
-									<div class="stat <if condition='$difday_m lt 1'>stat-important<else />stat-success</if>">{$difday_m|round=###,0}%</div>
-								</div>
-								<div class="infobox infobox-pink col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-comment"></i>
-									</div>
-									<div class="infobox-data">
-										<span class="infobox-data-number">{$tocoms_count}</span>
-										<div class="infobox-content">今日评论</div>
-									</div>
-                                    <div class="stat <if condition='$difday_c lt 1'>stat-important<else />stat-success</if>">{$difday_c|round=###,0}%</div>
-								</div>
-								<div class="infobox infobox-orange infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-folder"></i>
-									</div>
+							<div class="col-xs-12">
+								<div class="space-6"></div>
+							</div>
+						</div>
+						<div class="widget-box sl-indextop10 text-left">
+							<script src='https://git.oschina.net/rainfer/YFCMF/widget_preview'></script>
+							<style>
+								.pro_name a{color: #4183c4;}
+								.osc_git_title{background-color: #d8e5f1;}
+								.osc_git_box{background-color: #fafafa;}
+								.osc_git_box{border-color: #ddd;}
+								.osc_git_info{color: #666;}
+								.osc_git_main a{color: #4183c4;}
+							</style>
+						</div>
+						<div class="widget-box sl-indextop10 text-left">
+							<div class="widget-header">
+								<h5 class="widget-title"><span style="font-size:14px; font-family:Microsoft YaHei">框架&系统信息</span></h5>
 
-									<div class="infobox-data">
-                                        <div class="infobox-content">总文章数</div>
-                                        <a href="{:U('News/news_list')}"><div class="infobox-content">{$news_count}</div></a>
-									</div>
-								</div>
-								<div class="infobox infobox-green infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-users"></i>
-									</div>
-									<div class="infobox-data">
-                                        <div class="infobox-content">总会员数</div>
-                                        <a href="{:U('Member/member_list')}"><div class="infobox-content">{$members_count}</div></a>
-									</div>
-								</div>
-								<div class="infobox infobox-orange2 infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
-									<div class="infobox-icon">
-										<i class="ace-icon fa fa-comment"></i>
-									</div>
-									<div class="infobox-data">
-										<div class="infobox-content">总评论数</div>
-                                        <a href="{:U('Comment/comment_list')}"><div class="infobox-content">{$coms_count}</div></a>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="space-6"></div>
-									</div>
-								</div>
-								<div class="widget-box sl-indextop10">
-								<script src='https://git.oschina.net/rainfer/YFCMF/widget_preview'></script>
-									<style>
-									.pro_name a{color: #4183c4;}
-									.osc_git_title{background-color: #d8e5f1;}
-									.osc_git_box{background-color: #fafafa;}
-									.osc_git_box{border-color: #ddd;}
-									.osc_git_info{color: #666;}
-									.osc_git_main a{color: #4183c4;}
-									</style>
-								</div>
-								<div class="widget-box sl-indextop10">
-									<div class="widget-header">
-										<h5 class="widget-title"><span style="font-size:14px; font-family:Microsoft YaHei">框架&系统信息</span></h5>
-
-									</div>
-									<div class="widget-body">
-										<div class="widget-main">
-											<p class="alert alert-danger sl-line-height25">
-                                                YFCMF版本：{$Think.config.YFCMF_VERSION} &nbsp;
-												<if condition="empty($ver_last)">
-												<button class="btn btn-xs btn-info">{$ver_str}</button>
-												<else />
-												<a href="{:UU('Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger">{$ver_str}</button></a>
-												</if>
-												<br />
-												框架版本：ThinkPHP{$info.ThinkPHPTYE}&nbsp;&nbsp;上传附件限制：{$info.ONLOAD}<br />
-												系统版本：{$info.RUNTYPE}<br />
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="widget-box sl-indextop10">
-									<div class="widget-header">
-										<h5 class="widget-title"><span style="font-size:14px; font-family:Microsoft YaHei">开发团队&贡献者</span></h5>
-									</div>
-									<div class="widget-body">
-										<div class="widget-main">
-											<p class="alert alert-info sl-line-height25">
-												YFCMF：<a href="http://www.rainfer.cn" target="_blank" alt="RainferCMF">www.rainfer.cn</a>
-												<br />
-												开发团队：Rainfer（<i class="ace-icon fa fa-qq"></i>:81818832）、Kenan2726（<i class="ace-icon fa fa-qq"></i>:86301216）<br />
-											</p>
-											<p class="alert alert-success">贡献者：
-												<a>slackck</a>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div><!-- col-sm-7 -->
-							<div class="col-sm-5">
-								<!-- 安全检测开始 -->
-								<div class="panel <if condition="$system_safe">panel-default<else />panel-danger</if>">
-								<div class="panel-heading">
-									<i class="ace-icon fa fa-bolt"></i>
-									<span class="icon-dashboard"></span> 系统安全检测
-								</div>
-								<div class="panel-body">
-									<if condition="$system_safe">
-										<p class="text-success"><span class="glyphicon glyphicon-ok-sign"></span> 当前系统安全！</p>
-									</if>
-									<if condition="$weak_setting_db_password">
-										<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 数据库连接密码为弱密码，安全起见，增强密码！</p>
-									</if>
-									<if condition="$weak_setting_admin_password">
-										<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 检测到您的后台登录密码为弱密码！</p>
-									</if>
-									<if condition="$danger_mode_debug">
-										<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span> 当前系统运行在调试模式，可能会影响运行性能及安全！</p>
-									</if>
-									<if condition="$weak_setting_admin_last_change_password">
-										<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  您太久没有更换登陆密码了，请定期更换后台登陆密码！</p>
-									</if>
-									<!--[if lte IE 8]>
-									<p class="text-warning">
-										<span class="glyphicon glyphicon-info-sign"></span> 浏览器版本过低！
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<p class="alert alert-danger sl-line-height25">
+										YFCMF版本：{$Think.config.YFCMF_VERSION} &nbsp;
+										<if condition="empty($ver_last)">
+											<button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check"></i>{$ver_str}</button>
+										<else />
+											<a href="{:UU('Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-bolt bigger-110"></i>{$ver_str}</button></a>
+										</if>
+										<br />
+										框架版本：ThinkPHP{$info.ThinkPHPTYE}&nbsp;&nbsp;上传附件限制：{$info.ONLOAD}<br />
+										系统版本：{$info.RUNTYPE}<br />
 									</p>
-									<![endif]-->
 								</div>
+							</div>
+						</div>
+						<div class="widget-box sl-indextop10 text-left">
+							<div class="widget-header">
+								<h5 class="widget-title"><span style="font-size:14px; font-family:Microsoft YaHei">开发团队&贡献者</span></h5>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<p class="alert alert-info sl-line-height25">
+										YFCMF：<a href="http://www.rainfer.cn" target="_blank" alt="RainferCMF">www.rainfer.cn</a>
+										<br />
+										开发团队：Rainfer（<i class="ace-icon fa fa-qq"></i>:81818832）、Kenan2726（<i class="ace-icon fa fa-qq"></i>:86301216）<br />
+									</p>
+									<p class="alert alert-success">贡献者：
+										<a>slackck</a>
+									</p>
 								</div>
-							<!-- 安全检测结束 -->
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<i class="ace-icon fa fa-wrench"></i>
-									<span class="icon-desktop"></span> 日常维护                    
-								</div>
-								<table class="table">
+							</div>
+						</div>
+					</div>
+
+					<div class="vspace-12-sm"></div>
+
+					<div class="col-sm-5">
+						<!-- 安全检测开始 -->
+						<div class="panel <if condition="$system_safe">panel-default<else />panel-danger</if>">
+						<div class="panel-heading">
+							<i class="ace-icon fa fa-bolt"></i>
+							<span class="icon-dashboard"></span> 系统安全检测
+						</div>
+						<div class="panel-body">
+							<if condition="$system_safe">
+								<p class="text-success"><span class="glyphicon glyphicon-ok-sign"></span> 当前系统安全！</p>
+							</if>
+							<if condition="$weak_setting_db_password">
+								<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 数据库连接密码为弱密码，安全起见，增强密码！</p>
+							</if>
+							<if condition="$weak_setting_admin_password">
+								<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 检测到您的后台登录密码为弱密码！</p>
+							</if>
+							<if condition="$danger_mode_debug">
+								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span> 当前系统运行在调试模式，可能会影响运行性能及安全！</p>
+							</if>
+							<if condition="$weak_setting_admin_last_change_password">
+								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  您太久没有更换登陆密码了，请定期更换后台登陆密码！</p>
+							</if>
+							<!--[if lte IE 8]>
+							<p class="text-warning">
+								<span class="glyphicon glyphicon-info-sign"></span> 浏览器版本过低！
+							</p>
+							<![endif]-->
+						</div>
+					</div>
+					<!-- 安全检测结束 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<i class="ace-icon fa fa-wrench"></i>
+							<span class="icon-desktop"></span> 日常维护
+						</div>
+						<table class="table">
+							<tbody>
+							<tr>
+								<td colspan="2">
+									<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default">下载日志</a>
+									<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default">查看日志</a>
+									<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn">清除日志</a>
+									<if condition="$debug">
+										<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn">关闭调试</a>
+										<else />
+										<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn">打开调试</a>
+									</if>
+								</td>
+							</tr>
+							<tr>
+								<td>日志大小 : {$log_size|format_bytes}</td>
+								<td>日志数 : {$log_file_cnt}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- 文章排行开始 -->
+					<div class="widget-box widget-color-blue">
+						<div class="widget-header">
+							<h5 class="widget-title bigger lighter sl-font14">
+								<i class="ace-icon fa fa-table"></i>
+								<span style="font-size:14px; font-family:Microsoft YaHei">热门文章排行</span>
+							</h5>
+						</div>
+						<div class="widget-body">
+							<div class="widget-main no-padding">
+								<table class="table table-striped table-bordered table-hover">
+									<thead class="thin-border-bottom">
+									<tr>
+										<th width="68%">标题</th>
+										<th width="17%"><em>点击数</em></th>
+									</tr>
+									</thead>
 									<tbody>
+									<php>
+										$color=array("badge badge-pink","badge badge-yellow","badge badge-danger","badge badge-warning","badge badge-success","badge badge-inverse","badge badge-purple","badge badge-info","badge badge-grey","badge");
+									</php>
+									<foreach name="news_list" item="v" key="k">
 										<tr>
-											<td colspan="2">
-												<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default">下载日志</a>
-												<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default">查看日志</a>
-												<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn">清除日志</a>
-												<if condition="$debug">
-												<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn">关闭调试</a>
-												<else />
-												<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn">打开调试</a>
-												</if>
-											</td>
+											<td height="25"><span class="{$color[$k]}">{$k+1}</span><a href="{:U('Home/News/index',array('id'=>$v['n_id']))}" target="_blank">{$v.news_title}</a></td>
+											<td>{$v.news_hits}</td>
 										</tr>
-										<tr>
-											<td>日志大小 : {$log_size|format_bytes}</td>
-											<td>日志数 : {$log_file_cnt}</td>
-										</tr>
+									</foreach>
 									</tbody>
 								</table>
 							</div>
-							<!-- 文章排行开始 -->
-							<div class="widget-box widget-color-blue">
-								<div class="widget-header">
-									<h5 class="widget-title bigger lighter sl-font14">
-										<i class="ace-icon fa fa-table"></i>
-										<span style="font-size:14px; font-family:Microsoft YaHei">热门文章排行</span>
-									</h5>
-								</div>
-								<div class="widget-body">
-									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover">
-											<thead class="thin-border-bottom">
-											<tr>
-												<th width="68%">标题</th>
-												<th width="17%"><em>点击数</em></th>
-											</tr>
-											</thead>
-											<tbody>
-											<php>
-												$color=array("badge badge-pink","badge badge-yellow","badge badge-danger","badge badge-warning","badge badge-success","badge badge-inverse","badge badge-purple","badge badge-info","badge badge-grey","badge");
-											</php>
-											<foreach name="news_list" item="v" key="k">
-												<tr>
-													<td height="25"><span class="{$color[$k]}">{$k+1}</span><a href="{:U('Home/News/index',array('id'=>$v['n_id']))}" target="_blank">{$v.news_title}</a></td>
-													<td>{$v.news_hits}</td>
-												</tr>
-											</foreach>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							<!-- 文章排行结束 -->
-						</div><!-- col-sm-5 -->
-					</div><!-- row -->
-					<style>
-						.font12{ font-size:14px;}
-					</style>
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="hidden">
-								<div id="sidebar2" class="sidebar h-sidebar navbar-collapse collapse menu-min">
-									<ul class="nav nav-list">
-										<li>
-											<a href="{:U('Index/index')}">
-												<o class="font12">欢迎使用YFCMF后台系统管理</o>
-											</a>
-										</li>
-									</ul><!-- /.nav-list -->
-								</div><!-- .sidebar -->
-							</div>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-				</div><!-- col-xs-12 -->
-			</div><!-- row -->
-		</div><!-- /.page-content -->
-	</div><!-- main-content-inner -->
-</div><!-- /.main-content -->
-<include file='Common:footer' />
-</div><!-- /.main-container -->
-</body>
-</html>
+						</div>
+					</div>
+					<!-- 文章排行结束 -->
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.col -->
+	</div><!-- /.row -->
+	</div>
+</block>

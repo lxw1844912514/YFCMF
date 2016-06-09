@@ -2,6 +2,13 @@
 <html>
 <head>
 <include file="Public:head" />
+<!--[if !IE]> -->
+<script src="__PUBLIC__/others/jquery.min-2.2.1.js"></script>
+<!-- <![endif]-->
+<!-- 如果为IE,则引入jq1.12.1 -->
+<!--[if IE]>
+<script src="__PUBLIC__/others/jquery.min-1.12.1.js"></script>
+<![endif]-->
 </head>
 <body>
 	<div class="wrap">
@@ -132,9 +139,8 @@
 				</div>
 			</form>
 		</section>
-		<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
-		<script src="__PUBLIC__/assets/js/validate.js"></script>
-		<script src="__PUBLIC__/assets/js/ajaxForm.js"></script>
+		<script src="__PUBLIC__/install/js/validate.js"></script>
+		<script src="__PUBLIC__/install/js/ajaxForm.js"></script>
 		<script>
 			function TestDbPwd() {
 				var dbHost = $('#dbhost').val();

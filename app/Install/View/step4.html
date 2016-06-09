@@ -2,7 +2,13 @@
 <html>
 <head>
 <include file="Public:head" />
-<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
+<!--[if !IE]> -->
+<script src="__PUBLIC__/others/jquery.min-2.2.1.js"></script>
+<!-- <![endif]-->
+<!-- 如果为IE,则引入jq1.12.1 -->
+<!--[if IE]>
+<script src="__PUBLIC__/others/jquery.min-1.12.1.js"></script>
+<![endif]-->
 </head>
 <body>
 	<div class="wrap">

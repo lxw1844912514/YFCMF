@@ -19,22 +19,21 @@ class AuthController extends CommonController {
 			$this->error('还没有登录，正在跳转到登录页',U('Admin/Login/login'));
 		}
 		//已登录，不需要验证的权限
-		$not_check = array('Sys/clear');//不需要检测的控制器/方法
+		$not_check = array('Sys/clear','Index/index');//不需要检测的控制器/方法
 
 		//当前操作的请求                 模块名/方法名
-		//在不需要验证权限时
-		if(in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check)){
-			return true;
-		}
-		//下面代码动态判断权限
-		$auth = new Auth();
-		if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,$_SESSION['aid']) && $_SESSION['aid']!= 1){
-			$this->error('没有权限',0,0);
+		//不在不需要检测的控制器/方法时,检测
+		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check)){
+			$auth = new Auth();
+			if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,session('aid')) && session('aid')!= 1){
+				$this->error('没有权限',0,0);
+			}
 		}
 		//获取有权限的菜单tree
 		$menus=F('menus_admin_'.session('aid'));
 		if(empty($menus)){
 			$m = M('auth_rule');
+			$auth = new Auth();
 			$data = $m->where(array('status'=>1))->order('sort')->select();
 			foreach ($data as $k=>$v){
 				if(!$auth->check($v['name'], session('aid')) && session('aid') != 1){
@@ -55,8 +54,6 @@ class AuthController extends CommonController {
 				//再取父级
 				$rst=M('auth_rule')->where(array('id'=>$pid))->find();
 				$menus_curr=get_menus_admin($rst['name']);
-				$pid=$rst['pid'];
-				$id_curr=$rst['id'];
 			}
 		}
 		$this->assign('menus_curr',$menus_curr);
