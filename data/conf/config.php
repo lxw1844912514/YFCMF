@@ -3,20 +3,20 @@
   'URL_CASE_INSENSITIVE' => true,
   'DB_LIKE_FIELDS' => 'news_title|news_content|news_flag|news_open',
   'URL_MODEL' => 0,
-  'URL_HTML_SUFFIX' => 'html',
+  'URL_HTML_SUFFIX' => '',
   'URL_ROUTER_ON' => true,
   'URL_MAP_RULES' => 
   array (
-    'index' => 'home/index/index',
-    'contacts' => 'home/list/index?id=10',
     'about' => 'home/list/index?id=1',
+    'contacts' => 'home/list/index?id=10',
+    'index' => 'home/index/index',
   ),
   'URL_ROUTE_RULES' => 
   array (
-    'news/:id\\d' => 'home/news/index',
     'list/:id\\d' => 'home/list/index',
+    'news/:id\\d' => 'home/news/index',
   ),
-  'YFCMF_VERSION' => 'V1.1.1',
+  'YFCMF_VERSION' => 'V1.2.0',
   'THINK_SDK_QQ' => 
   array (
     'APP_KEY' => '203564',
