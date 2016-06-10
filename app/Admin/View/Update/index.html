@@ -1,11 +1,5 @@
-<include file='Common:header' />
-<!-- /section:basics/navbar.layout -->
-<div class="main-container" id="main-container">
-	<!-- #section:basics/sidebar -->
-	<include file='Common:left' />
-	<!-- /section:basics/sidebar -->
-	<div class="main-content">
-		<div class="main-content-inner">
+<extend name="Public/base" />
+<block name="main-content">
 			<div class="page-content">
 				<div class="page-header">
 					<h1>
@@ -42,12 +36,9 @@
 				</div>
 				<div id="show-list" class="col-sm-offset-1 col-sm-11">
 				</div>
-				<!-- <include file='Common:header_nav' /> -->
-
-			</div><!-- /.page-content -->
-		</div>
-	</div><!-- /.main-content -->
-	<include file='Common:footer' />
+			</div>
+</block>
+<block name="scripts">
 <script type="text/javascript">
 var list   = document.getElementById('show-list');
 function showmsg(msg, classname){
@@ -58,6 +49,4 @@ function showmsg(msg, classname){
 	document.scrollTop += 30;
 }
 </script>
-</div><!-- /.main-container -->
-</body>
-</html>
+</block>

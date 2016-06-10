@@ -7,8 +7,8 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
-use Common\Controller\CommonController;
-class IndexController extends CommonController {
+use Common\Controller\AuthController;
+class IndexController extends AuthController {
 	public function index(){
 		//未登录
 		if (empty($_SESSION['aid'])){
@@ -106,6 +106,7 @@ class IndexController extends CommonController {
         if ($this->weak_setting_admin_last_change_password) {
             $this->system_safe = false;
         }
+		$this->assign('system_pageshow',C('SHOW_PAGE_TRACE'));
 		$debug=APP_DEBUG;
 		$this->assign('debug',$debug);
 		$log_size = 0;

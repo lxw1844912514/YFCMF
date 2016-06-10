@@ -7,9 +7,9 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
-use Common\Controller\CommonController;
+use Common\Controller\AuthController;
 use OT\File;
-class UpdateController extends CommonController {
+class UpdateController extends AuthController {
 	/**
 	 * 初始化页面
 	 */

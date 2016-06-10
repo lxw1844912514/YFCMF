@@ -95,6 +95,7 @@ class SysController extends AuthController {
 	 * @author rainfer <81818832@qq.com>
      */
 	public function route_runadd(){
+		$p=I('p',1,'intval');
 		if (!IS_AJAX){
 			$this->error('提交方式不正确',U('Sys/urlsys',array('p'=>$p)),0);
 		}else{
@@ -199,8 +200,15 @@ class SysController extends AuthController {
 	}
 	//微信设置显示
 	public function wesys(){
-		$sys=M('options')->where(array('option_name'=>'weixin_options'))->getField("option_value");
-		$sys=json_decode($sys,true);
+		$sys=M('options')->where(array('option_name'=>'weixin_options'))->find();
+		if(empty($sys)){
+			$data['option_name']='weixin_options';
+			$data['option_value']='';
+			$data['autoload']=1;
+			M('options')->add($data);
+		}else{
+			$sys=json_decode($sys['option_value'],true);
+		}
 		$this->assign('sys',$sys)->display();
 	}
 
@@ -255,14 +263,14 @@ class SysController extends AuthController {
 	}
 	//发送邮件设置
 	public function emailsys(){
-		$sys=M('options')->where(array('option_name'=>'email_options'))->getField("option_value");
+		$sys=M('options')->where(array('option_name'=>'email_options'))->find();
 		if(empty($sys)){
 			$data['option_name']='email_options';
-			$data['option_value']='{}';
+			$data['option_value']='';
 			$data['autoload']=1;
 			M('options')->add($data);
 		}
-		$sys=json_decode($sys,true);
+		$sys=json_decode($sys['option_value'],true);
 		$this->assign('sys',$sys)->display();
 	}
 
@@ -283,14 +291,14 @@ class SysController extends AuthController {
 
 	//帐号激活设置
 	public function activesys(){
-		$sys=M('options')->where(array('option_name'=>'active_options'))->getField("option_value");
+		$sys=M('options')->where(array('option_name'=>'active_options'))->find();
 		if(empty($sys)){
 			$data['option_name']='active_options';
-			$data['option_value']='{}';
+			$data['option_value']='';
 			$data['autoload']=1;
 			M('options')->add($data);
 		}
-		$sys=json_decode($sys,true);
+		$sys=json_decode($sys['option_value'],true);
 		$this->assign('sys',$sys)->display();
 	}
 
@@ -835,8 +843,16 @@ class SysController extends AuthController {
 		$admindata['admin_open']=I('admin_open',0,'intval');
 		$admin_list->save($admindata);
         if($group_id){
-            //修改
-            $rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+			$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->find();
+			if($rst){
+				//修改
+				$rst=M('auth_group_access')->where(array('uid'=>I('admin_id')))->setField('group_id',$group_id);
+			}else{
+				//增加
+				$data['uid']=I('admin_id');
+				$data['group_id']=$group_id;
+				$rst=M('auth_group_access')->add($data);
+			}
         }
         if($rst!==false){
             $this->success('管理员修改成功',U('admin_list'),1);
@@ -972,6 +988,7 @@ class SysController extends AuthController {
             'rules'=>$imp_rules,
         );
         if($m->save($sldata)!==false){
+			clear_cache();
             $this->success('权限配置成功',U('admin_group_list'),1);
         }else{
             $this->error('权限配置失败',U('admin_group_list'),0);
@@ -1027,6 +1044,7 @@ class SysController extends AuthController {
 				'level'=>$level,
 			);
 			$admin_rule->add($sldata);
+			clear_cache();
 			$this->success('权限添加成功',U('admin_rule_list'),1);
 		}
 	}
@@ -1037,10 +1055,12 @@ class SysController extends AuthController {
 		if($statusone==1){
 			$statedata = array('status'=>0);
 			$auth_group=M('auth_rule')->where(array('id'=>$id))->setField($statedata);
+			clear_cache();
 			$this->success('状态禁止',1,1);
 		}else{
 			$statedata = array('status'=>1);
 			$auth_group=M('auth_rule')->where(array('id'=>$id))->setField($statedata);
+			clear_cache();
 			$this->success('状态开启',1,1);
 		}
 
@@ -1054,6 +1074,7 @@ class SysController extends AuthController {
 			foreach ($_POST as $id => $sort){
 				$auth_rule->where(array('id' => $id ))->setField('sort' , $sort);
 			}
+			clear_cache();
 			$this->success('排序更新成功',U('admin_rule_list'),1);
 		}
 	}
@@ -1100,6 +1121,7 @@ class SysController extends AuthController {
 			//dump($sldata);
 			$rst=$admin_rule->save($sldata);
 			if($rst!==false){
+				clear_cache();
 				$this->success('权限修改成功',U('admin_rule_list'),1);
 			}else{
 				$this->error('权限修改失败',U('admin_rule_list'),0);
@@ -1111,6 +1133,7 @@ class SysController extends AuthController {
         //TODO 自动删除子权限
 		$rst=M('auth_rule')->where(array('id'=>I('id')))->delete();
         if($rst!==false){
+			clear_cache();
             $this->success('权限删除成功',U('admin_rule_list'),1);
         }else{
             $this->error('权限删除失败',U('admin_rule_list'),0);
@@ -1265,6 +1288,26 @@ class SysController extends AuthController {
 					@unlink($file);
 				}
 				$this->success('已关闭调试',U('Index/index'),1);
+                break;
+			case 'trace_on' :
+				$data = array('SHOW_PAGE_TRACE'=>true);
+				$res=sys_config_setbyarr($data);
+				if($res === false){
+					$this->error('打开Trace失败',U('Index/index'),0);
+				}else{
+					clear_cache();
+					$this->success('已打开Trace',U('Index/index'),1);
+				}
+                break;
+			case 'trace_off' :
+				$data = array('SHOW_PAGE_TRACE'=>false);
+				$res=sys_config_setbyarr($data);
+				if($res === false){
+					$this->error('关闭Trace失败',U('Index/index'),0);
+				}else{
+					clear_cache();
+					$this->success('已关闭Trace',U('Index/index'),1);
+				}
                 break;
         }
     }

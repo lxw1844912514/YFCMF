@@ -1478,3 +1478,44 @@ function clear_cache(){
 	remove_dir(DATA_PATH);
 	file_exists($file = RUNTIME_PATH . 'common~runtime.php') && @unlink($file);
 }
+/**
+ * 倒推后台菜单数组
+ * $str String '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
+ * $status int 获取的menu是否含全部状态，还是仅status=1。不为0和1时,不限制
+ * $arr boolean 是否返回全部数据数组，默认假，仅返回ids
+ * @author rainfer <81818832@qq.com>
+ */
+ function get_menus_admin($str='',$status=1,$arr=false){
+	$str=empty($str)?CONTROLLER_NAME.'/'.ACTION_NAME:$str;
+	if(strpos($str,'/')===false){
+		$str.=CONTROLLER_NAME;
+	}
+	$status=empty($status)?1:$status;
+	$arr=empty($arr)?false:true;
+	$where['name']=$str;
+	if($status==0 || $status==1){
+		$where['status']=$status;
+	}
+	$arr_rst=array();
+	$rst=M('auth_rule')->where($where)->order('level desc,sort')->limit(1)->select();
+	if($rst){
+		$rst=$rst[0];
+		if($arr){
+			$arr_rst[]=$rst;
+		}else{
+			$arr_rst[]=$rst['id'];
+		}
+		$pid=$rst['pid'];
+		while(intval($pid)!=0) {
+			//非顶级
+			$rst=M('auth_rule')->where(array('id'=>$pid))->find();
+			if($arr){
+				$arr_rst[]=$rst;
+			}else{
+				$arr_rst[]=$rst['id'];
+			}
+			$pid=$rst['pid'];	
+		} 
+	}
+	return array_reverse($arr_rst);
+}

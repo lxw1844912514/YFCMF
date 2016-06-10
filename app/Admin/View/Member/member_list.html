@@ -1,167 +1,150 @@
-<include file='Common:header' />
+<extend name="Public/base" />
+<block name="main-content">
+	<div class="page-content">
 
-<!-- /section:basics/navbar.layout -->
-<div class="main-container" id="main-container">
+		<div class="row maintop">
+			<div class="col-xs-12 col-sm-1">
+				<a href="{:U('member_add')}">
+					<button class="btn btn-xs btn-danger">
+						<i class="ace-icon fa fa-bolt bigger-110"></i>
+						添加会员
+					</button>
+				</a>
+			</div>
 
-	<!-- #section:basics/sidebar -->
-
-	<include file='Common:left' />
-	<!-- /section:basics/sidebar -->
-	<div class="main-content">
-		<div class="main-content-inner">
-			<div class="page-content">
-
-				<div class="row maintop">
-					<div class="col-xs-12 col-sm-1">
-						<a href="{:U('member_add')}">
-							<button class="btn btn-xs btn-danger">
-								<i class="ace-icon fa fa-bolt bigger-110"></i>
-								添加会员
-							</button>
-						</a>
-					</div>
-
-					<div class="col-xs-12 col-sm-3">
-						<form name="admin_list_sea" class="form-search" method="post" action="{:U('member_list')}">
-							<div class="input-group">
+			<div class="col-xs-12 col-sm-3">
+				<form name="admin_list_sea" class="form-search" method="post" action="{:U('member_list')}">
+					<div class="input-group">
 										<span class="input-group-addon">
 											<i class="ace-icon fa fa-check"></i>
 										</span>
-								<input type="text" name="key" id="key" class="form-control search-query admin_sea" value="{$val}" placeholder="输入用户名或者邮箱" />
+						<input type="text" name="key" id="key" class="form-control search-query admin_sea" value="{$val}" placeholder="输入用户名或者邮箱" />
 										<span class="input-group-btn">
 											<button type="submit" class="btn btn-xs  btn-purple">
 												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 												搜索
 											</button>
 										</span>
-							</div>
-						</form>
 					</div>
-					<div class="input-group-btn">
-						<a href="{:U('member_list')}">
-							<button type="button" class="btn btn-xs  btn-purple">
-								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
-								显示全部
-							</button>
-						</a>
-					</div>
-				</div>
+				</form>
+			</div>
+			<div class="input-group-btn">
+				<a href="{:U('member_list')}">
+					<button type="button" class="btn btn-xs  btn-purple">
+						<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+						显示全部
+					</button>
+				</a>
+			</div>
+		</div>
 
-				<div class="row">
-					<div class="col-xs-12">
-						<div>
-							<table class="table table-striped table-bordered table-hover" id="dynamic-table">
-								<thead>
-								<tr>
-									<th class="hidden-xs">ID</th>
-									<th>用户名</th>
-									<th>昵称/邮箱</th>
-									<th class="hidden-sm hidden-xs">来源</th>
-									<th class="hidden-sm hidden-xs">性别</th>
-									<th class="hidden-sm hidden-xs">会员用户组</th>
-									<th class="hidden-sm hidden-xs">积分</th>
-									<th class="hidden-sm hidden-xs">添加时间</th>
-									<th class="hidden-xs">状态</th>
-									<th class="hidden-xs">激活</th>
-									<th style="border-right:#CCC solid 1px;">操作</th>
-								</tr>
-								</thead>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+						<thead>
+						<tr>
+							<th class="hidden-xs">ID</th>
+							<th>用户名</th>
+							<th>昵称/邮箱</th>
+							<th class="hidden-sm hidden-xs">来源</th>
+							<th class="hidden-sm hidden-xs">性别</th>
+							<th class="hidden-sm hidden-xs">会员用户组</th>
+							<th class="hidden-sm hidden-xs">积分</th>
+							<th class="hidden-sm hidden-xs">添加时间</th>
+							<th class="hidden-xs">状态</th>
+							<th class="hidden-xs">激活</th>
+							<th style="border-right:#CCC solid 1px;">操作</th>
+						</tr>
+						</thead>
 
-								<tbody>
+						<tbody>
 
-								<foreach name="member_list" item="v">
-									<tr>
-										<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
-										<td>{$v.member_list_username}</td>
-										<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
-										<td class="hidden-sm hidden-xs">{$v.member_list_from|default="本地"}</td>
-										<td class="hidden-sm hidden-xs">
-										<if condition="$v.member_list_sex eq 1">程序猿
+						<foreach name="member_list" item="v">
+							<tr>
+								<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
+								<td>{$v.member_list_username}</td>
+								<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
+								<td class="hidden-sm hidden-xs">{$v.member_list_from|default="本地"}</td>
+								<td class="hidden-sm hidden-xs">
+									<if condition="$v.member_list_sex eq 1">程序猿
 										<elseif condition="$v.member_list_sex eq 2"/>程序媛
 										<else />保密
-										</if>
-										</td>
-										<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
-										<td class="hidden-sm hidden-xs">{$v.score}</td>
-										<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
-										<td class="hidden-xs">
-											<if condition='$v.member_list_open eq 1'>
-												<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已开启">
-													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
-												</a>
-											<else/>
-												<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已禁用">
-													<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
-												</a>														
-											</if>
-										</td>
-										<td class="hidden-xs">
-											<if condition='$v.user_status eq 1'>
-												<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="已激活">
-													<div id="jh{$v.member_list_id}">
-														<button class="btn btn-minier btn-yellow">已激活</button>
-													</div>
-												</a>
-											<else/>
-												<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="未激活">
-													<div id="jh{$v.member_list_id}">
-														<button class="btn btn-minier btn-danger">未激活</button>
-													</div>
-												</a>														
-											</if>
-										</td>
-										<td>
-											<div class="hidden-sm hidden-xs action-buttons">
-												<a class="green"  href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" title="修改">
-													<i class="ace-icon fa fa-pencil bigger-130"></i>
-												</a>
-												<a class="red confirm-rst-url-btn" href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}" data-info="你确定要删除吗？" title="删除">
-													<i class="ace-icon fa fa-trash-o bigger-130"></i>
-												</a>
+									</if>
+								</td>
+								<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
+								<td class="hidden-sm hidden-xs">{$v.score}</td>
+								<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
+								<td class="hidden-xs">
+									<if condition='$v.member_list_open eq 1'>
+										<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已开启">
+											<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+										</a>
+										<else/>
+										<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已禁用">
+											<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+										</a>
+									</if>
+								</td>
+								<td class="hidden-xs">
+									<if condition='$v.user_status eq 1'>
+										<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="已激活">
+											<div id="jh{$v.member_list_id}">
+												<button class="btn btn-minier btn-yellow">已激活</button>
 											</div>
-											<div class="hidden-md hidden-lg">
-													<div class="inline position-relative">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<li>
-																<a href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+										</a>
+										<else/>
+										<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="未激活">
+											<div id="jh{$v.member_list_id}">
+												<button class="btn btn-minier btn-danger">未激活</button>
+											</div>
+										</a>
+									</if>
+								</td>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="green"  href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" title="修改">
+											<i class="ace-icon fa fa-pencil bigger-130"></i>
+										</a>
+										<a class="red confirm-rst-url-btn" href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}" data-info="你确定要删除吗？" title="删除">
+											<i class="ace-icon fa fa-trash-o bigger-130"></i>
+										</a>
+									</div>
+									<div class="hidden-md hidden-lg">
+										<div class="inline position-relative">
+											<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+												<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+												<li>
+													<a href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil bigger-120"></i>
 																	</span>
-																</a>
-															</li>
+													</a>
+												</li>
 
-															<li>
-																<a href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+												<li>
+													<a href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
-																</a>
-															</li>
-														</ul>
-													</div>
-												</div>
-										</td>
-									</tr>
-								</foreach>
-								<tr>
-									<td height="50" colspan="12" align="left">{$page}</td>
-								</tr>
-								</tbody>
-							</table>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</foreach>
+						<tr>
+							<td height="50" colspan="12" align="left">{$page}</td>
+						</tr>
+						</tbody>
+					</table>
 
-						</div>
-					</div>
 				</div>
-
-				<include file='Common:header_nav' />
-
-			</div><!-- /.page-content -->
+			</div>
 		</div>
-	</div><!-- /.main-content -->
-	<include file='Common:footer' />
-</div><!-- /.main-container -->
-</body>
-</html>
+	</div><!-- /.page-content -->
+</block>
