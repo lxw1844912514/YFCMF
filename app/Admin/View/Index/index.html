@@ -150,6 +150,9 @@
 							<if condition="$danger_mode_debug">
 								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span> 当前系统运行在调试模式，可能会影响运行性能及安全！</p>
 							</if>
+							<if condition="$system_pageshow">
+								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  当前系统已开SHOW_PAGE_TRACE</p>
+							</if>
 							<if condition="$weak_setting_admin_last_change_password">
 								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  您太久没有更换登陆密码了，请定期更换后台登陆密码！</p>
 							</if>
@@ -177,6 +180,11 @@
 										<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn maintain">关闭调试</a>
 										<else />
 										<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn maintain">打开调试</a>
+									</if>
+									<if condition="$system_pageshow">
+										<a href="{:U('Sys/maintain',array('action'=>'trace_off'))}" class="btn btn-default rst-url-btn maintain">关闭Trace</a>
+										<else />
+										<a href="{:U('Sys/maintain',array('action'=>'trace_on'))}" class="btn btn-default rst-url-btn maintain">打开Trace</a>
 									</if>
 								</td>
 							</tr>

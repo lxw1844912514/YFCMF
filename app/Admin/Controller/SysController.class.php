@@ -1289,6 +1289,26 @@ class SysController extends AuthController {
 				}
 				$this->success('已关闭调试',U('Index/index'),1);
                 break;
+			case 'trace_on' :
+				$data = array('SHOW_PAGE_TRACE'=>true);
+				$res=sys_config_setbyarr($data);
+				if($res === false){
+					$this->error('打开Trace失败',U('Index/index'),0);
+				}else{
+					clear_cache();
+					$this->success('已打开Trace',U('Index/index'),1);
+				}
+                break;
+			case 'trace_off' :
+				$data = array('SHOW_PAGE_TRACE'=>false);
+				$res=sys_config_setbyarr($data);
+				if($res === false){
+					$this->error('关闭Trace失败',U('Index/index'),0);
+				}else{
+					clear_cache();
+					$this->success('已关闭Trace',U('Index/index'),1);
+				}
+                break;
         }
     }
 	public function profile(){
