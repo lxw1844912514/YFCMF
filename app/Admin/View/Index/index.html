@@ -170,13 +170,13 @@
 							<tbody>
 							<tr>
 								<td colspan="2">
-									<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default">下载日志</a>
-									<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default">查看日志</a>
-									<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn">清除日志</a>
+									<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default maintain">下载日志</a>
+									<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default maintain">查看日志</a>
+									<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn maintain">清除日志</a>
 									<if condition="$debug">
-										<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn">关闭调试</a>
+										<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn maintain">关闭调试</a>
 										<else />
-										<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn">打开调试</a>
+										<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn maintain">打开调试</a>
 									</if>
 								</td>
 							</tr>
