@@ -21,13 +21,13 @@
   array (
     'APP_KEY' => '203564',
     'APP_SECRET' => 'bab1f3acc0c67b69a1f470ac5e8dc36a',
-    'CALLBACK' => 'http://www.rainfer.cn/ace/index.php?m=Home&c=oauth&a=callback&type=qq',
+    'CALLBACK' => 'http://www.rainfer.cn/index.php?m=Home&c=oauth&a=callback&type=qq',
   ),
   'THINK_SDK_SINA' => 
   array (
     'APP_KEY' => '602735229',
     'APP_SECRET' => '66781cbeab9fdb9b014a387ab6e943fe',
-    'CALLBACK' => 'http://www.rainfer.cn/ace/index.php?m=Home&c=oauth&a=callback&type=sina',
+    'CALLBACK' => 'http://www.rainfer.cn/index.php?m=Home&c=oauth&a=callback&type=sina',
   ),
   'COMMENT' => 
   array (
