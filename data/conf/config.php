@@ -1,37 +1,60 @@
-<?php	return array (
-  'SHOW_PAGE_TRACE' => true,
-  'URL_CASE_INSENSITIVE' => true,
-  'DB_LIKE_FIELDS' => 'news_title|news_content|news_flag|news_open',
-  'URL_MODEL' => 0,
-  'URL_HTML_SUFFIX' => '',
-  'URL_ROUTER_ON' => true,
-  'URL_MAP_RULES' => 
+<?php
+return array (
+  'yfcmf_version' => 'V2.0.0',
+  'update_check' => false,
+  'think_sdk_qq' => 
   array (
-    'about' => 'home/list/index?id=1',
-    'contacts' => 'home/list/index?id=10',
-    'index' => 'home/index/index',
+    'app_key' => '203564',
+    'app_secret' => 'bab1f3acc0c67b69a1f470ac5e8dc36a',
+    'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/qq.html',
   ),
-  'URL_ROUTE_RULES' => 
+  'think_sdk_sina' => 
   array (
-    'list/:id\\d' => 'home/list/index',
-    'news/:id\\d' => 'home/news/index',
+    'app_key' => '602735229',
+    'app_secret' => '66781cbeab9fdb9b014a387ab6e943fe',
+    'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/sina.html',
   ),
-  'YFCMF_VERSION' => 'V1.2.0',
-  'THINK_SDK_QQ' => 
+  'comment' => 
   array (
-    'APP_KEY' => '203564',
-    'APP_SECRET' => 'bab1f3acc0c67b69a1f470ac5e8dc36a',
-    'CALLBACK' => 'http://www.rainfer.cn/index.php?m=Home&c=oauth&a=callback&type=qq',
+    't_open' => true,
+    't_limit' => 60,
   ),
-  'THINK_SDK_SINA' => 
+  'auth_config' => 
   array (
-    'APP_KEY' => '602735229',
-    'APP_SECRET' => '66781cbeab9fdb9b014a387ab6e943fe',
-    'CALLBACK' => 'http://www.rainfer.cn/index.php?m=Home&c=oauth&a=callback&type=sina',
+    'auth_on' => true,
+    'auth_type' => 1,
+    'auth_group' => 'auth_group',
+    'auth_group_access' => 'auth_group_access',
+    'auth_rule' => 'auth_rule',
+    'auth_user' => 'admin',
   ),
-  'COMMENT' => 
+  'app_debug' => true,
+  'app_trace' => true,
+  'baidumap_ak' => 'D91c810554767b49e3bdd2a7b25d97c1',
+  'upload_validate' => 
   array (
-    'T_OPEN' => '1',
-    'T_LIMIT' => 60,
+    'size' => 10485760,
+    'ext' => 
+    array (
+      0 => 'jpg',
+      1 => 'gif',
+      2 => 'png',
+      3 => 'jpeg',
+    ),
   ),
+  'upload_path' => '/data/upload',
+  'url_route_on' => true,
+  'url_route_must' => false,
+  'url_complete_matcht' => false,
+  'url_html_suffix' => 'html',
+  'storage' => 
+  array (
+    'storage_open' => true,
+    'accesskey' => '3AUEFIe0ucy0V95CQSa0-Mh3-oW4dCgVEyuRUf-j',
+    'secretkey' => 'Um5GL5hh4txxDnDVNk8VCQahXYSOl2ap3IBhrI5q',
+    'bucket' => 'rainfer',
+    'domain' => 'http://ohjmksy46.bkt.clouddn.com/',
+  ),
+  'lang_switch_on' => true,
+  'default_lang' => 'zh-cn',
 );

@@ -4,10 +4,10 @@
 <!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <title>联系我们 {$site_name} </title>
-    <meta name="keywords" content="{$site_seo_keywords}" />
-    <meta name="description" content="{$site_seo_description}">
-    <include file="Public:head" />
+    <title>{:lang('contact us')} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
     <script src="http://api.map.baidu.com/api?v=1.3"></script>
     <style>
         img {
@@ -16,12 +16,12 @@
     </style>
 </head>
 <body class="blog">
-<include file="Public:nav" />
+{include file="public:nav" /}
 <div class="section slice no-padding">
     <div id="mapCanvas" class="map-canvas no-margin" style="height: 400px;">
         <script type="text/javascript">
             var map = new BMap.Map("mapCanvas"); // 创建Map实例
-            var point = new BMap.Point("113.747085", "23.023544"); // 创建点坐标
+            var point = new BMap.Point("{$map_lng}", "{$map_lat}"); // 创建点坐标
             map.centerAndZoom(point, 15); // 初始化地图,设置中心点坐标和地图级别。
             map.enableScrollWheelZoom(); //启用滚轮放大缩小
             //添加缩放控件
@@ -32,13 +32,13 @@
             var marker = new BMap.Marker(point); // 创建标注
             map.addOverlay(marker); // 将标注添加到地图中
 			var sContent =
-				"<img style='float:left;margin:4px' id='imgjingu' src='{$yf_theme_path}Public/images/jingu.jpg' width='150' height='100' />" +
-				"<p>电话：{$site_tel}</p>" +
-				"<p>官网：http://www.rainfer.cn</p>" +
-				"<p>地址：{$site_address}</p>";
+				"<img style='float:left;margin:4px' id='imgjingu' src='{$yf_theme_path}public/images/jingu.jpg' width='150' height='100' />" +
+				"<p>{:lang('phone')}：{$site_tel}</p>" +
+				"<p>{:lang('homepage')}：http://www.rainfer.cn</p>" +
+				"<p>{:lang('address')}：{$site_address}</p>";
 			var opts = {
 				width : 400,     // 信息窗口宽度
-				title : "我们的位置"  // 信息窗口标题
+				title : "{:lang('our location')}"  // 信息窗口标题
 			}
             var infoWindow = new BMap.InfoWindow(sContent,opts); // 创建信息窗口对象
             marker.openInfoWindow(infoWindow);
@@ -48,61 +48,61 @@
 <div class="container" style="margin-top:20px;">
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
-            <h3 class="title">在线留言</h3>
-            <form class="form-horizontal" name="plug_sug_add" id="plug_sug_add" method="post" action="{:UU('index/addmsg')}">
+            <h3 class="title">{:lang('online message')}</h3>
+            <form class="form-horizontal verify-ajax-form" name="plug_sug_add" id="plug_sug_add" method="post" action="{:url('index/addmsg')}">
                 <fieldset>
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>姓名: <span>*</span></label>
+                            <label>{:lang('username')}: <span>*</span></label>
                             <input type="text" class="form-control" placeholder="Your name" name="plug_sug_name" required>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>邮箱: <span>*</span></label>
+                            <label>{:lang('email')}: <span>*</span></label>
                             <input type="email" class="form-control" placeholder="Email address" name="plug_sug_email" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>内容: <span>*</span></label>
+                            <label>{:lang('content')}: <span>*</span></label>
                             <textarea class="form-control" id="message" placeholder="Write you message here..." style="height: 100px;" name="plug_sug_content" required></textarea>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <label>验证码: <span>*</span></label>
+                            <label>{:lang('captcha')}: <span>*</span></label>
                             <input type="text" class="form-control" id="verify" placeholder="Enter the verify" style="height: 48px;" name="verify" required>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <label>&nbsp;<span></span></label>
-                            <img class="verify_img form-control" id="verify_img" src="{:UU('index/verify_msg')}" onClick="this.src='{:UU('index/verify_msg')}'+<in name='Think.config.url_model' value='1,2'>'?'<else />'&'</in>+Math.random()" style="cursor:pointer;width:150px;height:48px;padding:0;" title="点击获取">
+                            <img class="verify_img form-control" id="verify_img" src="{:url('Index/verify_msg')}" onClick="this.src='{:url('Index/verify_msg')}'+'?'+Math.random()" style="cursor:pointer;width:150px;height:48px;padding:0;" title="{:lang('click to get')}">
                         </div>
                     </div>
                 </fieldset>
                 <div style="height:10px;"></div>
-                <button type="submit" class="btn btn-primary" data-wait="1500">发送留言</button>
+                <button type="submit" class="btn btn-primary" data-wait="1500">{:lang('send message')}</button>
                 <div class="clearfix"></div>
             </form>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-12 col-sm-6">
             <div class="address widget">
-                <h3 class="title">联系方式</h3>
+                <h3 class="title">{:lang('contact information')}</h3>
                 <ul class="contact-us">
                     <li>
                         <i class="fa fa-map-marker"></i>
                         <p>
-                            <strong>地址:</strong>{$site_address}
+                            <strong>{:lang('address')}:</strong>{$site_address}
                         </p>
                     </li>
                     <li>
                         <i class="fa fa-phone"></i>
                         <p>
-                            <strong>电话:</strong> {$site_tel}
+                            <strong>{:lang('phone')}:</strong> {$site_tel}
                         </p>
                     </li>
                     <li>
                         <i class="fa fa-envelope"></i>
                         <p>
-                            <strong>邮箱:</strong><a href="mailto:{$site_admin_email}">{$site_admin_email}</a>
+                            <strong>{:lang('email')}:</strong><a href="mailto:{$site_admin_email}">{$site_admin_email}</a>
                         </p>
                     </li>
 					<li>
@@ -112,53 +112,18 @@
                 </ul>
             </div>
             <div class="contact-info widget">
-                <h3 class="title">工作时间</h3>
+                <h3 class="title">{:lang('working hours')}</h3>
                 <ul>
-                    <li><i class="fa fa-clock-o"> </i>周一~周五: 9am to 5pm </li>
-                    <li><i class="fa fa-clock-o"> </i>周六: 9am to 2pm</li>
-                    <li><i class="fa fa-times-circle"> </i>周日: 休息</li>
+                    <li><i class="fa fa-clock-o"> </i>{:lang('Monday ~ Friday')}: 9am to 5pm </li>
+                    <li><i class="fa fa-clock-o"> </i>{:lang('Saturday')}: 9am to 2pm</li>
+                    <li><i class="fa fa-times-circle"> </i>{:lang('Sunday')}: {:lang('rest')}</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="divider"></div>
 </div>
-<include file="Public:footer" />
-<include file="Public:scripts" />
-<script type="text/javascript">
-//添加操作
-$(function(){
-	$('#plug_sug_add').ajaxForm({
-		success: complete, // 这是提交后的方法
-		dataType: 'json'
-	});
-	function complete(data){
-		if(data.status==1){
-			layer.alert(data.info, {icon: 6}, function(index){
-				layer.close(index);
-				$(':input').val("");
-			});
-		}else{
-			layer.alert(data.info, {icon: 5}, function(index){
-				layer.close(index);
-				if(data.info=='验证码错误'){
-					$('#verify').val("");
-				}else{
-					$(':input').val("");
-				}
-			});
-		}
-		var $verify_img=$('#verify_img');
-		var $url=$verify_img.attr("src");
-		if($url.indexOf('?')>0){
-			$url=$url+'&'+Math.random();
-		}else{
-			$url=$url+'?'+Math.random();
-		}
-		$verify_img.attr("src",$url); 
-		return false;
-	}
-});
-</script>
+{include file="public:footer" /}
+{include file="public:scripts" /}
 </body>
 </html>

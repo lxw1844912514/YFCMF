@@ -1,11 +1,11 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 		<div class="row maintop">
-			<div class="col-xs-12 col-sm-1">
+			<div class="col-xs-12 col-sm-2">
 				<!-- 点击模态框（Modal） -->
-				<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModal">
+				<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">
 					<i class="ace-icon fa fa-bolt bigger-110"></i>
 					添加会员组
 				</button>
@@ -17,7 +17,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div>
-					<form class="ajaxForm" name="member_group_order" method="post" action="{:U('member_group_order')}" >
+					<form class="ajaxForm" name="member_group_order" method="post" action="{:url('member_group_order')}" >
 						<table class="table table-striped table-bordered table-hover" id="dynamic-table">
 							<thead>
 							<tr>
@@ -32,28 +32,28 @@
 
 							<tbody>
 
-							<foreach name="member_group_list" item="v">
+							{foreach name="member_group_list" item="v"}
 								<tr>
 									<td height="28" >{$v.member_group_id}</td>
 									<td>{$v.member_group_name}</td>
 									<td class="hidden-sm hidden-xs">{$v.member_group_bomlimit} - {$v.member_group_toplimit} 积分</td>
 									<td>
-										<if condition='$v.member_group_open eq 1'>
-											<a class="red open-btn" href="{:U('member_group_state')}" data-id="{$v.member_group_id}" title="已开启">
+										{if condition='$v.member_group_open eq 1'}
+											<a class="red open-btn" href="{:url('member_group_state')}" data-id="{$v.member_group_id}" title="已开启">
 												<div id="zt{$v.member_group_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
 											</a>
-											<else/>
-											<a class="red open-btn" href="{:U('member_group_state')}" data-id="{$v.member_group_id}" title="已禁用">
+											{else/}
+											<a class="red open-btn" href="{:url('member_group_state')}" data-id="{$v.member_group_id}" title="已禁用">
 												<div id="zt{$v.member_group_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 											</a>
-										</if>														</td>
+										{/if}														</td>
 									<td><input name="{$v.member_group_id}" value=" {$v.member_group_order}" class="list_order"/></td>
 									<td>
 										<div class="hidden-sm hidden-xs action-buttons">
-											<a class="green memberedit-btn"  href="{:U('member_group_edit')}" data-id="{$v.member_group_id}" title="修改">
+											<a class="green memberedit-btn"  href="{:url('member_group_edit')}" data-id="{$v.member_group_id}" title="修改">
 												<i class="ace-icon fa fa-pencil bigger-130"></i>
 											</a>
-											<a class="red confirm-rst-url-btn" href="{:U('member_group_del',array('member_group_id'=>$v['member_group_id']))}" data-info="你确定要删除吗？" title="删除">
+											<a class="red confirm-rst-url-btn" href="{:url('member_group_del',array('member_group_id'=>$v['member_group_id']))}" data-info="你确定要删除吗？" title="删除">
 												<i class="ace-icon fa fa-trash-o bigger-130"></i>
 											</a>
 										</div>
@@ -64,7 +64,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 													<li>
-														<a href="{:U('member_group_edit')}" data-id="{$v.member_group_id}" class="tooltip-success memberedit-btn" data-rel="tooltip" title="" data-original-title="修改">
+														<a href="{:url('member_group_edit')}" data-id="{$v.member_group_id}" class="tooltip-success memberedit-btn" data-rel="tooltip" title="" data-original-title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil bigger-120"></i>
 																	</span>
@@ -72,7 +72,7 @@
 													</li>
 
 													<li>
-														<a href="{:U('member_group_del',array('member_group_id'=>$v['member_group_id']))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+														<a href="{:url('member_group_del',array('member_group_id'=>$v['member_group_id']))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -83,7 +83,7 @@
 										</div>
 									</td>
 								</tr>
-							</foreach>
+							{/foreach}
 							<tr>
 								<td colspan="8" align="left"><button type="submit"  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
 							</tr>
@@ -100,7 +100,7 @@
 
 		<!-- 显示模态框（Modal） -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<form class="form-horizontal ajaxForm2" name="member_group_runadd" method="post" action="{:U('member_group_runadd')}">
+			<form class="form-horizontal ajaxForm2" name="member_group_runadd" method="post" action="{:url('member_group_runadd')}">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -189,7 +189,7 @@
 		<!-- 显示模态框（Modal） -->
 		<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-			<form class="form-horizontal ajaxForm2" name="member_group_runedit" method="post" action="{:U('member_group_runedit')}">
+			<form class="form-horizontal ajaxForm2" name="member_group_runedit" method="post" action="{:url('member_group_runedit')}">
 				<input type="hidden" name="member_group_id" id="editmember_group_id" value="" />
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -261,4 +261,4 @@
 				</div><!-- /.modal-dialog -->
 			</form>
 		</div><!-- /.modal -->
-</block>
+{/block}

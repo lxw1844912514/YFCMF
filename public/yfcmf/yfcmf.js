@@ -1,13 +1,13 @@
 /************************************************************* 所有带确认的ajax提交btn ********************************************************/
 /* get执行并返回结果，执行后不带跳转 */
 $(function () {
-    $('.rst-btn').click(function () {
+	$('body').on('click','.rst-btn',function () {
         var $url = this.href;
         $.get($url, function (data) {
-            if (data.status == 1) {
-                layer.alert(data.info, {icon: 6});
+            if (data.code == 1) {
+                layer.alert(data.msg, {icon: 6});
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -15,16 +15,16 @@ $(function () {
 });
 /* get执行并返回结果，执行后带跳转 */
 $(function () {
-    $('.rst-url-btn').click(function () {
+	$('body').on('click','.rst-url-btn',function () {
         var $url = this.href;
         $.get($url, function (data) {
-            if (data.status) {
-                layer.alert(data.info, {icon: 6}, function (index) {
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
                     layer.close(index);
                     window.location.href = data.url;
                 });
             } else {
-                layer.alert(data.info, {icon: 5}, function (index) {
+                layer.alert(data.msg, {icon: 5}, function (index) {
                     layer.close(index);
                 });
             }
@@ -34,7 +34,7 @@ $(function () {
 });
 /* 直接跳转 */
 $(function () {
-    $(".confirm-btn").click(function () {
+	$('body').on('click','.confirm-btn',function () {
         var $url = this.href,
             $info = $(this).data('info');
         layer.confirm($info, {icon: 3}, function (index) {
@@ -46,13 +46,13 @@ $(function () {
 });
 /* post执行并返回结果，执行后不带跳转 */
 $(function () {
-    $('.confirm-rst-btn').click(function () {
+	$('body').on('click','.confirm-rst-btn',function () {
         var $url = this.href,
             $info = $(this).data('info');
         layer.confirm($info, {icon: 3}, function (index) {
             layer.close(index);
             $.post($url, {}, function (data) {
-                layer.alert(data.info, {icon: 6});
+                layer.alert(data.msg, {icon: 6});
             }, "json");
         });
         return false;
@@ -60,19 +60,19 @@ $(function () {
 });
 /* get执行并返回结果，执行后带跳转 */
 $(function () {
-    $('.confirm-rst-url-btn').click(function () {
+	$('body').on('click','.confirm-rst-url-btn',function () {
         var $url = this.href,
             $info = $(this).data('info');
         layer.confirm($info, {icon: 3}, function (index) {
             layer.close(index);
             $.get($url, function (data) {
-                if (data.status) {
-                    layer.alert(data.info, {icon: 6}, function (index) {
+                if (data.code==1) {
+                    layer.alert(data.msg, {icon: 6}, function (index) {
                         layer.close(index);
                         window.location.href = data.url;
                     });
                 } else {
-                    layer.alert(data.info, {icon: 5}, function (index) {
+                    layer.alert(data.msg, {icon: 5}, function (index) {
                         layer.close(index);
                     });
                 }
@@ -84,12 +84,12 @@ $(function () {
 /*************************************************************************** 所有状态类的ajax提交btn ********************************************************/
 /* 审核状态操作 */
 $(function () {
-    $(".state-btn").click(function () {
+	$('body').on('click','.state-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {x: val}, function (data) {
-            if (data.status) {
-                if (data.info == '未审') {
+            if (data.code==1) {
+                if (data.msg == '未审') {
                     var a = '<button class="btn btn-minier btn-danger">未审</button>';
                     $('#zt' + val).html(a);
                     return false;
@@ -99,7 +99,27 @@ $(function () {
                     return false;
                 }
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
+            }
+        }, "json");
+        return false;
+    });
+});
+$(function () {
+	$('body').on('click','#btnorder',function () {
+        var $url=$(this).attr("href");
+        if(!$url){
+            $url=$(this).parents('form').attr('action');
+        }
+        $.post($url, $("input.list_order").serialize(), function (data) {
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
+                    layer.close(index);
+                });
+            }else{
+                layer.alert(data.msg, {icon: 5}, function (index) {
+                    layer.close(index);
+                });
             }
         }, "json");
         return false;
@@ -107,12 +127,12 @@ $(function () {
 });
 /* 启用状态操作 */
 $(function () {
-    $(".open-btn").click(function () {
+	$('body').on('click','.open-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {x: val}, function (data) {
-            if (data.status) {
-                if (data.info == '状态禁止') {
+            if (data.code==1) {
+                if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">禁用</button>';
                     $('#zt' + val).html(a);
                     return false;
@@ -122,7 +142,7 @@ $(function () {
                     return false;
                 }
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -130,12 +150,12 @@ $(function () {
 });
 /* 显示状态操作 */
 $(function () {
-    $(".display-btn").click(function () {
+	$('body').on('click','.display-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {x: val}, function (data) {
-            if (data.status) {
-                if (data.info == '状态禁止') {
+            if (data.code==1) {
+                if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">隐藏</button>';
                     $('#zt' + val).html(a);
                     return false;
@@ -145,7 +165,7 @@ $(function () {
                     return false;
                 }
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -153,12 +173,12 @@ $(function () {
 });
 /* 激活状态操作 */
 $(function () {
-    $(".active-btn").click(function () {
+	$('body').on('click','.active-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {x: val}, function (data) {
-            if (data.status) {
-                if (data.info == '未激活') {
+            if (data.code==1) {
+                if (data.msg == '未激活') {
                     var a = '<button class="btn btn-minier btn-danger">未激活</button>';
                     $('#jh' + val).html(a);
                     return false;
@@ -168,7 +188,7 @@ $(function () {
                     return false;
                 }
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -222,13 +242,13 @@ $(function () {
 });
 //失败跳转
 function complete(data) {
-    if (data.status == 1) {
-        layer.alert(data.info, {icon: 6}, function (index) {
+    if (data.code == 1) {
+        layer.alert(data.msg, {icon: 6}, function (index) {
             layer.close(index);
             window.location.href = data.url;
         });
     } else {
-        layer.alert(data.info, {icon: 5}, function (index) {
+        layer.alert(data.msg, {icon: 5}, function (index) {
             layer.close(index);
             window.location.href = data.url;
         });
@@ -237,25 +257,25 @@ function complete(data) {
 }
 //失败不跳转
 function complete2(data) {
-    if (data.status == 1) {
-        layer.alert(data.info, {icon: 6}, function (index) {
+    if (data.code == 1) {
+        layer.alert(data.msg, {icon: 6}, function (index) {
             layer.close(index);
             window.location.href = data.url;
         });
     } else {
-        layer.alert(data.info, {icon: 5}, function (index) {
+        layer.alert(data.msg, {icon: 5}, function (index) {
             layer.close(index);
         });
     }
 }
 //失败不跳转,验证码刷新
 function complete3(data) {
-    if (data.status == 1) {
+    if (data.code == 1) {
         window.location.href = data.url;
     } else {
         $("#verify").val('');
         $("#verify_img").click();
-        layer.alert(data.info, {icon: 5});
+        layer.alert(data.msg, {icon: 5});
     }
 }
 //admin表单检查
@@ -340,6 +360,11 @@ function CheckAll(form) {
         }
     }
 }
+/* 日期选择器 */
+var dateInput = $("input.js-date")
+if (dateInput.length) {
+	dateInput.datePicker();
+}
 /* 权限配置 */
 $(function () {
     //动态选择框，上下级选中状态变化
@@ -403,11 +428,11 @@ $(document).ready(function () {
 /*************************************************************************** 所有ajax获取编辑数据 ********************************************************/
 /* 会员组修改操作 */
 $(function () {
-    $(".memberedit-btn").click(function () {
+	$('body').on('click','.memberedit-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {member_group_id: val}, function (data) {
-            if (data.status == 1) {
+            if (data.code == 1) {
                 $("#myModaledit").show(300);
                 $("#editmember_group_id").val(data.member_group_id);
                 $("#editmember_group_name").val(data.member_group_name);
@@ -415,7 +440,7 @@ $(function () {
                 $("#editmember_group_toplimit").val(data.member_group_toplimit);
                 $("#editmember_group_bomlimit").val(data.member_group_bomlimit);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -430,13 +455,14 @@ function openWindow(a, b, c) {
 }
 /* 友链编辑 */
 $(function () {
-    $(".linkedit-btn").click(function () {
+	$('body').on('click','.linkedit-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {plug_link_id: val}, function (data) {
-            if (data.status == 1) {
+            if (data.code == 1) {
                 $("#myModaledit").show(300);
                 $("#editplug_link_id").val(data.plug_link_id);
+				$("#editplug_link_l").val(data.plug_link_l);
                 $("#editplug_link_name").val(data.plug_link_name);
                 $("#editplug_link_url").val(data.plug_link_url);
                 $("#editplug_link_target").val(data.plug_link_target);
@@ -444,7 +470,7 @@ $(function () {
                 $("#editplug_link_order").val(data.plug_link_order);
                 $("#editplug_link_typeid").val(data.plug_link_typeid);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -452,41 +478,35 @@ $(function () {
 });
 /* 广告位编辑 */
 $(function () {
-    $(".adtypeedit-btn").click(function () {
+	$('body').on('click','.adtypeedit-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {plug_adtype_id: val}, function (data) {
-            if (data.status == 1) {
+            if (data.code == 1) {
                 $("#myModaledit").show(300);
                 $("#adtype_id").val(data.plug_adtype_id);
                 $("#adtype_name").val(data.plug_adtype_name);
                 $("#adtype_order").val(data.plug_adtype_order);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
     });
 });
-/* 路由规则编辑 */
+/* 回复留言 */
 $(function () {
-    $(".routeedit-btn").click(function () {
+	$('body').on('click','.sugreply-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
-        $.post($url, {id: val}, function (data) {
-            if (data.status == 1) {
-                $("#myModaledit").show(300);
-                $("#editroute_id").val(data.id);
-                $("#editroute_full_url").val(data.full_url);
-                $("#editroute_url").val(data.url);
-                if (data.r_status == 1) {
-                    $("#editroute_status").attr("checked", true);
-                } else {
-                    $("#editroute_status").attr("checked", false);
-                }
-                $("#editroute_listorder").val(data.listorder);
+        $.post($url, {plug_sug_id: val}, function (data) {
+            if (data.code == 1) {
+                $("#myModal").show(300);
+                $("#plug_sug_toemail").val(data.plug_sug_email);
+                $("#plug_sug_toname").val(data.plug_sug_name);
+                $("#plug_sug_id").val(data.plug_sug_id);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -494,17 +514,17 @@ $(function () {
 });
 /* 来源编辑 */
 $(function () {
-    $(".sourceedit-btn").click(function () {
+	$('body').on('click','.sourceedit-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {source_id: val}, function (data) {
-            if (data.status == 1) {
+            if (data.code == 1) {
                 $("#myModaledit").show(300);
                 $("#editsource_id").val(data.source_id);
                 $("#editsource_name").val(data.source_name);
                 $("#editsource_order").val(data.source_order);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -516,19 +536,20 @@ function souadd(val) {
 }
 /* 微信菜单编辑 */
 $(function () {
-    $(".menuedit-btn").click(function () {
+	$('body').on('click','.menuedit-btn',function () {
         var $url = this.href,
             val = $(this).data('id');
         $.post($url, {we_menu_id: val}, function (data) {
-            if (data.status == 1) {
+            if (data.code == 1) {
                 $("#myModaledit").show(300);
                 $("#editwe_menu_id").val(data.we_menu_id);
                 $("#editwe_menu_name").val(data.we_menu_name);
-                $("#editwe_menu_leftid").val(data.we_menu_leftid);
+                $("#editwe_menu_pid").val(data.we_menu_pid);
                 $("#editwe_menu_type").val(data.we_menu_type);
                 $("#editwe_menu_typeval").val(data.we_menu_typeval);
+                $("#editwe_menu_order").val(data.we_menu_order);
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         }, "json");
         return false;
@@ -575,20 +596,20 @@ function delall(id, url) {
 (function ($) {
     $("a[id^=optimize_]").click(function () {
         $.get(this.href, function (data) {
-            if (data.status) {
-                layer.alert(data.info, {icon: 6});
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6});
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         });
         return false;
     });
     $("a[id^=repair_]").click(function () {
         $.get(this.href, function (data) {
-            if (data.status) {
-                layer.alert(data.info, {icon: 6});
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6});
             } else {
-                layer.alert(data.info, {icon: 5});
+                layer.alert(data.msg, {icon: 5});
             }
         });
         return false;
@@ -599,12 +620,12 @@ function delall(id, url) {
 
     $optimize.add($repair).click(function () {
         $.post(this.href, $form.serialize(), function (data) {
-            if (data.status) {
-                layer.alert(data.info, {icon: 6}, function (index) {
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
                     layer.close(index);
                 });
             } else {
-                layer.alert(data.info, {icon: 5}, function (index) {
+                layer.alert(data.msg, {icon: 5}, function (index) {
                     layer.close(index);
                 });
             }
@@ -623,15 +644,15 @@ function delall(id, url) {
             $form.attr("action"),
             $form.serialize(),
             function (data) {
-                if (data.status) {
+                if (data.code==1) {
                     tables = data.tables;
-                    $export.children().text(data.info + "开始备份，请不要关闭本页面！");
+                    $export.children().text(data.msg + "开始备份，请不要关闭本页面！");
                     backup(data.tab);
                     window.onbeforeunload = function () {
                         return "正在备份数据库，请不要关闭！"
                     }
                 } else {
-                    layer.alert(data.info, {icon: 5});
+                    layer.alert(data.msg, {icon: 5});
                     $export.children().removeClass("disabled");
                     $export.children().text("立即备份");
                     setTimeout(function () {
@@ -648,8 +669,8 @@ function delall(id, url) {
     function backup(tab, status) {
         status && showmsg(tab.id, "开始备份...(0%)");
         $.get($form.attr("action"), tab, function (data) {
-            if (data.status) {
-                showmsg(tab.id, data.info);
+            if (data.code==1) {
+                showmsg(tab.id, data.msg);
                 if (!$.isPlainObject(data.tab)) {
                     $export.children().removeClass("disabled");
                     $export.children().text("备份完成，点击重新备份");
@@ -657,7 +678,7 @@ function delall(id, url) {
                 }
                 backup(data.tab, tab.id != data.tab.id);
             } else {
-                updateAlert(data.info, 'alert-error');
+                updateAlert(data.msg, 'alert-error');
                 $export.children().removeClass("disabled");
                 $export.children().text("立即备份");
                 setTimeout(function () {
@@ -666,11 +687,13 @@ function delall(id, url) {
                 }, 1500);
             }
         }, "json");
-
     }
 
     function showmsg(id, msg) {
-        $form.find("input[value=" + tables[id] + "]").closest("tr").find(".info").html(msg);
+        $tr=$form.find("input[value=" + tables[id] + "]").closest("tr");
+        $tr.find(".green").html("");
+        $tr.find(".info").html("");
+        $tr.find(".backup").html(msg);
     }
 })(jQuery);
 /*************************************************************************** 其它********************************************************/
@@ -697,4 +720,97 @@ $(function () {
 });
 $(function () {
     $("[data-toggle='tooltip']").tooltip();
+});
+/*************************************************************************** 生成安全文件********************************************************/
+(function ($) {
+	$('body').on('click','#security_generate',function () {
+        $(this).children().addClass("disabled");
+        $(this).find("span").text("正在生成安全文件...");
+        $.get(this.href, function (data) {
+            if (data.code==1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
+                    layer.close(index);
+                    window.location.href = data.url;
+                });
+            } else {
+                layer.alert(data.msg, {icon: 5}, function (index) {
+                    layer.close(index);
+                });
+            }
+            $(this).children().removeClass("disabled");
+            $(this).find("span").text("重新生成安全文件");
+        });
+        return false;
+});
+})(jQuery);
+/*************************************************************************** 选择列表框change事件********************************************************/
+(function ($) {
+	$('body').on('change','.ajax_change',function () {		
+        var $form = $(this).parents("form");
+		$.ajax({
+			type:"POST",
+			data:$form.serialize(),            
+			success: function(data,status){
+				$("#ajax-data").html(data);
+			}
+		});		
+        //$form.submit();
+    });
+    })(jQuery);
+(function ($) {
+	$('body').on('change','.submit_change',function () {		
+        var $form = $(this).parents("form");	
+        $form.submit();
+    });
+    })(jQuery);
+function ajax_page(page) {
+	$.ajax({
+		type:"POST",
+		data:$('#list-filter').serialize()+'&page='+page,            
+		success: function(data,status){
+			$("#ajax-data").html(data);
+		}
+	});
+}
+/*搜索form*/
+$(function () {
+	$('body').on('click','.ajax-search-form',function () {
+		$.ajax({
+			type:"POST",
+			data:$(this).parents("form").serialize(),            
+			success: function(data,status){
+				$("#ajax-data").html(data);
+			}
+		});	
+        return false;
+    });
+});
+/*搜索type*/
+$(function () {
+	$('body').on('click','.ajax-search-type',function () {
+		$(this).parents("form")[0].reset();
+		alert($(this).data('type'));
+		$.ajax({
+			type:"POST",
+			data:{type:$(this).data('type')},            
+			success: function(data,status){
+				$("#ajax-data").html(data);
+			}
+		});	
+        return false;
+    });
+});
+/*搜索form显示全部*/
+$(function () {
+	$('body').on('click','.ajax-display-all',function () {
+		$(this).parents("form")[0].reset();
+		$.ajax({
+			type:"POST",
+			data:{},            
+			success: function(data,status){
+				$("#ajax-data").html(data);
+			}
+		});	
+        return false;
+    });
 });

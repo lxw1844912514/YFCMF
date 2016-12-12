@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -7,12 +7,12 @@
 			<button type="button" class="close" data-dismiss="alert">
 				<i class="ace-icon fa fa-times"></i>
 			</button>
-			此处导入功能作为参考示例，缺少部分判断业务流程，程序员根据需求进行更改(参考：<a href="http://www.cnblogs.com/freespider/p/3284828.html" target="_blank">PHPEXCEL插件</a>)
+			此处导入功能作为参考示例，缺少部分判断业务流程，程序员根据需求进行更改(参考：<a href="http://www.codeplex.com/PHPExcel" target="_blank">PHPEXCEL插件</a>)
 		</div>
 
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:U('excel_runimport')}"  enctype="multipart/form-data">
+				<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:url('excel_runimport')}"  enctype="multipart/form-data">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 【文章】选择上传的EXCEL文件： </label>
 						<div class="col-sm-4">
@@ -38,4 +38,4 @@
 
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

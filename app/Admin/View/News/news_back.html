@@ -1,24 +1,29 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 		<link rel="stylesheet" type="text/css" media="all" href="__PUBLIC__/sldate/daterangepicker-bs3.css" />
-		<form name="admin_list_sea" class="form-search form-horizontal" method="post" action="{:U('news_back')}">
+		<form name="admin_list_sea" class="form-search form-horizontal" id="list-filter" method="post" action="{:url('news_back')}">
 			<div class="row maintop">
-				<div class="col-xs-12 col-sm-3">
+				<div class="col-xs-12 col-sm-5">
 					<select name="keytype">
-						<option value="news_title" <if condition="($keytype eq 'news_title') or ($keytype eq '')">selected</if>>按标题搜</option>
-						<option value="news_auto" <if condition="$keytype eq 'news_auto'">selected</if>>按发布人</option>
+						<option value="news_title" {if condition="($keytype eq 'news_title') or ($keytype eq '')"}selected{/if}>按标题搜</option>
+						<option value="news_auto" {if condition="$keytype eq 'news_auto'"}selected{/if}>按发布人ID</option>
 					</select>
-					<select name="diyflag">
+					<select name="news_l" class="ajax_change">
+						<option value="">按语言</option>
+						<option value="zh-cn" {if condition="$news_l eq 'zh-cn'"}selected="selected"{/if}>中文</option>
+						<option value="en-us" {if condition="$news_l eq 'en-us'"}selected="selected"{/if} >英语</option>
+					</select>
+					<select name="diyflag" class="ajax_change">
 						<option value="">按属性</option>
-						<foreach name="diyflag" item="v">
-							<option value="{$v.diyflag_value}" <if condition="$diyflag_check eq $v['diyflag_value']">selected</if>>{$v.diyflag_name}【{$v.diyflag_value}】</option>
-						</foreach>
+						{foreach name="diyflag" item="v"}
+							<option value="{$v.diyflag_value}" {if condition="$diyflag_check eq $v['diyflag_value']"}selected{/if}>{$v.diyflag_name}【{$v.diyflag_value}】</option>
+						{/foreach}
 					</select>
-					<select name="opentype_check">
+					<select name="opentype_check" class="ajax_change">
 						<option value="">状态</option>
-						<option value="1" <if condition="$opentype_check eq '1'">selected="selected"</if>>已审</option>
-						<option value="0" <if condition="$opentype_check eq '0'">selected="selected"</if> >未审</option>
+						<option value="1" {if condition="$opentype_check eq '1'"}selected="selected"{/if}>已审</option>
+						<option value="0" {if condition="$opentype_check eq '0'"}selected="selected"{/if} >未审</option>
 					</select>
 				</div>
 
@@ -39,7 +44,7 @@
 									</span>
 						<input type="text" name="key" id="key" class="form-control search-query admin_sea" value="{$keyy}" placeholder="输入需查询的关键字" />
 									<span class="input-group-btn">
-										<button type="submit" class="btn btn-xs btm-input btn-purple">
+										<button type="submit" class="btn btn-xs btm-input btn-purple ajax-search-form">
 											<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 											搜索
 										</button>
@@ -48,8 +53,8 @@
 				</div>
 
 				<div class="input-group-btn">
-					<a href="{:U('news_list')}">
-						<button type="button" class="btn btn-xs all-btn btn-purple">
+					<a href="{:url('news_list')}">
+						<button type="button" class="btn btn-xs all-btn btn-purple ajax-display-all">
 							<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
 							显示全部
 						</button>
@@ -65,8 +70,8 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div>
-					<form id="alldel" name="alldel" method="post" action="{:U('news_back_alldel')}" >
-						<input name="p" id="p" value="{:I('p',1)}" type="hidden" />
+					<form id="alldel" name="alldel" method="post" action="{:url('news_back_alldel')}" >
+						<input name="p" id="p" value="{:input('p',1)}" type="hidden" />
 						<div class="table-responsive">
 							<table class="table table-striped table-bordered table-hover" id="dynamic-table">
 								<thead>
@@ -86,77 +91,8 @@
 								</tr>
 								</thead>
 
-								<tbody>
-
-								<foreach name="news" item="v">
-									<tr>
-										<td class="hidden-xs" align="center">
-											<label class="pos-rel">
-												<input name='n_id[]' id="navid" class="ace"  type='checkbox' value='{$v.n_id}'>
-												<span class="lbl"></span>														</label>														</td>
-										<td class="hidden-xs" align="center">{$v.n_id}</td>
-										<td><a href="" target="_blank" title="{$v.news_title}">{$v.news_title|subtext=25}</a>【{$v['admin_realname']|default=$v['admin_username']}】</td>
-										<td class="hidden-sm hidden-xs">{$v.menu_name}</td>
-										<td class="hidden-sm hidden-xs">
-											<if condition="strstr($v['news_flag'],'h') eq true"><span style="color:#03C">头</span></if>
-											<if condition="strstr($v['news_flag'],'c') eq true"><span style="color:#060">荐</span></if>
-											<if condition="strstr($v['news_flag'],'f') eq true"><span style="color:#09F">幻</span></if>
-											<if condition="strstr($v['news_flag'],'a') eq true"><span style="color:#63C">特</span></if>
-											<if condition="strstr($v['news_flag'],'s') eq true"><span style="color:#C0C">滚</span></if>
-											<if condition="strstr($v['news_flag'],'p') eq true"><span style="color:#960">图</span></if>
-											<if condition="strstr($v['news_flag'],'j') eq true"><span style="color:#C00">跳</span></if>
-											<if condition="strstr($v['news_flag'],'d') eq true"><span style="color:#630">原</span></if>														</td>
-										<td class="hidden-xs">{$v.news_hits}</td>
-										<td class="hidden-xs">
-											<if condition="$v['news_open'] eq 1">
-												<a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="已审">
-													<div id="zt{$v.n_id}"><button class="btn btn-minier btn-yellow">已审</button></div>
-												</a>
-												<else/>
-												<a class="red state-btn" href="{:U('news_state')}" data-id="{$v.n_id}" title="未审">
-													<div id="zt{$v.n_id}"><button class="btn btn-minier btn-danger">未审</button></div>
-												</a>
-											</if>
-										</td>
-										<td class="hidden-xs">{$v.news_time|date='Y-m-d',###}</td>
-										<td>
-											<div class="action-buttons">
-												<a class="red confirm-rst-url-btn" data-info="你确定要还原文章到文章列表吗？" href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="还原">
-													<i class="ace-icon fa fa-check bigger-130"></i>																</a>
-												<a class="red confirm-rst-url-btn" data-info="你确定要彻底删除文章吗？" href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" title="删除">
-													<i class="ace-icon fa fa-close bigger-130"></i>																</a>												</div>
-											<div class="hidden-md hidden-lg hidden-sm hidden-xs">
-												<div class="inline position-relative">
-													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-														<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-													</button>
-													<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-														<li>
-															<a href="{:U('news_back_open',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}" class="tooltip-success confirm-rst-url-btn" data-info="你确定要还原文章到文章列表吗？" data-rel="tooltip" title="" data-original-title="还原">
-																			<span class="green">
-																				<i class="ace-icon fa fa-check bigger-120"></i>
-																			</span>
-															</a>
-														</li>
-
-														<li>
-															<a href="{:U('news_back_del',array('n_id'=>$v['n_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要彻底删除文章吗？" data-rel="tooltip" title="" data-original-title="删除">
-																			<span class="red">
-																				<i class="ace-icon fa fa-close bigger-120"></i>
-																			</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</td>
-									</tr>
-								</foreach>
-								<tr>
-									<td align="left"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm">删</button> </td>
-									<td colspan="8" align="right" class="hidden-xs">{$page}</td>
-									<td colspan="8" align="right" class="hidden-lg hidden-md hidden-sm">{$page_min}</td>
-								</tr>
+								<tbody id="ajax-data">
+									{include file="news/ajax_news_back"/}
 								</tbody>
 							</table>
 						</div>
@@ -165,8 +101,8 @@
 			</div>
 		</div>
 	</div><!-- /.page-content -->
-</block>
-<block name="scripts">
+{/block}
+{block name="scripts"}
 	<script type="text/javascript" src="__PUBLIC__/sldate/moment.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/sldate/daterangepicker.js"></script>
 	<script type="text/javascript">
@@ -174,4 +110,4 @@
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
 	</script>
-</block>
+{/block}

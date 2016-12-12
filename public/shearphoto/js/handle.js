@@ -78,13 +78,13 @@ window.ShearPhoto.MINGGE(function() {
 		$.post(SHEAR.URL,
 		{'imgurl':serverdata[0]['ImgUrl']},
 		function(data){
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
+			if(data.code==1){
+				layer.alert(data.msg, {icon: 6}, function(index){
 					layer.close(index);
 					window.location.href=data.url;
 				});
 			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
+				layer.alert(data.msg, {icon: 5}, function(index){
 					layer.close(index);
 				});
 			}

@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
 		<div class="page-header">
@@ -13,21 +13,21 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:U('news_runadd')}"  enctype="multipart/form-data">
+				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('news_runadd')}"  enctype="multipart/form-data">
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章所属主栏目： </label>
 						<div class="col-sm-10">
 							<select name="news_columnid"  class="col-sm-3 selector" required>
 								<option value="">请选择所属栏目</option>
-								<foreach name="menu" item="vo">
-									<option value="{$vo.id}" <if condition="$vo.menu_type eq 1">disabled class="bgccc"<else/>class="bgc"</if>>{$vo.lefthtml}{$vo.menu_name} <if condition="$vo.menu_type eq 1">(频道页)</if></option>
-								</foreach>
+								{foreach name="menu" item="vo"}
+									<option value="{$vo.id}" {if condition="$vo.menu_type eq 1"}disabled class="bgccc"{else/}class="bgc"{/if}>{$vo.lefthtml}{$vo.menu_name}({if condition="$vo.menu_l eq 'zh-cn'"}中{else /}英{/if}) {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
+								{/foreach}
 							</select>
 						</div>
 					</div>
 					<div class="space-4"></div>
-
+					
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章名称：  </label>
 						<div class="col-sm-10">
@@ -39,16 +39,17 @@
 						</div>
 					</div>
 					<div class="space-4"></div>
-
+					
+					
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章属性：  </label>
 						<div class="checkbox">
-							<foreach name='diyflag' item='diyflag'>
+							{foreach name='diyflag' item='diyflag'}
 								<label id="news_flag_{$diyflag.diyflag_value}">
 									<input class="ace ace-checkbox-2" name="news_flag[]" type="checkbox" id="news_flag_va{$diyflag.diyflag_value}" value="{$diyflag.diyflag_value}" />
 									<span class="lbl"> {$diyflag.diyflag_name}</span>
 								</label>
-							</foreach>
+							{/foreach}
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -84,9 +85,9 @@
 							<input type="text" name="news_source" id="news_source" value="YFCMF" class="col-xs-10 col-sm-2" />
 							<label class="input_last">
 								常用：
-								<volist name="source" id="k">
+								{volist name="source" id="k"}
 									<a class="btn btn-minier btn-yellow" href="javascript:;" onclick="return souadd('{$k.source_name}');" >{$k.source_name}</a>&nbsp;
-								</volist>
+								{/volist}
 							</label>
 						</div>
 					</div>
@@ -133,8 +134,8 @@
                     <script src="__PUBLIC__/ppy/js/fileinput_locale_zh.js" type="text/javascript"></script>
 					<div class="form-group" id="pic_list">
 						<div class="col-sm-10 col-sm-offset-2" style="padding-top:5px;">
-							<input id="file-5" name="pic_all[]" type="file" class="file"  multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""><br />
-							<textarea name="news_pic_content" class="col-xs-12 col-sm-12" id="news_pic_content"  placeholder="多图对应文章说明，例如： 图片一说明 | 图片二说明 | 图片三说明    每个文字说明以 | 分割" ></textarea>
+							<input id="file-5" name="pic_all[]" type="file"  class="file"  multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""><br />
+							<textarea name="news_pic_content" class="col-xs-12 col-sm-12" id="news_pic_content"  placeholder="单次编辑或添加文章,选择多图时请一次性选择。多图对应文章说明，例如： 图片一说明 | 图片二说明 | 图片三说明    每个文字说明以 | 分割" ></textarea>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -147,6 +148,23 @@
 					</div>
 					<div class="space-4"></div>
 
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+						<div class="col-sm-10">
+							<input type="text" name="listorder" value="50" class="col-xs-10 col-sm-1" />
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示日期：  </label>
+						<div class="col-sm-10">
+							<input name="showdate" class="date-picker col-xs-10 col-sm-6" value="{php}$time = time();
+echo date("Y-m-d",$time){/php}" type="text" data-date-format="yyyy-mm-dd">
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章简介： </label>
 						<div class="col-sm-9">
@@ -189,8 +207,8 @@
 		</div>
 
 	</div><!-- /.page-content -->
-</block>
-<block name="scripts">
+{/block}
+{block name="scripts"}
 	<script>
 			//多图设置
 			$("#pic_list").hide();
@@ -209,5 +227,10 @@
 			$("#news_flag_vacp").click(function(){
 				$("#cpprice").toggle(400);
 			});
+			$('.date-picker').datepicker({
+					autoclose: true,
+					todayHighlight: true,
+					language:'zh-CN',
+				})
 	</script>
-</block>
+{/block}

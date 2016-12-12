@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 		<div class="row">
 			<div class="col-xs-12">
@@ -9,7 +9,7 @@
 						<i class="ace-icon fa fa-times"></i>
 					</button>
 					<i class="ace-icon fa fa-check green"></i>
-					为了您更好的使用本系统，建议屏幕分辨率1280*768以上，并且安装chrome谷歌浏览器 ——— <a href="{:U('Help/soft')}">进入软件下载专区</a>
+					为了您更好的使用本系统，建议屏幕分辨率1280*768以上，并且安装chrome谷歌浏览器 ——— <a href="{:url('Help/soft')}">进入软件下载专区</a>
 				</div>
 				<div class="row">
 					<div class="space-6"></div>
@@ -22,7 +22,7 @@
 								<span class="infobox-data-number">{$tonews_count}</span>
 								<div class="infobox-content">今日普通文章数</div>
 							</div>
-							<div class="stat <if condition='$difday lt 1'>stat-important<else />stat-success</if>">{$difday|round=###,0}%</div>
+							<div class="stat {if condition='$difday lt 1'}stat-important{else /}stat-success{/if}">{$difday|round=###,0}%</div>
 						</div>
 						<div class="infobox infobox-blue col-xs-12 col-sm-6 col-md-6 col-lg-4">
 							<div class="infobox-icon">
@@ -32,7 +32,7 @@
 								<span class="infobox-data-number">{$tomembers_count}</span>
 								<div class="infobox-content">今日增加会员</div>
 							</div>
-							<div class="stat <if condition='$difday_m lt 1'>stat-important<else />stat-success</if>">{$difday_m|round=###,0}%</div>
+							<div class="stat {if condition='$difday_m lt 1'}stat-important{else /}stat-success{/if}">{$difday_m|round=###,0}%</div>
 						</div>
 						<div class="infobox infobox-pink col-xs-12 col-sm-6 col-md-6 col-lg-4">
 							<div class="infobox-icon">
@@ -42,7 +42,7 @@
 								<span class="infobox-data-number">{$tocoms_count}</span>
 								<div class="infobox-content">今日评论</div>
 							</div>
-							<div class="stat <if condition='$difday_c lt 1'>stat-important<else />stat-success</if>">{$difday_c|round=###,0}%</div>
+							<div class="stat {if condition='$difday_c lt 1'}stat-important{else /}stat-success{/if}">{$difday_c|round=###,0}%</div>
 						</div>
 						<div class="infobox infobox-orange infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
 							<div class="infobox-icon">
@@ -51,7 +51,7 @@
 
 							<div class="infobox-data">
 								<div class="infobox-content">总文章数</div>
-								<a href="{:U('News/news_list')}"><div class="infobox-content">{$news_count}</div></a>
+								<a href="{:url('News/news_list')}"><div class="infobox-content">{$news_count}</div></a>
 							</div>
 						</div>
 						<div class="infobox infobox-green infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
@@ -60,7 +60,7 @@
 							</div>
 							<div class="infobox-data">
 								<div class="infobox-content">总会员数</div>
-								<a href="{:U('Member/member_list')}"><div class="infobox-content">{$members_count}</div></a>
+								<a href="{:url('Member/member_list')}"><div class="infobox-content">{$members_count}</div></a>
 							</div>
 						</div>
 						<div class="infobox infobox-orange2 infobox-dark col-xs-12 col-sm-6 col-md-6 col-lg-4">
@@ -69,7 +69,7 @@
 							</div>
 							<div class="infobox-data">
 								<div class="infobox-content">总评论数</div>
-								<a href="{:U('Comment/comment_list')}"><div class="infobox-content">{$coms_count}</div></a>
+								<a href="{:url('Comment/comment_list')}"><div class="infobox-content">{$coms_count}</div></a>
 							</div>
 						</div>
 						<div class="row">
@@ -96,12 +96,14 @@
 							<div class="widget-body">
 								<div class="widget-main">
 									<p class="alert alert-danger sl-line-height25">
-										YFCMF版本：{$Think.config.YFCMF_VERSION} &nbsp;
-										<if condition="empty($ver_last)">
+										YFCMF版本：{$Think.config.yfcmf_version} &nbsp;
+										{if condition="!empty($update_check)"}
+										{if condition="empty($ver_last)"}
 											<button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check"></i>{$ver_str}</button>
-										<else />
-											<a href="{:UU('Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-bolt bigger-110"></i>{$ver_str}</button></a>
-										</if>
+										{else /}
+											<a href="{:url('Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-bolt bigger-110"></i>{$ver_str}</button></a>
+										{/if}
+										{/if}
 										<br />
 										框架版本：ThinkPHP{$info.ThinkPHPTYE}&nbsp;&nbsp;上传附件限制：{$info.ONLOAD}<br />
 										系统版本：{$info.RUNTYPE}<br />
@@ -116,12 +118,14 @@
 							<div class="widget-body">
 								<div class="widget-main">
 									<p class="alert alert-info sl-line-height25">
-										YFCMF：<a href="http://www.rainfer.cn" target="_blank" alt="RainferCMF">www.rainfer.cn</a>
+										交流网站：<a href="http://www.yfcmf.net" target="_blank" alt="YFCMF">www.yfcmf.net</a>
 										<br />
 										开发团队：Rainfer（<i class="ace-icon fa fa-qq"></i>:81818832）、Kenan2726（<i class="ace-icon fa fa-qq"></i>:86301216）<br />
 									</p>
-									<p class="alert alert-success">贡献者：
-										<a>slackck</a>
+									<p class="alert alert-success">
+										演示网站：<a href="http://www.rainfer.cn" target="_blank" alt="YFCMF">www.rainfer.cn</a>
+										<br/>
+										git网址：<a href="https://git.oschina.net/rainfer/YFCMF" target="_blank" alt="YFCMF">https://git.oschina.net/rainfer/YFCMF</a>&nbsp;(觉得好记得加颗★star)
 									</p>
 								</div>
 							</div>
@@ -132,30 +136,30 @@
 
 					<div class="col-sm-5">
 						<!-- 安全检测开始 -->
-						<div class="panel <if condition="$system_safe">panel-default<else />panel-danger</if>">
+						<div class="panel {if condition="$system_safe"}panel-default{else /}panel-danger{/if}">
 						<div class="panel-heading">
 							<i class="ace-icon fa fa-bolt"></i>
 							<span class="icon-dashboard"></span> 系统安全检测
 						</div>
 						<div class="panel-body">
-							<if condition="$system_safe">
+							{if condition="$system_safe"}
 								<p class="text-success"><span class="glyphicon glyphicon-ok-sign"></span> 当前系统安全！</p>
-							</if>
-							<if condition="$weak_setting_db_password">
+							{/if}
+							{if condition="$weak_setting_db_password"}
 								<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 数据库连接密码为弱密码，安全起见，增强密码！</p>
-							</if>
-							<if condition="$weak_setting_admin_password">
+							{/if}
+							{if condition="$weak_setting_admin_password"}
 								<p class="text-danger"><span class="glyphicon glyphicon-info-sign"></span> 检测到您的后台登录密码为弱密码！</p>
-							</if>
-							<if condition="$danger_mode_debug">
+							{/if}
+							{if condition="$danger_mode_debug"}
 								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span> 当前系统运行在调试模式，可能会影响运行性能及安全！</p>
-							</if>
-							<if condition="$system_pageshow">
+							{/if}
+							{if condition="$system_pageshow"}
 								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  当前系统已开SHOW_PAGE_TRACE</p>
-							</if>
-							<if condition="$weak_setting_admin_last_change_password">
+							{/if}
+							{if condition="$weak_setting_admin_last_change_password"}
 								<p class="text-warning"><span class="glyphicon glyphicon-info-sign"></span>  您太久没有更换登陆密码了，请定期更换后台登陆密码！</p>
-							</if>
+							{/if}
 							<!--[if lte IE 8]>
 							<p class="text-warning">
 								<span class="glyphicon glyphicon-info-sign"></span> 浏览器版本过低！
@@ -173,19 +177,19 @@
 							<tbody>
 							<tr>
 								<td colspan="2">
-									<a href="{:U('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default maintain">下载日志</a>
-									<a href="{:U('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default maintain">查看日志</a>
-									<a href="{:U('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn maintain">清除日志</a>
-									<if condition="$debug">
-										<a href="{:U('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn maintain">关闭调试</a>
-										<else />
-										<a href="{:U('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn maintain">打开调试</a>
-									</if>
-									<if condition="$system_pageshow">
-										<a href="{:U('Sys/maintain',array('action'=>'trace_off'))}" class="btn btn-default rst-url-btn maintain">关闭Trace</a>
-										<else />
-										<a href="{:U('Sys/maintain',array('action'=>'trace_on'))}" class="btn btn-default rst-url-btn maintain">打开Trace</a>
-									</if>
+									<a href="{:url('Sys/maintain',array('action'=>'download_log'))}" target="_blank" class="btn btn-default maintain">下载日志</a>
+									<a href="{:url('Sys/maintain',array('action'=>'view_log'))}" target="_blank" class="btn btn-default maintain">查看日志</a>
+									<a href="{:url('Sys/maintain',array('action'=>'clear_log'))}" class="btn btn-default rst-url-btn maintain">清除日志</a>
+									{if condition="$danger_mode_debug"}
+										<a href="{:url('Sys/maintain',array('action'=>'debug_off'))}" class="btn btn-default rst-url-btn maintain">关闭调试</a>
+										{else /}
+										<a href="{:url('Sys/maintain',array('action'=>'debug_on'))}" class="btn btn-default rst-url-btn maintain">打开调试</a>
+									{/if}
+									{if condition="$system_pageshow"}
+										<a href="{:url('Sys/maintain',array('action'=>'trace_off'))}" class="btn btn-default rst-url-btn maintain">关闭Trace</a>
+										{else /}
+										<a href="{:url('Sys/maintain',array('action'=>'trace_on'))}" class="btn btn-default rst-url-btn maintain">打开Trace</a>
+									{/if}
 								</td>
 							</tr>
 							<tr>
@@ -213,15 +217,15 @@
 									</tr>
 									</thead>
 									<tbody>
-									<php>
+									{php}
 										$color=array("badge badge-pink","badge badge-yellow","badge badge-danger","badge badge-warning","badge badge-success","badge badge-inverse","badge badge-purple","badge badge-info","badge badge-grey","badge");
-									</php>
-									<foreach name="news_list" item="v" key="k">
+									{/php}
+									{foreach name="news_list" item="v" key="k"}
 										<tr>
-											<td height="25"><span class="{$color[$k]}">{$k+1}</span><a href="{:U('Home/News/index',array('id'=>$v['n_id']))}" target="_blank">{$v.news_title}</a></td>
+											<td height="25"><span class="{$color[$k]}">{$k+1}</span><a href="{:url('home/News/index',array('id'=>$v['n_id']))}" target="_blank">{$v.news_title}</a></td>
 											<td>{$v.news_hits}</td>
 										</tr>
-									</foreach>
+									{/foreach}
 									</tbody>
 								</table>
 							</div>
@@ -233,4 +237,4 @@
 		</div><!-- /.col -->
 	</div><!-- /.row -->
 	</div>
-</block>
+{/block}

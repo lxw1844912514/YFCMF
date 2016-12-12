@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
 		<div class="page-header">
@@ -13,8 +13,9 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="menuadd" method="post" action="{:U('news_menu_runadd')}">
+				<form class="form-horizontal ajaxForm2" name="menuadd" method="post" action="{:url('news_menu_runadd')}">
 					<input type="hidden" name="parentid" value="{$parentid}" />
+					<input type="hidden" name="lang_list" value="{$menu_l}" />
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
 						<div class="col-sm-9">
@@ -26,6 +27,26 @@
 					</div>
 					<div class="space-4"></div>
 
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 选择语言： </label>
+						<div class="col-sm-9">
+							{if condition="$menu_l eq ''"}
+							<select name="menu_l"  class="col-sm-3 selector" required>
+								<option value="">请选择语言</option>
+								<option value="zh-cn">中文</option>
+								<option value="en-us">英语</option>
+							</select>
+							{else /}
+							<select name="menu_l"  class="col-sm-3 selector" disabled required>
+								<option value="">请选择语言</option>
+								<option value="zh-cn" {if condition="$menu_l eq 'zh-cn'"}selected{/if}>中文</option>
+								<option value="en-us" {if condition="$menu_l eq 'en-us'"}selected{/if}>英语</option>
+							</select>
+							{/if}
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文菜单名称： </label>
 						<div class="col-sm-9">
@@ -101,9 +122,9 @@
 						<div class="col-sm-9">
 							<select name="menu_listtpl"  class="col-sm-3 selector">
 								<option value="">请选择模板</option>
-								<foreach name="tpls" item="vo">
+								{foreach name="tpls" item="vo"}
 									<option value="{$vo}">{$vo}</option>
-								</foreach>
+									{/foreach}
 							</select>
 						</div>
 					</div>
@@ -114,9 +135,9 @@
 						<div class="col-sm-9">
 							<select name="menu_newstpl"  class="col-sm-3 selector">
 								<option value="">请选择模板</option>
-								<foreach name="tpls" item="vo">
+								{foreach name="tpls" item="vo"}
 									<option value="{$vo}">{$vo}</option>
-								</foreach>
+								{/foreach}
 							</select>
 						</div>
 					</div>
@@ -198,8 +219,8 @@
 			</div>
 		</div>
 	</div><!-- /.page-content -->
-</block>
-<block name="scripts">
+{/block}
+{block name="scripts"}
     <script>
         $('#address').hide();//默认隐藏
         $('#menu_content').hide();//默认隐藏
@@ -230,4 +251,4 @@
             $('#pic_list').show();
         });
     </script>
-</block>
+{/block}

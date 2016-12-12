@@ -4,32 +4,32 @@
 <!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
-	<title>登录 {$site_name} </title>
-	<meta name="keywords" content="{$site_seo_keywords}" />
-	<meta name="description" content="{$site_seo_description}">
-	<include file="Public:head" />
+	<title>{:lang('login')} {$site_name} </title>
+	<meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+	<meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+	{include file="public:head" /}
 </head>
 
 <body class="body-white">
 <div class="wrap">
-	<include file="Public:nav" />
+	{include file="public:nav" /}
 	<div id="main-cmf">
 		<div class="content">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-10 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-1 animate_afr">
-						<h2 class="text-center">用户登录</h2>
+						<h2 class="text-center">{:lang('user login')}</h2>
 						<div class="widget tabs">
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form id="login" class="form-light" action="{:UU('Login/runlogin')}" method="post">
+										<form id="login" class="form-light verify-ajax-form" action="{:url('Login/runlogin')}" method="post">
 											<div>
-												<input type="text" id="input_username" name="member_list_username" placeholder="手机号/邮箱/用户名" class="form-control">
+												<input type="text" id="input_username" name="member_list_username" placeholder="{:lang('username or email')}" class="form-control">
 											</div>
 											<div>&nbsp;</div>
 											<div>
-												<input type="password" id="input_password" name="member_list_pwd" placeholder="密码" class="form-control">
+												<input type="password" id="input_password" name="member_list_pwd" placeholder="{:lang('pwd')}" class="form-control">
 											</div>
 											<div>&nbsp;</div>
 											<div class="row">
@@ -37,22 +37,22 @@
 													<input type="text" class="form-control" id="verify" placeholder="" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:UU('Login/verify')}" onClick="this.src='{:UU('Login/verify')}'+<in name='Think.config.url_model' value='1,2'>'?'<else />'&'</in>+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:url('Login/verify')}" onClick="this.src='{:url('Login/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="{:lang('click to get')}">
 												</div>
 											</div>
-											<div>&nbsp;</div>
-											<div>
-												<button class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12">确定</button>
-
+											<div style="margin:5px 0">
+											<input type="checkbox" checked="checked" name="remember" value="1" style="cursor:pointer;">{:lang('remember')}
 											</div>
-											<div>&nbsp;</div>
-											<div style="text-align: center;">
+											<div>
+												<button class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12">{:lang('ok')}</button>
+											</div>
+											<div style="text-align: center; margin:5px 0">
 												<div class="row">
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:UU('Register/index')}">现在注册</a>
+														<a href="{:url('Register/index')}">{:lang('register immediately')}</a>
 													</div>
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:UU('Login/forgot_pwd')}">忘记密码</a>
+														<a href="{:url('Login/forgot_pwd')}">{:lang('forget password')}</a>
 													</div>
 												</div>
 											</div>
@@ -66,43 +66,8 @@
 			</div>
 		</div>
 	</div>
-	<include file="Public:footer"/>
+	{include file="public:footer"/}
 </div>
-<include file="Public:scripts"/>
-<script type="text/javascript">
-//添加操作
-$(function(){
-	$('#login').ajaxForm({
-		success: complete, // 这是提交后的方法
-		dataType: 'json'
-	});
-	function complete(data){
-		if(data.status==1){
-			layer.alert(data.info, {icon: 6}, function(index){
-				layer.close(index);
-				window.location.href=data.url;
-			});
-		}else{
-			layer.alert(data.info, {icon: 5}, function(index){
-				layer.close(index);
-				if(data.info=='验证码错误'){
-					$('#verify').val("");
-				}else{
-					$(':input').val("");
-				}
-			});
-			var $verify_img=$('#verify_img');
-			var $url=$verify_img.attr("src");
-			if($url.indexOf('?')>0){
-				$url=$url+'&'+Math.random();
-			}else{
-				$url=$url+'?'+Math.random();
-			}
-			$verify_img.attr("src",$url); 
-		}
-		return false;
-	}
-});
-</script>
+{include file="public:scripts"/}
 </body>
 </html>

@@ -6,6 +6,8 @@
 	<title>用户登录</title>
 	<meta name="description" content="User login page" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<link rel="Bookmark" href="__ROOT__/favicon.ico" >
+    <link rel="Shortcut Icon" href="__ROOT__/favicon.ico" />
 	<!-- bootstrap & fontawesome必须的css -->
 	<link rel="stylesheet" href="__PUBLIC__/ace/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="__PUBLIC__/font-awesome/css/font-awesome.min.css" />
@@ -50,7 +52,7 @@
 									</h4>
 
 									<div class="space-6"></div>
-									<form class="ajaxForm3" name="runlogin" id="runlogin" method="post" action="{:U('runlogin')}">
+									<form class="ajaxForm3" name="runlogin" id="runlogin" method="post" action="{:url('runlogin')}">
 										<fieldset>
 											<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -73,7 +75,7 @@
 											</label>
 											<label class="block clearfix">
 												<span class="block text-center">
-													<img class="verify_img" id="verify_img" src="{:U('Login/verify')}" onClick="this.src='{:U('Login/verify')}'+<in name='Think.config.url_model' value='1,2'>'?'<else />'&'</in>+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:url('Login/verify')}" onClick="this.src='{:url('Login/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
 												</span>
 											</label>
 											<div class="space"></div>
@@ -115,7 +117,8 @@
 <![endif]-->
 <!-- jquery.form、layer、yfcmf的js -->
 <script src="__PUBLIC__/others/jquery.form.js"></script>
-<script src="__PUBLIC__/layer/layer.js"></script>
+<script src="__PUBLIC__/layer/layer_zh-cn.js"></script>
+<script src="__PUBLIC__/others/maxlength.js"></script>
 <script src="__PUBLIC__/yfcmf/yfcmf.js"></script>
 <!-- 如果为触屏,则引入jquery.mobile -->
 <script type="text/javascript">

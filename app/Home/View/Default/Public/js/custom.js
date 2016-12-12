@@ -585,128 +585,135 @@ jQuery(document).ready(function () {
 		});
 	});
 	//点赞等
-	$(function(){
-		var $js_count_btn = $("a.js-count-btn");
-		$js_count_btn.click(function(){
-			var $url=this.href,
-				$count=$(this).next(".count"),
-				count=parseInt($count.text());
-			$.post($url,{},function(data){
-				if(data.status){
-					layer.alert(data.info, {icon: 6}, function(index){
-						$count.text(count+1);
+$(function(){
+	//事件绑定
+	$("body").on("click","a.js-count-btn", function(){
+		var $url=this.href,
+			$count=$(this).next(".count"),
+			count=parseInt($count.text());
+		$.post($url,{},function(data){
+			if(data.code==1){
+				layer.alert(data.msg, {icon: 6}, function(index){
+					$count.text(count+1);
+					layer.close(index);
+				});
+			} else {
+				layer.alert(data.msg, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+		}, "json");
+		return false;	 		
+	});
+});
+//收藏
+$(function(){
+	$("body").on("click","a.js-favorite-btn", function(){
+		var $url=this.href,
+			id = $(this).data("id"),
+			key = $(this).data("key");
+		$.post($url,{id:id,key:key},function(data){
+			if(data.code==1){
+				layer.alert(data.msg, {icon: 6}, function(index){
+					layer.close(index);
+				});
+			} else {
+				layer.alert(data.msg, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+		}, "json");
+		return false;
+	});
+});
+//删除
+$(function(){
+	$("body").on("click","a.js-delete-btn", function(){
+		var $url=this.href;
+		layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
+			layer.close(index);
+			$.get($url, function(data){
+				if(data.code==1){
+					layer.alert(data.msg, {icon: 6}, function(index){
 						layer.close(index);
+						window.location.href=data.url;
 					});
 				} else {
-					layer.alert(data.info, {icon: 5}, function(index){
+					layer.alert(data.msg, {icon: 5}, function(index){
 						layer.close(index);
 					});
 				}
 			}, "json");
-			return false;
 		});
+		return false;
 	});
-    //收藏
-    $(function(){
-        var $js_favorite_btn = $("a.js-favorite-btn");
-        $js_favorite_btn.click(function(){
-            var $url=this.href,
-                id = $(this).data("id"),
-                key = $(this).data("key");
-            $.post($url,{id:id,key:key},function(data){
-                if(data.status){
-                    layer.alert(data.info, {icon: 6}, function(index){
-                        layer.close(index);
-                    });
-                } else {
-                    layer.alert(data.info, {icon: 5}, function(index){
-                        layer.close(index);
-                    });
-                }
-            }, "json");
-            return false;
-        });
-    });
-    //删除
-    $(function(){
-        var $js_delete_btn = $("a.js-delete-btn");
-        $js_delete_btn.click(function(){
-            var $url=this.href;
-            layer.confirm('你确定要删除吗？', {icon: 3}, function(index){
-                layer.close(index);
-                $.get($url, function(data){
-                    if(data.status){
-                        layer.alert(data.info, {icon: 6}, function(index){
-                            layer.close(index);
-                            window.location.href=data.url;
-                        });
-                    } else {
-                        layer.alert(data.info, {icon: 5}, function(index){
-                            layer.close(index);
-                        });
-                    }
-                }, "json");
-            });
-            return false;
-        });
-    });
-	//评论
-	$(function(){
-		$('form.comment-form').ajaxForm({
-			beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-			success: complete, // 这是提交后的方法
-			dataType: 'json'
-		});
-		var $this=$('form.comment-form'),
-			$btn=$this.find('button');
-		function checkForm(){
-			$btn.text($btn.text() + '中...').prop('disabled', true).addClass('disabled');
-		}
-		function complete(data){
-			$btn.removeClass('disabled').text($btn.text().replace('中...', '')).removeProp('disabled').removeClass('disabled');
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
-					var $comments=$this.siblings(".comments"),
-						comment_tpl=$this.parent().find('.comment-tpl').html(),
-						$comment_tpl=$(comment_tpl),
-						$comment_postbox=$this.find(".comment-postbox"),
-						comment_content=$comment_postbox.val();
-					$comment_tpl.attr("data-id",data.id);
-					$comment_tpl.find(".comment-content .content").html(comment_content);
-                    $comments.append($comment_tpl);
-                    $comment_postbox.val("");
-					layer.close(index);
-				});
-			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
-					layer.close(index);
-				});
-			}
-			return false;
-		}
+});
+//评论
+$(function(){
+	$('form.comment-form').ajaxForm({
+		beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
 	});
+	var $this=$('form.comment-form'),
+		$btn=$this.find('button');
+	function checkForm(){
+		$btn.text($btn.text() + '中...').prop('disabled', true).addClass('disabled');
+	}
+	function complete(data){
+		$btn.removeClass('disabled').text($btn.text().replace('中...', '')).removeProp('disabled').removeClass('disabled');
+		if(data.code==1){
+			layer.alert(data.msg, {icon: 6}, function(index){
+				var $comments=$this.siblings(".comments"),
+					comment_tpl=$this.parent().find('.comment-tpl').html(),
+					$comment_tpl=$(comment_tpl),
+					$comment_postbox=$this.find(".comment-postbox"),
+					comment_content=$comment_postbox.val();
+				$comment_tpl.attr("data-id",data.id);
+				$comment_tpl.find(".comment-content .content").html(comment_content);
+				$comments.append($comment_tpl);
+				$comment_postbox.val("");
+				layer.close(index);
+			});
+		}else{
+			layer.alert(data.msg, {icon: 5}, function(index){
+				layer.close(index);
+			});
+		}
+		return false;
+	}
+});
 //回复
 function comment_reply(obj){
 	$('.comments .comment-reply-submit').hide();
 	var $this=$(obj);
-	var $comment_body=$this.parents(".comments > .comment> .comment-body");
-	var commentid=$this.parents(".comment").data("id");
-	var $comment_reply_submit=$comment_body.find(".comment-reply-submit");
-	if($comment_reply_submit.length){
-		$comment_reply_submit.show();
+	var $comment_form=$this.parents(".comment-area").find(".comment-form");
+	var comment_url=$comment_form.attr("action");
+	if(!comment_url){
+		layer.alert("未登录", {icon: 5}, function(index){
+			layer.close(index);
+		});
+		return;
 	}else{
-		var comment_reply_box_tpl=$comment_body.parents(".comment-area").find(".comment-reply-box-tpl").html();
-		$comment_reply_submit=$(comment_reply_box_tpl);
-		$comment_body.append($comment_reply_submit);
+		var $comment_body=$this.parents(".comments > .comment> .comment-body");
+		var commentid=$this.parents(".comment").data("id");
+		var $comment_reply_submit=$comment_body.find(".comment-reply-submit");
+		if($comment_reply_submit.length){
+			$comment_reply_submit.show();
+		}else{
+			var comment_reply_box_tpl=$comment_body.parents(".comment-area").find(".comment-reply-box-tpl").html();
+			$comment_reply_submit=$(comment_reply_box_tpl);
+			$comment_body.append($comment_reply_submit);
+		}
+		$comment_reply_submit.find(".textbox").focus();
+		$comment_reply_submit.data("replyid",commentid);
 	}
-	$comment_reply_submit.find(".textbox").focus();
-	$comment_reply_submit.data("replyid",commentid);
 }
 //取消回复
 function comment_cancel(obj){
 	$('.comments .comment-reply-submit').hide();
 }
-function comment_submit(obj){	
+function comment_submit(obj){
 	var $this=$(obj);
 	var $comment_reply_submit=$this.parents(".comment-reply-submit");
 	var $reply_textbox=$comment_reply_submit.find(".textbox");
@@ -735,18 +742,119 @@ function comment_submit(obj){
 			parentid:replyid,
 			c_content:reply_content
 		},function(data){
-			if(data.status==1){
-				layer.alert(data.info, {icon: 6}, function(index){
+			if(data.code==1){
+				layer.alert(data.msg, {icon: 6}, function(index){
 					$comment_tpl.attr("data-id",data.id);
 					$reply_textbox.val('');
 					layer.close(index);
 				});
 			}else{
-				layer.alert(data.info, {icon: 5}, function(index){
+				layer.alert(data.msg, {icon: 5}, function(index){
 					$comment_tpl.remove();
 					layer.close(index);
 				});
 			}
 		},'json');
 		$comment_reply_submit.hide();	
+}
+//语言切换
+$(function(){
+	$("body").on("click","a.js-lang-btn", function(){
+		var $url=this.href;
+		$.get($url, function(data){
+			console.log(data);
+			if(data.code==1){
+				layer.alert(data.msg, {icon: 6}, function(index){
+					layer.close(index);
+					window.location.href=data.url;
+				});
+			} else {
+				layer.alert(data.msg, {icon: 5}, function(index){
+					layer.close(index);
+				});
+			}
+		}, "json");
+		return false;
+	});
+});
+//搜索
+$(function(){
+	$('.search-ajaxform').ajaxForm({
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+	function complete(data){
+		if(data){
+			window.location.href=data.url;
+			//document.write(data);
+		}else{
+			layer.alert(data.msg, {icon: 5}, function(index){
+				layer.close(index);
+			});
+		}
+		return false;
+	}
+});
+//带验证码ajaxform提交
+$(function(){
+	$('.verify-ajax-form').ajaxForm({
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+	function complete(data){
+		if(data.code==1){
+			layer.alert(data.msg, {icon: 6}, function(index){
+				layer.close(index);
+				window.location.href=data.url;
+			});
+		}else{
+			layer.alert(data.msg, {icon: 5}, function(index){
+				layer.close(index);
+				if(data.msg=="{:lang('verifiy incorrect')}"){
+					$('#verify').val("");
+				}else{
+					$(':input').val("");
+				}
+			});
+			var $verify_img=$('#verify_img');
+			var $url=$verify_img.attr("src");
+			if($url.indexOf('?')>0){
+				$url=$url+'&'+Math.random();
+			}else{
+				$url=$url+'?'+Math.random();
+			}
+			$verify_img.attr("src",$url);
+		}
+		return false;
+	}
+});
+//ajaxform提交
+$(function(){
+	$('.ajax-form').ajaxForm({
+		success: complete, // 这是提交后的方法
+		dataType: 'json'
+	});
+	function complete(data){
+		if(data.code==1){
+			layer.alert(data.msg, {icon: 6}, function(index){
+				layer.close(index);
+				window.location.href=data.url;
+			});
+		}else{
+			layer.alert(data.msg, {icon: 5}, function(index){
+				layer.close(index);
+			});
+		}
+		return false;
+	}
+});
+//ajax分页
+function ajax_page(page) {        
+	$.ajax({
+		type:"POST",
+		data:{page:page},            
+		success: function(data,status){
+			$("#news_list").html(data);
+		}
+	});
 }

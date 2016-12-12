@@ -1,41 +1,54 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 		<div class="row maintop">
-			<div class="col-xs-12 col-sm-1">
-				<a href="{:U('member_add')}">
-					<button class="btn btn-xs btn-danger">
+			<div class="col-xs-5 col-sm-2  margintop5">
+				<a href="{:url('member_add')}">
+					<button class="btn btn-sm btn-danger">
 						<i class="ace-icon fa fa-bolt bigger-110"></i>
 						添加会员
 					</button>
 				</a>
 			</div>
-
-			<div class="col-xs-12 col-sm-3">
-				<form name="admin_list_sea" class="form-search" method="post" action="{:U('member_list')}">
+			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('member_list')}">
+				<div class="col-xs-12 col-sm-4  margintop5">
+					<select name="opentype_check" class="ajax_change">
+						<option value="">按开启状态</option>
+						<option value="1" {if condition="$opentype_check eq '1'"}selected="selected"{/if}>开启</option>
+						<option value="0" {if condition="$opentype_check eq '0'"}selected="selected"{/if} >禁用</option>
+					</select>
+					<select name="activetype_check" class="ajax_change">
+						<option value="">按激活状态</option>
+						<option value="1" {if condition="$activetype_check eq '1'"}selected="selected"{/if}>已激活</option>
+						<option value="0" {if condition="$activetype_check eq '0'"}selected="selected"{/if} >未激活</option>
+					</select>
+				</div>
+				<div class="col-xs-12 col-sm-3  margintop5">
 					<div class="input-group">
-										<span class="input-group-addon">
-											<i class="ace-icon fa fa-check"></i>
-										</span>
-						<input type="text" name="key" id="key" class="form-control search-query admin_sea" value="{$val}" placeholder="输入用户名或者邮箱" />
-										<span class="input-group-btn">
-											<button type="submit" class="btn btn-xs  btn-purple">
-												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
-												搜索
-											</button>
-										</span>
+						<span class="input-group-addon">
+							<i class="ace-icon fa fa-check"></i>
+						</span>
+						<input type="text" name="key" id="key" class="form-control" value="{$val}" placeholder="输入用户名或者邮箱" />
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-sm  btn-purple ajax-search-form">
+								<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+								搜索
+							</button>
+						</span>
 					</div>
-				</form>
-			</div>
-			<div class="input-group-btn">
-				<a href="{:U('member_list')}">
-					<button type="button" class="btn btn-xs  btn-purple">
-						<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
-						显示全部
-					</button>
-				</a>
-			</div>
+				</div>
+				<div class="col-xs-4 col-sm-3 margintop5">
+					<div class="input-group-btn">
+						<a href="{:url('member_list')}">
+							<button type="button" class="btn btn-sm  btn-purple ajax-display-all">
+								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+								显示全部
+							</button>
+						</a>
+					</div>
+				</div>
+			</form>
 		</div>
 
 		<div class="row">
@@ -58,88 +71,8 @@
 						</tr>
 						</thead>
 
-						<tbody>
-
-						<foreach name="member_list" item="v">
-							<tr>
-								<td class="hidden-xs" height="28" >{$v.member_list_id}</td>
-								<td>{$v.member_list_username}</td>
-								<td>{$v.member_list_nickname|default="未设置"}【{$v.member_list_email|default="未设置"}】</td>
-								<td class="hidden-sm hidden-xs">{$v.member_list_from|default="本地"}</td>
-								<td class="hidden-sm hidden-xs">
-									<if condition="$v.member_list_sex eq 1">程序猿
-										<elseif condition="$v.member_list_sex eq 2"/>程序媛
-										<else />保密
-									</if>
-								</td>
-								<td class="hidden-sm hidden-xs">{$v.member_group_name}</td>
-								<td class="hidden-sm hidden-xs">{$v.score}</td>
-								<td class="hidden-sm hidden-xs">{$v.member_list_addtime|date='Y-m-d H:i:s',###}</td>
-								<td class="hidden-xs">
-									<if condition='$v.member_list_open eq 1'>
-										<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已开启">
-											<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
-										</a>
-										<else/>
-										<a class="red open-btn" href="{:U('member_state')}" data-id="{$v.member_list_id}" title="已禁用">
-											<div id="zt{$v.member_list_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
-										</a>
-									</if>
-								</td>
-								<td class="hidden-xs">
-									<if condition='$v.user_status eq 1'>
-										<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="已激活">
-											<div id="jh{$v.member_list_id}">
-												<button class="btn btn-minier btn-yellow">已激活</button>
-											</div>
-										</a>
-										<else/>
-										<a class="red active-btn" href="{:U('member_active')}" data-id="{$v.member_list_id}" title="未激活">
-											<div id="jh{$v.member_list_id}">
-												<button class="btn btn-minier btn-danger">未激活</button>
-											</div>
-										</a>
-									</if>
-								</td>
-								<td>
-									<div class="hidden-sm hidden-xs action-buttons">
-										<a class="green"  href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" title="修改">
-											<i class="ace-icon fa fa-pencil bigger-130"></i>
-										</a>
-										<a class="red confirm-rst-url-btn" href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}" data-info="你确定要删除吗？" title="删除">
-											<i class="ace-icon fa fa-trash-o bigger-130"></i>
-										</a>
-									</div>
-									<div class="hidden-md hidden-lg">
-										<div class="inline position-relative">
-											<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-												<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-											</button>
-											<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-												<li>
-													<a href="{:U('member_edit',array('member_list_id'=>$v['member_list_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil bigger-120"></i>
-																	</span>
-													</a>
-												</li>
-
-												<li>
-													<a href="{:U('member_del',array('member_list_id'=>$v['member_list_id'],'p'=>I('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</foreach>
-						<tr>
-							<td height="50" colspan="12" align="left">{$page}</td>
-						</tr>
+						<tbody id="ajax-data">
+							{include file="member/ajax_member_list"/}
 						</tbody>
 					</table>
 
@@ -147,4 +80,4 @@
 			</div>
 		</div>
 	</div><!-- /.page-content -->
-</block>
+{/block}

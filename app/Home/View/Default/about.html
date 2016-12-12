@@ -4,27 +4,27 @@
 <!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <title>{$site_seo_title} {$site_name}</title>
-    <meta name="keywords" content="{$site_seo_keywords}" />
-    <meta name="description" content="{$site_seo_description}">
-    <include file="Public:head" />
+    <title>{$menu.menu_seo_title|default=$site_seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
 </head>
 <body class="about page">
 <div class="wrap">
-    <include file="Public:nav" />
+    {include file="public:nav" /}
     <div id="main-cmf">
         <div class="breadcrumb-wrapper">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                        <h2 class="title">关于我们</h2>
+                        <h2 class="title">{:lang('about us')}</h2>
                     </div>
                     <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
                         <div class="breadcrumbs pull-right">
                             <ul>
-                                <li>当前位置:</li>
-                                <li><a href="__ROOT__/">首页</a></li>
-                                <li>关于我们</li>
+                                <li>{:lang('current location')}:</li>
+                                <li><a href="__ROOT__/">{:lang('home')}</a></li>
+                                <li>{:lang('about us')}</li>
                             </ul>
                         </div>
                     </div>
@@ -36,32 +36,32 @@
                 <div class="row">
                     <div class="posts-block col-lg-8 col-md-8 col-sm-6 col-xs-12">
                         <article>
-                            <php>$menu=get_menu_one($about_id);</php>
-                            <h3 class="title">团队介绍</h3>
+							{yf:singlepage name="menu" menuid="$about_id" /}
+                            <h3 class="title">{:lang('team introduction')}</h3>
                             <div class="post-content">
                                 <div class="img-content">
-                                    <img src="__ROOT__{$menu.menu_img}" alt="" style="max-width:350px">
+                                    <img src="{$menu.menu_img|get_imgurl}" alt="" style="max-width:350px">
                                 </div>
                                 <p>{$menu.menu_content}</p>
                             </div>
                         </article>
                     </div>
                     <div class="skills col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <h3 class="title">我们的优势</h3>
+                        <h3 class="title">{:lang('our advantage')}</h3>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">深厚的技术力量 90%</div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">{:lang('our advantage one')} 90%</div>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">丰富的行业经验 85%</div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">{:lang('our advantage two')} 85%</div>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">高效的作业流程 90%</div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">{:lang('our advantage three')} 90%</div>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">完善的服务体系 90%</div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">{:lang('our advantage four')} 90%</div>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">众多的成功案例 75%</div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">{:lang('our advantage five')} 75%</div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -69,44 +69,25 @@
                 <div class="divider"></div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <h3 class="title">工作流程</h3>
+                        <h3 class="title">{:lang('work flow')}</h3>
                         <div class="widget tabs animate_afc">
                             <div id="horizontal-tabs">
                                 <ul class="tabs">
-                                    <li id="tab1" class="current">协商设计</li>
-                                    <li id="tab2">开发阶段</li>
-                                    <li id="tab3">测试验收</li>
+                                    <li id="tab1" class="current">{:lang('design')}</li>
+                                    <li id="tab2">{:lang('development phase')}</li>
+                                    <li id="tab3">{:lang('test and acceptance')}</li>
                                 </ul>
                                 <div class="contents">
                                     <div class="tabscontent" id="content1" style="display: block;">
-                                        <p>
-                                            1 双方协商网站建设内容，修改补充，达成共识 </br>
-                                            2 我方制定《网站建设方案》 </br>
-                                            3 双方确定建站细节及价格</br>
-                                            4 双方签订《网站建设协议》</br>
-                                            5 客户支付预付款(30%)</br>
-                                            6 客户根据第一阶段调研表提供网站相关第一步内容资料
-                                            完成样稿设计</br>
+                                        <p>{:lang('flow one')}
                                         </p>
                                     </div>
                                     <div class="tabscontent" id="content2">
-                                        <p>
-                                            1 我方根据《网站建设方案》完成网站样稿 </br>
-                                            2 客户支付预付款(40%) </br>
-                                            3 首页、频道首页、基本页、网站架构图 </br>
-                                            4 客户审核确认样稿 </br>
-                                            5 为客户注册域名</br>
-                                            6 同时进行第二阶段调研	</br>
+                                        <p>{:lang('flow two')}
                                         </p>
                                     </div>
                                     <div class="tabscontent" id="content3">
-                                        <p>
-                                            1 我方完成全部网站制作 </br>
-                                            2 我方完成网站测试，双方协商完善 </br>
-                                            3 网站本地测试通过，客户确认 </br>
-                                            4 客户验收网站，网站开通 </br>
-                                            5 客户签发《网站建设验收合格确认书》 </br>
-                                            6 客户支付余款，网站开通 	</br>
+                                        <p>{:lang('flow three')}
                                         </p>
                                     </div>
                                 </div>
@@ -118,25 +99,22 @@
                             <div class="testimonials widget">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="testimonials-title">
-                                        <h3 class="title">客户评价</h3>
+                                        <h3 class="title">{:lang('positive')}</h3>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div id="testimonials-carousel" class="testimonials-carousel slide animate_afc">
                                     <div class="carousel-inner">
-                                        <php>
-                                            $tag="cid:".$positive_cid.";field:news_title,news_scontent,news_source,n_id,news_img;order:news_time desc;limit:8;";
-                                            $positive=get_news($tag);
-                                        </php>
-                                        <foreach name="positive" item="vo" key="k">
-                                            <div <if condition="$k eq 0">class="item active"<else />class="item"</if>>
+										{yf:news name="positive" cid="$positive_cid" field="news_title,news_scontent,news_source,n_id,news_img" order="news_time desc" limit="8" /} 
+                                        {foreach name="positive" item="vo" key="k"}
+                                            <div {if condition="$k eq 0"}class="item active"{else /}class="item"{/if}>
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="testimonial item">
                                                     <p>{$vo.news_scontent}</p>
                                                     <div class="testimonials-arrow">
                                                     </div>
                                                     <div class="author">
-                                                        <div class="testimonial-image "><img alt="" src="__ROOT__{$vo.news_img}"></div>
+                                                        <div class="testimonial-image "><img alt="" src="{$vo.news_img|get_imgurl}"></div>
                                                         <div class="testimonial-author-info">
                                                             <a href=""><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
                                                         </div>
@@ -144,7 +122,7 @@
                                                 </div>
                                             </div>
                                             </div>
-                                        </foreach>
+                                        {/foreach}
                                 </div>
                             </div>
                         </div>
@@ -155,8 +133,8 @@
         </div>
     </div>
 </div>
-<include file="Public:footer"/>
+{include file="public:footer"/}
 </div>
-<include file="Public:scripts"/>
+{include file="public:scripts"/}
 </body>
 </html>

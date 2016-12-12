@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -36,15 +36,15 @@
 						</a>
 					</li>
 				</ul>
-				<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:U('runsys')}">
+				<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:url('runsys')}">
 					<fieldset>
 						<div class="tab-content">
 							<div id="basic" class="tab-pane fade in active">
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点名称 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_name]" id="site_name" value="{$sys.site_name}" class="col-xs-10 col-sm-5" required/>
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_name]" id="site_name" value="{$sys.site_name}" class="col-xs-10 col-sm-7" required/>
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="resone">*</span>
 								</span>
 									</div>
@@ -54,8 +54,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点网址 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_host]" id="site_host" value="{$sys.site_host}"  class="col-xs-10 col-sm-5" required/>
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_host]" id="site_host" value="{$sys.site_host}"  class="col-xs-10 col-sm-7" required/>
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo">*</span>
 								</span>
 									</div>
@@ -65,12 +65,12 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题 </label>
 									<div class="col-sm-9">
-										<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-5" required>
-											<foreach name="templates" item="vo">
-												<option value="{$vo}" <if condition="$sys.site_tpl eq $vo">selected="selected"</if>>{$vo}</option>
-											</foreach>
+										<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-7" required>
+											{foreach name="templates" item="vo"}
+												<option value="{$vo}" {if condition="$sys.site_tpl eq $vo"}selected="selected"{/if}>{$vo}</option>
+											{/foreach}
 										</select>
-						<span class="help-inline col-xs-12 col-sm-7">
+						<span class="help-inline col-xs-12 col-sm-5">
 							<span class="middle" id="restwo">*</span>
 						</span>
 									</div>
@@ -87,10 +87,10 @@
 											<input type="file" name="file0" id="file0" multiple="multiple"/>
 											选择上传文件
 										</a>
-										&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$sys.site_logo eq ''">__PUBLIC__/img/no_img.jpg<else/>__ROOT__{$sys.site_logo}</if>');" title="还原修改前的图片" class="file">
+										&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('{$sys.site_logo|get_imgurl}');" title="还原修改前的图片" class="file">
 										撤销上传
 										</a>
-										<div><img src="<if condition="$sys.site_logo neq ''">__ROOT__{$sys.site_logo}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
+										<div><img src="{$sys.site_logo|get_imgurl}" height="70" id="img0" ></div>
 									</div>
 								</div>
 								<div class="space-4"></div>
@@ -98,8 +98,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 备案信息 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_icp]" id="site_icp" value="{$sys.site_icp}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_icp]" id="site_icp" value="{$sys.site_icp}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo"></span>
 								</span>
 									</div>
@@ -129,14 +129,24 @@
 									</div>
 								</div>
 								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启自动更新： </label>
+									<div class="col-sm-9" style="padding-top:5px;">
+										<input name="update_check" id="update_check" {if condition='$Think.config.update_check eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl"></span>
+									</div>
+								</div>
+								<div class="space-4"></div>								
+
 							</div>
 
 							<div id="contact" class="tab-pane fade">
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司名称 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_co_name]" id="site_co_name" value="{$sys.site_co_name}" class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_co_name]" id="site_co_name" value="{$sys.site_co_name}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="resone"></span>
 								</span>
 									</div>
@@ -146,8 +156,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司地址 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_address]" id="site_address" value="{$sys.site_address}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_address]" id="site_address" value="{$sys.site_address}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo"></span>
 								</span>
 									</div>
@@ -155,10 +165,32 @@
 								<div class="space-4"></div>
 
 								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地图lat </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[map_lat]" id="map_lat" value="{$map_lat}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地图lng </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[map_lng]" id="map_lng" value="{$map_lng}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								
+								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 联系电话 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_tel]" id="site_tel" value="{$sys.site_tel}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_tel]" id="site_tel" value="{$sys.site_tel}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo"></span>
 								</span>
 									</div>
@@ -168,8 +200,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长邮箱 </label>
 									<div class="col-sm-9">
-										<input type="email" name="options[site_admin_email]" id="site_admin_email" value="{$sys.site_admin_email}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="email" name="options[site_admin_email]" id="site_admin_email" value="{$sys.site_admin_email}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo"></span>
 								</span>
 									</div>
@@ -179,8 +211,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长QQ </label>
 									<div class="col-sm-9">
-										<input type="number" name="options[site_qq]" id="site_qq" value="{$sys.site_qq}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="number" name="options[site_qq]" id="site_qq" value="{$sys.site_qq}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="restwo"></span>
 								</span>
 									</div>
@@ -192,8 +224,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO标题 </label>
 									<div class="col-sm-9">
-										<input type="text" name="options[site_seo_title]" id="site_seo_title" value="{$sys.site_seo_title}"  class="col-xs-10 col-sm-5" />
-								<span class="help-inline col-xs-12 col-sm-7">
+										<input type="text" name="options[site_seo_title]" id="site_seo_title" value="{$sys.site_seo_title}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
 									<span class="middle" id="resthr"></span>
 								</span>
 									</div>
@@ -218,7 +250,7 @@
 										<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limited3"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
 										<input type="hidden" name="maxlengthone" value="200" />
 								<span class="help-inline col-xs-5 col-sm-5">
-									还可以输入 <span class="middle charsLef3"></span> 个字符
+									还可以输入 <span class="middle charsLeft3"></span> 个字符
 								</span>
 									</div>
 								</div>
@@ -245,4 +277,4 @@
 		</div>
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

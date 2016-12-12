@@ -1,11 +1,11 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 		<div class="row">
 			<div class="col-xs-12">
 				<div>
-					<form id="export-form" method="post"   class="form-horizontal"  action="{:U('export')}">
+					<form id="export-form" method="post"   class="form-horizontal"  action="{:url('export')}">
 						<table class="table table-striped table-bordered table-hover" id="dynamic-table">
 							<thead>
 							<tr>
@@ -19,7 +19,7 @@
 
 							<tbody>
 
-							<foreach name="data_list" item="v">
+							{foreach name="data_list" item="v"}
 								<tr>
 									<td>{$v.name}</td>
 									<td class="hidden-sm hidden-xs">【{$v.rows}】 条记录 </td>
@@ -27,13 +27,13 @@
 									<td class="hidden-sm hidden-xs">{$v.create_time}</td>
 									<td>
 										<div class="action-buttons" >
-											<a class="green" href="{:U('excel_runexport?table='.$v['name'])}" title="导出到Excel">
+											<a class="green" href="{:url('excel_runexport?table='.$v['name'])}" title="导出到Excel">
 												<i class="ace-icon fa fa-share bigger-130"></i>
 											</a>
 										</div>
 									</td>
 								</tr>
-							</foreach>
+							{/foreach}
 							<tr>
 								<td height="50" colspan="7" align="left">&nbsp;</td>
 							</tr>
@@ -46,4 +46,4 @@
 
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

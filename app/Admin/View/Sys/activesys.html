@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -16,11 +16,11 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm" name="sys" method="post" action="{:U('runactive')}">
+				<form class="form-horizontal ajaxForm" name="sys" method="post" action="{:url('runactive')}">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启邮箱激活： </label>
 						<div class="col-sm-9" style="padding-top:5px;">
-							<input name="options[email_active]" id="email_open" <if condition="!empty($sys['email_active'])">checked</if>  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<input name="options[email_active]" id="email_open" {if condition="!empty($sys['email_active'])"}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
 							<span class="lbl"></span>
 						</div>
 					</div>
@@ -29,8 +29,8 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮件标题： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[email_title]" id="email_title" value="{$sys.email_title}"  class="col-xs-10 col-sm-5" required/>
-											<span class="help-inline col-xs-12 col-sm-7">
+							<input type="text" name="options[email_title]" id="email_title" value="{$sys.email_title}"  class="col-xs-10 col-sm-7" required/>
+											<span class="help-inline col-xs-12 col-sm-5">
 												<span class="middle" id="restwo"></span>
 											</span>
 						</div>
@@ -47,7 +47,7 @@
 								var editor = new UE.ui.Editor();
 								editor.render("myEditor");
 							</script>
-							<span style="color: #ffb752;">请用http://#link#代替激活链接，#username#代替用户名</span>
+							<span style="color: #F3920A;">请用http://#link#代替激活链接，#username#代替用户名</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -69,4 +69,4 @@
 			</div>
 		</div>
 	</div>
-</block>
+{/block}

@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -16,11 +16,11 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm" name="oauthsys" method="post" action="{:U('runoauthsys')}">
+				<form class="form-horizontal ajaxForm" name="oauthsys" method="post" action="{:url('runoauthsys')}">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APPID： </label>
 						<div class="col-sm-9">
-							<input type="text" name="qq_appid" id="qq_appid" value="{$oauth_qq.APP_KEY}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="qq_appid" id="qq_appid" value="{$oauth_qq.app_key}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
@@ -32,7 +32,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APP KEY： </label>
 						<div class="col-sm-9">
-							<input type="text" name="qq_appkey" id="qq_appkey" value="{$oauth_qq.APP_SECRET}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="qq_appkey" id="qq_appkey" value="{$oauth_qq.app_secret}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
@@ -48,7 +48,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博APPID： </label>
 						<div class="col-sm-9">
-							<input type="text" name="sina_appid" id="sina_appid" value="{$oauth_sina.APP_KEY}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="sina_appid" id="sina_appid" value="{$oauth_sina.app_key}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resthr"></span>
@@ -60,7 +60,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博 APP KEY： </label>
 						<div class="col-sm-9">
-							<input type="text" name="sina_appkey" id="sina_appkey" value="{$oauth_sina.APP_SECRET}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="sina_appkey" id="sina_appkey" value="{$oauth_sina.app_secret}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resfour"></span>
@@ -94,4 +94,4 @@
 
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

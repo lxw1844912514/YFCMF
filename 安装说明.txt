@@ -1,0 +1,24 @@
+全新安装
+
+1、搭建环境
+PHP5.4以上版本（注意：PHP5.4dev版本和PHP6均不支持）
+2、进http://git.oschina.net/rainfer/YFCMF下载(顺便就给给star呗)
+3、解压缩,放至环境网站目录
+4、浏览器输入"http://网站域名/index.php",如果不是网站根目录,加上目录,如"http://网站域名/目录/index.php"
+5、按步骤安装
+
+
+以前版本升级安装
+1、备份数据库
+2、复制"update(1.2.0-2.0.0).sql"到mysql管理工具里升级数据库
+3、下载完整包,解压缩
+4、打开"目录/app/database.php",修改数据库配置
+5、登录后台"http://网站域名/目录/admin.php"
+6、进入会员管理,增加一个会员(给管理员匹配会员),并进入mysql数据库将增加的会员id更新到管理员表"yf_admin"的"member_id"
+(有几个管理员就增加几个)
+7、mysql数据库更新文章数据表"yf_news"的"news_auto",举例：
+原先文章表有使用管理员id=1 和id=3的发布文章,新增加的对应会员id=21 和id=22
+那么执行 
+update yf_news set news_auto=21 where news_auto=1;
+update yf_news set news_auto=22 where news_auto=3;
+8、切换到英文版,进行系统设置、增加英文版菜单、发布英文版文章

@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<include file="Public:head" />
+{include file="public:head" /}
 </head>
 <body>
 	<div class="wrap">
-		<include file="Public:header" />
+		{include file="public:header" /}
 		<div class="section">
 			<div class="main">
 				<pre class="agreement">YFCMF软件使用协议
@@ -27,10 +27,10 @@ YFCMF免责声明
   2、您一旦安装使用YFCMF，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。</pre>
 			</div>
 			<div class="bottom text-center">
-				<a href="__ROOT__/index.php?m=install&c=index&a=step2" class="btn btn-primary">接受</a>
+				<a href="{:url('step2')}" class="btn btn-primary">接受</a>
 			</div>
 		</div>
 	</div>
-	<include file="Public:footer" />
+	{include file="public:footer" /}
 </body>
 </html>

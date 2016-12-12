@@ -1,7 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<include file="Public:head" />
+{include file="public:head" /}
 <!--[if !IE]> -->
 <script src="__PUBLIC__/others/jquery.min-2.2.1.js"></script>
 <!-- <![endif]-->
@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class="wrap">
-		<include file="Public:header" />
+		{include file="public:header" /}
 		<section class="section">
 			<div class="step">
 				<ul class="unstyled">
@@ -21,7 +21,7 @@
 					<li><em>3</em>完成安装</li>
 				</ul>
 			</div>
-			<form id="js-install-form" action="__ROOT__/index.php?m=install&c=index&a=step4" method="post">
+			<form id="js-install-form" action="{:url('step4')}" method="post">
 				<input type="hidden" name="force" value="0" />
 				<div class="server">
 					<table width="100%">
@@ -55,7 +55,7 @@
 						</tr>
 						<tr>
 							<td class="text-left">数据库密码：</td>
-							<td><input type="password" name="dbpw" id="dbpw" value="" class="input" autoComplete="off" onblur="TestDbPwd()"></td>
+							<td><input type="password" name="dbpw" id="dbpw" value="" class="input" autoComplete="off" onblur="testdb()"></td>
 							<td><div id="js-install-tip-dbpw"></div></td>
 						</tr>
 						<tr>
@@ -134,7 +134,7 @@
 					<div id="js-response-tips" style="display: none;"></div>
 				</div>
 				<div class="bottom text-center">
-					<a href="__ROOT__/index.php?m=install&c=index&a=step2" class="btn btn-primary">上一步</a>
+					<a href="{:url('step2')}" class="btn btn-primary">上一步</a>
 					<button type="submit" class="btn btn-primary">创建数据</button>
 				</div>
 			</form>
@@ -142,19 +142,19 @@
 		<script src="__PUBLIC__/install/js/validate.js"></script>
 		<script src="__PUBLIC__/install/js/ajaxForm.js"></script>
 		<script>
-			function TestDbPwd() {
+			function testdb() {
 				var dbHost = $('#dbhost').val();
 				var dbUser = $('#dbuser').val();
 				var dbPwd = $('#dbpw').val();
 				var dbName = $('#dbname').val();
 				var dbPort = $('#dbport').val();
 				data = {
-					'DB_HOST' : dbHost,
-					'DB_USER' : dbUser,
-					'DB_PWD' : dbPwd,
-					'DB_PORT' : dbPort
+					'hostname' : dbHost,
+					'username' : dbUser,
+					'password' : dbPwd,
+					'hostport' : dbPort
 				};
-				var url = "__ROOT__/index.php?m=install&c=index&a=testdbpwd";
+				var url = "{:url('testdb')}";
 				$.ajax({
 					type : "POST",
 					url : url,
@@ -163,7 +163,8 @@
 					},
 					success : function(msg) {
 						if (msg) {
-
+							$('#dbpw').val("");
+							$('#js-install-tip-dbpw').html('<i class="fa fa-check correct"></i>数据库配置正确');
 						} else {
 							$('#dbpw').val("");
 							$('#js-install-tip-dbpw').html('<span for="dbname" generated="true" class="tips-error" style="">数据库链接配置失败</span>');
@@ -198,18 +199,11 @@
 
 				var install_form = $("#js-install-form");
 
-				//validate插件修改了remote ajax验证返回的response处理方式；增加密码强度提示 passwordRank
 				install_form.validate({
-					//debug : true,
-					//onsubmit : false,
 					errorPlacement : function(error, element) {
-						//错误提示容器
 						$('#js-install-tip-' + element[0].name).html(error);
 					},
 					errorElement : 'span',
-					//invalidHandler : , 未验证通过 回调
-					//ignore : '.ignore' 忽略验证
-					//onkeyup : true,
 					errorClass : 'tips-error',
 					validClass : 'tips-error',
 					onkeyup : false,
@@ -270,6 +264,6 @@
 			});
 		</script>
 	</div>
-	<include file="Public:footer" />
+	{include file="public:footer" /}
 </body>
 </html>

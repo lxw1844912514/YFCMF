@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -16,7 +16,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="admin_group_runaccess" method="post" action="{:U('admin_group_runaccess')}">
+				<form class="form-horizontal ajaxForm2" name="admin_group_runaccess" method="post" action="{:url('admin_group_runaccess')}">
 					<input name="id" id="id" type="hidden" value="{$admin_group.id}" />
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户组名：  </label>
@@ -42,46 +42,46 @@
 								</label>
 							</td>
 						</tr>
-						<foreach name="datab" item="vo">
+						{foreach name="datab" item="vo"}
 							<tr>
 								<td height="40" style="border-bottom:#CCCCCC solid 1px;padding-left:10px;">
 									<label>
-										<input <if condition="strstr($admin_group['rules'],$vo['id']) eq true">checked</if> name="new_rules[]" class="ace ace-checkbox-2 checkbox-parent" type="checkbox"  value="{$vo.id}" dataid="id-{$vo['id']}" /><span class="lbl"> <strong>{$vo.title}</strong></span>
+										<input {in name="vo.id" value="$admin_group['rules']"}checked{/in} name="new_rules[]" class="ace ace-checkbox-2 checkbox-parent" type="checkbox"  value="{$vo.id}" dataid="id-{$vo['id']}" /><span class="lbl"> <strong>{$vo.title}</strong></span>
 									</label>
 								</td>
 							</tr>
-							<foreach name="vo['sub']" item="sub">
+							{foreach name="vo['sub']" item="sub"}
 								<tr>
 									<td height="30" style="padding-left:30px;border-bottom:#E7EBF8 dashed 1px; color:#333333">
 										<label>
-											<input <if condition="strpos($admin_group['rules'],','.$sub['id'].',') GT -1 ">checked</if> name="new_rules[]" id="{$sub.id}" class="ace ace-checkbox-2 checkbox-parent checkbox-child" type="checkbox"  value="{$sub.id}" dataid="id-{$vo['id']}-{$sub['id']}" /><span class="lbl"> {$sub.title}</span>
+											<input {in name="sub.id" value="$admin_group['rules']"}checked{/in} name="new_rules[]" id="{$sub.id}" class="ace ace-checkbox-2 checkbox-parent checkbox-child" type="checkbox"  value="{$sub.id}" dataid="id-{$vo['id']}-{$sub['id']}" /><span class="lbl"> {$sub.title}</span>
 										</label>
 									</td>
 								</tr>
-								<foreach name="sub['sub']" item="subb">
+								{foreach name="sub['sub']" item="subb"}
 									<tr>
 										<td height="30" style="padding-left:50px;border-bottom:#E7EBF8 dashed 1px; color:#666666">
 											<label class="thopen">
-												<input <if condition=" strpos($admin_group['rules'],','.$subb['id'].',') GT -1 ">checked</if> name="new_rules[]" class="ace ace-checkbox-2 checkbox-parent checkbox-child" type="checkbox"  id="{$subb.id}" value="{$subb.id}" dataid="id-{$vo['id']}-{$sub['id']}-{$subb['id']}" />
+												<input {in name="subb.id" value="$admin_group['rules']"}checked{/in} name="new_rules[]" class="ace ace-checkbox-2 checkbox-parent checkbox-child" type="checkbox"  id="{$subb.id}" value="{$subb.id}" dataid="id-{$vo['id']}-{$sub['id']}-{$subb['id']}" />
 												<span class="lbl" style="margin-right:20px;"> {$subb.title}</span>
 											</label>
 										</td>
 									</tr>
-									<if condition="!empty($subb['sub'])">
+									{if condition="!empty($subb['sub'])"}
 										<tr>
 											<td height="30" style="padding-left:70px;border-bottom:#E7EBF8 dashed 1px; color:#666666">
-												<volist name="subb['sub']" id="subbb">
+												{volist name="subb['sub']" id="subbb"}
 													<label class="thopen">
-														<input <if condition=" strpos($admin_group['rules'],','.$subbb['id'].',') GT -1 ">checked</if> name="new_rules[]" class="ace ace-checkbox-2 checkbox-child" type="checkbox"  id="{$subbb.id}" value="{$subbb.id}" dataid="id-{$vo['id']}-{$sub['id']}-{$subb['id']}-{$subbb['id']}" />
+														<input {in name="subbb.id" value="$admin_group['rules']"}checked{/in} name="new_rules[]" class="ace ace-checkbox-2 checkbox-child" type="checkbox"  id="{$subbb.id}" value="{$subbb.id}" dataid="id-{$vo['id']}-{$sub['id']}-{$subb['id']}-{$subbb['id']}" />
 														<span class="lbl" style="margin-right:20px;"> {$subbb.title}</span>
 													</label>
-												</volist>
+												{/volist}
 											</td>
 										</tr>
-									</if>
-								</foreach>
-							</foreach>
-						</foreach>
+									{/if}
+								{/foreach}
+							{/foreach}
+						{/foreach}
 					</table>
 					<div class="clearfix form-actions">
 						<div class="col-md-offset-3 col-md-9">
@@ -103,4 +103,4 @@
 
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

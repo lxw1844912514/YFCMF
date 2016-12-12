@@ -1,12 +1,18 @@
 <?php
-if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
-if (file_exists('./data/conf/debug.lock') || !file_exists('./data/install.lock')) {
-    define ('APP_DEBUG', true);
-    define ('DB_DEBUG', true);
-} else {
-    define ('APP_DEBUG', false);
-    define ('DB_DEBUG', false);
-}
-define('APP_PATH','./app/');
-define("RUNTIME_PATH", "./data/runtime/");
-require './ThinkPHP/ThinkPHP.php';
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: liu21st <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// [ 应用入口文件 ]
+
+// 定义应用目录
+define('APP_PATH', __DIR__ . '/app/');
+define("RUNTIME_PATH", __DIR__ .'/data/runtime/');
+// 加载框架引导文件
+require __DIR__ . '/thinkphp/start.php';

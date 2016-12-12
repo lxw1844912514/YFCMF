@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
 		<div class="page-header">
@@ -13,8 +13,9 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="runnews_menuedit" method="post" action="{:U('news_menu_runedit')}">
+				<form class="form-horizontal ajaxForm2" name="runnews_menuedit" method="post" action="{:url('news_menu_runedit')}">
 					<input type="hidden" name="id" value="{$menu.id}" />
+					<input type="hidden" name="lang_list" value="{$menu.menu_l}" />
 					<input type="hidden" name="parentid" value="{$menu.parentid}" />
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
@@ -23,6 +24,18 @@
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
 											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单所属语言： </label>
+						<div class="col-sm-9">
+							<select name="menu_l"  class="col-sm-3 " disabled required>
+								<option value="">请选择所属语言</option>
+								<option value="zh-cn" {if condition="$menu['menu_l'] eq 'zh-cn'"}selected{/if}>中文</option>
+								<option value="en-us" {if condition="$menu['menu_l'] eq 'en-us'"}selected{/if}>英语</option>
+							</select>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -38,7 +51,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
 						<div class="col-sm-9" style="padding-top:5px;">
-							<input name="menu_open" id="menu_open" <if condition="$menu.menu_open eq 1">checked</if> value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<input name="menu_open" id="menu_open" {if condition="$menu.menu_open eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
 							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
 						</div>
 					</div>
@@ -57,28 +70,28 @@
 						<div class="col-sm-9">
 							<div class="radio">
 								<label>
-									<input name="menu_type" type="radio" class="ace" id="type1" value="1" <if condition="$menu.menu_type eq 1">checked</if>/>
+									<input name="menu_type" type="radio" class="ace" id="type1" value="1" {if condition="$menu.menu_type eq 1"}checked{/if}/>
 									<span class="lbl"> 作为频道页，不可作为栏目发布文章</span>
 								</label>
 							</div>
 
 							<div class="radio">
 								<label>
-									<input name="menu_type" id="type2" type="radio" class="ace" value="2" <if condition="$menu.menu_type eq 2">checked</if>/>
+									<input name="menu_type" id="type2" type="radio" class="ace" value="2" {if condition="$menu.menu_type eq 2"}checked{/if}/>
 									<span class="lbl"> 不直接发布内容，用于跳转页面</span>
 								</label>
 							</div>
 
 							<div class="radio">
 								<label>
-									<input name="menu_type" id="type3" type="radio" class="ace" value="3" <if condition="$menu.menu_type eq 3">checked</if>/>
+									<input name="menu_type" id="type3" type="radio" class="ace" value="3" {if condition="$menu.menu_type eq 3"}checked{/if}/>
 									<span class="lbl"> 作为发布栏目，文章列表模式</span>
 								</label>
 							</div>
 
 							<div class="radio">
 								<label>
-									<input name="menu_type" id="type4" type="radio" class="ace" value="4" <if condition="$menu.menu_type eq 4">checked</if>/>
+									<input name="menu_type" id="type4" type="radio" class="ace" value="4" {if condition="$menu.menu_type eq 4"}checked{/if}/>
 									<span class="lbl"> 单页面模式，例如企业简介</span>
 								</label>
 							</div>
@@ -102,9 +115,9 @@
 						<div class="col-sm-9">
 							<select name="menu_listtpl"  class="col-sm-3 selector">
 								<option value="">请选择模板</option>
-								<foreach name="tpls" item="vo">
-									<option value="{$vo}" <if condition="$vo eq $menu['menu_listtpl']">selected</if>>{$vo}</option>
-								</foreach>
+								{foreach name="tpls" item="vo"}
+									<option value="{$vo}" {if condition="$vo eq $menu['menu_listtpl']"}selected{/if}>{$vo}</option>
+								{/foreach}
 							</select>
 						</div>
 					</div>
@@ -115,9 +128,9 @@
 						<div class="col-sm-9">
 							<select name="menu_newstpl"  class="col-sm-3 selector">
 								<option value="">请选择模板</option>
-								<foreach name="tpls" item="vo">
-									<option value="{$vo}" <if condition="$vo eq $menu['menu_newstpl']">selected</if>>{$vo}</option>
-								</foreach>
+								{foreach name="tpls" item="vo"}
+									<option value="{$vo}" {if condition="$vo eq $menu['menu_newstpl']"}selected{/if}>{$vo}</option>
+								{/foreach}
 							</select>
 						</div>
 					</div>
@@ -132,11 +145,11 @@
 								<input type="file" name="file0" id="file0" multiple="multiple"/>
 								选择上传文件
 							</a>
-							&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('<if condition="$menu.menu_img eq ''">__PUBLIC__/img/no_img.jpg<else/>__ROOT__{$menu.menu_img}</if>');" title="还原修改前的图片" class="file">
+							&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('{$menu.menu_img|get_imgurl}');" title="还原修改前的图片" class="file">
 							撤销上传
 							</a>
 
-							<div><img src="<if condition="$menu.menu_img neq ''">__ROOT__{$menu.menu_img}<else/>__PUBLIC__/img/no_img.jpg</if>" height="70" id="img0" ></div>
+							<div><img src="{$menu.menu_img|get_imgurl}" height="70" id="img0" ></div>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -201,8 +214,8 @@
 		</div>
 
 	</div><!-- /.page-content -->
-</block>
-<block name="scripts">
+{/block}
+{block name="scripts"}
     <script>
         checkType();
         function checkType(){
@@ -240,4 +253,4 @@
             checkType();
         });
     </script>
-</block>
+{/block}

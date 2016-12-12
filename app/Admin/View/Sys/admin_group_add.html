@@ -1,5 +1,5 @@
-<extend name="Public/base" />
-<block name="main-content">
+{extend name="public/base" /}
+{block name="main-content"}
 	<div class="page-content">
 
 
@@ -18,7 +18,7 @@
 
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="admin_group_add" method="post" action="{:U('admin_group_runadd')}">
+				<form class="form-horizontal ajaxForm2" name="admin_group_add" method="post" action="{:url('admin_group_runadd')}">
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户组名：  </label>
@@ -32,7 +32,7 @@
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
 						<div class="col-sm-10" style="padding-top:5px;">
 							<input name="status" id="status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
-							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+							<span class="lbl">&nbsp;默认关闭</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -64,4 +64,4 @@
 		</div>
 
 	</div><!-- /.page-content -->
-</block>
+{/block}

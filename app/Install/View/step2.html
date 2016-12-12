@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<include file="Public:head" />
+{include file="public:head" /}
 </head>
 <body>
 	<div class="wrap">
-		<include file="Public:header" />
+		{include file="public:header" /}
 		<section class="section">
 			<div class="step">
 				<ul class="unstyled">
@@ -30,9 +30,9 @@
 					</tr>
 					<tr>
 						<td>PHP版本</td>
-						<td>>5.3.x</td>
+						<td>>5.4.x</td>
 						<td><i class="fa fa-check correct"></i> {$phpversion}</td>
-						<td>5.3.0</td>
+						<td>5.4.0</td>
 					</tr>
 					<tr>
 						<td>
@@ -61,6 +61,26 @@
 						<td>开启</td>
 					</tr>
 					<tr>
+					<td>
+						PHP的curl扩展
+					</td>
+					<td>开启</td>
+					<td>
+						{$curl}
+					</td>
+					<td>开启</td>
+					</tr>
+					<tr>
+						<td>
+							PHP的mbstring扩展
+						</td>
+						<td>开启</td>
+						<td>
+							{$mbstring}
+						</td>
+						<td>开启</td>
+					</tr>
+					<tr>
 						<td>
 							PHP的php_exif扩展
 						</td>
@@ -70,23 +90,13 @@
 						</td>
 						<td>开启</td>
 					</tr>
-                    <tr>
-                        <td>
-                            PHP的allow_url_fopen
-                        </td>
-                        <td>开启</td>
-                        <td>
-                            {$allow_url_fopen}
-                        </td>
-                        <td>开启</td>
-                    </tr>					
 					<tr>
-						<td>附件上传</td>
-						<td>>2M</td>
+						<td>file_get_contents</td>
+						<td>开启</td>
 						<td>
-							{$upload_size}
+							{$file_get_contents}
 						</td>
-						<td>不限制</td>
+						<td>开启</td>
 					</tr>
 					<tr>
 						<td>session</td>
@@ -96,6 +106,24 @@
 						</td>
 						<td>开启</td>
 					</tr>
+					<tr>
+						<td>
+							PHP的allow_url_fopen
+						</td>
+						<td>开启</td>
+						<td>
+							{$allow_url_fopen}
+						</td>
+						<td>开启</td>
+					</tr>
+					<tr>
+						<td>附件上传</td>
+						<td>>2M</td>
+						<td>
+							{$upload_size}
+						</td>
+						<td>不限制</td>
+					</tr>
 				</table>
 				<table width="100%">
 					<tr>
@@ -103,35 +131,35 @@
 						<td class="td1" width="25%">写入</td>
 						<td class="td1" width="25%">读取</td>
 					</tr>
-					<foreach name="folders" item="vo" key="dir">
+					{foreach name="checklist" item="vo" key="path"}
 						<tr>
 							<td>
-								./{$dir}
+								./{$path}
 							</td>
 							<td>
-								<if condition="$vo['w']">
+								{if condition="$vo['w']"}
 									<i class="fa fa-check correct"></i> 可写 
-								<else/>
+								{else/}
 									<i class="fa fa-remove error"></i> 不可写 
-								</if>
+								{/if}
 							</td>
 							<td>
-								<if condition="$vo['r']">
+								{if condition="$vo['r']"}
 									<i class="fa fa-check correct"></i> 可读
-								<else/>
+								{else/}
 									<i class="fa fa-remove error"></i> 不可读
-								</if>
+								{/if}
 							</td>
 						</tr>
-					</foreach>
+					{/foreach}
 				</table>
 			</div>
 			<div class="bottom text-center">
-				<a href="__ROOT__/index.php?m=install&c=index&a=step2" class="btn btn-primary">重新检测</a>
-				<a href="__ROOT__/index.php?m=install&c=index&a=step3" class="btn btn-primary">下一步</a>
+				<a href="{:url('step2')}" class="btn btn-primary">重新检测</a>
+				<a href="{:url('step3')}" class="btn btn-primary">下一步</a>
 			</div>
 		</section>
 	</div>
-	<include file="Public:footer" />
+	{include file="public:footer" /}
 </body>
 </html>

@@ -3,34 +3,34 @@
         <div class="container">
             <div class="row">
                 <section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-one">
-                    <h3>关于我们</h3>
+                    <h3>{:lang('about us')}</h3>
                     <p>{$site_seo_description}</p>
                 </section>
                 <section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-two">
-                    <h3>友情链接</h3>
+                    <h3>{:lang('link')}</h3>
                     <ul id="tweets">
-                        <php>$links=get_links($link_footer);</php>
-                        <foreach name="links" item="vo">
+                        {php}$links=get_links($link_footer);{/php}
+                        {foreach name="links" item="vo"}
                             <li><a href="{$vo.plug_link_url}" target="{$vo.plug_link_target}">{$vo.plug_link_name}</a></li>
-                        </foreach>
+                        {/foreach}
                     </ul>
                 </section>
                 <section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-three">
-                    <h3>联系我们</h3>
+                    <h3>{:lang('contact us')}</h3>
                     <ul class="contact-us">
                         <li>
                             <i class="fa fa-map-marker"></i>
                             <p>
-                                <strong>地址:</strong>{$site_address}
+                                <strong>{:lang('address')}:</strong>{$site_address}
                             </p>
                         </li>
                         <li>
                             <i class="fa fa-phone"></i>
-                            <p><strong>电话:</strong> {$site_tel}</p>
+                            <p><strong>{:lang('phone')}:</strong> {$site_tel}</p>
                         </li>
                         <li>
                             <i class="fa fa-envelope"></i>
-                            <p><strong>邮箱:</strong><a href="mailto:{$site_admin_email}">{$site_admin_email}</a></p>
+                            <p><strong>{:lang('email')}:</strong><a href="mailto:{$site_admin_email}">{$site_admin_email}</a></p>
                         </li>
                         <li>
                             <i class="fa fa-qq"></i>
@@ -39,12 +39,12 @@
                     </ul>
                 </section>
                 <section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-four">
-                    <h3>扫描二维码</h3>
-					<if condition="!empty($site_qr)">
-                    <img src="#" alt="扫一扫" style="width:120px;">
-					<else />
-					<img src="{$yf_theme_path}Public/images/qbar.png" alt="扫一扫" style="width:120px;">
-					</if>
+                    <h3>{:lang('scan QR code')}</h3>
+					{if condition="!empty($site_qr)"}
+                    <img src="#" alt="{:lang('scan')}" style="width:120px;">
+					{else /}
+					<img src="{$yf_theme_path}public/images/qbar.png" alt="{:lang('scan')}" style="width:120px;">
+					{/if}
                     <a href="#"></a>
                 </section>
             </div>
