@@ -25,7 +25,7 @@ class Index extends Controller {
         }
         $data=array();
         $icon_correct='<i class="fa fa-check correct"></i> ';
-        $icon_error='<i class="fa fa-check error"></i> ';
+        $icon_error='<i class="fa fa-close error"></i> ';
         //php版本、操作系统版本
         $data['phpversion'] = @phpversion();
         $data['os']=PHP_OS;
@@ -94,7 +94,6 @@ class Index extends Controller {
             'data/conf',
             'data/runtime',
             'data/runtime/cache',
-            'data/runtime/data',
             'data/runtime/log',
             'data/runtime/temp',
             'data/upload',

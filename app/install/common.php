@@ -107,6 +107,8 @@ function update_site_configs($db,$table_prefix){
 helllo;
     $sql="INSERT INTO `{$table_prefix}options` (option_value,option_name) VALUES ('$site_options','site_options')";
     $db->exec($sql);
+    $sql="INSERT INTO `{$table_prefix}options` (option_value,option_name,option_l) VALUES ('$site_options','site_options','en-us')";
+    $db->exec($sql);
     showmsg("网站信息配置成功!");
 }
 /*
