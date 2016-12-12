@@ -1,4 +1,6 @@
 .idea
 composer.lock
+thinkphp
 *.log
 *.lock
+.gitignore
