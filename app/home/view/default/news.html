@@ -55,7 +55,7 @@
                                 {if condition="!empty($next)"}
                                     <a href="{:url('News/index',array('id'=>$next['n_id']))}" class="btn btn-primary pull-right">{:lang('next news')}</a>
                                 {/if}
-                                <script type="text/javascript" src="{$yf_theme_path}Public/js/qrcode.min.js"></script>
+                                <script type="text/javascript" src="{$yf_theme_path}public/js/qrcode.min.js"></script>
                                 <div id="qrcode" style="width: 100px;margin:0 auto"></div>
                                 <script type="text/javascript">
                                     var qrcode = new QRCode(document.getElementById("qrcode"), {

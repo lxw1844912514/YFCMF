@@ -38,7 +38,7 @@
 		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
 			<a class="pull-left" href="{:url('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
 				{if condition="empty($user['member_list_headpic'])"}
-				<img src="{$yf_theme_path}Public/images/headicon.png" class="media-object avatar"/>
+				<img src="{$yf_theme_path}public/images/headicon.png" class="media-object avatar"/>
 				{else /}
 				<img src="{$user['member_list_headpic']|get_imgurl=1}" class="media-object avatar"/>
 				{/if}
