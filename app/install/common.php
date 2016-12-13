@@ -92,18 +92,24 @@ function update_site_configs($db,$table_prefix){
     $site_options=<<<helllo
             {
             		"site_name":"$sitename",
-            		"site_host":"$siteurl",
-            		"site_root":"",
-            		"site_logo":"/data/upload/2016-05-06/572c6855f09fc.png",
-            		"site_icp":"",
-            		"site_tpl":"default",
-            		"site_admin_email":"$email",
-            		"site_tongji":"",
-            		"site_copyright":"",
-            		"site_seo_title":"$sitename",
-            		"site_seo_keywords":"$seo_keywords",
-            		"site_seo_description":"$seo_description"
+					"site_host":"$siteurl",
+					"site_tpl":"default",
+					"site_icp":"",
+					"site_tongji":"",
+					"site_copyright":"",
+					"site_co_name":"",
+					"site_address":"",
+					"map_lat":"23.029759",
+					"map_lng":"113.752114",
+					"site_tel":"+86 769 8888 8888",
+					"site_admin_email":"$email",
+					"site_qq":"81818832",
+					"site_seo_title":"$sitename",
+					"site_seo_keywords":"$seo_keywords",
+					"site_seo_description":"$seo_description",
+					"site_logo":"http:\\/\\/ohjmksy46.bkt.clouddn.com\\/image\\/iw7sxvxs_6n9tgd6cbu4o58417156d5943.png"
         }
+		
 helllo;
     $sql="INSERT INTO `{$table_prefix}options` (option_value,option_name) VALUES ('$site_options','site_options')";
     $db->exec($sql);

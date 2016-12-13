@@ -93,9 +93,6 @@ class Index extends Controller {
             'data',
             'data/conf',
             'data/runtime',
-            'data/runtime/cache',
-            'data/runtime/log',
-            'data/runtime/temp',
             'data/upload',
         );
         $new_checklist=array();
@@ -199,6 +196,7 @@ class Index extends Controller {
     public function step5(){
         if(session('step')==4){
             @touch('./data/install.lock');
+			cookie('think_var', 'zh-cn');
             session(null);
             return $this->fetch(':step5');
         }else{
