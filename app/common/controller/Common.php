@@ -21,7 +21,7 @@ class Common extends Controller{
         }
 		if (!file_exists(ROOT_PATH.'data/install.lock')) {
             //不存在，则进入安装
-            header('Location: ' . url('Install/index/index'));
+            header('Location: ' . url('install/index/index'));
             exit();
         }
 		if (null === $this->request) {

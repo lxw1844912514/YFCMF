@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\Controller;
+namespace app\admin\controller;
 use app\common\controller\Common;
 use think\Db;
 class Ueditor extends Common {
