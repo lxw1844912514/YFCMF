@@ -102,7 +102,7 @@ class Auth{
             return $groups[$uid];
         $user_groups = db()->name($this->_config['auth_group_access'] . ' a')
                            ->where("a.uid='$uid' and g.status='1'")
-                           ->join("{$this->_config['auth_group']} g"," a.group_id = g.id")
+                           ->join(config('database.prefix')."{$this->_config['auth_group']} g"," a.group_id = g.id")
                            ->field('uid,group_id,title,rules')->select();
         $groups[$uid]=$user_groups?:array();
         return $groups[$uid];
