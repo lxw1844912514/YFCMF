@@ -11,8 +11,8 @@
     <div class="errors">
         <div class="text">
             <h4>{:lang('reason')}</h4>
-            <h4><?php echo($error); ?>!</h4>
-            <p>YFCMF：{:lang('automatically')} <a id="href" href="<?php echo($jumpUrl); ?>">{:lang('jump')}</a> {:lang('wait second')} <b id="wait"><?php echo($waitSecond); ?></b></p>
+            <h4><?php echo (is_array($msg))?implode("|",$msg):$msg;; ?>!</h4>
+            <p>YFCMF：{:lang('automatically')} <a id="href" href="<?php echo($url); ?>">{:lang('jump')}</a> {:lang('wait second')} <b id="wait"><?php echo($wait); ?></b></p>
         </div>
     </div>
 </div>
