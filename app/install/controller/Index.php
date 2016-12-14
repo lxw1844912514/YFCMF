@@ -76,15 +76,15 @@ class Index extends Controller {
         }
         //函数检测
         if (function_exists('file_get_contents')) {
-            $data['file_get_contents'] = $icon_correct.'支持';
+            $data['file_get_contents'] = $icon_correct.'已开启';
         } else {
-            $data['file_get_contents'] = $icon_error.'不支持';
+            $data['file_get_contents'] = $icon_error.'未开启';
             $err++;
         }
         if (function_exists('session_start')) {
-            $data['session'] = $icon_correct.'支持';
+            $data['session'] = $icon_correct.'已开启';
         } else {
-            $data['session'] = $icon_error.'不支持';
+            $data['session'] = $icon_error.'未开启';
             $err++;
         }
         //检测文件夹属性

@@ -1,5 +1,14 @@
 ## UPDATE
 V2.0.0
+
+环境要求:
+1)PHP >= 5.4.0(注意：PHP5.4dev版本和PHP6均不支持)
+2)PDO PHP Extension
+3)MBstring PHP Extension
+4)CURL PHP Extension
+5)开启静态重写(方法参考:http://www.kancloud.cn/manual/thinkphp5/177576)
+6)要求环境支持pathinfo
+
 * 更新核心框架到TP5.0.3
 * 修复部分已知的BUG
 * 增加分页ajax加载
