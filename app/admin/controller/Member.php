@@ -201,7 +201,7 @@ class Member extends Base {
 		if (!request()->isAjax()){
 			$this->error('提交方式不正确',url('member_group_list'));
 		}else{
-			$rst=Db::name('member_group')->insert(input('post'));
+			$rst=Db::name('member_group')->insert(input('post.'));
 			if($rst!==false){
 				$this->success('会员组添加成功',url('member_group_list'));
 			}else{
