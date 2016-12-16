@@ -615,10 +615,18 @@ class Sys extends Base {
 	}
 	//权限规则列表
 	public function admin_rule_list(){
-		$admin_rule=Db::name('auth_rule')->order('sort')->select();
-		$arr = \Leftnav::rule($admin_rule);
-		$this->assign('admin_rule',$arr);//权限列表
-		return $this->fetch();
+		$pid=input('pid',0);
+		$level=input('level',0);
+		$id_str=input('id','pid');
+		$admin_rule=Db::name('auth_rule')->where('pid',$pid)->order('sort')->select();
+		$arr = \Leftnav::rule($admin_rule,'─',$pid,$level,$level*20);
+		$this->assign('admin_rule',$arr);
+		$this->assign('pid',$id_str);
+		if(request()->isAjax()){
+			return $this->fetch('ajax_admin_rule_list');
+		}else{
+			return $this->fetch();
+		}
 	}
 	//权限规则添加
 	public function admin_rule_runadd(){

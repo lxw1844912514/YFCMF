@@ -814,3 +814,33 @@ $(function () {
         return false;
     });
 });
+/*权限管理*/
+$(function () {
+	$('body').on('click','.rule-list',function () {
+		var $a=$(this),$tr=$a.parents('tr');
+		var $pid=$tr.attr('id');
+		if($a.find('span').hasClass('fa-minus')){
+			alert(1);
+			$("tr[id^='"+$pid+"-']").attr('style','display:none');
+			$a.find('span').removeClass('fa-minus').addClass('fa-plus');
+		}else{
+			if($("tr[id^='"+$pid+"-']").length>0){
+				alert(2);
+				$("tr[id^='"+$pid+"-']").attr('style','');
+				$a.find('span').removeClass('fa-plus').addClass('fa-minus');
+			}else{
+				var $url = this.href,$id=$a.data('id'),$level=$a.data('level');
+				$.post($url,{pid:$id,level:$level,id:$pid}, function (data) {
+					if (data) {
+						alert(3);
+						$a.find('span').removeClass('fa-plus').addClass('fa-minus');
+						$tr.after(data);
+					}else{
+						$a.find('span').removeClass('fa-plus').addClass('fa-minus');
+					}
+				}, "json");
+			}
+		}
+        return false;
+    });
+});

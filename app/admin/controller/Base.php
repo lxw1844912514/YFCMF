@@ -24,25 +24,27 @@ class Base extends Common {
 		$not_check = array('Sys/clear','Index/index');//不需要检测的控制器/方法
 
 		//当前操作的请求                 模块名/方法名
-		//不在不需要检测的控制器/方法时,检测
-		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check)){
+		//不在不需要检测的控制器/方法且管理员id!=1时才检测
+		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && $aid_s!=1){
 			$auth = new Auth();
-			if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,session('aid')) && session('aid')!= 1){
+			if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,$aid_s)){
 				$this->error('没有权限',url('Index/index'));
 			}
 		}
 		//获取有权限的菜单tree
-		$menus=cache('menus_admin_'.session('aid'));
+		$menus=cache('menus_admin_'.$aid_s);
 		if(empty($menus)){
-			$auth = new Auth();
 			$data = Db::name('auth_rule')->where(array('status'=>1))->order('sort')->select();
-			foreach ($data as $k=>$v){
-				if(!$auth->check($v['name'], session('aid')) && session('aid') != 1){
-					unset($data[$k]);
+			if($aid_s!=1){
+				$auth = new Auth();
+				foreach ($data as $k=>$v){
+					if(!$auth->check($v['name'], $aid_s)){
+						unset($data[$k]);
+					}
 				}
 			}
 			$menus=node_merge($data);
-			cache('menus_admin_'.session('aid'),$menus);
+			cache('menus_admin_'.$aid_s,$menus);
 		}
 		$this->assign('menus',$menus);
 		//当前方法倒推到顶级菜单数组
