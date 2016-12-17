@@ -10,8 +10,6 @@
 // +----------------------------------------------------------------------
 
 return [
-'/' => 'Index/index',
-'login' => 'Login/index',
 //单页
 'about'=>'Listn/index?id=1',
 'about_en'=>'Listn/index?id=8',
