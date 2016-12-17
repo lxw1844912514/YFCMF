@@ -762,7 +762,6 @@ $(function(){
 	$("body").on("click","a.js-lang-btn", function(){
 		var $url=this.href;
 		$.get($url, function(data){
-			console.log(data);
 			if(data.code==1){
 				layer.alert(data.msg, {icon: 6}, function(index){
 					layer.close(index);

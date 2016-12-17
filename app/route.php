@@ -10,4 +10,15 @@
 // +----------------------------------------------------------------------
 
 return [
+'/' => 'Index/index',
+'login' => 'Login/index',
+//单页
+'about'=>'Listn/index?id=1',
+'about_en'=>'Listn/index?id=8',
+'contacts'=>'Listn/index?id=4',
+'contacts_en'=>'Listn/index?id=11',
+//频道页
+'list/:id'=>'Listn/index',
+//新闻
+'news/:id'=>'News/index',
 ];

@@ -769,12 +769,15 @@ function get_menu_datas($id){
     foreach ($navs as $key=>$nav){
         if($nav['menu_type']==2){
             $nav['href']=$nav['menu_address'];
+        }elseif($nav['menu_type']==4){
+			//为了匹配单页路由
+			$nav['href']=url('listn/index?id='.$nav['id']);
         }else{
-            $nav['href']=url('listn/index',array('id'=>$nav['id']));
+			$nav['href']=url('listn/index',array('id'=>$nav['id']));
             if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
                 $nav['href']=url('index/index');
             }
-        }
+		}
         $navs[$key]=$nav;
     }
     cache("site_nav_".$id,$navs);

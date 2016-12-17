@@ -7,21 +7,20 @@
 				您当前操作
 				<small>
 					<i class="ace-icon fa fa-angle-double-right"></i>
-					修改权限菜单
+					添加权限菜单
 				</small>
 			</h1>
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="admin_rule_edit" method="post" action="{:url('admin_rule_runedit')}">
-					<input type="hidden" name="id" value="{$rule.id}" />
+				<form class="form-horizontal ajaxForm2" name="admin_rule_copy" method="post" action="{:url('admin_rule_runadd')}">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 父级权限： </label>
 						<div class="col-sm-9">
 							<select name="pid"  class="col-xs-10 col-sm-5" required>
 								<option value="0">--默认顶级--</option>
 								{foreach name="admin_rule" item="v"}
-									<option value="{$v.id}" {if condition="$v['id'] eq $rule['pid']"}selected{/if}>{$v.lefthtml}{$v.title}</option>
+									<option value="{$v.id}" {if condition="$v['id'] eq $pid"}selected{/if}>{$v.lefthtml}{$v.title}</option>
 								{/foreach}
 							</select>
 						</div>
@@ -29,7 +28,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 导航标题： </label>
 						<div class="col-sm-9">
-							<input type="text" name="title" id="title"  value="{$rule.title}"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="title" id="title"  value=""  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="resone"></span>
 											</span>
@@ -40,7 +39,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 控制器/方法： </label>
 						<div class="col-sm-9">
-							<input type="text" name="name" id="name"  value="{$rule.name}"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="name" id="name"  value=""  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle" id="restwo"></span>
 											</span>
@@ -51,7 +50,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 样式名称： </label>
 						<div class="col-sm-9">
-							<input type="text" name="css" id="css"  value="{$rule.css}" class="col-xs-10 col-sm-5" />
+							<input type="text" name="css" id="css"  value="" class="col-xs-10 col-sm-5" />
                                             <span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle">只针对顶级栏目有效</span>
 											</span>
@@ -63,7 +62,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
 						<div class="col-sm-9" style="padding-top:5px;">
-							<input name="status" value="1"  {if condition="$rule['status'] eq 1"}checked{/if}  class="ace ace-switch ace-switch-5" type="checkbox" />
+							<input name="status" value="1" class="ace ace-switch ace-switch-5" type="checkbox" />
 							<span class="lbl"></span>
 						</div>
 					</div>
@@ -72,7 +71,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
 						<div class="col-sm-9">
-							<input type="text" name="sort" id="sort"  value="{$rule.sort}" class="col-xs-10 col-sm-1" required/>
+							<input type="text" name="sort" id="sort"  value="50" class="col-xs-10 col-sm-1" />
 						</div>
 					</div>
 					<div class="space-4"></div>

@@ -509,15 +509,18 @@ class News extends Base {
 	}
 	//菜单管理
 	public function news_menu_list(){
+		//TODO 分页
 		$menu_l=input('menu_l');
 		$nav = new \Leftnav;
 		$where=array();
 		if(!empty($menu_l)){
 			$where['menu_l']=array('eq',$menu_l);
 		}
-		$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
-		$show = $menus->render();
-		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
+		//$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		//$show = $menus->render();
+		/* $show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show); */
+		$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->select();
+		$show='';
 		$arr = $nav::menu_n($menus);
 		$this->assign('arr',$arr);
 		$this->assign('menu_l',$menu_l);

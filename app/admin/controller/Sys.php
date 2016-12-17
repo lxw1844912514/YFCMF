@@ -629,6 +629,16 @@ class Sys extends Base {
 		}
 	}
 	//权限规则添加
+	public function admin_rule_add(){
+		$pid=input('pid',0);
+		//全部规则
+		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
+		$arr = \Leftnav::rule($admin_rule_all);
+		$this->assign('admin_rule',$arr);
+		$this->assign('pid',$pid);
+		return $this->fetch();
+	}
+	//权限规则添加操作
 	public function admin_rule_runadd(){
 		if(!request()->isAjax()){
 			$this->error('提交方式不正确',url('admin_rule_list'));
