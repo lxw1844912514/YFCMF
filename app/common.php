@@ -397,16 +397,21 @@ function has_action($path,$name,$action){
  *
  * @return array
  */
-function db_get_tables()
+function db_get_tables($prefix=fasle)
 {
     $db_prefix =config('database.prefix');
     $list  = Db::query('SHOW TABLE STATUS FROM '.config('database.database'));
     $list  = array_map('array_change_key_case', $list);
     $tables = array();
     foreach($list as $k=>$v){
-        if(stripos($v['name'],strtolower(config('database.prefix')))===0){
-            $tables [] = strtolower(substr($v['name'], strlen($db_prefix)));
+        if(empty($prefix)){
+            if(stripos($v['name'],strtolower(config('database.prefix')))===0){
+                $tables [] = strtolower(substr($v['name'], strlen($db_prefix)));
+            }
+        }else{
+            $tables [] = strtolower($v['name']);
         }
+
     }
     return $tables;
 }
@@ -771,11 +776,11 @@ function get_menu_datas($id){
             $nav['href']=$nav['menu_address'];
         }elseif($nav['menu_type']==4){
 			//为了匹配单页路由
-			$nav['href']=url('listn/index?id='.$nav['id']);
+			$nav['href']=url('Listn/index?id='.$nav['id']);
         }else{
-			$nav['href']=url('listn/index',array('id'=>$nav['id']));
+			$nav['href']=url('Listn/index',array('id'=>$nav['id']));
             if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
-                $nav['href']=url('index/index');
+                $nav['href']=url('Index/index');
             }
 		}
         $navs[$key]=$nav;
