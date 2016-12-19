@@ -14,7 +14,6 @@ $basename = Request::instance()->root();
 if (pathinfo($basename, PATHINFO_EXTENSION) == 'php') {
     $basename = dirname($basename);
 }
-$basename=($basename!=DS)?:'';
 $configs= [
   // +----------------------------------------------------------------------
   // | 应用设置
