@@ -10,7 +10,26 @@ namespace app\admin\controller;
 use think\Db;
 class Model extends Base
 {
-    protected function build_table_exists($table)
+    public function model_list()
+    {
+		$models=Db::name('model')->order('create_time desc')->select();
+		$this->assign('models',$models);
+		return $this->fetch();
+	} 
+	public function model_state(){
+		$id=input('x');
+		$status=Db::name('model')->where(array('model_id'=>$id))->value('model_status');//判断当前状态情况
+		if($status==1){
+			$statedata = array('model_status'=>0);
+			Db::name('model')->where(array('model_id'=>$id))->setField($statedata);
+			$this->success('状态禁止');
+		}else{
+			$statedata = array('model_status'=>1);
+			Db::name('model')->where(array('model_id'=>$id))->setField($statedata);
+			$this->success('状态开启');
+		}
+	}
+	protected function build_table_exists($table)
     {
         static $tables = null;
         static $db_prefix = null;
@@ -25,7 +44,10 @@ class Model extends Base
         }
         return false;
     }
-
+    public function model_add()
+    {
+		return $this->fetch();
+	} 
     public function model_runadd()
     {
         static $db = null;
@@ -101,13 +123,10 @@ class Model extends Base
                                 $sql_fields [] = "`${f}_lat` DOUBLE NOT NULL DEFAULT '$defaults[1]' COMMENT '$fi[title]'";
                                 break;
                             //变长或固定字符串型
-                            case 'tag':
                             case 'text' :
                             case 'imagefile' :
-                            case 'commonfile' :
                             case 'selecttext' :
                             case 'checkbox' :
-                            case 'large_file':
                                 if (empty ($fi ['length'])) {
                                     $fi ['length'] = 200;
                                 }
