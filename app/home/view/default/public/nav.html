@@ -7,6 +7,7 @@
                     <a href="mailto:{$site_admin_email}"><i class="fa fa-envelope"></i>{:lang('email')}: {$site_admin_email}</a>
                 </div>
                 <div class="pull-right">
+					{if condition="config('lang_switch_on')"}
                     <div class="phone-email pull-left">
                         {if condition="$lang eq 'en-us'"}
                         <a href="{:url('Index/lang',array('lang_s'=>'cn'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">中文简体</i></a>
@@ -14,6 +15,7 @@
                         <a href="{:url('Index/lang',array('lang_s'=>'en'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">ENGLISH</i></a>
                         {/if}
                     </div>
+					{/if}
                     <div id="search-form" class="pull-right">
                         <form action="{:url('Listn/search')}" class="search-ajaxform" method="post">
                             <input type="text" class="search-text-box" name="keyword" value="{:input('keyword')}" />

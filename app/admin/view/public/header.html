@@ -101,13 +101,14 @@
 					</a>
 				</li>
 				
+				{if condition="config('lang_switch_on')"}
 				<li class="grey">
 					{switch name="$lang"}
 						{case value="zh-cn"}<a href="{:url('Index/lang',['lang_s'=>'en'])}" class="rst-url-btn">ENGLISH</a>{/case}
 						{case value="en-us"}<a href="{:url('Index/lang',['lang_s'=>'cn'])}" class="rst-url-btn">简体中文</a>{/case}
 					{/switch}
 				</li>
-
+				{/if}
 				<!-- 用户菜单开始 -->
 				<li class="light-blue dropdown-modal">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">

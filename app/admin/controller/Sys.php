@@ -122,6 +122,20 @@ class Sys extends Base {
 			}
 		}
 	}
+	//多语言设置显示
+	public function langsys(){
+		return $this->fetch();
+	}
+	//多语言设置
+	public function runlangsys(){
+		$lang_switch_on=input('lang_switch_on',0,'intval')?true:false;
+		$default_lang=input('default_lang','');
+		sys_config_setbykey('lang_switch_on',$lang_switch_on);
+		sys_config_setbykey('default_lang',$default_lang);
+		cache::clear();
+		cookie('think_var', null);
+		$this->success('多语言设置成功',url('langsys'));
+	}
 	//url设置显示
 	public function urlsys(){
 		return $this->fetch();

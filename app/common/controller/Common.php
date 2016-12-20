@@ -31,7 +31,11 @@ class Common extends Controller{
         if (!defined('CONTROLLER_NAME')){define('CONTROLLER_NAME', $this->request->controller());}
         if (!defined('ACTION_NAME')){define('ACTION_NAME', $this->request->action());}
 		// 多语言
-		$this->lang=Lang::detect();
+		if(config('lang_switch_on')){
+			$this->lang=Lang::detect();
+		}else{
+			$this->lang=config('default_lang');
+		}
 		$this->assign('lang',$this->lang);
 	}
     //空操作
