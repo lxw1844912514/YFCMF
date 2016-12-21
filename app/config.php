@@ -150,7 +150,7 @@ $configs= [
     ],
   // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
-    'dispatch_error_tmpl'    => $basename . '/public/yfcmf/dispatch_jump.html',
+    'dispatch_error_tmpl'    => ROOT_PATH . 'public/yfcmf/dispatch_jump.html',
 
   // +----------------------------------------------------------------------
   // | 异常及错误设置

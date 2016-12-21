@@ -348,6 +348,8 @@ class News extends Base {
 		}
 		if(!empty($picall_url)){
 			$sl_data['news_pic_allurl']=$pic_oldlist.$picall_url;
+		}else{
+			$sl_data['news_pic_allurl']=$pic_oldlist;
 		}
 		//根据栏目id,获取语言
 		$news_l=Db::name('menu')->where('id',input('news_columnid'))->value('menu_l');
