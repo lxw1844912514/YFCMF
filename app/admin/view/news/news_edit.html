@@ -137,77 +137,78 @@
                     <script src="__PUBLIC__/ppy/js/fileinput.js" type="text/javascript"></script>
                     <script src="__PUBLIC__/ppy/js/fileinput_locale_zh.js" type="text/javascript"></script>
 					<div class="form-group" id="pic_list" {if condition="$news_list['news_pic_type'] eq 1"}style="display:none"{/if}>
-					<div class="col-sm-10 col-sm-offset-2" style="padding-top:5px;">
-						<input id="file-5" name="pic_all[]" type="file" class="file"  multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""><br />
-						<textarea name="news_pic_content" class="col-xs-12 col-sm-12" id="news_pic_content"  placeholder="单次编辑或添加文章,选择多图时请一次性选择。多图对应文章说明，例如： 图片一说明 | 图片二说明 | 图片三说明    每个文字说明以 | 分割" >{$news_list['news_pic_content']}</textarea>
+						<div class="col-sm-10 col-sm-offset-2" style="padding-top:5px;">
+							<input id="file-5" name="pic_all[]" type="file" class="file"  multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""><br />
+							<textarea name="news_pic_content" class="col-xs-12 col-sm-12" id="news_pic_content"  placeholder="单次编辑或添加文章,选择多图时请一次性选择。多图对应文章说明，例如： 图片一说明 | 图片二说明 | 图片三说明    每个文字说明以 | 分割" >{$news_list['news_pic_content']}</textarea>
+						</div>
 					</div>
-			</div>
-			<div class="space-4"></div>
-			<!--老多图字符串-->
-			<input name="pic_oldlist" type="hidden" id="pic_oldlist" type="text" size="130" value="{$news_list.news_pic_allurl}" >
-			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
-				<div class="col-sm-10" style="padding-top:5px;">
-					<input name='news_open' id='news_open' {if condition="$news_list['news_open'] eq 1"}checked{/if}  value='1' class='ace ace-switch ace-switch-4 btn-flat' type='checkbox' />
-					<span class="lbl">&nbsp;&nbsp;默认关闭</span>
-				</div>
-			</div>
-			<div class="space-4"></div>
+					<div class="space-4"></div>
+					<!--老多图字符串-->
+					<input name="pic_oldlist" type="hidden" id="pic_oldlist" type="text" size="130" value="{$news_list.news_pic_allurl}" >
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+						<div class="col-sm-10" style="padding-top:5px;">
+							<input name='news_open' id='news_open' {if condition="$news_list['news_open'] eq 1"}checked{/if}  value='1' class='ace ace-switch ace-switch-4 btn-flat' type='checkbox' />
+							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
 
-			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
-				<div class="col-sm-10">
-					<input type="text" name="listorder" value="{$news_list['listorder']|default=50}" class="col-xs-10 col-sm-1" />
-				</div>
-			</div>
-			<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+						<div class="col-sm-10">
+							<input type="text" name="listorder" value="{$news_list['listorder']|default=50}" class="col-xs-10 col-sm-1" />
+						</div>
+					</div>
+					<div class="space-4"></div>
 
-			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示日期：  </label>
-				<div class="col-sm-10">
-					<input name="showdate" class="date-picker col-xs-10 col-sm-6" value="{$news_extra['showdate']|date='Y-m-d',###}" type="text" data-date-format="yyyy-mm-dd">
-					<span class="lbl">&nbsp;&nbsp;默认为文章添加日期</span>
-				</div>
-			</div>
-			<div class="space-4"></div>
-			
-			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章简介： </label>
-				<div class="col-sm-9">
-					<input type="text" name="news_scontent" id="news_scontent" class="col-xs-10 col-sm-10"  maxlength="100" value="{$news_list.news_scontent}"  placeholder="输入文章简介"  />
-					<label class="input_last">已限制在100个字以内</label>
-				</div>
-			</div>
-			<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示日期：  </label>
+						<div class="col-sm-10">
+							<input name="showdate" class="date-picker col-xs-10 col-sm-6" value="{$news_extra['showdate']|date='Y-m-d',###}" type="text" data-date-format="yyyy-mm-dd">
+							<span class="lbl">&nbsp;&nbsp;默认为文章添加日期</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章简介： </label>
+						<div class="col-sm-9">
+							<input type="text" name="news_scontent" id="news_scontent" class="col-xs-10 col-sm-10"  maxlength="100" value="{$news_list.news_scontent}"  placeholder="输入文章简介"  />
+							<label class="input_last">已限制在100个字以内</label>
+						</div>
+					</div>
+					<div class="space-4"></div>
 
-			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章主内容 </label>
-				<div class="col-sm-10">
-					<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
-					<script src="__PUBLIC__/ueditor/ueditor.all.js" type="text/javascript"></script>
-					<textarea name="news_content" rows="100%" style="width:100%" id="myEditor">{$news_list.news_content}</textarea>
-					<script type="text/javascript">
-						var editor = new UE.ui.Editor();
-						editor.render("myEditor");
-					</script>
-				</div>
-			</div>
-			<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章主内容 </label>
+						<div class="col-sm-10">
+							<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
+							<script src="__PUBLIC__/ueditor/ueditor.all.js" type="text/javascript"></script>
+							<textarea name="news_content" rows="100%" style="width:100%" id="myEditor">{$news_list.news_content}</textarea>
+							<script type="text/javascript">
+								var editor = new UE.ui.Editor();
+								editor.render("myEditor");
+							</script>
+						</div>
+					</div>
+					<div class="space-4"></div>
 
-			<div class="clearfix form-actions">
-				<div class="col-md-offset-3 col-md-9">
-					<button class="btn btn-info" type="submit">
-						<i class="ace-icon fa fa-check bigger-110"></i>
-						保存
-					</button>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
 
-					&nbsp; &nbsp; &nbsp;
-					<button class="btn" type="reset">
-						<i class="ace-icon fa fa-undo bigger-110"></i>
-						重置
-					</button>
-				</div>
-			</div>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</div>	
 			</form>
 		</div>
         <!-- 显示模态框（Modal） -->
