@@ -265,4 +265,10 @@ $configs= [
 if(file_exists($file=ROOT_PATH."data/conf/config.php")){
   $configs=array_merge($configs,include ($file));
 }
+//调试模式,错误模板保持TP默认
+if($configs['app_debug']){
+    $configs['dispatch_success_tmpl']= THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl';
+    $configs['dispatch_error_tmpl']= THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl';
+    $configs['exception_tmpl']= THINK_PATH . 'tpl' . DS . 'think_exception.tpl';
+}
 return  $configs;

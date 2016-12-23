@@ -129,10 +129,14 @@ $('ul#flickrfeed').jflickrfeed({
             jQuery(this).parent().parent().siblings().find('.accordion-toggle > .icon').removeClass('iconActive');
         });
     });
-
-
- 
-
+	//高亮导航
+	var curr_url = window.location.href;
+	$('nav.menu >ul >li >a').each(function(i,n){
+		var href = this.href;
+		if(href == curr_url){
+			$(this).attr('id','current');
+		}
+	});
 });
 
 

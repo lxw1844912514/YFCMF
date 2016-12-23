@@ -32,3 +32,6 @@ body{color:#727272;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:
     background-color: #fff;
     border: 1px solid #ddd;
 }
+.navbar-nav>li>a:focus{
+	color:#fff;
+}
