@@ -37,10 +37,16 @@ class Login extends Common {
 		}else{
 			$admin_username=input('admin_username');
 			$password=input('admin_pwd');
-			$verify =new Captcha ();
-			if (!$verify->check(input('verify'), 'aid')) {
-				$this->error('验证码错误',url('Login/login'));
-			}
+			if(config('geetest.geetest_on')){
+                if(!geetest_check(input('post.'))){
+                    $this->error('验证不通过',url('Login/login'));
+                };
+            }else{
+                $verify =new Captcha ();
+                if (!$verify->check(input('verify'), 'aid')) {
+                    $this->error('验证码错误',url('Login/login'));
+                }
+            }
 			$admin=Db::name('admin')->where(array('admin_username'=>$admin_username))->find();
 			if (!$admin||encrypt_password($password,$admin['admin_pwd_salt'])!==$admin['admin_pwd']){
 				$this->error('用户名或者密码错误，重新输入',url('Login/login'));

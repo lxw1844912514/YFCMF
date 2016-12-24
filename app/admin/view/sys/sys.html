@@ -130,15 +130,44 @@
 								</div>
 								<div class="space-4"></div>
 
-								<div class="form-group">
+								<div class="form-group none">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启自动更新： </label>
 									<div class="col-sm-9" style="padding-top:5px;">
 										<input name="update_check" id="update_check" {if condition='$Think.config.update_check eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
 										<span class="lbl"></span>
 									</div>
 								</div>
-								<div class="space-4"></div>								
-
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 后台极验验证： </label>
+									<div class="col-sm-9" style="padding-top:5px;">
+										<input name="geetest_on" id="geetest_on" {if condition="config('geetest.geetest_on')"}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl"><a href="http://www.geetest.com" target="_blank" style="margin-left: 10px;"><span class="label label-lg label-pink">申请：http://www.geetest.com</span></a></span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div id="geetest" {if condition="config('geetest.geetest_on') eq 0"}style="display: none;"{/if}>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 极验captcha_id：</label>
+									<div class="col-sm-9">
+										<input type="text" name="captcha_id" id="captcha_id" value="{:config('geetest.captcha_id')}" class="col-xs-10 col-sm-7" />
+										<span class="help-inline col-xs-12 col-sm-5">
+									<span class="lbl"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 极验private_key： </label>
+									<div class="col-sm-9">
+										<input type="text" name="private_key" id="private_key" value="{:config('geetest.private_key')}" class="col-xs-10 col-sm-7" />
+										<span class="help-inline col-xs-12 col-sm-5">
+									<span class="lbl"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								</div>
 							</div>
 
 							<div id="contact" class="tab-pane fade">

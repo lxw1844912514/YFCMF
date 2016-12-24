@@ -23,7 +23,8 @@
         "topthink/think-installer": "^1.0",
         "topthink/think-sae": "^1.1",
         "phpmailer/phpmailer": "^5.2",
-        "topthink/think-helper": "^1.0"
+        "topthink/think-helper": "^1.0",
+        "yfcmf/geetest": "^1.0"
     },
     "extra": {
         "think-path": "thinkphp"

@@ -8,8 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'think\\sae\\' => array($vendorDir . '/topthink/think-sae/src'),
     'think\\helper\\' => array($vendorDir . '/topthink/think-helper/src'),
+    'think\\geetest\\' => array($vendorDir . '/yfcmf/geetest/src'),
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
     'think\\captcha\\' => array($vendorDir . '/topthink/think-captcha/src'),
-    'think\\' => array($baseDir . '/thinkphp/library/think', $vendorDir . '/topthink/think-image/src'),
-    'Qiniu\\' => array($vendorDir . '/qiniu/php-sdk/src/Qiniu'),
+    'think\\' => array($vendorDir . '/topthink/think-image/src', $baseDir . '/thinkphp/library/think'),
 );

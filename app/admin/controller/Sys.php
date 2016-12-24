@@ -75,6 +75,10 @@ class Sys extends Base {
 		}else{
 			$update_check=input('update_check',0,'intval')?true:false;;
 			sys_config_setbykey('update_check',$update_check);
+            $geetest_on=input('geetest_on',0,'intval')?true:false;
+            $captcha_id=input('captcha_id','');
+            $private_key=input('private_key','');
+            sys_config_setbykey('geetest',['geetest_on'=>$geetest_on,'captcha_id'=>$captcha_id,'private_key'=>$private_key]);
 			$checkpic=input('checkpic');
 			$oldcheckpic=input('oldcheckpic');
 			$options=input('post.options/a');

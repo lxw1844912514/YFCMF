@@ -835,8 +835,8 @@ $(function () {
         return false;
     });
 });
-/*权限管理*/
 $(function () {
+    /*权限管理*/
 	$('body').on('click','.rule-list',function () {
 		var $a=$(this),$tr=$a.parents('tr');
 		var $pid=$tr.attr('id');
@@ -860,5 +860,9 @@ $(function () {
 			}
 		}
         return false;
+    });
+	//极验验证
+    $('#geetest_on').click(function(){
+        $("#geetest").toggle(200);
     });
 });

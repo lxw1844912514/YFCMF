@@ -67,6 +67,10 @@
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 											</label>
+											{if condition="config('geetest.geetest_on')"}
+											<div id="captcha"></div>
+											<div class="space-6"></div>
+											{else /}
 											<label class="block clearfix">
 												<span class="block input-icon input-icon-right">
 													<input type="text" class="form-control" name="verify" id="verify" placeholder="输入验证码" required/>
@@ -78,8 +82,7 @@
 													<img class="verify_img" id="verify_img" src="{:url('Login/verify')}" onClick="this.src='{:url('Login/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
 												</span>
 											</label>
-											<div class="space"></div>
-											<div class="space"></div>
+											{/if}
 
 											<div class="clearfix">
 												<label class="inline">
@@ -116,10 +119,36 @@
 <script src="__PUBLIC__/others/jquery.min-1.12.1.js"></script>
 <![endif]-->
 <!-- jquery.form、layer、yfcmf的js -->
+<script src="__PUBLIC__/others/bootstrap.min.js"></script>
 <script src="__PUBLIC__/others/jquery.form.js"></script>
 <script src="__PUBLIC__/layer/layer_zh-cn.js"></script>
 <script src="__PUBLIC__/others/maxlength.js"></script>
 <script src="__PUBLIC__/yfcmf/yfcmf.js"></script>
+<script src="http://static.geetest.com/static/tools/gt.js"></script>
+<script>
+    var handler = function (captchaObj) {
+        captchaObj.appendTo("#captcha");
+        captchaObj.onSuccess(function () {
+            //验证成功执行
+        });
+        captchaObj.onReady(function () {
+            //加载完毕执行
+        });
+    };
+    $.ajax({
+        url: "{:geetest_url()}?t=" + (new Date()).getTime(),
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "float",
+                offline: !data.success
+            }, handler);
+        }
+    });
+</script>
 <!-- 如果为触屏,则引入jquery.mobile -->
 <script type="text/javascript">
 	if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/others/jquery.mobile.custom.min.js'>"+"<"+"/script>");
