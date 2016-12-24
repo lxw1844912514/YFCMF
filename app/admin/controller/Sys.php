@@ -774,14 +774,21 @@ class Sys extends Base {
 	}
 	//权限规则删除
 	public function admin_rule_del(){
-		//TODO 自动删除子权限
-		$rst=Db::name('auth_rule')->where(array('id'=>input('id')))->delete();
-		if($rst!==false){
-			Cache::clear();
-			$this->success('权限删除成功',url('admin_rule_list'));
-		}else{
-			$this->error('权限删除失败',url('admin_rule_list'));
-		}
+        $pid=input('id');
+        $arr=Db::name('auth_rule')->select();
+        $ids=array();
+        $arrTree=getMenuTree($arr, $pid,'pid',$ids);
+        if(!empty($arrTree)){
+            $rst=Db::name('auth_rule')->where('id','in',$ids)->delete();
+            if($rst!==false){
+                Cache::clear();
+                $this->success('权限删除成功',url('admin_rule_list'));
+            }else{
+                $this->error('权限删除失败',url('admin_rule_list'));
+            }
+        }else{
+            $this->error('权限删除失败',url('admin_rule_list'));
+        }
 	}
 	public function security_list()
 	{

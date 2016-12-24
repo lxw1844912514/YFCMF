@@ -81,21 +81,33 @@ $(function () {
         return false;
     });
 });
+$(function () {
+    $('body').on('click','.confirm-url-btn',function () {
+        var $url = this.href,
+            $info = $(this).data('info');
+        layer.confirm($info, {icon: 3}, function (index) {
+            layer.close(index);
+            window.location.href = $url;
+        });
+        return false;
+    });
+});
 /*************************************************************************** 所有状态类的ajax提交btn ********************************************************/
 /* 审核状态操作 */
 $(function () {
 	$('body').on('click','.state-btn',function () {
         var $url = this.href,
-            val = $(this).data('id');
+            val = $(this).data('id'),
+            $btn=$(this);
         $.post($url, {x: val}, function (data) {
             if (data.code==1) {
                 if (data.msg == '未审') {
                     var a = '<button class="btn btn-minier btn-danger">未审</button>';
-                    $('#zt' + val).html(a);
+                    $btn.children('div').html(a);
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">已审</button>';
-                    $('#zt' + val).html(b);
+                    $btn.children('div').html(b);
                     return false;
                 }
             } else {
@@ -129,16 +141,17 @@ $(function () {
 $(function () {
 	$('body').on('click','.open-btn',function () {
         var $url = this.href,
-            val = $(this).data('id');
+            val = $(this).data('id'),
+            $btn=$(this);
         $.post($url, {x: val}, function (data) {
             if (data.code==1) {
                 if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">禁用</button>';
-                    $('#zt' + val).html(a);
+                    $btn.children('div').html(a);
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">开启</button>';
-                    $('#zt' + val).html(b);
+                    $btn.children('div').html(b);
                     return false;
                 }
             } else {
@@ -152,16 +165,17 @@ $(function () {
 $(function () {
 	$('body').on('click','.display-btn',function () {
         var $url = this.href,
-            val = $(this).data('id');
+            val = $(this).data('id'),
+            $btn=$(this);
         $.post($url, {x: val}, function (data) {
             if (data.code==1) {
                 if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">隐藏</button>';
-                    $('#zt' + val).html(a);
+                    $btn.children('div').html(a);
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">显示</button>';
-                    $('#zt' + val).html(b);
+                    $btn.children('div').html(b);
                     return false;
                 }
             } else {
@@ -175,16 +189,17 @@ $(function () {
 $(function () {
 	$('body').on('click','.active-btn',function () {
         var $url = this.href,
-            val = $(this).data('id');
+            val = $(this).data('id'),
+            $btn=$(this);
         $.post($url, {x: val}, function (data) {
             if (data.code==1) {
                 if (data.msg == '未激活') {
                     var a = '<button class="btn btn-minier btn-danger">未激活</button>';
-                    $('#jh' + val).html(a);
+                    $btn.children('div').html(a);
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">已激活</button>';
-                    $('#jh' + val).html(b);
+                    $btn.children('div').html(b);
                     return false;
                 }
             } else {
@@ -452,6 +467,11 @@ function openWindow(a, b, c) {
     $("#plug_linktype_id").val(a);
     $("#newplug_linktype_name").val(b);
     $("#newplug_linktype_order").val(c);
+}
+/* 模型添加到menu */
+function addmenu(a) {
+    $("#myModal").show(300);
+    $("#model_id").val(a);
 }
 /* 友链编辑 */
 $(function () {
@@ -748,6 +768,7 @@ $(function () {
 	$('body').on('change','.ajax_change',function () {		
         var $form = $(this).parents("form");
 		$.ajax({
+		    url:$form.attr('action'),
 			type:"POST",
 			data:$form.serialize(),            
 			success: function(data,status){

@@ -92,8 +92,7 @@ class Index extends Controller {
             'app/database.php',
             'data',
             'data/conf',
-            'data/runtime',
-            'data/upload',
+            'data/runtime'
         );
         $new_checklist=array();
         foreach($checklist as $dir){

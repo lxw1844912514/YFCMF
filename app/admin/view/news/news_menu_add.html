@@ -25,7 +25,7 @@
 											</span>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 选择语言： </label>
@@ -45,7 +45,7 @@
 							{/if}
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 					
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文菜单名称： </label>
@@ -53,7 +53,7 @@
 							<input type="text" name="menu_enname" id="menu_enname" placeholder="英文菜单名称" class="col-xs-10 col-sm-5" />
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
@@ -62,7 +62,7 @@
 							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
@@ -70,7 +70,7 @@
 							<input type="text" name="listorder" id="menu_order" value="50" class="col-xs-10 col-sm-1" />
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
@@ -104,7 +104,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group" id="address">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 跳转地址： </label>
@@ -115,7 +115,17 @@
 											</span>
 						</div>
 					</div>
-					<div class="space-4"></div>
+					<div class="form-group" id="model">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 使用模型选择： </label>
+						<div class="col-sm-9">
+							<select name="menu_modelid"  class="col-sm-3 selector">
+								<option value="0">请选择模型</option>
+								{foreach name="model" item="vo"}
+								<option value="{$vo.model_id}">{$vo.model_title}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
 
 					<div class="form-group" id="listtpl">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 列表页(单页)模板选择： </label>
@@ -128,7 +138,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group" id="newstpl">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单文章页模板选择： </label>
@@ -141,7 +151,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group" id="pic_list">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 缩略图： </label>
@@ -157,7 +167,7 @@
 							<div><img src="__PUBLIC__/img/no_img.jpg" height="70" id="img0" ></div>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group" id="menu_content">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容： </label>
@@ -171,7 +181,7 @@
 							</script>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO标题： </label>
@@ -181,7 +191,7 @@
 						</div>
 					</div>
 
-					<div class="space-4"></div>
+
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO关键字： </label>
 						<div class="col-sm-9">
@@ -191,7 +201,7 @@
 											</span>
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO描述： </label>
@@ -199,7 +209,7 @@
 							<input type="text" id="menu_des" name="menu_seo_des"  placeholder="SEO描述"  class="col-xs-10 col-sm-10" />
 						</div>
 					</div>
-					<div class="space-4"></div>
+
 
 					<div class="clearfix form-actions">
 						<div class="col-md-offset-3 col-md-9">
@@ -222,33 +232,22 @@
 {/block}
 {block name="scripts"}
     <script>
-        $('#address').hide();//默认隐藏
-        $('#menu_content').hide();//默认隐藏
-        $('#single').hide();//默认隐藏
-        $('#pic_list').hide();//默认隐藏
+        $('#address,#model,#menu_content,#single,#pic_list').hide();//默认隐藏
         $('#type2').click(function(){
             $('#address').show();
-            $('#menu_content').hide();
-            $('#pic_list').hide();
-            $('#single').hide();
-            $('#listtpl').hide();
-            $('#newstpl').hide();
+            $('#menu_content,#pic_list,#single,#listtpl,#newstpl,#model').hide();
         });
-        $('#type1,#type3').click(function(){
-            $('#address').hide();
-            $('#menu_content').hide();
-            $('#pic_list').hide();
-            $('#single').hide();
-            $('#listtpl').show();
-            $('#newstpl').show();
+        $('#type1').click(function(){
+            $('#address,#menu_content,#pic_list,#single,#model').hide();
+            $('#listtpl,#newstpl').show();
+        });
+        $('#type3').click(function(){
+            $('#address,#menu_content,#pic_list,#single').hide();
+            $('#listtpl,#newstpl,#model').show();
         });
         $('#type4').click(function(){
-            $('#address').hide();
-            $('#single').show();
-            $('#listtpl').show();
-            $('#newstpl').hide();
-            $('#menu_content').show();
-            $('#pic_list').show();
+            $('#address,#newstpl,#model').hide();
+            $('#single，#listtpl,#menu_content,#pic_list').show();
         });
     </script>
 {/block}

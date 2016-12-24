@@ -39,6 +39,13 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
 	if(strpos($str,'/')===false){
 		$str.=Request::instance()->controller();
 	}
+	//model的cmslist cmsadd cmsedit
+	if(strtolower($str)=='model/cmslist' || strtolower($str)=='model/cmsadd' || strtolower($str)=='model/cmsedit')
+	{
+		$id=get_query();
+		$id=$id['id'];
+		$str.='?id='.$id;
+	}
 	$status=empty($status)?1:$status;
 	$arr=empty($arr)?false:true;
 	$where['name']=$str;
@@ -1302,4 +1309,73 @@ function get_query(){
 		}
 	}
 	return $rst;
+}
+/**
+ * 货币转换
+ * @return 
+ */
+function long_currency($long)
+{
+    return sprintf('%d.%02d', intval($long / 100), intval($long % 100));
+}
+function currency_long($currency)
+{
+    $s = explode('.', trim($currency));
+    switch (count($s)) {
+        case 1:
+            return $s[0] * 100;
+        case 2:
+            if (strlen($s[1]) == 1) {
+                $s[1] .= '0';
+            } else if (strlen($s[1]) > 2) {
+                $s[1] = substr($s[1], 0, 2);
+            }
+            return $s[0] * 100 + $s[1];
+    }
+    return 0;
+}
+/**
+ * 递归无限级分类获取任意节点下所有子孩子
+ * @param array $arr 待排序的数组
+ * @param int $parent_id 父级节点
+ * @param string $pid 层级数
+ * @param array $ids ids数组
+ * @param boolean $itself 是否包含自身
+ * @return array $arrTree 排序后的数组
+ */
+function getMenuTree($arr, $parent_id = 0,$pid='pid',&$ids=array(),$itself=true)
+{
+    static  $arrTree = array();
+    if( empty($arr)) return array();
+    foreach($arr as $key => $value)
+    {
+        if($value[$pid] == $parent_id)
+        {
+            $arrTree[] = $value;
+            $ids[]=$value[ 'id'];
+            unset($arr[$key]);
+            getMenuTree($arr, $value[ 'id'], $pid,$ids,$itself);
+        }
+        if($itself && $value['id']==$parent_id){
+            $arrTree[] = $value;
+            $ids[]=$value[ 'id'];
+        }
+    }
+    return $arrTree;
+}
+//返回前台菜单含model_name model_id model_title的菜单数组
+function get_menu_model($menus)
+{
+    $rst=array();
+    foreach ($menus as $menu){
+        $menu['model_name']='';
+        $menu['model_title']='';
+        if(!empty($menu['menu_modelid'])) {
+            $model=Db::name('model')->find($menu['menu_modelid']);
+            $menu['model_name']=$model['model_name'];
+            $menu['model_title']=$model['model_title'];
+        }
+        $rst[]=$menu;
+    }
+    return $rst;
 }

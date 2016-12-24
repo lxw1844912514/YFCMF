@@ -1,26 +1,38 @@
 {foreach name="arr" item="v"}
 	<tr>
 		<td><input name="{$v.id}" value=" {$v.listorder}" class="list_order"/></td>
-		<td style=padding-left:{if condition='$v.leftpin neq 0'}{$v.leftpin}{/if}px; >{$v.lefthtml}{$v.menu_name}</span> <strong>(ID：{$v.id})</strong></td>
+		<td>{$v.id}</td>
+		<td>
+			{switch name="v.menu_type"}
+			{case value="1"}<span class="label label-lg label-grey">频道栏目</span>{/case}
+			{case value="2"}<span class="label label-lg label-yellow">跳转栏目</span>{/case}
+			{case value="3"}
+				<a class="green" href="{:url('Model/cmslist?id='.$v['menu_modelid'])}" data-toggle="tooltip" title="列表管理"><span class="label label-lg label-pink">可发布栏目</span></a>
+			{/case}
+			{default /}<span class="label label-lg label-primary">单页栏目</span>
+			{/switch}
+		</td>
+		<td style=padding-left:{if condition='$v.leftpin neq 0'}{$v.leftpin}{/if}px; >{$v.lefthtml}{$v.menu_name}</span></td>
+		<td>{$v.model_title}</td>
 		<td>{$v.menu_l}</td>
 		<td>
 			{if condition="$v['menu_open'] eq 1"}
 				<a class="red open-btn" href="{:url('news_menu_state')}" data-id="{$v.id}" title="已开启">
-					<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+					<div><button class="btn btn-minier btn-yellow">开启</button></div>
 				</a>
 				{else/}
 				<a class="red open-btn" href="{:url('news_menu_state')}" data-id="{$v.id}" title="已禁用">
-					<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+					<div><button class="btn btn-minier btn-danger">禁用</button></div>
 				</a>
 			{/if}
 		</td>
 		<td>
 			<div class="hidden-sm hidden-xs action-buttons">
-				<a class="blue" href="{:url('news_menu_add',array('id'=>$v['id']))}"  title="添加子类">
+				<a class="blue" href="{:url('news_menu_add',array('id'=>$v['id']))}"  data-toggle="tooltip" title="添加子类">
 					<i class="ace-icon fa fa-plus-circle bigger-130"></i>																</a>
-				<a class="green" href="{:url('news_menu_edit',array('id'=>$v['id']))}" title="修改">
+				<a class="green" href="{:url('news_menu_edit',array('id'=>$v['id']))}" data-toggle="tooltip" title="修改">
 					<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-				<a class="red confirm-rst-url-btn" href="{:url('news_menu_del',array('id'=>$v['id'],'lang_list'=>$menu_l))}" data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" title="删除">
+				<a class="red confirm-rst-url-btn" href="{:url('news_menu_del',array('id'=>$v['id'],'lang_list'=>$menu_l))}" data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" data-toggle="tooltip" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
 			<div class="hidden-md hidden-lg">
 				<div class="inline position-relative">
@@ -29,14 +41,14 @@
 					</button>
 					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 						<li>
-							<a href="{:url('news_menu_add',array('id'=>$v['id']))}"  class="tooltip-success" data-rel="tooltip" title="" data-original-title="添加子类">
+							<a href="{:url('news_menu_add',array('id'=>$v['id']))}"  class="tooltip-success" data-rel="tooltip" title="添加子类" data-original-title="添加子类">
 										<span class="green">
 											<i class="ace-icon fa fa-plus-circle bigger-120"></i>
 										</span>
 							</a>
 						</li>
 						<li>
-							<a href="{:url('news_menu_edit',array('id'=>$v['id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+							<a href="{:url('news_menu_edit',array('id'=>$v['id']))}" class="tooltip-success" data-rel="tooltip" title="修改" data-original-title="修改">
 										<span class="green">
 											<i class="ace-icon fa fa-pencil bigger-120"></i>
 										</span>
@@ -44,7 +56,7 @@
 						</li>
 
 						<li>
-							<a href="{:url('news_menu_del',array('id'=>$v['id'],'lang_list'=>$menu_l))}"  data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
+							<a href="{:url('news_menu_del',array('id'=>$v['id'],'lang_list'=>$menu_l))}"  data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
 										<span class="red">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
 										</span>
@@ -58,5 +70,5 @@
 {/foreach}
 <tr>
 	<td align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
-	<td colspan="4">{$page}</td>
+	<td colspan="10">{$page}</td>
 </tr>

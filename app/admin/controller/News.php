@@ -346,11 +346,7 @@ class News extends Base {
 		if(!empty($img_one)){
 			$sl_data['news_img']=$img_one;
 		}
-		if(!empty($picall_url)){
-			$sl_data['news_pic_allurl']=$pic_oldlist.$picall_url;
-		}else{
-			$sl_data['news_pic_allurl']=$pic_oldlist;
-		}
+		$sl_data['news_pic_allurl']=$pic_oldlist.$picall_url;
 		//根据栏目id,获取语言
 		$news_l=Db::name('menu')->where('id',input('news_columnid'))->value('menu_l');
 		$sl_data['news_l']=$news_l;
@@ -518,10 +514,8 @@ class News extends Base {
 		if(!empty($menu_l)){
 			$where['menu_l']=array('eq',$menu_l);
 		}
-		//$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
-		//$show = $menus->render();
-		/* $show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show); */
 		$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->select();
+        $menus=get_menu_model($menus);
 		$show='';
 		$arr = $nav::menu_n($menus);
 		$this->assign('arr',$arr);
@@ -541,6 +535,8 @@ class News extends Base {
 		if(!empty($parentid)){
 			$menu_l=Db::name('menu')->where('id',$parentid)->value('menu_l');
 		}
+		$model=Db::name('model')->select();
+        $this->assign('model',$model);
 		$this->assign('parentid',$parentid);
 		$this->assign('menu_l',$menu_l);
 		$this->assign('tpls',$this->tpls);
@@ -588,6 +584,7 @@ class News extends Base {
 				'menu_l'=>empty($lang_list)?input('menu_l','zh-cn'):$lang_list,
 				'menu_enname'=>input('menu_enname'),
 				'menu_type'=>input('menu_type'),
+                'menu_modelid'=>input('menu_modelid',0,'intval'),
 				'parentid'=>input('parentid'),
 				'menu_listtpl'=>input('menu_listtpl'),
 				'menu_newstpl'=>input('menu_newstpl'),
@@ -616,6 +613,8 @@ class News extends Base {
 	//编辑菜单
 	public function news_menu_edit(){
 		$menu=Db::name('menu')->where(array('id'=>input('id')))->find();
+        $model=Db::name('model')->select();
+        $this->assign('model',$model);
 		$this->assign('menu',$menu);
 		$this->assign('tpls',$this->tpls);
 		return $this->fetch();
@@ -662,6 +661,7 @@ class News extends Base {
 				'menu_name'=>input('menu_name'),
 				'menu_enname'=>input('menu_enname'),
 				'menu_type'=>input('menu_type'),
+                'menu_modelid'=>input('menu_modelid',0,'intval'),
 				'parentid'=>input('parentid'),
 				'menu_listtpl'=>input('menu_listtpl'),
 				'menu_newstpl'=>input('menu_newstpl'),
@@ -689,6 +689,7 @@ class News extends Base {
 	public function news_menu_del(){
 		$lang_list=input('lang_list');
 		$arr=Db::name('menu')->find(input('id'));
+		$model_id=$arr['menu_modelid'];
 		$parentid=$arr['parentid'];
 		$arr=Db::name('menu')->find($parentid);
 		$rst=Db::name('menu')->where(array('parentid'=>input('id')))->select();
@@ -701,7 +702,7 @@ class News extends Base {
 					if($parentid && $arr['menu_type']==1){
 						$child=Db::name('menu')->where(array('parentid'=>$parentid))->select();
 						if(empty($child)){
-							Db::name('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
+                            Db::name('menu')->where(array('id'=>$parentid))->update(['menu_type'=>3,'menu_modelid'=>$model_id]);
 						}
 					}
 					cache('site_nav_main',null);
@@ -719,7 +720,7 @@ class News extends Base {
 				if($parentid && $arr['menu_type']==1){
 					$child=Db::name('menu')->where(array('parentid'=>$parentid))->select();
 					if(empty($child)){
-						Db::name('menu')->where(array('id'=>$parentid))->setField('menu_type' , 3);
+						Db::name('menu')->where(array('id'=>$parentid))->update(['menu_type'=>3,'menu_modelid'=>$model_id]);
 					}
 				}
 				cache('site_nav_main',null);
