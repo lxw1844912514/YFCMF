@@ -1,6 +1,6 @@
 <?php
 return array (
-  'yfcmf_version' => 'V2.0.0',
+  'yfcmf_version' => 'V2.0.1',
   'update_check' => false,
   'think_sdk_qq' => 
   array (
