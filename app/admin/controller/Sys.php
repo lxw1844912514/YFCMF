@@ -140,6 +140,23 @@ class Sys extends Base {
 		cookie('think_var', null);
 		$this->success('多语言设置成功',url('langsys'));
 	}
+    //日志设置显示
+    public function logsys(){
+	    $log=config('log');
+	    $log['level']=empty($log['level'])?join(',',['log', 'error', 'info', 'sql', 'notice', 'alert', 'debug']):join(',',$log['level']);
+        $this->assign('log',$log);
+        return $this->fetch();
+    }
+    //url设置显示
+    public function runlogsys(){
+        $log_level=input('log_level/a');
+        $log['clear_on']=input('clear_on',0,'intval')?true:false;
+        $log['timebf']=input('timebf',2592000,'intval');
+        $log['level']=(count($log_level)==7 || empty($log_level))?[]:$log_level;
+        sys_config_setbykey('log',$log);
+        cache::clear();
+        $this->success('日志设置成功',url('logsys'));
+    }
 	//url设置显示
 	public function urlsys(){
 		return $this->fetch();

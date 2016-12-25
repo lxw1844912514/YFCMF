@@ -385,7 +385,7 @@ $(function () {
     //动态选择框，上下级选中状态变化
     $('input.checkbox-parent').on('change', function () {
         var dataid = $(this).attr("dataid");
-        $('input[dataid^=' + dataid + ']').prop('checked', $(this).is(':checked'));
+        $('input[dataid^=' + dataid + '-]').prop('checked', $(this).is(':checked'));
     });
     $('input.checkbox-child').on('change', function () {
         var dataid = $(this).attr("dataid");
