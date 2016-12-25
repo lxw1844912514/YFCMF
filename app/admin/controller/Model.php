@@ -1504,6 +1504,21 @@ class Model extends Base
             $this->success('状态开启');
         }
     }
+	public function cmsorder(){
+		$model_id=input('id',0);
+		$model=Db::name('model')->where('model_id',$model_id)->find();
+		if(empty($model)){
+			$this->error('不存在的模型');
+		}
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('cmslist',['id'=>$model_id]));
+		}else{
+			foreach (input('post.') as $cms_id => $cms_order){
+				Db::name($model['model_name'])->where($model['model_pk'],$cms_id)->setField($model['model_order'] , $cms_order);
+			}
+			$this->success('排序更新成功',url('cmslist',['id'=>$model_id]));
+		}
+    }
     //model_fields处理
     private function fields($fields)
     {

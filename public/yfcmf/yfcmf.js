@@ -126,6 +126,7 @@ $(function () {
         $.post($url, $("input.list_order").serialize(), function (data) {
             if (data.code==1) {
                 layer.alert(data.msg, {icon: 6}, function (index) {
+					window.location.href = data.url;
                     layer.close(index);
                 });
             }else{

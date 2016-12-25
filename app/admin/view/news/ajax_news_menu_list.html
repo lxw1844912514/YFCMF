@@ -7,7 +7,11 @@
 			{case value="1"}<span class="label label-lg label-grey">频道栏目</span>{/case}
 			{case value="2"}<span class="label label-lg label-yellow">跳转栏目</span>{/case}
 			{case value="3"}
+				{if condition="!empty($v['menu_modelid'])"}
 				<a class="green" href="{:url('Model/cmslist?id='.$v['menu_modelid'])}" data-toggle="tooltip" title="列表管理"><span class="label label-lg label-pink">可发布栏目</span></a>
+				{else /}
+				<span class="label label-lg label-pink">可发布栏目</span>
+				{/if}
 			{/case}
 			{default /}<span class="label label-lg label-primary">单页栏目</span>
 			{/switch}

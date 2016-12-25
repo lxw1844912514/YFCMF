@@ -49,6 +49,6 @@
 {/foreach}
 <tr>
 	<td align="left" class="hidden-xs"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm hidden-xs">删</button> </td>
-	<td align="left" class="hidden-xs"><button  id="btnorder" href="{:url('cmsorder')}" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+	<td align="left" class="hidden-xs"><button  id="btnorder" href="{:url('cmsorder',['id'=>$model_id])}" class="btn btn-white btn-yellow btn-sm">排序</button></td>
 	<td colspan="20" align="right" class="hidden-xs">{$page}</td>
 </tr>
