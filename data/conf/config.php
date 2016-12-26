@@ -49,11 +49,11 @@ return array (
   'url_html_suffix' => 'html',
   'storage' => 
   array (
-    'storage_open' => true,
-    'accesskey' => '3AUEFIe0ucy0V95CQSa0-Mh3-oW4dCgVEyuRUf-j',
-    'secretkey' => 'Um5GL5hh4txxDnDVNk8VCQahXYSOl2ap3IBhrI5q',
-    'bucket' => 'rainfer',
-    'domain' => 'http://ohjmksy46.bkt.clouddn.com/',
+    'storage_open' => false,
+    'accesskey' => '',
+    'secretkey' => '',
+    'bucket' => '',
+    'domain' => '',
   ),
   'lang_switch_on' => true,
   'default_lang' => 'zh-cn',

@@ -12,6 +12,10 @@ class Index extends Controller {
             header('Location: ' . url('@home/index/index'));
             exit();
         }
+        if (!defined('__ROOT__')) {
+            $_root = rtrim(dirname(rtrim($_SERVER['SCRIPT_NAME'], '/')), '/');
+            define('__ROOT__', (('/' == $_root || '\\' == $_root) ? '' : $_root));
+        }
     }
     //首页
 	public function index() {
@@ -20,7 +24,7 @@ class Index extends Controller {
 		return $this->fetch(':index');
     }
     public function step2(){
-        if(session('step')!==1){
+        if(session('step')!==1 && session('step')!==3 && session('step')!==2){
             $this->error('请按顺序安装！', url('index'));
         }
         $data=array();
@@ -132,7 +136,7 @@ class Index extends Controller {
         return $this->fetch(':step2');
     }
     public function step3(){
-        if(session('step')!==2){
+        if(session('step')!==2 ){
             $this->error('请按顺序安装！', url('step2'));
         }else{
             session('step', 3);
@@ -158,17 +162,17 @@ class Index extends Controller {
             try {
                 $db = new \PDO($dsn, $dbconfig['username'], $dbconfig['password']);
             } catch (\PDOException $e) {
-                $this->error($e->getMessage(), url('step3'));
+                $this->error('数据库连接失败', url('step3'));
             }
             //建立数据库
             $sql = "CREATE DATABASE IF NOT EXISTS `{$dbname}` DEFAULT CHARACTER SET utf8";
-            $db->exec($sql) || $this->error($db->errorInfo());
+            $db->exec($sql) || $this->error('数据库创建失败');
             //重新实例化
             $dsn = "mysql:dbname={$dbname};host={$dbconfig['hostname']};port={$dbconfig['hostport']};charset=utf8";
             try {
                 $db = new \PDO($dsn, $dbconfig['username'], $dbconfig['password']);
             } catch (\PDOException $e) {
-                $this->error($e->getMessage(), url('step3'));
+                $this->error('数据库连接失败', url('step3'));
             }
             $dbconfig['database']=$dbname;
             $dbconfig['prefix']=trim(input('dbprefix'));

@@ -57,7 +57,7 @@ class Login extends Base {
 		$validate = new Validate($rule);
 		$rst   = $validate->check(array('member_list_username'=>$member_list_username,'member_list_pwd'=>$member_list_pwd));
 		if(true !==$rst){
-			$this->error($validate->getError());
+			$this->error(join('|',$validate->getError()));
 		}
 		if(strpos($member_list_username,"@")>0){//邮箱登陆
             $where['member_list_email']=$member_list_username;
@@ -126,7 +126,7 @@ class Login extends Base {
 			$validate = new Validate($rule);
 			$rst   = $validate->check(array('member_list_email'=>$member_list_email,'member_list_username'=>$member_list_username));
 			if(true !==$rst){
-				$this->error($validate->getError());
+				$this->error(join('|',$validate->getError()));
 			}
 			$find_user=Db::name("member_list")->where(array("member_list_username"=>$member_list_username))->find();
 			if($find_user){
@@ -196,7 +196,7 @@ hello;
 			$validate = new Validate($rule);
 			$rst= $validate->check(array('password'=>input('password'),'hash'=>input('hash'),'repassword'=>input('repassword')));
 			if(true !==$rst){
-				$this->error($validate->getError());
+				$this->error(join('|',$validate->getError()));
 			}else{
 				$password=input('password');
 				$hash=input('hash');

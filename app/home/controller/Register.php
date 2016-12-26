@@ -55,7 +55,7 @@ class Register extends Base {
 			));
 			$users_model=Db::name("member_list");
 			if(true !==$rst){
-				$this->error($validate->getError());
+				$this->error(join('|',$validate->getError()));
 			}
 			//用户名需过滤的字符的正则
 			$stripChar = '?<*.>\'"';

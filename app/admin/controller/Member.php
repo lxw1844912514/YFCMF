@@ -232,7 +232,7 @@ class Member extends Base {
 	public function member_group_state(){
 		$member_group_id=input('x');
 		if (!$member_group_id){
-			$this->error($member_group_id,url('member_group_list'));
+			$this->error('ID:'.$member_group_id.'不存在',url('member_group_list'));
 		}
 		$status=Db::name('member_group')->where(array('member_group_id'=>$member_group_id))->value('member_group_open');//判断当前状态情况
 		if($status==1){
