@@ -11,12 +11,24 @@ use think\Db;
 use think\Cache;
 class Model extends Base
 {
+    protected $cms_pk='id';
+    protected $cms_cid='';
+    protected $cms_table='';
+    protected $cms_model=[];
+    protected $cms_db_engine='MyISAM';
+    protected $cms_fields_list=[];
+    protected $cms_fields_edit=[];
+    protected $cms_fields_search=[];
+    protected $cms_fields=[];
+    protected $cms_allfields=[];
+    //模型列表
     public function model_list()
     {
 		$models=Db::name('model')->order('create_time desc')->select();
 		$this->assign('models',$models);
 		return $this->fetch();
-	} 
+	}
+	//模型switch操作
 	public function model_state(){
 		$id=input('x');
 		$status=Db::name('model')->where(array('model_id'=>$id))->value('model_status');//判断当前状态情况
@@ -30,7 +42,6 @@ class Model extends Base
 			$this->success('状态开启');
 		}
 	}
-
     //模型添加到后台menu
     public function model_addmenu(){
         $model_id=input('model_id');
@@ -44,8 +55,8 @@ class Model extends Base
                 //不存在
                 $sldata=array(
                     'name'=>'Model',
-                    'title'=>input('menu_name'),
-                    'css'=>input('css'),
+                    'title'=>input('menu_name',$model['model_title']),
+                    'css'=>input('css','fa-list'),
                     'pid'=>0,
                     'level'=>1,
                     'sort'=>input('sort',50,'intval'),
@@ -118,7 +129,29 @@ class Model extends Base
         if (empty($model)){
             $this->error('参数错误',url('model_list'));
         }else{
+            //备份
+            static $db = null;
+            static $db_prefix = null;
+            $db_prefix = config('database.prefix');
+            if (null === $db) {
+                $db = Db::connect([], true);
+            }
+            $tablename=$model['model_name'];
+            $path=ROOT_PATH.'data/backup/';
+            if (!file_exists($path)) {
+                @mkdir($path,0777,true);
+            }
+            $content=db_get_insert_sqls($model['model_name']);
+            file_put_contents($path.$db_prefix.$tablename.'.sql', $content);
+            //删除
+            $sql="DROP TABLE `$db_prefix$tablename`;";
+            $rst=$db->execute($sql);
+            if($rst===false){
+                $this -> error("模型删除失败！",url('model_list'));
+            }
+            //删模型
             $rst=Db::name('model')->where('model_id',$model_id)->delete();
+            //删权限菜单
             if($rst!==false){
                 $rule=Db::name('auth_rule')->where('name','Model/cmslist?id='.$model_id)->find();
                 if($rule){
@@ -131,26 +164,12 @@ class Model extends Base
                         Cache::clear();
                     }
                 }
+
                 $this->success('模型删除成功',url('model_list'));
             }else{
                 $this -> error("模型删除失败！",url('model_list'));
             }
         }
-    }
-	protected function build_table_exists($table)
-    {
-        static $tables = null;
-        static $db_prefix = null;
-
-        $db_prefix = config('database.prefix');
-        if (null === $tables) {
-            $tables = db_get_tables(true);
-        }
-
-        if (in_array($db_prefix . $table, $tables)) {
-            return true;
-        }
-        return false;
     }
     public function model_add()
     {
@@ -158,7 +177,6 @@ class Model extends Base
 	} 
     public function model_runadd()
     {
-        
 		static $db = null;
         static $db_prefix = null;
         $db_prefix = config('database.prefix');
@@ -207,8 +225,8 @@ class Model extends Base
             'model_engine'=>$model_engine
 
         );
-        $rst=$db->name('model')->insert($sl_data);
-        if($rst===false){
+        $model_id=$db->name('model')->insertGetId($sl_data);
+        if($model_id===false){
             $this->error('创建模型失败');
         }
         //加上cid order字段
@@ -232,140 +250,143 @@ class Model extends Base
             'rules'=>'',
             'default'=>50
         );
+		//删除
+		$sql="DROP TABLE IF EXISTS `$db_prefix$model_name`;";
+		$db->execute($sql);
         switch (config('database.type')) {
             case 'mysql' :
-                //不存在则创建
-                if (!$this->build_table_exists($model_name)) {
-                    $sql = ("CREATE TABLE `$db_prefix$model_name` (
-                        `$model_pk` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                        %FIELDS_SQL%
-                        %PRIMARY_KEY_SQL%
-                        %UNIQUE_KEY_SQL%
-                        %KEY_SQL%
-                        ) ENGINE=$model_engine AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
+                //创建
+                $sql = ("CREATE TABLE `$db_prefix$model_name` (
+                    `$model_pk` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                    %FIELDS_SQL%
+                    %PRIMARY_KEY_SQL%
+                    %UNIQUE_KEY_SQL%
+                    %KEY_SQL%
+                    ) ENGINE=$model_engine AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
-                    $sql_fields = array();
-                    $sql_primary_key = "PRIMARY KEY (`$model_pk`)";
-                    $sql_unique_key = array();
-                    $sql_key = array();
+                $sql_fields = array();
+                $sql_primary_key = "PRIMARY KEY (`$model_pk`)";
+                $sql_unique_key = array();
+                $sql_key = array();
 
-                    foreach ($model_fields as $f=>$fi) {
-                        $rules = explode(',', str_replace(' ', '', $fi ['rules']));
-                        switch ($fi ['type']) {
-                            //百度地图字段，双精度型
-                            case 'baidu_map':
-                                $defaults = explode(',', $fi['default']);
-                                $sql_fields [] = "`${f}_lng` DOUBLE NOT NULL DEFAULT ".($defaults[0]?"$defaults[0]":"0")." COMMENT '$fi[title]'";
-                                $sql_fields [] = "`${f}_lat` DOUBLE NOT NULL DEFAULT ".($defaults[1]?"$defaults[1]":"0")." COMMENT '$fi[title]'";
-                                break;
-                            //变长或固定字符串型
-                            case 'text' :
-                            case 'imagefile' :
-                            case 'selecttext' :
-                            case 'checkbox' :
-                                if (empty ($fi ['length'])) {
-                                    $fi ['length'] = 200;
-                                }
-                                $ftype = 'VARCHAR';
-                                //固定长度
-                                if (in_array('lengthfixed', $rules)) {
-                                    $ftype = 'CHAR';
-                                }
-                                $fnull = '';
-                                //非空
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=$fi['default']?:'未填写';
-                                }
-                                $sql_fields [] = "`$f` $ftype($fi[length]) $fnull DEFAULT '$fi[default]' COMMENT '$fi[title]'";
-                                break;
-                            //bigint型
-                            case 'currency':
-                            case 'large_number':
-                                $funsigned = '';
-                                //非负数
-                                if (in_array('unsigned', $rules)) {
-                                    $funsigned = 'UNSIGNED';
-                                }
-                                $fnull = '';
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=isset($fi['default'])?$fi['default']:'0';
-                                }
-                                $sql_fields [] = "`$f` BIGINT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
-                                break;
-                            //整数型
-                            case 'number' :
-                            case 'datetime' :
-                            case 'date' :
-                            case 'selectnumber' :
-                                $funsigned = '';
-                                if (in_array($fi ['type'], array(
-                                        'date',
-                                        'datetime'
-                                    )) || in_array('unsigned', $rules)
-                                ) {
-                                    $funsigned = 'UNSIGNED';
-                                }
-                                $fnull = '';
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=isset($fi['default'])?$fi['default']:'0';
-                                }
-                                $sql_fields [] = "`$f` INT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
-                                break;
-                            //text型
-                            case 'richtext' :
-                            case 'bigtext' :
-                            case 'images':
-                                $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
-                                break;
-                            //TINYINT型
-                            case 'switch' :
-                                $sql_fields [] = "`$f` TINYINT UNSIGNED NOT NULL DEFAULT ".($fi['default']?"1":"0")." COMMENT '$fi[title]'";
-                                break;
-                            default :
-                                $this->error('不能识别字段类型');
-                        }
-                        if (in_array($fi ['type'], array(
-                            'switch',
-                            'text',
-                            'number',
-                            'datetime',
-                            'date',
-                            'selecttext',
-                            'selectnumber',
-                            'checkbox'
-                        ))) {
-                            //不重复
-                            if (in_array('unique', $rules)) {
-                                $sql_unique_key [] = "UNIQUE KEY $f ($f)";
+                foreach ($model_fields as $f=>$fi) {
+                    $rules = explode(',', str_replace(' ', '', $fi ['rules']));
+                    switch ($fi ['type']) {
+                        //百度地图字段，双精度型
+                        case 'baidu_map':
+                            $defaults = explode(',', $fi['default']);
+                            $sql_fields [] = "`${f}_lng` DOUBLE NOT NULL DEFAULT ".($defaults[0]?"$defaults[0]":"0")." COMMENT '$fi[title]'";
+                            $sql_fields [] = "`${f}_lat` DOUBLE NOT NULL DEFAULT ".($defaults[1]?"$defaults[1]":"0")." COMMENT '$fi[title]'";
+                            break;
+                        //变长或固定字符串型
+                        case 'text' :
+                        case 'imagefile' :
+                        case 'selecttext' :
+                        case 'checkbox' :
+                            if (empty ($fi ['length'])) {
+                                $fi ['length'] = 200;
                             }
+                            $ftype = 'VARCHAR';
+                            //固定长度
+                            if (in_array('lengthfixed', $rules)) {
+                                $ftype = 'CHAR';
+                            }
+                            $fnull = '';
+                            //非空
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=$fi['default']?:'未填写';
+                            }
+                            $sql_fields [] = "`$f` $ftype($fi[length]) $fnull DEFAULT '$fi[default]' COMMENT '$fi[title]'";
+                            break;
+                        //bigint型
+                        case 'currency':
+                        case 'large_number':
+                            $funsigned = '';
+                            //非负数
+                            if (in_array('unsigned', $rules)) {
+                                $funsigned = 'UNSIGNED';
+                            }
+                            $fnull = '';
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=isset($fi['default'])?$fi['default']:'0';
+                            }
+                            $sql_fields [] = "`$f` BIGINT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
+                            break;
+                        //整数型
+                        case 'number' :
+                        case 'datetime' :
+                        case 'date' :
+                        case 'selectnumber' :
+                            $funsigned = '';
+                            if (in_array($fi ['type'], array(
+                                    'date',
+                                    'datetime'
+                                )) || in_array('unsigned', $rules)
+                            ) {
+                                $funsigned = 'UNSIGNED';
+                            }
+                            $fnull = '';
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=isset($fi['default'])?$fi['default']:'0';
+                            }
+                            $sql_fields [] = "`$f` INT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
+                            break;
+                        //text型
+                        case 'richtext' :
+                        case 'bigtext' :
+                        case 'images':
+                            $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
+                            break;
+                        //TINYINT型
+                        case 'switch' :
+                            $sql_fields [] = "`$f` TINYINT UNSIGNED NOT NULL DEFAULT ".($fi['default']?"1":"0")." COMMENT '$fi[title]'";
+                            break;
+                        default :
+                            $this->error('不能识别字段类型');
+                    }
+                    if (in_array($fi ['type'], array(
+                        'switch',
+                        'text',
+                        'number',
+                        'datetime',
+                        'date',
+                        'selecttext',
+                        'selectnumber',
+                        'checkbox'
+                    ))) {
+                        //不重复
+                        if (in_array('unique', $rules)) {
+                            $sql_unique_key [] = "UNIQUE KEY $f ($f)";
                         }
                     }
-                    //索引数组
-					$model_indexes=input('model_indexes','')?explode(',',input('model_indexes','')):array();
-                    if (!empty($model_indexes)) {
-                        foreach ($model_indexes as $indexes) {
-                            $sql_key[] = "INDEX IX_" . join('_', $indexes) . "(" . join(',', $indexes) . ")";
-                        }
+                }
+                //索引数组
+                $model_indexes=input('model_indexes','')?explode(',',input('model_indexes','')):array();
+                if (!empty($model_indexes)) {
+                    foreach ($model_indexes as $indexes) {
+                        $sql_key[] = "INDEX IX_" . join('_', $indexes) . "(" . join(',', $indexes) . ")";
                     }
-                    //替换sql语句
-                    $sql = str_replace(array(
-                        '%FIELDS_SQL%',
-                        '%PRIMARY_KEY_SQL%',
-                        '%UNIQUE_KEY_SQL%',
-                        '%KEY_SQL%'
-                    ), array(
-                        join(",\n", $sql_fields) . ((empty ($sql_primary_key) && empty ($sql_unique_key) && empty ($sql_key)) ? '' : ",\n"),
-                        $sql_primary_key . ((empty ($sql_primary_key) || (empty ($sql_unique_key) && empty ($sql_key))) ? '' : ",\n"),
-                        join(",\n", $sql_unique_key) . ((empty ($sql_unique_key) || empty ($sql_key)) ? '' : ",\n"),
-                        join(",\n", $sql_key)
-                    ), $sql);
-                    $rst=$db->execute($sql);//创建模型数据表
-                    if($rst===false){
-                        $this->success('创建模型失败');
-                    }
+                }
+                //替换sql语句
+                $sql = str_replace(array(
+                    '%FIELDS_SQL%',
+                    '%PRIMARY_KEY_SQL%',
+                    '%UNIQUE_KEY_SQL%',
+                    '%KEY_SQL%'
+                ), array(
+                    join(",\n", $sql_fields) . ((empty ($sql_primary_key) && empty ($sql_unique_key) && empty ($sql_key)) ? '' : ",\n"),
+                    $sql_primary_key . ((empty ($sql_primary_key) || (empty ($sql_unique_key) && empty ($sql_key))) ? '' : ",\n"),
+                    join(",\n", $sql_unique_key) . ((empty ($sql_unique_key) || empty ($sql_key)) ? '' : ",\n"),
+                    join(",\n", $sql_key)
+                ), $sql);
+                $rst=$db->execute($sql);//创建模型数据表
+                if($rst===false){
+                    //删除model里的数据
+                    Db::name('model')->delete($model_id);
+                    $this->error('创建模型失败');
                 }
                 break;
             //TODO mysql以外数据类型
@@ -442,23 +463,19 @@ class Model extends Base
             'model_engine'=>$model_engine
 
         );
-        $rst=$db->name('model')->where('model_id',$model_id)->update($sl_data);
-        if($rst===false){
-            $this->error('编辑模型失败');
-        }else{
-			$old_table=$old_model['model_name'];
-			if($this->build_table_exists($old_table)){
-				//备份
-				$path=ROOT_PATH.'data/backup/';
-				if (!file_exists($path)) {
-					@mkdir($path,0777,true);
-				}
-				$content=db_get_insert_sqls($old_table);
-				file_put_contents($path.$db_prefix.$old_table.'.sql', $content);
-				//删除
-				$sql="DROP TABLE `$db_prefix$old_table`;";
-                $db->execute($sql);
-			}
+        $old_table=$old_model['model_name'];
+        if($this->build_table_exists($old_table)){
+            //备份
+            $path=ROOT_PATH.'data/backup/';
+            if (!file_exists($path)) {
+                @mkdir($path,0777,true);
+            }
+            $content=db_get_insert_sqls($old_table);
+            file_put_contents($path.$db_prefix.$old_table.'.sql', $content);
+            //修改为临时文件名
+            if($db->execute("RENAME TABLE `$db_prefix$old_table` TO `$db_prefix$old_table"."_temp`;")){
+                $old_table=$old_table.'_temp';
+            }
         }
         //加上cid order字段
         $model_fields[input('model_cid',$model_name.'_cid')]=array(
@@ -481,137 +498,149 @@ class Model extends Base
             'rules'=>'',
             'default'=>50
         );
+				//删除
+		$sql="DROP TABLE IF EXISTS `$db_prefix$model_name`;";
+		$db->execute($sql);
         switch (config('database.type')) {
             case 'mysql' :
-                if (!$this->build_table_exists($model_name)) {
-                    $sql = ("CREATE TABLE `$db_prefix$model_name` (
-                        `$model_pk` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                        %FIELDS_SQL%
-                        %PRIMARY_KEY_SQL%
-                        %UNIQUE_KEY_SQL%
-                        %KEY_SQL%
-                        ) ENGINE=$model_engine AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
-                    $sql_fields = array();
-                    $sql_primary_key = "PRIMARY KEY (`$model_pk`)";
-                    $sql_unique_key = array();
-                    $sql_key = array();
-
-                    foreach ($model_fields as $f=>$fi) {
-                        $rules = explode(',', str_replace(' ', '', $fi ['rules']));
-                        switch ($fi ['type']) {
-                            //百度地图字段，双精度型
-                            case 'baidu_map':
-                                $defaults = explode(',', $fi['default']);
-                                $sql_fields [] = "`${f}_lng` DOUBLE NOT NULL DEFAULT ".($defaults[0]?"$defaults[0]":"0")." COMMENT '$fi[title]'";
-                                $sql_fields [] = "`${f}_lat` DOUBLE NOT NULL DEFAULT ".($defaults[1]?"$defaults[1]":"0")." COMMENT '$fi[title]'";
-                                break;
-                            //变长或固定字符串型
-                            case 'text' :
-                            case 'imagefile' :
-                            case 'selecttext' :
-                            case 'checkbox' :
-                                if (empty ($fi ['length'])) {
-                                    $fi ['length'] = 200;
-                                }
-                                $ftype = 'VARCHAR';
-                                //固定长度
-                                if (in_array('lengthfixed', $rules)) {
-                                    $ftype = 'CHAR';
-                                }
-                                $fnull = '';
-                                //非空
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=$fi['default']?:'未填写';
-                                }
-                                $sql_fields [] = "`$f` $ftype($fi[length]) $fnull DEFAULT '$fi[default]' COMMENT '$fi[title]'";
-                                break;
-                            //bigint型
-                            case 'currency':
-                            case 'large_number':
-                                $funsigned = '';
-                                //非负数
-                                if (in_array('unsigned', $rules)) {
-                                    $funsigned = 'UNSIGNED';
-                                }
-                                $fnull = '';
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=isset($fi['default'])?$fi['default']:'0';
-                                }
-                                $sql_fields [] = "`$f` BIGINT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
-                                break;
-                            //整数型
-                            case 'number' :
-                            case 'datetime' :
-                            case 'date' :
-                            case 'selectnumber' :
-                                $funsigned = '';
-                                if (in_array($fi ['type'], array(
-                                        'date',
-                                        'datetime'
-                                    )) || in_array('unsigned', $rules)
-                                ) {
-                                    $funsigned = 'UNSIGNED';
-                                }
-                                $fnull = '';
-                                if (in_array('required', $rules)) {
-                                    $fnull = 'NOT NULL';
-									$fi['default']=isset($fi['default'])?$fi['default']:'0';
-                                }
-                                $sql_fields [] = "`$f` INT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
-                                break;
-                            //text型
-                            case 'richtext' :
-                            case 'bigtext' :
-                            case 'images':
-                                $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
-                                break;
-                            //TINYINT型
-                            case 'switch' :
-                                $sql_fields [] = "`$f` TINYINT UNSIGNED NOT NULL DEFAULT ".($fi['default']?"1":"0")." COMMENT '$fi[title]'";
-                                break;
-                            default :
-                                $this->error('不能识别字段类型');
-                        }
-                        if (in_array($fi ['type'], array(
-                            'switch',
-                            'text',
-                            'number',
-                            'datetime',
-                            'date',
-                            'selecttext',
-                            'selectnumber',
-                            'checkbox'
-                        ))) {
-                            //不重复
-                            if (in_array('unique', $rules)) {
-                                $sql_unique_key [] = "UNIQUE KEY $f ($f)";
+                //重新创建
+                $sql = ("CREATE TABLE `$db_prefix$model_name` (
+                    `$model_pk` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                    %FIELDS_SQL%
+                    %PRIMARY_KEY_SQL%
+                    %UNIQUE_KEY_SQL%
+                    %KEY_SQL%
+                    )ENGINE=$model_engine AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
+                $sql_fields = array();
+                $sql_primary_key = "PRIMARY KEY (`$model_pk`)";
+                $sql_unique_key = array();
+                $sql_key = array();
+                foreach ($model_fields as $f=>$fi) {
+                    $rules = explode(',', str_replace(' ', '', $fi ['rules']));
+                    switch ($fi ['type']) {
+                        //百度地图字段，双精度型
+                        case 'baidu_map':
+                            $defaults = explode(',', $fi['default']);
+                            $sql_fields [] = "`${f}_lng` DOUBLE NOT NULL DEFAULT ".($defaults[0]?"$defaults[0]":"0")." COMMENT '$fi[title]'";
+                            $sql_fields [] = "`${f}_lat` DOUBLE NOT NULL DEFAULT ".($defaults[1]?"$defaults[1]":"0")." COMMENT '$fi[title]'";
+                            break;
+                        //变长或固定字符串型
+                        case 'text' :
+                        case 'imagefile' :
+                        case 'selecttext' :
+                        case 'checkbox' :
+                            if (empty ($fi ['length'])) {
+                                $fi ['length'] = 200;
                             }
+                            $ftype = 'VARCHAR';
+                            //固定长度
+                            if (in_array('lengthfixed', $rules)) {
+                                $ftype = 'CHAR';
+                            }
+                            $fnull = '';
+                            //非空
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=$fi['default']?:'未填写';
+                            }
+                            $sql_fields [] = "`$f` $ftype($fi[length]) $fnull DEFAULT '$fi[default]' COMMENT '$fi[title]'";
+                            break;
+                        //bigint型
+                        case 'currency':
+                        case 'large_number':
+                            $funsigned = '';
+                            //非负数
+                            if (in_array('unsigned', $rules)) {
+                                $funsigned = 'UNSIGNED';
+                            }
+                            $fnull = '';
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=isset($fi['default'])?$fi['default']:'0';
+                            }
+                            $sql_fields [] = "`$f` BIGINT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
+                            break;
+                        //整数型
+                        case 'number' :
+                        case 'datetime' :
+                        case 'date' :
+                        case 'selectnumber' :
+                            $funsigned = '';
+                            if (in_array($fi ['type'], array(
+                                    'date',
+                                    'datetime'
+                                )) || in_array('unsigned', $rules)
+                            ) {
+                                $funsigned = 'UNSIGNED';
+                            }
+                            $fnull = '';
+                            if (in_array('required', $rules)) {
+                                $fnull = 'NOT NULL';
+                                $fi['default']=isset($fi['default'])?$fi['default']:'0';
+                            }
+                            $sql_fields [] = "`$f` INT $funsigned $fnull ".($fi['default']?"DEFAULT $fi[default]":"")." COMMENT '$fi[title]'";
+                            break;
+                        //text型
+                        case 'richtext' :
+                        case 'bigtext' :
+                        case 'images':
+                            $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
+                            break;
+                        //TINYINT型
+                        case 'switch' :
+                            $sql_fields [] = "`$f` TINYINT UNSIGNED NOT NULL DEFAULT ".($fi['default']?"1":"0")." COMMENT '$fi[title]'";
+                            break;
+                        default :
+                            $this->error('不能识别字段类型');
+                    }
+                    if (in_array($fi ['type'], array(
+                        'switch',
+                        'text',
+                        'number',
+                        'datetime',
+                        'date',
+                        'selecttext',
+                        'selectnumber',
+                        'checkbox'
+                    ))) {
+                        //不重复
+                        if (in_array('unique', $rules)) {
+                            $sql_unique_key [] = "UNIQUE KEY $f ($f)";
                         }
                     }
-                    //索引数组
-					$model_indexes=input('model_indexes','')?explode(',',input('model_indexes','')):array();
-                    if (!empty($model_indexes)) {
-                        foreach ($model_indexes as $indexes) {
-                            $sql_key[] = "INDEX IX_" . join('_', $indexes) . "(" . join(',', $indexes) . ")";
-                        }
+                }
+                //索引数组
+                $model_indexes=input('model_indexes','')?explode(',',input('model_indexes','')):array();
+                if (!empty($model_indexes)) {
+                    foreach ($model_indexes as $indexes) {
+                        $sql_key[] = "INDEX IX_" . join('_', $indexes) . "(" . join(',', $indexes) . ")";
                     }
-                    //替换sql语句
-                    $sql = str_replace(array(
-                        '%FIELDS_SQL%',
-                        '%PRIMARY_KEY_SQL%',
-                        '%UNIQUE_KEY_SQL%',
-                        '%KEY_SQL%'
-                    ), array(
-                        join(",\n", $sql_fields) . ((empty ($sql_primary_key) && empty ($sql_unique_key) && empty ($sql_key)) ? '' : ",\n"),
-                        $sql_primary_key . ((empty ($sql_primary_key) || (empty ($sql_unique_key) && empty ($sql_key))) ? '' : ",\n"),
-                        join(",\n", $sql_unique_key) . ((empty ($sql_unique_key) || empty ($sql_key)) ? '' : ",\n"),
-                        join(",\n", $sql_key)
-                    ), $sql);
-                    $rst=$db->execute($sql);//创建模型数据表
+                }
+                //替换sql语句
+                $sql = str_replace(array(
+                    '%FIELDS_SQL%',
+                    '%PRIMARY_KEY_SQL%',
+                    '%UNIQUE_KEY_SQL%',
+                    '%KEY_SQL%'
+                ), array(
+                    join(",\n", $sql_fields) . ((empty ($sql_primary_key) && empty ($sql_unique_key) && empty ($sql_key)) ? '' : ",\n"),
+                    $sql_primary_key . ((empty ($sql_primary_key) || (empty ($sql_unique_key) && empty ($sql_key))) ? '' : ",\n"),
+                    join(",\n", $sql_unique_key) . ((empty ($sql_unique_key) || empty ($sql_key)) ? '' : ",\n"),
+                    join(",\n", $sql_key)
+                ), $sql);
+				$rst=$db->execute($sql);
+                if($rst===false){
+                    //改回原来的数据表
+                    $db->execute("RENAME TABLE `$db_prefix$old_table` TO `$db_prefix{$old_model['model_name']}`;");
+                    $this->error('编辑模型失败');
+                }else{
+                    $rst=$db->name('model')->where('model_id',$model_id)->update($sl_data);
                     if($rst===false){
-                        $this->success('创建模型失败');
+					    $sql="DROP TABLE IF EXISTS `$db_prefix$model_name`;";
+                        $db->execute($sql);
+                        $sql="RENAME TABLE `$db_prefix$old_table` TO `$db_prefix{$old_model['model_name']}`;";
+                        $db->execute($sql);
+                        $this->error('编辑模型失败');
                     }
                 }
                 break;
@@ -625,109 +654,26 @@ class Model extends Base
     {
         $model_id=input('id',0);
         $key=input('key','');
-		$model=Db::name('model')->where('model_id',$model_id)->find();
-		if(empty($model)){
-			$this->error('不存在的模型');
-		}
-		//除主键、cid、order外字段
-		$model_fields=$model['model_fields']?json_decode($model['model_fields'],true):array();
-		//加上主键、cid、order
-		$model_fields[$model['model_pk']]=array(
-			'name'=>$model['model_pk'],
-			'title'=>'ID',
-			'type'=>'number',
-			'data'=>'',
-			'description'=>'',
-			'length'=>'',
-			'rules'=>'',
-			'default'=>''
-		);
-        $model_fields[$model['model_cid']]=array(
-            'name'=>$model['model_cid'],
-            'title'=>'前台栏目',
-            'type'=>'selecttext',
-            'data'=>'menu|id|menu_name|id',
-            'description'=>'前台栏目',
-            'length'=>100,
-            'rules'=>'required',
-            'default'=>''
-        );
-        $model_fields[$model['model_order']]=array(
-            'name'=>$model['model_order'],
-            'title'=>'排序',
-            'type'=>'number',
-            'data'=>'',
-            'description'=>'排序,越小越靠前',
-            'length'=>3,
-            'rules'=>'',
-            'default'=>50
-        );
+        if(!$this->cms_init($model_id,false,true,true)){
+            $this->error('不存在的模型');
+        }
 		//栏目过滤
         $map=array();
-        $model_cid=input($model['model_cid'],'');
+        $model_cid=input($this->cms_cid,'');
         if ($model_cid!=''){
             $ids=get_menu_byid($model_cid,1,2);
-            $map[$model['model_cid']]= array('in',implode(",", $ids));
+            $map[$this->cms_cid]= array('in',implode(",", $ids));
         }
         //处理搜索字段
         $where='';
 		if(!empty($key)){
-            $model_search=$model['search_list']?explode(',',$model['search_list']):array();
-            $fields_search = array();
-            if(empty($model_search)){
-                $fields_search=$model_fields;
-            }else{
-                foreach ($model_search as &$v) {
-                    if (isset ($model_fields[$v])) {
-                        $fields_search[$v] = $model_fields[$v];
-                    }
-                }
-            }
-            $field_search=array();
-            foreach($fields_search as $k=>$v){
-                if($v['type']=='baidu_map'){
-                    $field_search[]=$k.'_lng';
-                    $field_search[]=$k.'_lat';
-                }else{
-                    $field_search[]=$k;
-                }
-            }
-            $where=join('|',$field_search);
+            $where=join('|',$this->cms_fields_search);
         }
-		//列表显示字段
-		$model_list=$model['model_list']?explode(',',$model['model_list']):array();
-		//字段处理,排除不在表内字段
-		$fields = array();
-		if(empty($model_list)){
-			$fields=$model_fields;
-		}else{
-			foreach ($model_list as &$v) {
-				if (isset ($model_fields[$v])) {
-					$fields[$v] = $model_fields[$v];
-				}
-			}
-		}
-		$field_list=array();
-		foreach($fields as $k=>$v){
-			if($v['type']=='baidu_map'){
-				$field_list[]=$k.'_lng';
-				$field_list[]=$k.'_lat';
-			}else{
-				$field_list[]=$k;
-			}
-		}
-		//判断cid order是否在显示字段里，不在则加入
-        if(!in_array($model['model_cid'],$field_list)){
-            array_unshift($field_list,$model['model_cid']);
-        }
-        if(!in_array($model['model_order'],$field_list)){
-            array_unshift($field_list,$model['model_order']);
-        }
-        $order=$model['model_sort']?:$model['model_order'];
+        $order=$this->cms_model['model_sort']?:$this->cms_model['model_order'];
 		if($where){
-            $data=Db::name($model['model_name'])->where($map)->where($where,'like',"%".$key."%")->field(join(',',$field_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+            $data=Db::name($this->cms_table)->where($map)->where($where,'like',"%".$key."%")->field(join(',',$this->cms_fields_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
         }else{
-            $data=Db::name($model['model_name'])->where($map)->field(join(',',$field_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+            $data=Db::name($this->cms_table)->where($map)->field(join(',',$this->cms_fields_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
         }
 		//处理分页
 		$show = $data->render();
@@ -737,14 +683,14 @@ class Model extends Base
 		foreach($data as &$v){
 			$item=array();
 			foreach($v as $kk=>$vv){
-				if ($kk == $model['model_pk']) {
+				if ($kk == $this->cms_pk) {
 					$item [$kk] = $vv;
 					continue;
 				}
-				if (!isset($model_fields [$kk])) {
+				if (!isset($this->cms_fields [$kk])) {
 					$kk = substr($kk, 0, strrpos($kk, '_'));
 				}				
-				switch ($model_fields [$kk] ['type']) {
+				switch ($this->cms_fields [$kk] ['type']) {
 					case 'images':
 						$images = array();
 						if ($vv) {
@@ -779,9 +725,9 @@ class Model extends Base
 						break;	
 					case 'switch' :
 						if ($vv) {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$model['model_pk']].'" title="开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
 						} else {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$model['model_pk']].'" title="关闭"><div><button class="btn btn-minier btn-danger">关闭</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="关闭"><div><button class="btn btn-minier btn-danger">关闭</button></div></a>';
 						}
 						break;
 					case 'bigtext' :
@@ -791,7 +737,7 @@ class Model extends Base
 					case 'selecttext' :
 					case 'selectnumber' :
 					case 'checkbox' :
-						$item [$kk] = $this->cms_field_option_get_titles($model_fields [$kk] ['data'], explode(',', $vv));
+						$item [$kk] = $this->cms_field_option_get_titles($this->cms_fields [$kk] ['data'], explode(',', $vv));
 						$item [$kk] = htmlspecialchars(join(',', $item [$kk]));
 						break;
 					case 'baidu_map':
@@ -801,6 +747,11 @@ class Model extends Base
 			}
 			$data_list[]= $item;
 		}
+		//字段数组
+        $fields=array();
+        foreach ($this->cms_fields_list as $key){
+            $fields[$key]=$this->cms_fields[$key];
+        }
         //栏目数据
         $nav = new \Leftnav;
         $menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
@@ -810,7 +761,7 @@ class Model extends Base
 		$this->assign('page',$show);
 		$this->assign('data',$data_list);
 		$this->assign('model_id', $model_id);
-		$this->assign('model', $model);
+		$this->assign('model', $this->cms_model);
         $this->assign('keyy', $key);
 		$this->assign('fields', $fields);
 		if(request()->isAjax()){
@@ -823,103 +774,14 @@ class Model extends Base
     public function cmsadd()
     {
         $model_id=input('id',0);
-        $model=Db::name('model')->where('model_id',$model_id)->find();
-        if(empty($model)){
+        if(!$this->cms_init($model_id)){
             $this->error('不存在的模型');
         }
-        $model_cid=input($model['model_cid'],'');
-        //cid、order
-        $model_fields[$model['model_cid']]=array(
-            'name'=>$model['model_cid'],
-            'title'=>'前台栏目',
-            'type'=>'selecttext',
-            'data'=>'menu|id|menu_name|id',
-            'description'=>'前台栏目',
-            'length'=>100,
-            'rules'=>'required',
-            'default'=>''
-        );
-        $model_fields[$model['model_order']]=array(
-            'name'=>$model['model_order'],
-            'title'=>'排序',
-            'type'=>'number',
-            'data'=>'',
-            'description'=>'排序,越小越靠前',
-            'length'=>3,
-            'rules'=>'',
-            'default'=>50
-        );
-        //除主键外字段
-        $model_fields=array_merge($model_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
-		//处理默认值
-		$fields_data = array();
-        foreach ($model_fields as $k=>$v) {
-            $fields_data [$k] = $model_fields [$k];
-            $fields_data [$k] ['rules'] = explode('|', $fields_data [$k] ['rules']);
-            //未设置则为''
-            if (!isset ($fields_data [$k] ['default'])) {
-                $fields_data [$k] ['default'] = '';
-            }
-            switch ($fields_data [$k] ['type']) {
-                case 'images':
-                    $fields_data [$k] ['images']=array_filter(explode(",", $fields_data [$k] ['default']));
-					$fields_data [$k] ['value'] = join(',', $fields_data [$k] ['images']);
-                    break;
-                case 'baidu_map':
-                    $fields_data [$k] ['default'] = explode(',', $fields_data [$k] ['default']);
-                    $fields_data [$k] ['value']['lng'] = $fields_data [$k] ['default'][0];
-                    $fields_data [$k] ['value']['lat'] = $fields_data [$k] ['default'][1];
-                    break;
-                case 'text' :
-                case 'number' :
-                case 'switch' :
-                case 'bigtext' :
-                case 'large_number':
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    break;
-                case 'currency':
-                    $fields_data [$k] ['value'] = long_currency($fields_data [$k] ['default']);
-                    break;
-                case 'datetime' :
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    if (empty ($fields_data [$k] ['value'])) {
-                        $fields_data [$k] ['value'] = time();
-                    }
-                    break;
-                case 'date' :
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    if (empty ($fields_data [$k] ['value'])) {
-                        $fields_data [$k] ['value'] = time();
-                    }
-                    break;
-                case 'selectnumber' :
-                case 'selecttext' :
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    if($k!=$model['model_cid']){
-                        $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
-                    }else{
-                        $nav = new \Leftnav;
-                        $arr=Db::name('menu')->where(['menu_modelid'=>$model_id,'menu_type'=>3])->select();
-                        $fields_data [$k] ['option']=$nav::menu_n($arr);
-                    }
-                    break;
-                case 'checkbox' :
-                    $fields_data [$k] ['value'] = explode(',', $fields_data [$k] ['default']);;
-                    $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
-                    break;
-                case 'richtext' :
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    break;
-                case 'imagefile' :
-                    $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
-                    break;
-                default :
-                    $this->error('未知字段 ' . $fields_data [$k] ['type']);
-                    break;
-            }
-        }//处理默认值
+        $model_cid=input($this->cms_cid,0);
+        $data=array_reduce($this->cms_fields, create_function('$v,$w', '$v[$w["name"]]=$w["default"];return $v;'));
+        $fields_data=$this->handle_data($model_id,$this->cms_allfields,$data);
 		$this->assign('model_id',$model_id);
-		$this->assign('model',$model);
+		$this->assign('model',$this->cms_model);
         $this->assign('model_cid',$model_cid);
 		$this->assign('fields_data', $fields_data);
 		return $this->fetch();
@@ -928,200 +790,11 @@ class Model extends Base
     public function cmsrunadd()
     {
         $model_id=input('id',0);
-        $model=Db::name('model')->where('model_id',$model_id)->find();
-        if(empty($model)){
+        if(!$this->cms_init($model_id)){
             $this->error('不存在的模型');
         }
-        //cid、order
-        $model_fields[$model['model_cid']]=array(
-            'name'=>$model['model_cid'],
-            'title'=>'前台栏目',
-            'type'=>'selecttext',
-            'data'=>'menu|id|menu_name|id',
-            'description'=>'前台栏目',
-            'length'=>100,
-            'rules'=>'required',
-            'default'=>''
-        );
-        $model_fields[$model['model_order']]=array(
-            'name'=>$model['model_order'],
-            'title'=>'排序',
-            'type'=>'number',
-            'data'=>'',
-            'description'=>'排序,越小越靠前',
-            'length'=>3,
-            'rules'=>'',
-            'default'=>50
-        );
-        //除主键外字段
-        $model_fields=array_merge($model_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
-        //处理postdata
-        $postdata=array();
-        foreach ($model_fields as $k=>$v) {
-            $f=$model_fields[$k];
-            $rules = explode('|', $f ['rules']);
-            //处理input数据
-			switch ($f ['type']) {
-				case 'images':
-					//判断是否有传多图
-					$files = request()->file('pic_all');
-					$picall_url='';
-					if(!empty($files)){
-						if(config('storage.storage_open')){
-							//七牛
-							$upload = \Qiniu::instance();
-							$info = $upload->upload();
-							$error = $upload->getError();
-							if ($info) {
-								if(!empty($info['pic_all'])) {
-									foreach ($info['pic_all'] as $file) {
-										$img_url=config('storage.domain').$file['key'];
-										$picall_url = $img_url . ',' . $picall_url;
-									}
-								}else{
-									foreach ($info as $file) {
-										$img_url=config('storage.domain').$file['key'];
-										$picall_url = $img_url . ',' . $picall_url;
-									}
-								}
-							}else{
-								$this->error($error);//否则就是上传错误，显示错误原因
-							}
-						}else{
-							$validate = config('upload_validate');
-							//多图
-							foreach ($files as $file) {
-								$info = $file->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
-								if ($info) {
-									$img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
-									//写入数据库
-									$data['uptime'] = time();
-									$data['filesize'] = $info->getSize();
-									$data['path'] = $img_url;
-									Db::name('plug_files')->insert($data);
-									$picall_url = $img_url . ',' . $picall_url;
-								} else {
-									$this->error($file->getError());//否则就是上传错误，显示错误原因
-								}
-							}
-						}
-					}
-					$postdata[$k]=$picall_url;
-					break;
-				case 'imagefile':
-					$file = request()->file('pic_one');
-					$img_one='';
-					if(!empty($file)){
-						if(config('storage.storage_open')){
-							//七牛
-							$upload = \Qiniu::instance();
-							$info = $upload->upload();
-							$error = $upload->getError();
-							if ($info) {
-								if(!empty($info['pic_one'])){
-									$img_one= config('storage.domain').$info['pic_one'][0]['key'];
-								}else{
-									$img_one= config('storage.domain').$info[0]['key'];
-								}
-							}else{
-								$this->error($error);//否则就是上传错误，显示错误原因
-							}
-						}else{
-							$validate = config('upload_validate');
-							//单图
-							$info = $file[0]->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
-							if ($info) {
-								$img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
-								//写入数据库
-								$data['uptime'] = time();
-								$data['filesize'] = $info->getSize();
-								$data['path'] = $img_url;
-								Db::name('plug_files')->insert($data);
-								$img_one = $img_url;
-							} else {
-								$this->error($file->getError());//否则就是上传错误，显示错误原因
-							}
-						}
-					}
-					$postdata[$k]=$img_one;
-					break;
-				case 'baidu_map':
-					$postdata [$k . '_lng'] = input("${k}_lng", 0, 'floatval');
-					$postdata [$k . '_lat'] = input("${k}_lat", 0, 'floatval');
-					break;
-				case 'text' :
-				case 'bigtext' :
-					$postdata [$k] = input("$k", '', 'trim');
-					break;
-				case 'number' :
-				case 'switch' :
-					$postdata [$k] = input("$k", 0, 'intval');
-					break;
-				case 'large_number' :
-					$postdata [$k] = input("$k", 0);
-					break;
-				case 'currency':
-					$postdata [$k] = currency_long(input("$k", '', 'trim'));
-					break;
-				case 'datetime' :
-				case 'date' :
-					$postdata [$k] = input("$k", '', 'strtotime');
-					break;
-				case 'selectnumber' :
-					$postdata [$k] = input("$k", 0, 'intval');
-					if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-						$this->error($f ['title'] . ' 无效');
-					}
-					break;
-				case 'selecttext' :
-					$postdata [$k] = input("$k", '', 'trim');
-					if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-						$this->error($f ['title'] . ' 无效');
-					}
-					break;
-				case 'checkbox' :
-					$postdata [$k] = input("{$k}".'/a', array());
-					if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-						$this->error($f ['title'] . ' 无效');
-					}
-					$postdata [$k] = join(',', $postdata [$k]);
-					break;
-				case 'richtext' :
-					$postdata [$k] = htmlspecialchars_decode(input("$k"));
-					break;
-				default :
-					$this->error('未知字段 ' . $f ['title'] . ':' . $f ['type']);
-					break;
-			}
-            //处理特殊规则-必须
-            if (in_array('required', $rules)) {
-                switch ($model_fields[$k]['type']) {
-                    case 'baidu_map':
-                        if (!isset ($postdata [$k . '_lng']) || '' === $postdata [$k . '_lng']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        if (!isset ($postdata [$k . '_lat']) || '' === $postdata [$k . '_lat']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
-                    default:
-                        if (!isset ($postdata [$k]) || '' === $postdata [$k]) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
-                }
-            }
-            //处理特殊规则-唯一
-            if (in_array('unique', $rules)) {
-                $one = Db::name($model['model_name'])->where(array(
-                    $k => $postdata [$k]
-                ))->find();
-                if ($one) {
-                    $this->error($f ['title'] . ' 不能重复');
-                }
-            }
-        }
-        $rst=Db::name($model['model_name'])->insert($postdata);
+        $postdata=$this->handle_postdata(0,$this->cms_allfields,false,true);
+        $rst=Db::name($this->cms_table)->insert($postdata);
         if($rst!==false){
             $this->success('增加成功',url('cmslist',['id'=>$model_id]));
         }else{
@@ -1132,115 +805,17 @@ class Model extends Base
     public function cmsedit()
     {
         $model_id=input('id',0);
-		$model=Db::name('model')->where('model_id',$model_id)->find();
-		if(empty($model)){
-			$this->error('不存在的模型');
-		}
+        if(!$this->cms_init($model_id,true)){
+            $this->error('不存在的模型');
+        }
 		//主键id
-		$model_pkid=input($model['model_pk'],0);
-		//前台栏目id
-        $model_cid=Db::name($model['model_name'])->where($model['model_pk'],$model_pkid)->value($model['model_cid']);
-        //cid、order
-        $model_fields[$model['model_cid']]=array(
-            'name'=>$model['model_cid'],
-            'title'=>'前台栏目',
-            'type'=>'selecttext',
-            'data'=>'menu|id|menu_name|id',
-            'description'=>'前台栏目',
-            'length'=>100,
-            'rules'=>'required',
-            'default'=>''
-        );
-        $model_fields[$model['model_order']]=array(
-            'name'=>$model['model_order'],
-            'title'=>'排序',
-            'type'=>'number',
-            'data'=>'',
-            'description'=>'排序,越小越靠前',
-            'length'=>3,
-            'rules'=>'',
-            'default'=>50
-        );
-        //除主键外字段
-        $model_fields=array_merge($model_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
-		//可编辑字段
-		$model_edit=$model['model_edit']?explode(',',$model['model_edit']):array();
-		//字段处理,排除不在表内字段
-		$fields = array();
-		if(empty($model_edit)){
-			$fields=$model_fields;
-		}else{
-			foreach ($model_edit as &$v) {
-				if (isset ($model_fields[$v])) {
-					$fields[$v] = $model_fields[$v];
-				}
-			}
-		}
-		$field_list=array();
-		foreach($fields as $k=>$v){
-			if($v['type']=='baidu_map'){
-				$field_list[]=$k.'_lng';
-				$field_list[]=$k.'_lat';
-			}else{
-				$field_list[]=$k;
-			}
-		}
-		$data=Db::name($model['model_name'])->field(join(',',$field_list))->where($model['model_pk'],$model_pkid)->find();
-		//处理数据
-		$fields_data = array();
-		foreach ($field_list as $k) {
-			if (!isset($model_fields [$k])) {
-				$k = substr($k, 0, strrpos($k, '_'));
-			}
-		    $fields_data [$k] = $model_fields [$k];
-            $fields_data [$k] ['rules'] = explode(',', $fields_data [$k] ['rules']);
-			switch ($fields_data [$k] ['type']) {
-				case 'images':
-					$fields_data [$k] ['images'] = array_filter(explode(",", $data [$k]));
-                    $fields_data [$k] ['value'] = join(',',$fields_data [$k] ['images']);
-					break;
-				case 'baidu_map':
-					$fields_data [$k] ['default'] = explode(',', $fields_data [$k] ['default']);
-					$fields_data [$k] ['value']['lng'] = $data [$k . '_lng'];
-					$fields_data [$k] ['value']['lat'] = $data [$k . '_lat'];
-					break;
-				case 'text' :
-                case 'number' :
-                case 'switch' :
-                case 'date' :
-				case 'datetime' :
-                case 'bigtext' :
-				case 'richtext' :
-                case 'large_number' :
-				case 'imagefile' :
-                    $fields_data [$k] ['value'] = $data [$k];
-                    break;
-				case 'currency':
-                    $fields_data [$k] ['value'] = long_currency($data [$k]);
-                    break;
-				case 'selectnumber' :
-                case 'selecttext' :
-                    $fields_data [$k] ['value'] = $data [$k];
-                    if($k!=$model['model_cid']){
-                        $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
-                    }else{
-                        $nav = new \Leftnav;
-                        $arr=Db::name('menu')->where(['menu_modelid'=>$model_id,'menu_type'=>3])->select();
-                        $fields_data [$k] ['option']=$nav::menu_n($arr);
-                    }
-                    break;
-				case 'checkbox' :
-                    $fields_data [$k] ['value'] = explode(',', $data [$k]);
-                    $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
-                    break;
-				default :
-                    $this->error('未知字段 ' . $fields_data [$k] ['type']);
-                    break;
-			}
-		}
+		$model_pkid=input($this->cms_pk,0);
+        $data=Db::name($this->cms_table)->where($this->cms_pk,$model_pkid)->find();
+        $model_cid=$data[$this->cms_cid];
+        $fields_data=$this->handle_data($model_id,$this->cms_fields_edit,$data);
 		$this->assign('model_pkid',$model_pkid);
 		$this->assign('model_id',$model_id);
-		$this->assign('model',$model);
+		$this->assign('model',$this->cms_model);
         $this->assign('model_cid',$model_cid);
 		$this->assign('fields_data', $fields_data);
 		return $this->fetch();
@@ -1249,200 +824,12 @@ class Model extends Base
     public function cmsrunedit()
     {
         $model_id=input('id',0);
-        $model=Db::name('model')->where('model_id',$model_id)->find();
-        if(empty($model)){
+        if(!$this->cms_init($model_id,true)){
             $this->error('不存在的模型');
         }
-        //主键id
-        $model_pkid=input($model['model_pk'],0);
-        //除主键外字段
-        $model_fields=$model['model_fields']?json_decode($model['model_fields'],true):array();
-        //可编辑字段
-        $model_edit=$model['model_edit']?explode(',',$model['model_edit']):array();
-        //字段处理,排除不在表内字段
-        $fields = array();
-        if(empty($model_edit)){
-            $fields=$model_fields;
-        }else{
-            foreach ($model_edit as &$v) {
-                if (isset ($model_fields[$v])) {
-                    $fields[$v] = $model_fields[$v];
-                }
-            }
-        }
-        //得到可编辑字段
-        $field_list=array_keys($fields);
-        //处理postdata
-        $postdata=array();
-        foreach ($field_list as $k) {
-            $f=$model_fields[$k];
-            $rules = explode('|', $f ['rules']);
-            //非只读时处理input数据
-            if(!in_array('readonly', $rules)){
-                switch ($f ['type']) {
-                    case 'images':
-                        //判断是否有传多图
-                        $files = request()->file('pic_all');
-                        $picall_url='';
-                        if(!empty($files)){
-                            if(config('storage.storage_open')){
-                                //七牛
-                                $upload = \Qiniu::instance();
-                                $info = $upload->upload();
-                                $error = $upload->getError();
-                                if ($info) {
-									if(!empty($info['pic_all'])) {
-										foreach ($info['pic_all'] as $file) {
-											$img_url=config('storage.domain').$file['key'];
-											$picall_url = $img_url . ',' . $picall_url;
-										}
-									}else{
-										foreach ($info as $file) {
-											$img_url=config('storage.domain').$file['key'];
-											$picall_url = $img_url . ',' . $picall_url;
-										}
-									}
-                                }else{
-                                    $this->error($error);//否则就是上传错误，显示错误原因
-                                }
-                            }else{
-                                $validate = config('upload_validate');
-                                //多图
-                                foreach ($files as $file) {
-                                    $info = $file->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
-                                    if ($info) {
-                                        $img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
-                                        //写入数据库
-                                        $data['uptime'] = time();
-                                        $data['filesize'] = $info->getSize();
-                                        $data['path'] = $img_url;
-                                        Db::name('plug_files')->insert($data);
-                                        $picall_url = $img_url . ',' . $picall_url;
-                                    } else {
-                                        $this->error($file->getError());//否则就是上传错误，显示错误原因
-                                    }
-                                }
-                            }
-                        }
-                        $postdata[$k]=input('pic_oldlist','').$picall_url;
-                        break;
-                    case 'imagefile':
-                        $file = request()->file('pic_one');
-                        $img_one='';
-                        if(!empty($file)){
-                            if(config('storage.storage_open')){
-                                //七牛
-                                $upload = \Qiniu::instance();
-                                $info = $upload->upload();
-                                $error = $upload->getError();
-                                if ($info) {
-									if(!empty($info['pic_one'])){
-										$img_one= config('storage.domain').$info['pic_one'][0]['key'];
-									}else{
-										$img_one= config('storage.domain').$info[0]['key'];
-									}
-                                }else{
-                                    $this->error($error);//否则就是上传错误，显示错误原因
-                                }
-                            }else{
-                                $validate = config('upload_validate');
-                                //单图
-                                $info = $file[0]->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
-                                if ($info) {
-                                    $img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
-                                    //写入数据库
-                                    $data['uptime'] = time();
-                                    $data['filesize'] = $info->getSize();
-                                    $data['path'] = $img_url;
-                                    Db::name('plug_files')->insert($data);
-                                    $img_one = $img_url;
-                                } else {
-                                    $this->error($file->getError());//否则就是上传错误，显示错误原因
-                                }
-                            }
-                        }
-                        if(!empty($img_one)){
-                            $postdata[$k]=$img_one;
-                        }
-                        break;
-                    case 'baidu_map':
-                        $postdata [$k . '_lng'] = input("${k}_lng", 0, 'floatval');
-                        $postdata [$k . '_lat'] = input("${k}_lat", 0, 'floatval');
-                        break;
-                    case 'text' :
-                    case 'bigtext' :
-                        $postdata [$k] = input("$k", '', 'trim');
-                        break;
-                    case 'number' :
-                    case 'switch' :
-                        $postdata [$k] = input("$k", 0, 'intval');
-                        break;
-                    case 'large_number' :
-                        $postdata [$k] = input("$k", 0);
-                        break;
-                    case 'currency':
-                        $postdata [$k] = currency_long(input("$k", '', 'trim'));
-                        break;
-                    case 'datetime' :
-                    case 'date' :
-                        $postdata [$k] = input("$k", '', 'strtotime');
-                        break;
-                    case 'selectnumber' :
-                        $postdata [$k] = input("$k", 0, 'intval');
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-                            $this->error($f ['title'] . ' 无效');
-                        }
-                        break;
-                    case 'selecttext' :
-                        $postdata [$k] = input("$k", '', 'trim');
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-                            $this->error($f ['title'] . ' 无效');
-                        }
-                        break;
-                    case 'checkbox' :
-                        $postdata [$k] = input("{$k}".'/a', array());
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
-                            $this->error($f ['title'] . ' 无效');
-                        }
-                        $postdata [$k] = join(',', $postdata [$k]);
-                        break;
-                    case 'richtext' :
-                        $postdata [$k] = htmlspecialchars_decode(input("$k"));
-                        break;
-                    default :
-                        $this->error('未知字段 ' . $f ['title'] . ':' . $f ['type']);
-                        break;
-                }
-            }
-            //处理特殊规则-必须
-            if (in_array('required', $rules)) {
-                switch ($model_fields[$k]['type']) {
-                    case 'baidu_map':
-                        if (!isset ($postdata [$k . '_lng']) || '' === $postdata [$k . '_lng']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        if (!isset ($postdata [$k . '_lat']) || '' === $postdata [$k . '_lat']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
-                    default:
-                        if (!isset ($postdata [$k]) || '' === $postdata [$k]) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
-                }
-            }
-            //处理特殊规则-唯一
-            if (in_array('unique', $rules)) {
-                $one = Db::name($model['model_name'])->where(array(
-                    $k => $postdata [$k]
-                ))->find();
-                if ($one && $one [$model['model_pk']] != $model_pkid) {
-                    $this->error($f ['title'] . ' 不能重复');
-                }
-            }
-        }
-        $rst=Db::name($model['model_name'])->where($model['model_pk'],$model_pkid)->update($postdata);
+        $model_pkid=input($this->cms_pk,0);
+        $postdata=$this->handle_postdata($model_pkid,$this->cms_fields_edit,true);
+        $rst=Db::name($this->cms_table)->where($this->cms_pk,$model_pkid)->update($postdata);
         if($rst!==false){
             $this->success('修改成功',url('cmslist',['id'=>$model_id]));
         }else{
@@ -1604,5 +991,340 @@ class Model extends Base
             }
         }
         return true;
+    }
+	protected function build_table_exists($table)
+    {
+        static $tables = null;
+        static $db_prefix = null;
+
+        $db_prefix = config('database.prefix');
+        if (null === $tables) {
+            $tables = db_get_tables(true);
+        }
+
+        if (in_array($db_prefix . $table, $tables)) {
+            return true;
+        }
+        return false;
+    }
+    //初始化
+    protected function cms_init($model_id,$is_edit=false,$is_search=false,$is_list=false)
+    {
+        $model=Db::name('model')->find($model_id);
+        if($model){
+            $this->cms_pk=$model['model_pk'];
+            $this->cms_model=$model;
+            $this->cms_table=$model['model_name'];
+            $this->cms_cid=$model['model_cid'];
+            $this->cms_db_engine=$model['model_engine'];
+            $this->cms_fields[$model['model_pk']]=[
+                'name'=>$model['model_pk'],
+                'title'=>'ID',
+                'type'=>'number',
+                'data'=>'',
+                'description'=>'',
+                'length'=>'',
+                'rules'=>'',
+                'default'=>''];
+            $this->cms_fields[$model['model_order']]=[
+                'name'=>$model['model_order'],
+                'title'=>'排序',
+                'type'=>'number',
+                'data'=>'',
+                'description'=>'排序,越小越靠前',
+                'length'=>3,
+                'rules'=>'',
+                'default'=>50];
+            $this->cms_fields[$model['model_cid']]=[
+                'name'=>$model['model_cid'],
+                'title'=>'前台栏目',
+                'type'=>'selecttext',
+                'data'=>'menu|id|menu_name|id',
+                'description'=>'前台栏目',
+                'length'=>100,
+                'rules'=>'required',
+                'default'=>''];
+            $this->cms_fields=array_merge($this->cms_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
+            $this->cms_allfields=array_keys($this->cms_fields);
+            if($is_edit){
+                $this->cms_fields_edit=$model['model_edit']?explode(',',$model['model_edit']):array();
+                if(empty($this->cms_fields_edit)){
+                    $this->cms_fields_edit=$this->cms_allfields;
+                }else{
+                    $this->cms_fields_edit=array_intersect($this->cms_fields_edit,$this->cms_allfields);
+                }
+            }
+            if($is_search){
+                $this->cms_fields_search=$model['search_list']?explode(',',$model['search_list']):array();
+                if(empty($this->cms_fields_search)){
+                    $this->cms_fields_search=$this->cms_allfields;
+                }else{
+                    $this->cms_fields_search=array_intersect($this->cms_fields_search,$this->cms_allfields);
+                }
+            }
+            if($is_list){
+                $this->cms_fields_list=$model['model_list']?explode(',',$model['model_list']):array();
+                if(empty($this->cms_fields_list)){
+                    $this->cms_fields_list=$this->cms_allfields;
+                }else{
+                    $this->cms_fields_list=array_intersect($this->cms_fields_list,$this->cms_allfields);
+                    $this->cms_fields_list=array_merge([$model['model_pk'],$model['model_order'],$model['model_cid']],$this->cms_fields_list);
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+    //处理cms的add edit的值、option数据
+    protected function handle_data($model_id,$fields,$data)
+    {
+        $fields_data = array();
+        //baidu_map不含_lng _lat,但是$data中需要含_lng _lat
+        foreach ($fields as $k) {
+            //主键跳过
+            if($k==$this->cms_pk){
+                continue;
+            }
+            $fields_data [$k] = $this->cms_fields [$k];
+            $fields_data [$k] ['rules'] = explode(',', $fields_data [$k] ['rules']);
+            switch ($fields_data [$k] ['type']) {
+                case 'images':
+                    $fields_data [$k] ['images'] = array_filter(explode(",", $data [$k]));
+                    $fields_data [$k] ['value'] = join(',',$fields_data [$k] ['images']);
+                    break;
+                case 'baidu_map':
+                    $fields_data [$k] ['default'] = explode(',', $fields_data [$k] ['default']);
+                    if(isset($data[$k . '_lng'])){
+                        $fields_data [$k] ['value']['lng'] = $data [$k . '_lng'];
+                        $fields_data [$k] ['value']['lat'] = $data [$k . '_lat'];
+                    }else{
+                        $fields_data [$k] ['value']['lng'] = $fields_data [$k] ['default'][0];
+                        $fields_data [$k] ['value']['lat'] = $fields_data [$k] ['default'][1];
+                    }
+                    break;
+                case 'text' :
+                case 'number' :
+                case 'switch' :
+                case 'bigtext' :
+                case 'richtext' :
+                case 'large_number' :
+                case 'imagefile' :
+                    $fields_data [$k] ['value'] = $data [$k];
+                    break;
+                case 'date' :
+                case 'datetime' :
+                    $fields_data [$k] ['value'] = $data [$k];
+                    if (empty ($fields_data [$k] ['value'])) {
+                        $fields_data [$k] ['value'] = time();
+                    }
+                    break;
+                case 'currency':
+                    $fields_data [$k] ['value'] = long_currency($data [$k]);
+                    break;
+                case 'selectnumber' :
+                case 'selecttext' :
+                    $fields_data [$k] ['value'] = $data [$k];
+                    if($k!=$this->cms_cid){
+                        $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
+                    }else{
+                        $nav = new \Leftnav;
+                        $arr=Db::name('menu')->where(['menu_modelid'=>$model_id,'menu_type'=>3])->select();
+                        $fields_data [$k] ['option']=$nav::menu_n($arr);
+                    }
+                    break;
+                case 'checkbox' :
+                    $fields_data [$k] ['value'] = explode(',', $data [$k]);
+                    $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
+                    break;
+                default :
+                    $this->error('未知字段 ' . $fields_data [$k] ['type']);
+                    break;
+            }
+        }
+        return $fields_data;
+    }
+    //处理cms的add edit的post提交数据
+    protected function handle_postdata($model_pkid,$fields,$is_edit=true,$is_add=false)
+    {
+        $postdata=array();
+        foreach ($fields as $k) {
+            //主键跳过
+            if($k==$this->cms_pk){
+                continue;
+            }
+            $f=$this->cms_fields[$k];
+            $rules = explode('|', $f ['rules']);
+            //非只读或非编辑时处理input数据
+            if(!$is_edit || !in_array('readonly', $rules)){
+                switch ($f ['type']) {
+                    case 'images':
+                        //判断是否有传多图
+                        $files = request()->file('pic_all');
+                        $picall_url='';
+                        if(!empty($files)){
+                            if(config('storage.storage_open')){
+                                //七牛
+                                $upload = \Qiniu::instance();
+                                $info = $upload->upload();
+                                $error = $upload->getError();
+                                if ($info) {
+                                    if(!empty($info['pic_all'])) {
+                                        foreach ($info['pic_all'] as $file) {
+                                            $img_url=config('storage.domain').$file['key'];
+                                            $picall_url = $img_url . ',' . $picall_url;
+                                        }
+                                    }else{
+                                        foreach ($info as $file) {
+                                            $img_url=config('storage.domain').$file['key'];
+                                            $picall_url = $img_url . ',' . $picall_url;
+                                        }
+                                    }
+                                }else{
+                                    $this->error($error);//否则就是上传错误，显示错误原因
+                                }
+                            }else{
+                                $validate = config('upload_validate');
+                                //多图
+                                foreach ($files as $file) {
+                                    $info = $file->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
+                                    if ($info) {
+                                        $img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
+                                        //写入数据库
+                                        $data['uptime'] = time();
+                                        $data['filesize'] = $info->getSize();
+                                        $data['path'] = $img_url;
+                                        Db::name('plug_files')->insert($data);
+                                        $picall_url = $img_url . ',' . $picall_url;
+                                    } else {
+                                        $this->error($file->getError());//否则就是上传错误，显示错误原因
+                                    }
+                                }
+                            }
+                        }
+                        $postdata[$k]=input('pic_oldlist','').$picall_url;
+                        break;
+                    case 'imagefile':
+                        $file = request()->file('pic_one');
+                        $img_one='';
+                        if(!empty($file)){
+                            if(config('storage.storage_open')){
+                                //七牛
+                                $upload = \Qiniu::instance();
+                                $info = $upload->upload();
+                                $error = $upload->getError();
+                                if ($info) {
+                                    if(!empty($info['pic_one'])){
+                                        $img_one= config('storage.domain').$info['pic_one'][0]['key'];
+                                    }else{
+                                        $img_one= config('storage.domain').$info[0]['key'];
+                                    }
+                                }else{
+                                    $this->error($error);//否则就是上传错误，显示错误原因
+                                }
+                            }else{
+                                $validate = config('upload_validate');
+                                //单图
+                                $info = $file[0]->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
+                                if ($info) {
+                                    $img_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
+                                    //写入数据库
+                                    $data['uptime'] = time();
+                                    $data['filesize'] = $info->getSize();
+                                    $data['path'] = $img_url;
+                                    Db::name('plug_files')->insert($data);
+                                    $img_one = $img_url;
+                                } else {
+                                    $this->error($file->getError());//否则就是上传错误，显示错误原因
+                                }
+                            }
+                        }
+                        if(!empty($img_one)){
+                            $postdata[$k]=$img_one;
+                        }
+                        break;
+                    case 'baidu_map':
+                        $postdata [$k . '_lng'] = input("${k}_lng", 0, 'floatval');
+                        $postdata [$k . '_lat'] = input("${k}_lat", 0, 'floatval');
+                        break;
+                    case 'text' :
+                    case 'bigtext' :
+                        $postdata [$k] = input("$k", '', 'trim');
+                        break;
+                    case 'number' :
+                    case 'switch' :
+                        $postdata [$k] = input("$k", 0, 'intval');
+                        break;
+                    case 'large_number' :
+                        $postdata [$k] = input("$k", 0);
+                        break;
+                    case 'currency':
+                        $postdata [$k] = currency_long(input("$k", '', 'trim'));
+                        break;
+                    case 'datetime' :
+                    case 'date' :
+                        $postdata [$k] = input("$k", '', 'strtotime');
+                        break;
+                    case 'selectnumber' :
+                        $postdata [$k] = input("$k", 0, 'intval');
+                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                            $this->error($f ['title'] . ' 无效');
+                        }
+                        break;
+                    case 'selecttext' :
+                        $postdata [$k] = input("$k", '', 'trim');
+                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                            $this->error($f ['title'] . ' 无效');
+                        }
+                        break;
+                    case 'checkbox' :
+                        $postdata [$k] = input("{$k}".'/a', array());
+                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                            $this->error($f ['title'] . ' 无效');
+                        }
+                        $postdata [$k] = join(',', $postdata [$k]);
+                        break;
+                    case 'richtext' :
+                        $postdata [$k] = htmlspecialchars_decode(input("$k"));
+                        break;
+                    default :
+                        $this->error('未知字段 ' . $f ['title'] . ':' . $f ['type']);
+                        break;
+                }
+            }
+            //处理特殊规则-必须
+            if (in_array('required', $rules)) {
+                switch ($this->cms_fields[$k]['type']) {
+                    case 'baidu_map':
+                        if (!isset ($postdata [$k . '_lng']) || '' === $postdata [$k . '_lng']) {
+                            $this->error($f ['title'] . ' 不能为空');
+                        }
+                        if (!isset ($postdata [$k . '_lat']) || '' === $postdata [$k . '_lat']) {
+                            $this->error($f ['title'] . ' 不能为空');
+                        }
+                        break;
+                    default:
+                        if (!isset ($postdata [$k]) || '' === $postdata [$k]) {
+                            $this->error($f ['title'] . ' 不能为空');
+                        }
+                        break;
+                }
+            }
+            //处理特殊规则-唯一
+            if (in_array('unique', $rules)) {
+                $one = Db::name($this->cms_table)->where(array(
+                    $k => $postdata [$k]
+                ))->find();
+                if ($one) {
+                    if($is_edit && $one [$this->cms_pk] != $model_pkid ){
+                        $this->error($f ['title'] . ' 不能重复');
+                    }
+                    if($is_add){
+                        $this->error($f ['title'] . ' 不能重复');
+                    }
+                }
+            }
+        }
+        return $postdata;
     }
 }

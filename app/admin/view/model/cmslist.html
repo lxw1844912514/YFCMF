@@ -60,12 +60,13 @@
 								<th class="hidden-xs center">
 									<label class="pos-rel">
 										<input type="checkbox" class="ace"  id='chkAll' onclick='CheckAll(this.form)' value="全选"/>
-										<span class="lbl"></span>																					</label>
+										<span class="lbl"></span>														</label>
 								</th>
 								<th>排序</th>
-								<th>栏目</th>
-								{foreach name="fields" item="v"}
+								{foreach name="fields" item="v" key="k"}
+								{if condition="$k neq $model['model_order']"}
 								<th>{$v['title']}</th>
+								{/if}
 								{/foreach}
 								<th style="border-right:#CCC solid 1px;">操作</th>
 							</tr>

@@ -7,9 +7,10 @@
 		</label>
 	</td>
 	<td height="28" ><input name="{$v[$model['model_pk']]}" value="{$v[$model['model_order']]|default=50}" class="list_order"/></td>
-	<td height="28" >{$v[$model['model_cid']]}</td>
 	{foreach name="fields" item="vv" key="k"}
+	{if condition="$k neq $model['model_order']"}
 	<td height="28" >{$v[$k]}</td>
+	{/if}
 	{/foreach}
 	<td>
 		<div class="hidden-sm hidden-xs action-buttons">
