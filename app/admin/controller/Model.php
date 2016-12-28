@@ -473,7 +473,7 @@ class Model extends Base
             $content=db_get_insert_sqls($old_table);
             file_put_contents($path.$db_prefix.$old_table.'.sql', $content);
             //修改为临时文件名
-            if($db->execute("RENAME TABLE `$db_prefix$old_table` TO `$db_prefix$old_table"."_temp`;")){
+            if($db->execute("RENAME TABLE `$db_prefix$old_table` TO `$db_prefix$old_table"."_temp`;")!==false){
                 $old_table=$old_table.'_temp';
             }
         }
@@ -498,7 +498,7 @@ class Model extends Base
             'rules'=>'',
             'default'=>50
         );
-				//删除
+		//删除
 		$sql="DROP TABLE IF EXISTS `$db_prefix$model_name`;";
 		$db->execute($sql);
         switch (config('database.type')) {
