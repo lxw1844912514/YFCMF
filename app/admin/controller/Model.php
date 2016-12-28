@@ -641,6 +641,10 @@ class Model extends Base
                         $sql="RENAME TABLE `$db_prefix$old_table` TO `$db_prefix{$old_model['model_name']}`;";
                         $db->execute($sql);
                         $this->error('编辑模型失败');
+                    }else{
+						//删除改名的数据表
+						$sql="DROP TABLE IF EXISTS `$db_prefix$old_table`;";
+                        $db->execute($sql);
                     }
                 }
                 break;

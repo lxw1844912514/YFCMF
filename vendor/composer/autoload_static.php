@@ -10,7 +10,7 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '8e28d843d196ccc108817bb903255186' => __DIR__ . '/..' . '/yfcmf/geetest/src/helper.php',
-	'841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
+        '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -23,7 +23,7 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
             'think\\captcha\\' => 14,
             'think\\' => 6,
         ),
-	'Q' => 
+        'Q' => 
         array (
             'Qiniu\\' => 6,
         ),
@@ -55,7 +55,6 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
             0 => __DIR__ . '/..' . '/topthink/think-image/src',
             1 => __DIR__ . '/../..' . '/thinkphp/library/think',
         ),
-	,
         'Qiniu\\' => 
         array (
             0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',

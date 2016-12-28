@@ -8,7 +8,7 @@ SET time_zone = "+00:00";
 
 
 ALTER TABLE `yf_menu` ADD `menu_modelid` INT(3) NOT NULL DEFAULT '0' COMMENT '模型id' AFTER `menu_type`;
-INSERT INTO `yfcmf`.`yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES (NULL, 'Model', '模型管理', '1', '1', 'fa fa-list', '', '0', '1', '22', '1482139134');
+INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES (NULL, 'Model', '模型管理', '1', '1', 'fa fa-list', '', '0', '1', '22', '1482139134');
 CREATE TABLE IF NOT EXISTS `yf_model` (
   `model_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '模型ID',
   `model_name` char(30) NOT NULL DEFAULT '' COMMENT '模型标识',

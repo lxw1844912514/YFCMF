@@ -12,6 +12,7 @@ use think\Db;
 class Base extends Common{
 	protected $view;
 	protected $user;
+	protected $yf_theme_path;
 	protected function _initialize(){
         parent::_initialize();
 		//主题

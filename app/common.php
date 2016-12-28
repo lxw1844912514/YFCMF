@@ -1379,3 +1379,79 @@ function get_menu_model($menus)
     }
     return $rst;
 }
+//通用获取数据函数
+function get_data($table,$join,$joinon,$ids,$cid,$field,$limit,$order,$where_str,$ispage,$pagesize,$key,$page=0)
+{	
+	$where=array();
+	$config=array();
+	if(!empty($page)){
+		$config['page']=intval($page);
+	}
+	$model=Db::name('model')->where('model_name',$table)->find();
+	//处理$key
+	if($key){
+		if(stripos($key,':')!==false){
+			list($field_search,$k)=explode(':',$key);
+			$search_list=str_replace(',','|',$field_search);
+			$where[$search_list]=array('like','%' . $k . '%');
+		}else{
+			$k=$key;
+			if($model){
+				$search_list=$model['search_list']?explode(',',$model['search_list']):array_keys($model['model_fields']?json_decode($model['model_fields'],true):array());
+				if($search_list){
+					$search_list=join('|',$search_list);
+					$where[$search_list]=array('like','%' . $k . '%');
+				}
+			}
+		}
+	}
+	//处理ids
+	if($ids){
+		if(stripos($ids,':')!==false){
+			list($field_id,$id)=explode(':',$ids);
+			$where[$field_id]=array('in',$id);
+		}else{
+			$id=$ids;
+			if($model){
+				$where[$model['model_pk']]=array('in',$id);
+			}
+		}
+	}
+	//处理cid
+	if($cid){
+		if(stripos($cid,':')!==false){
+			list($field_cid,$id)=explode(':',$cid);
+			$where[$field_cid]=array('in',$id);
+		}else{
+			$id=$cid;
+			if($model){
+				$where[$model['model_cid']]=array('in',$id);
+			}
+		}			
+	}
+	//处理$where
+	if($where_str){
+		$where['_string'] = $where_str;
+	}
+	$count=Db::name($table)->field($field)->where($where)->count();
+	if($ispage=='true'){
+		if($join && $joinon){
+			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where)->order($order)->paginate($pagesize,false,$config);
+		}else{
+			$data=Db::name($table)->field($field)->where($where)->order($order)->paginate($pagesize,false,$config);
+		}
+		$show=$data->render();
+	}else{
+		if($join && $joinon){
+			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where)->order($order)->limit($limit)->select();
+		}else{
+			$data=Db::name($table)->field($field)->where($where)->order($order)->limit($limit)->select();
+		}
+		$show='';
+	}
+	$content['ajax_page']=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);;
+	$content['page']=$show;
+	$content['data']=$data;
+	$content['count']=$count;
+	return $content;
+}

@@ -115,7 +115,7 @@
 							<select name="menu_modelid"  class="col-sm-3 selector">
 								<option value="0">请选择模型</option>
 								{foreach name="model" item="vo"}
-								<option value="{$vo.model_id}">{$vo.model_title}</option>
+								<option value="{$vo.model_id}" {if condition="$vo.model_id eq $menu['menu_modelid']"}selected{/if}>{$vo.model_title}</option>
 								{/foreach}
 							</select>
 						</div>

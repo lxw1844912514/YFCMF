@@ -14,6 +14,7 @@
 namespace app\home\taglib;
 
 use think\template\TagLib;
+use think\Db;
 
 class Yf extends Taglib
 {
@@ -27,6 +28,7 @@ class Yf extends Taglib
 		'singlepage'=> ['attr' => 'name,menuid', 'close' => 0],
 		'comments'=> ['attr' => 'name,field,limit,order', 'close' => 0],
 		'menu'=>['attr' => 'top_ul_id,top_ul_class,child_ul_class,child_li_class,firstchild_dropdown_class,haschild_a_class,haschild_span_class,nochild_a_class,showlevel', 'close' => 0],
+		'data' => ['attr' => 'name,table,join,joinon,ids,cid,field,limit,order,where,ispage,pagesize,key,page', 'close' => 0],
     ];
 
     /**
@@ -44,7 +46,7 @@ class Yf extends Taglib
         $order    = isset($tag['order']) ? $tag['order'] : '';
 		$where    = isset($tag['where']) ? $tag['where'] : '';
         $ispage    = isset($tag['ispage']) ? $tag['ispage'] : 'false'; 
-		$pagesize    = !empty($tag['ispage']) && !empty($tag['pagesize']) && is_numeric($tag['pagesize']) ? intval($tag['pagesize']) : 10; 
+		$pagesize    = !empty($tag['ispage']) && !empty($tag['pagesize']) && is_numeric($tag['pagesize']) ? intval($tag['pagesize']) : config('paginate.list_rows'); 
         $type    = isset($tag['type']) ? $tag['type'] : 'null';
 		$key    = isset($tag['key']) ? $tag['key'] : '';
 		$tag_str='';
@@ -151,4 +153,34 @@ class Yf extends Taglib
         }
         return;
     }
+    /**
+     * 返回data
+     * @param $tag
+     * @return string
+     */
+    public function tagData($tag)
+    {
+        $name   = $tag['name'];
+		$table    = isset($tag['table']) ? $tag['table'] : 'news';//'news'不含前缀形式
+		$join    = isset($tag['join']) ? $tag['join'] : '';//'member_list'不含前缀形式
+		//'a.news_auto =b.member_list_id'字符串形式,$table为a表,$join为b表
+		$joinon    = isset($tag['joinon']) ? $tag['joinon'] : '';
+		$ids    = isset($tag['ids']) ? $tag['ids'] : '';//'id:1,2,3'形式或'1,2,3'形式
+        $cid    = isset($tag['cid']) ? $tag['cid'] : '';//'cid:1,2,3'形式或'1,2,3'形式
+        $field  = isset($tag['field']) ? $tag['field'] : '';//'a,b,c,d'形式
+        $limit  = isset($tag['limit']) ? $tag['limit'] : '';//'5,10'或'5'形式
+        $order    = isset($tag['order']) ? $tag['order'] : '';//'a,b desc,c'形式
+		$where_str    = isset($tag['where']) ? $tag['where'] : '';//sql字符串形式"news_open=1 and news_title='aa'"形式
+        $ispage    = isset($tag['ispage']) ? $tag['ispage'] : 'false'; //true表示分页
+		$pagesize    = !empty($tag['ispage']) && !empty($tag['pagesize']) && is_numeric($tag['pagesize']) ? intval($tag['pagesize']) : config('paginate.list_rows'); //分页单页数据条数
+		$key    = isset($tag['key']) ? $tag['key'] : '';//搜索"a,b,c,d:'aaa'"或'aaa'
+		$page    = !empty($tag['page']) && is_numeric($tag['page']) ? intval($tag['page']) : 0; //当前页
+		$parseStr = '<?php ';
+		$parseStr .='$'.$name .'=get_data('.'"'.$table.'","'.$join.'","'.$joinon.'","'.$ids.'","'.$cid.'","'.$field.'","'.$limit.'","'.$order.'","'.$where_str.'","'.$ispage.'","'.$pagesize.'","'.$key.'","'.$page.'");';
+		$parseStr .="?>";
+        if (!empty($parseStr)) {
+            return $parseStr;
+        }
+        return;
+    }	
 }
