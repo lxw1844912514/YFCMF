@@ -657,7 +657,7 @@ class Model extends Base
     public function cmslist()
     {
         $model_id=input('id',0);
-        $key=input('key','');
+        $keyy=input('key','');
         if(!$this->cms_init($model_id,false,true,true)){
             $this->error('不存在的模型');
         }
@@ -670,12 +670,12 @@ class Model extends Base
         }
         //处理搜索字段
         $where='';
-		if(!empty($key)){
+		if(!empty($keyy)){
             $where=join('|',$this->cms_fields_search);
         }
         $order=$this->cms_model['model_sort']?:$this->cms_model['model_order'];
 		if($where){
-            $data=Db::name($this->cms_table)->where($map)->where($where,'like',"%".$key."%")->field(join(',',$this->cms_fields_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+            $data=Db::name($this->cms_table)->where($map)->where($where,'like',"%".$keyy."%")->field(join(',',$this->cms_fields_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
         }else{
             $data=Db::name($this->cms_table)->where($map)->field(join(',',$this->cms_fields_list))->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
         }
@@ -766,7 +766,7 @@ class Model extends Base
 		$this->assign('data',$data_list);
 		$this->assign('model_id', $model_id);
 		$this->assign('model', $this->cms_model);
-        $this->assign('keyy', $key);
+        $this->assign('keyy', $keyy);
 		$this->assign('fields', $fields);
 		if(request()->isAjax()){
 			return $this->fetch('ajax_cmslist');

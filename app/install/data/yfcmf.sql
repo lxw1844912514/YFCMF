@@ -491,7 +491,7 @@ INSERT INTO `yf_menu` (`id`, `menu_name`, `menu_enname`, `menu_type`, `menu_mode
 (12, 'News', '', 3, 0, 0, 'list', 'news', '', 1, 30, '', '', '', '', '', 'en-us'),
 (13, 'Partner', '', 3, 0, 0, 'list', 'news', '', 0, 50, '', '', '', '', '', 'en-us'),
 (14, 'Home', 'Home', 1, 0, 0, '', '', '', 1, 1, '', '', '', '', '', 'en-us'),
-(15, '常见问题', 'FAQ', 3, 3, 0, 'faq_list', 'faq', '', 1, 30, '', '', '', '', '', 'zh-cn');
+(15, '常见问题', 'FAQ', 3, 2, 0, 'faq_list', 'faq', '', 1, 30, '', '', '', '', '', 'zh-cn');
 
 DROP TABLE IF EXISTS `yf_model`;
 CREATE TABLE IF NOT EXISTS `yf_model` (
