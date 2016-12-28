@@ -691,9 +691,6 @@ class Model extends Base
 					$item [$kk] = $vv;
 					continue;
 				}
-				if (!isset($this->cms_fields [$kk])) {
-					$kk = substr($kk, 0, strrpos($kk, '_'));
-				}				
 				switch ($this->cms_fields [$kk] ['type']) {
 					case 'images':
 						$images = array();
@@ -745,7 +742,7 @@ class Model extends Base
 						$item [$kk] = htmlspecialchars(join(',', $item [$kk]));
 						break;
 					case 'baidu_map':
-						$item[$kk] = '( ' . $v[$kk . '_lng'] . ', ' . $v[$kk . '_lat'] . ' )';
+						$item[$kk] = htmlspecialchars($vv);
 						break;
 				}
 			}
@@ -1049,12 +1046,43 @@ class Model extends Base
                 'rules'=>'required',
                 'default'=>''];
             $this->cms_fields=array_merge($this->cms_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
+            //处理baidu_map
+            $fields=array();
+            foreach ($this->cms_fields as $key=>$field){
+                if($field['type']=='baidu_map'){
+                    @list($lng,$lat)=explode(',',$field['default']);
+                    $field['name']=$this->cms_fields[$key]['name'].'_lng';
+                    $field['description']=$this->cms_fields[$key]['description'].'(lng)';
+                    $fields[$key.'_lng']=$field;
+                    $fields[$key.'_lng']['default']=$lng;
+                    $field['name']=$this->cms_fields[$key]['name'].'_lat';
+                    $field['description']=$this->cms_fields[$key]['description'].'(lat)';
+                    $fields[$key.'_lat']=$field;
+                    $fields[$key.'_lat']['default']=$lat;
+                    unset($this->cms_fields[$key]);
+                }
+            }
+            if($fields){
+                $this->cms_fields=array_merge($this->cms_fields,$fields);
+            }
             $this->cms_allfields=array_keys($this->cms_fields);
             if($is_edit){
                 $this->cms_fields_edit=$model['model_edit']?explode(',',$model['model_edit']):array();
                 if(empty($this->cms_fields_edit)){
                     $this->cms_fields_edit=$this->cms_allfields;
                 }else{
+                    //处理baidu_map
+                    $fields=array();
+                    foreach ($this->cms_fields_edit as $key=>$v){
+                        if($this->cms_fields[$v]['type']=='baidu_map'){
+                            $fields[]=$v.'_lng';
+                            $fields[]=$v.'_lat';
+                            unset($this->cms_fields_edit[$key]);
+                        }
+                    }
+                    if($fields){
+                        $this->cms_fields_edit=array_merge($this->cms_fields_edit,$fields);
+                    }
                     $this->cms_fields_edit=array_intersect($this->cms_fields_edit,$this->cms_allfields);
                 }
             }
@@ -1063,6 +1091,18 @@ class Model extends Base
                 if(empty($this->cms_fields_search)){
                     $this->cms_fields_search=$this->cms_allfields;
                 }else{
+                    //处理baidu_map
+                    $fields=array();
+                    foreach ($this->cms_fields_search as $key=>$v){
+                        if($this->cms_fields[$v]['type']=='baidu_map'){
+                            $fields[]=$v.'_lng';
+                            $fields[]=$v.'_lat';
+                            unset($this->cms_fields_search[$key]);
+                        }
+                    }
+                    if($fields){
+                        $this->cms_fields_search=array_merge($this->cms_fields_search,$fields);
+                    }
                     $this->cms_fields_search=array_intersect($this->cms_fields_search,$this->cms_allfields);
                 }
             }
@@ -1071,6 +1111,18 @@ class Model extends Base
                 if(empty($this->cms_fields_list)){
                     $this->cms_fields_list=$this->cms_allfields;
                 }else{
+                    //处理baidu_map
+                    $fields=array();
+                    foreach ($this->cms_fields_list as $key=>$v){
+                        if($this->cms_fields[$v]['type']=='baidu_map'){
+                            $fields[]=$v.'_lng';
+                            $fields[]=$v.'_lat';
+                            unset($this->cms_fields_list[$key]);
+                        }
+                    }
+                    if($fields){
+                        $this->cms_fields_list=array_merge($this->cms_fields_list,$fields);
+                    }
                     $this->cms_fields_list=array_intersect($this->cms_fields_list,$this->cms_allfields);
                     $this->cms_fields_list=array_merge([$model['model_pk'],$model['model_order'],$model['model_cid']],$this->cms_fields_list);
                 }
@@ -1084,7 +1136,6 @@ class Model extends Base
     protected function handle_data($model_id,$fields,$data)
     {
         $fields_data = array();
-        //baidu_map不含_lng _lat,但是$data中需要含_lng _lat
         foreach ($fields as $k) {
             //主键跳过
             if($k==$this->cms_pk){
@@ -1098,13 +1149,10 @@ class Model extends Base
                     $fields_data [$k] ['value'] = join(',',$fields_data [$k] ['images']);
                     break;
                 case 'baidu_map':
-                    $fields_data [$k] ['default'] = explode(',', $fields_data [$k] ['default']);
-                    if(isset($data[$k . '_lng'])){
-                        $fields_data [$k] ['value']['lng'] = $data [$k . '_lng'];
-                        $fields_data [$k] ['value']['lat'] = $data [$k . '_lat'];
+                    if(isset($data[$k])){
+                        $fields_data [$k] ['value'] = $data [$k];
                     }else{
-                        $fields_data [$k] ['value']['lng'] = $fields_data [$k] ['default'][0];
-                        $fields_data [$k] ['value']['lat'] = $fields_data [$k] ['default'][1];
+                        $fields_data [$k] ['value'] = $fields_data [$k] ['default'];
                     }
                     break;
                 case 'text' :
@@ -1248,8 +1296,7 @@ class Model extends Base
                         }
                         break;
                     case 'baidu_map':
-                        $postdata [$k . '_lng'] = input("${k}_lng", 0, 'floatval');
-                        $postdata [$k . '_lat'] = input("${k}_lat", 0, 'floatval');
+                        $postdata [$k] = input("${k}", 0, 'floatval');
                         break;
                     case 'text' :
                     case 'bigtext' :
@@ -1298,20 +1345,8 @@ class Model extends Base
             }
             //处理特殊规则-必须
             if (in_array('required', $rules)) {
-                switch ($this->cms_fields[$k]['type']) {
-                    case 'baidu_map':
-                        if (!isset ($postdata [$k . '_lng']) || '' === $postdata [$k . '_lng']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        if (!isset ($postdata [$k . '_lat']) || '' === $postdata [$k . '_lat']) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
-                    default:
-                        if (!isset ($postdata [$k]) || '' === $postdata [$k]) {
-                            $this->error($f ['title'] . ' 不能为空');
-                        }
-                        break;
+                if (!isset ($postdata [$k]) || '' === $postdata [$k]) {
+                    $this->error($f ['title'] . ' 不能为空');
                 }
             }
             //处理特殊规则-唯一

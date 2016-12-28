@@ -21,17 +21,9 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="{$k}_lng" class="col-xs-6 col-sm-6" value="{$f.value.lng|htmlspecialchars}"
+                                    <input type="text" name="{$k}" class="col-xs-6 col-sm-6" value="{$f.value|htmlspecialchars}"
                                     {if condition="in_array('required',$f['rules'])"} required {/if}/>
-                                    <span class="lbl">&nbsp;&nbsp;<span class="red">{if condition="in_array('required',$f['rules'])"}*{/if}</span>{$f.description|htmlspecialchars}(lng)</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="{$k}_lat" class="col-xs-6 col-sm-6" value="{$f.value.lat|htmlspecialchars}"
-                                    {if condition="in_array('required',$f['rules'])"} required {/if}/>
-                                    <span class="lbl">&nbsp;&nbsp;<span class="red">{if condition="in_array('required',$f['rules'])"}*{/if}</span>{$f.description|htmlspecialchars}(lat)</span>
+                                    <span class="lbl">&nbsp;&nbsp;<span class="red">{if condition="in_array('required',$f['rules'])"}*{/if}</span>{$f.description|htmlspecialchars}</span>
                                 </div>
                             </div>
                             {/case}
