@@ -22,8 +22,7 @@ class Route
 				case null:
 				case '1':
 					$rules = [                  
-						'index'              => 'home/index/index', // 首页访问路由
-						'test'              => 'home/index/test', // 首页访问路由
+						'index'              => 'index/index', // 首页访问路由
 					];
 					foreach ($rules as $key => $rule) {
 						$routes[] = [$key, $rule, 'post|get', [], []];
@@ -34,14 +33,7 @@ class Route
 				case '2':
 					// 内容模块
 					$rules = [
-						'index'         => 'home/index/index',
-						/*用户相关**/
-						'user/reg/index' => 'register/index',
-						'user/reg/verify' => 'register/verify',
-						'user/login/index' => 'login/index',
-						//'user/login/verify' => 'login/verify',
-						/*第三方登录*/
-						'login/:type/index' => 'oauth/login',
+						'index'         => 'index/index',
 					];
 					$data=\think\Db::name("route")->where("status=1")->order("listorder asc")->column('full_url','url');
 					$data=array_merge($rules,$data);
