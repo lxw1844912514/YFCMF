@@ -16,7 +16,7 @@ class Route
     private  function get_route()
     {
         $routes = \think\Cache::get('routes');
-		if(empty($routes)){
+		if(empty($routes) && config('url_route_on')){
 			switch (config('url_route_mode')) {
 				// 标准模式
 				case null:
@@ -34,7 +34,6 @@ class Route
 				case '2':
 					// 内容模块
 					$rules = [
-						'/' => 'index/index',
 						'index'         => 'home/index/index',
 						/*用户相关**/
 						'user/reg/index' => 'register/index',

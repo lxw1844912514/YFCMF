@@ -23,7 +23,7 @@ class Cron
             touch($lockfile);
         }
         @set_time_limit(1000);
-        ignore_user_abort(true);
+        @ignore_user_abort(true);
 		if(is_file(RUNTIME_PATH.'~crons.php')) {
             $crons	=	include RUNTIME_PATH.'~crons.php';
         }elseif(is_file(ROOT_PATH.'app/crons.php')){

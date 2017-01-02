@@ -19,20 +19,20 @@ class WebLog
     {
         $request = Request::instance();
 		//不记录的模块
-		$not_log_module=config('web_log.not_log_module')?:array();
+		$not_log_module=array(config('web_log.not_log_module'))?:array();
 
 		//不记录的控制器 'module/controller'
-		$not_log_controller=config('web_log.not_log_controller')?:array();
+		$not_log_controller=array(config('web_log.not_log_controller'))?:array();
 
 		//不记录的操作方法 'module/controller/action'
-		$not_log_action=config('web_log.not_log_action')?:array();
+		$not_log_action=array(config('web_log.not_log_action'))?:array();
 
 		//不记录data的操作方法 'module/controller/action'	如涉及密码传输的地方：1、前、后台登录runlogin 2、前台重置密码runpwd_reset 3、前台runregister runchangepwd 4、后台member_runadd member_runedit 5、后台admin_runadd admin_runedit
 		$not_log_data=['runlogin','runpwd_reset','runregister','runchangepwd','member_runadd','member_runedit','admin_runadd','admin_runedit'];
 		$not_log_data=array_merge($not_log_data,config('web_log.not_log_data')?:array());
 
 		//不记录的请求类型
-		$not_log_request_method=config('web_log.not_log_request_method')?:array();
+		$not_log_request_method=array(config('web_log.not_log_request_method'))?:array();
 		if (
             in_array($request->module(), $not_log_module) ||
 			in_array($request->module().'/'.$request->controller(), $not_log_controller) ||

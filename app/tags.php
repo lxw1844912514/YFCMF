@@ -7,7 +7,6 @@
   ),
   'module_init' => 
   array (
-    0 => 'app\\common\\behavior\\WebLog',
   ),
   'action_begin' => 
   array (
@@ -20,6 +19,5 @@
   ),
   'app_end' => 
   array (
-    0 => 'app\\admin\\behavior\\Cron',
   ),
 );

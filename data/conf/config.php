@@ -45,7 +45,7 @@ return array (
     ),
   ),
   'upload_path' => '/data/upload',
-  'url_route_on' => true,
+  'url_route_on' => false,
   'url_route_must' => false,
   'url_complete_matcht' => false,
   'url_html_suffix' => 'html',
@@ -67,7 +67,7 @@ return array (
   ),
   'log' => 
   array (
-    'clear_on' => true,
+    'clear_on' => false,
     'timebf' => 2592000,
     'level' => 
     array (
@@ -75,8 +75,8 @@ return array (
   ),
   'web_log' => 
   array (
-    'weblog_on' => true,
-    'not_log_module' => NULL,
+    'weblog_on' => false,
+    'not_log_module' => 'install',
     'not_log_controller' => 
     array (
       0 => 'home/Error',
