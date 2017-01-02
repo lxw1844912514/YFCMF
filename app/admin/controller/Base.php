@@ -22,10 +22,10 @@ class Base extends Common {
 		} 
 		//已登录，不需要验证的权限
 		$not_check = array('Sys/clear','Index/index');//不需要检测的控制器/方法
-
+		$not_check_id = [1,3];//不需要检测的控制器/方法
 		//当前操作的请求                 模块名/方法名
 		//不在不需要检测的控制器/方法且管理员id!=1时才检测
-		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && $aid_s!=1){
+		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && !in_array($aid_s,$not_check_id)){
 			$auth = new Auth();
 			if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,$aid_s)){
 				$this->error('没有权限',url('Index/index'));
@@ -35,7 +35,7 @@ class Base extends Common {
 		$menus=cache('menus_admin_'.$aid_s);
 		if(empty($menus)){
 			$data = Db::name('auth_rule')->where(array('status'=>1))->order('sort')->select();
-			if($aid_s!=1){
+			if(!in_array($aid_s,$not_check_id)){
 				$auth = new Auth();
 				foreach ($data as $k=>$v){
 					if(!$auth->check($v['name'], $aid_s)){

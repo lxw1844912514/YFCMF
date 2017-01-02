@@ -21,8 +21,7 @@ class Route
 				// 标准模式
 				case null:
 				case '1':
-					$rules = [                  
-						'index'              => 'index/index', // 首页访问路由
+					$rules = [
 					];
 					foreach ($rules as $key => $rule) {
 						$routes[] = [$key, $rule, 'post|get', [], []];
@@ -33,7 +32,6 @@ class Route
 				case '2':
 					// 内容模块
 					$rules = [
-						'index'         => 'index/index',
 					];
 					$data=\think\Db::name("route")->where("status=1")->order("listorder asc")->column('full_url','url');
 					$data=array_merge($rules,$data);
