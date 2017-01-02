@@ -103,11 +103,11 @@ $(function () {
             if (data.code==1) {
                 if (data.msg == '未审') {
                     var a = '<button class="btn btn-minier btn-danger">未审</button>';
-                    $btn.children('div').html(a);
+                    $btn.children('div').html(a).attr('title','未审');
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">已审</button>';
-                    $btn.children('div').html(b);
+                    $btn.children('div').html(b).attr('title','已审');
                     return false;
                 }
             } else {
@@ -148,11 +148,11 @@ $(function () {
             if (data.code==1) {
                 if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">禁用</button>';
-                    $btn.children('div').html(a);
+                    $btn.children('div').html(a).attr('title','已禁用');
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">开启</button>';
-                    $btn.children('div').html(b);
+                    $btn.children('div').html(b).attr('title','已开启');
                     return false;
                 }
             } else {
@@ -172,11 +172,11 @@ $(function () {
             if (data.code==1) {
                 if (data.msg == '状态禁止') {
                     var a = '<button class="btn btn-minier btn-danger">隐藏</button>';
-                    $btn.children('div').html(a);
+                    $btn.children('div').html(a).attr('title','已隐藏');
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">显示</button>';
-                    $btn.children('div').html(b);
+                    $btn.children('div').html(b).attr('title','已显示');
                     return false;
                 }
             } else {
@@ -196,11 +196,11 @@ $(function () {
             if (data.code==1) {
                 if (data.msg == '未激活') {
                     var a = '<button class="btn btn-minier btn-danger">未激活</button>';
-                    $btn.children('div').html(a);
+                    $btn.children('div').html(a).attr('title','未激活');
                     return false;
                 } else {
                     var b = '<button class="btn btn-minier btn-yellow">已激活</button>';
-                    $btn.children('div').html(b);
+                    $btn.children('div').html(b).attr('title','已激活');
                     return false;
                 }
             } else {
@@ -474,6 +474,35 @@ function addmenu(a) {
     $("#myModal").show(300);
     $("#model_id").val(a);
 }
+/* we菜单添加 */
+function add_we_menu(a) {
+    $('#myModal').modal('show');
+    $("#we_menu_leftid").val(a);
+}
+/* 路由规则编辑 */
+$(function () {
+    $('body').on('click','.routeedit-btn',function () {
+        var $url = this.href,
+            val = $(this).data('id');
+        $.post($url, {id: val}, function (data) {
+            if (data.code == 1) {
+                $("#myModaledit").show(300);
+                $("#editroute_id").val(data.id);
+                $("#editroute_full_url").val(data.full_url);
+                $("#editroute_url").val(data.url);
+                if (data.status == 1) {
+                    $("#editroute_status").prop("checked",true);
+                } else {
+                    $("#editroute_status").prop("checked", false);
+                }
+                $("#editroute_listorder").val(data.listorder);
+            } else {
+                layer.alert(data.msg, {icon: 5});
+            }
+        }, "json");
+        return false;
+    });
+});
 /* 友链编辑 */
 $(function () {
 	$('body').on('click','.linkedit-btn',function () {
@@ -565,10 +594,15 @@ $(function () {
                 $("#myModaledit").show(300);
                 $("#editwe_menu_id").val(data.we_menu_id);
                 $("#editwe_menu_name").val(data.we_menu_name);
-                $("#editwe_menu_pid").val(data.we_menu_pid);
+                $("#editwe_menu_leftid").val(data.we_menu_leftid);
                 $("#editwe_menu_type").val(data.we_menu_type);
                 $("#editwe_menu_typeval").val(data.we_menu_typeval);
                 $("#editwe_menu_order").val(data.we_menu_order);
+                if(data.we_menu_open){
+                    $("#editwe_menu_open").prop("checked",true);
+                }else{
+                    $("#editwe_menu_open").prop("checked",false);
+                }
             } else {
                 layer.alert(data.msg, {icon: 5});
             }
@@ -775,8 +809,20 @@ $(function () {
 			success: function(data,status){
 				$("#ajax-data").html(data);
 			}
-		});		
-        //$form.submit();
+		});	
+    });
+    $('body').on('click','.range_inputs .applyBtn',function () {
+        var reservation=$('#reservation');
+        var $form = reservation.parents("form");
+        reservation.val($('input[name="daterangepicker_start"]').val()+' - '+$('input[name="daterangepicker_end"]').val());
+        $.ajax({
+            url:$form.attr('action'),
+            type:"POST",
+            data:$form.serialize(),
+            success: function(data,status){
+                $("#ajax-data").html(data);
+            }
+        });
     });
     })(jQuery);
 (function ($) {
@@ -834,6 +880,33 @@ $(function () {
 			}
 		});	
         return false;
+    });
+});
+/*清空*/
+$(function () {
+	$('body').on('click','.ajax-drop',function () {
+		$(this).parents("form")[0].reset();
+		var url=$(this).parent('a').attr('href');
+		$.ajax({
+			type:"POST",
+			url:url,
+			data:{},            
+			success: function(data,status){
+				layer.alert(data.msg, {icon: 6}, function (index) {
+                    layer.close(index);
+                    window.location.href = data.url;
+                });
+			}
+		});	
+        return false;
+    });
+});
+/*详情*/
+$(function () {
+	$('body').on('click','.show-details-btn',function (e) {
+		e.preventDefault();
+		$(this).closest('tr').next().toggleClass('open');
+		$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
     });
 });
 $(function () {

@@ -1,17 +1,19 @@
 <?php
 return array (
-  'yfcmf_version' => 'V2.0.1',
+  'yfcmf_version' => 'V2.0.2',
   'update_check' => false,
   'think_sdk_qq' => 
   array (
     'app_key' => '203564',
     'app_secret' => 'bab1f3acc0c67b69a1f470ac5e8dc36a',
+    'display' => true,
     'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/qq.html',
   ),
   'think_sdk_sina' => 
   array (
     'app_key' => '602735229',
     'app_secret' => '66781cbeab9fdb9b014a387ab6e943fe',
+    'display' => true,
     'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/sina.html',
   ),
   'comment' => 
@@ -57,4 +59,90 @@ return array (
   ),
   'lang_switch_on' => true,
   'default_lang' => 'zh-cn',
+  'geetest' => 
+  array (
+    'geetest_on' => false,
+    'captcha_id' => '',
+    'private_key' => '',
+  ),
+  'log' => 
+  array (
+    'clear_on' => true,
+    'timebf' => 2592000,
+    'level' => 
+    array (
+    ),
+  ),
+  'web_log' => 
+  array (
+    'weblog_on' => true,
+    'not_log_module' => NULL,
+    'not_log_controller' => 
+    array (
+      0 => 'home/Error',
+      1 => 'home/Token',
+      2 => 'admin/Ajax',
+      3 => 'admin/Error',
+      4 => 'admin/Ueditor',
+      5 => 'admin/WebLog',
+    ),
+    'not_log_action' => NULL,
+    'not_log_data' => NULL,
+    'not_log_request_method' => 
+    array (
+      0 => 'GET',
+    ),
+  ),
+  'url_route_mode' => '2',
+  'think_sdk_facebook' => 
+  array (
+    'app_key' => '',
+    'app_secret' => '',
+    'display' => false,
+    'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/facebook.html',
+  ),
+  'payment' => 
+  array (
+    'alipay' => 
+    array (
+      'email' => '',
+      'key' => '',
+      'partner' => '',
+      'display' => '1',
+    ),
+    'aliwappay' => 
+    array (
+      'email' => '',
+      'key' => '',
+      'partner' => '',
+    ),
+    'wxqrcode' => 
+    array (
+      'appid' => '',
+      'appsecret' => '',
+      'mchid' => '',
+      'key' => '',
+    ),
+    'wxjspi' => 
+    array (
+      'appid' => '',
+      'appsecret' => '',
+      'mchid' => '',
+      'key' => '',
+    ),
+    'tenpay' => 
+    array (
+      'key' => '',
+      'partner' => '',
+    ),
+    'unionpay' => 
+    array (
+      'key' => '',
+      'partner' => '',
+    ),
+    'palpay' => 
+    array (
+      'business' => '',
+    ),
+  ),
 );

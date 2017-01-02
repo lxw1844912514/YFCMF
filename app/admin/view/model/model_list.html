@@ -126,10 +126,23 @@
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级栏目：  </label>
+										<div class="col-sm-9">
+											<select name="admin_rule_pid"class="col-sm-4 selector" required>
+												<option value="0">顶级栏目</option>
+												{foreach name="admin_rule" item="v"}
+												<option value="{$v.id}">{$v.lefthtml}{$v.title}</option>
+												{/foreach}
+											</select>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>后台菜单名</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 导航标题：  </label>
 										<div class="col-sm-9">
 											<input type="text" name="menu_name" id="menu_name"  class="col-xs-10 col-sm-5" required/>
-											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>后台顶级菜单名</span>
+											<span class="lbl">&nbsp;&nbsp;<span class="red"></span>后台菜单名</span>
 										</div>
 									</div>
 									<div class="space-4"></div>
@@ -137,7 +150,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 样式名称：  </label>
 										<div class="col-sm-9">
-											<input type="text" name="css" id="css" class="col-xs-10 col-sm-3" required/>
+											<input type="text" name="css" id="css" class="col-xs-10 col-sm-3"/>
 											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>样式图标样式</span>
 										</div>
 										<span class="col-sm-3"></span><span class="col-sm-9" style="font-size:12px; color:#999; margin-top:5px;">预留样式：fa-tachometer ， fa-folder ， fa-list ， fa-list-alt ， fa-calendar</span>

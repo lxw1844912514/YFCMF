@@ -147,7 +147,7 @@ class Sys extends Base {
         $this->assign('log',$log);
         return $this->fetch();
     }
-    //url设置显示
+    //日志设置
     public function runlogsys(){
         $log_level=input('log_level/a');
         $log['clear_on']=input('clear_on',0,'intval')?true:false;
@@ -157,6 +157,119 @@ class Sys extends Base {
         cache::clear();
         $this->success('日志设置成功',url('logsys'));
     }
+    //url 美化
+	public function urlsetsys(){
+		$routes=Db::name('route')->order('listorder')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		$show = $routes->render();
+		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
+		$this->assign('page',$show);
+	    $this->assign('routes',$routes);
+	    if(request()->isAjax()){
+            return $this->fetch('ajax_urlsetsys');
+        }else{
+            return $this->fetch();
+        }
+	}
+	/*
+     * 添加路由规则操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_runadd(){
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('urlsetsys'));
+		}		
+        Db::name('route')->insert(input('post.'));
+        $p=input('p',1,'intval');
+        if(config('url_route_mode')=='2') Cache::rm('routes');
+        $this->success('路由规则添加成功',url('urlsetsys',array('p'=>$p)),1);
+		
+	}
+	/*
+     * 修改路由规则操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_runedit(){
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('sys'));
+		}
+        $p=input('p',1,'intval');
+        $sl_data=array(
+            'id'=>input('id'),
+            'full_url'=>input('full_url'),
+            'url'=>input('url'),
+            'status'=>input('status'),
+            'listorder'=>input('listorder'),
+        );
+        $rst=Db::name('route')->update($sl_data);
+        if($rst!==false){
+            if(config('url_route_mode')=='2') Cache::rm('routes');
+            $this->success('路由规则修改成功',url('urlsetsys',array('p'=>$p)));
+        }else{
+            $this->error('路由规则修改失败',url('urlsetsys',array('p'=>$p)));
+        }
+	}
+	/*
+     * 路由规则修改返回值操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_edit(){
+		$id=input('id');
+		$route=Db::name('route')->where(array('id'=>$id))->find();
+        $route['code']=1;
+		return json($route);
+	}
+	/*
+     * 路由规则排序
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_order(){
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('urlsetsys'));
+		}	
+        $route=Db::name('route');
+        foreach (input('post.') as $id => $listorder){
+            $route->where(array('id' => $id ))->setField('listorder' , $listorder);
+        }
+        if(config('url_route_mode')=='2') Cache::rm('routes');
+        $this->success('排序更新成功',url('urlsetsys'));
+	}
+	/*
+     * 路由规则删除操作
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_del(){
+		$rst=Db::name('route')->where(array('id'=>input('id')))->delete();
+        if($rst!==false){
+			$p=input('p',1,'intval');
+            if(config('url_route_mode')=='2') Cache::rm('routes');
+            $this->success('路由规则删除成功',url('urlsetsys',array('p'=>$p)));
+        }else{
+            $this->error('路由规则删除失败',url('urlsetsys'));
+        }
+	}
+	/*
+     * 修改路由规则状态
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function route_state(){
+		$id=input('x');
+		if (empty($id)){
+			$this->error('规则ID不存在',url('urlsetsys'));
+		}
+		$status=Db::name('route')->where(array('id'=>$id))->value('status');//判断当前状态情况
+		if($status==1){
+			$statedata = array('status'=>0);
+			Db::name('route')->where(array('id'=>$id))->setField($statedata);
+            if(config('url_route_mode')=='2') Cache::rm('routes');
+			$this->success('状态禁止');
+		}else{
+			$statedata = array('status'=>1);
+			Db::name('route')->where(array('id'=>$id))->setField($statedata);
+            if(config('url_route_mode')=='2') Cache::rm('routes');
+			$this->success('状态开启');
+		}
+	}
+
 	//url设置显示
 	public function urlsys(){
 		return $this->fetch();
@@ -170,12 +283,14 @@ class Sys extends Base {
 		$route_must=input('route_must',0,'intval')?true:false;;
 		$complete_match=input('complete_match',0,'intval')?true:false;;
 		$html_suffix=input('html_suffix','');
+		$url_route_mode=input('url_route_mode','');
 		sys_config_setbykey('url_route_on',$route_on);
 		sys_config_setbykey('url_route_must',$route_must);
 		sys_config_setbykey('url_complete_matcht',$complete_match);
 		sys_config_setbykey('url_html_suffix',$html_suffix);
-		cache::clear();
-		$this->success('URL基本设置成功',url('urlsys'));
+		sys_config_setbykey('url_route_mode',$url_route_mode);
+        Cache::rm('routes');
+		$this->success('URL基本设置成功',url('urlsetsys#basic'));
 	}
 	//发送邮件设置
 	public function emailsys(){
@@ -250,12 +365,66 @@ class Sys extends Base {
 			}
 		}
 	}
+	//支付配置
+	public function paysys(){
+		$payment=sys_config_get('payment');
+		$this->assign('payment',$payment);
+		return $this->fetch();
+
+	}
+	public function runpaysys(){
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('paysys'));
+		}else{
+		    $config = input('config/a');
+			$rst=sys_config_setbyarr(['payment'=>$config]);
+			if($rst!==false){
+				Cache::clear();
+				$this->success('设置保存成功',url('paysys'));
+			}else{
+				$this->error('设置保存失败',url('paysys'));
+			}
+		}
+	}
+	//短信配置显示
+	public function smssys(){
+		$sms_sys=sys_config_get('think_sdk_sms');
+		$this->assign('sms_sys',$sms_sys);
+		return $this->fetch();
+	}
+	//保存短信配置
+	public function runsmssys(){
+		if (!request()->isAjax()){
+			$this->error('提交方式不正确',url('smssys'));
+		}else{
+            $data = array(
+                'think_sdk_sms' => array(
+                    'AccessKeyId' => input('AccessKeyId'),
+                    'accessKeySecret' => input('accessKeySecret'),
+                    'signName' => input('signName'),
+                    'TemplateCode' => input('TemplateCode'),
+                    'sms_open' => input('sms_open'),
+                )
+            );
+			$rst=sys_config_setbyarr($data);
+			if($rst!==false){
+				Cache::clear();
+				$this->success('设置保存成功',url('smssys'));
+			}else{
+				$this->error('设置保存失败',url('smssys'));
+			}
+		}
+	}
 	//第三方登录设置显示
 	public function oauthsys(){
 		$oauth_qq=sys_config_get('think_sdk_qq');
 		$oauth_sina=sys_config_get('think_sdk_sina');
+		$oauth_facebook=sys_config_get('think_sdk_facebook');
+		$oauth_google=sys_config_get('think_sdk_google');
 		$this->assign('oauth_qq',$oauth_qq);
 		$this->assign('oauth_sina',$oauth_sina);
+		$this->assign('oauth_facebook',$oauth_facebook);
+		$this->assign('oauth_google',$oauth_google);
 		return $this->fetch();
 	}
 	//保存第三方登录设置
@@ -268,11 +437,19 @@ class Sys extends Base {
 				'think_sdk_qq' => array(
 					'app_key'    => input('qq_appid'),
 					'app_secret' => input('qq_appkey'),
+					'display' => input('qq_display',0,'intval')?true:false,
 					'callback'   => $host.url('home/oauth/callback','type=qq'),
+				),
+				'think_sdk_facebook' => array(
+					'app_key'    => input('facebook_appid'),
+					'app_secret' => input('facebook_appkey'),
+					'display' => input('facebook_display',0,'intval')?true:false,
+					'callback'   => $host.url('home/oauth/callback','type=facebook'),
 				),
 				'think_sdk_sina' => array(
 					'app_key'    => input('sina_appid'),
 					'app_secret' => input('sina_appkey'),
+					'display' => input('sina_display',0,'intval')?true:false,
 					'callback'   => $host.url('home/oauth/callback','type=sina'),
 				),
 			);
@@ -654,7 +831,7 @@ class Sys extends Base {
 		$level=input('level',0);
 		$id_str=input('id','pid');
 		$admin_rule=Db::name('auth_rule')->where('pid',$pid)->order('sort')->select();
-		$arr = \Leftnav::rule($admin_rule,'─',$pid,$level,$level*20);
+		$arr = menu_left($admin_rule,'id','pid','─',$pid,$level,$level*20);
 		$this->assign('admin_rule',$arr);
 		$this->assign('pid',$id_str);
 		if(request()->isAjax()){
@@ -668,7 +845,7 @@ class Sys extends Base {
 		$pid=input('pid',0);
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
-		$arr = \Leftnav::rule($admin_rule_all);
+		$arr = menu_left($admin_rule_all);
 		$this->assign('admin_rule',$arr);
 		$this->assign('pid',$pid);
 		return $this->fetch();
@@ -683,7 +860,7 @@ class Sys extends Base {
 			//检测name是否有效
 			if($level==1){
 				$name=input('name');
-				if (!has_controller(APP_PATH . 'admin'. DS .'controller',$name)) {
+				if (!has_controller('admin',$name)) {
 					$this->error('不存在 '.$name.' 的控制器',url('admin_rule_list'));
 				}
 			}elseif($level==2){
@@ -692,7 +869,7 @@ class Sys extends Base {
 				//是否存在控制器/方法
 				$arr=explode('/',input('name'));
 				if(count($arr)==2){
-					$rst=has_action(APP_PATH . 'admin'. DS .'controller',$arr[0],$arr[1]);
+					$rst=has_action('admin',$arr[0],$arr[1]);
 					if($rst==0){
 						$this->error('不存在 '.$arr[0].' 的控制器',url('admin_rule_list'));
 					}elseif($rst==1){
@@ -749,7 +926,7 @@ class Sys extends Base {
 	public function admin_rule_edit(){
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
-		$arr = \Leftnav::rule($admin_rule_all);
+		$arr = menu_left($admin_rule_all);
 		$this->assign('admin_rule',$arr);
 		//待编辑规则
 		$admin_rule=Db::name('auth_rule')->where(array('id'=>input('id')))->find();
@@ -760,7 +937,7 @@ class Sys extends Base {
 	public function admin_rule_copy(){
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
-		$arr = \Leftnav::rule($admin_rule_all);
+		$arr = menu_left($admin_rule_all);
 		$this->assign('admin_rule',$arr);
 		//待编辑规则
 		$admin_rule=Db::name('auth_rule')->where(array('id'=>input('id')))->find();
@@ -798,7 +975,7 @@ class Sys extends Base {
         $pid=input('id');
         $arr=Db::name('auth_rule')->select();
         $ids=array();
-        $arrTree=getMenuTree($arr, $pid,'pid',$ids);
+        $arrTree=getMenuTree($arr, $pid,'pid','id',$ids);
         if(!empty($arrTree)){
             $rst=Db::name('auth_rule')->where('id','in',$ids)->delete();
             if($rst!==false){

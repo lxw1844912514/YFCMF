@@ -14,7 +14,12 @@ use think\Lang;
 // 应用公共文件
 /**
  * 递归重组节点信息为多维数组
- *
+ * @param array
+ * @param int
+ * @param string
+ * @param string
+ * @param string
+ * @return array
  */
 function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child_name = '_child')
 {
@@ -29,15 +34,16 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
 }
 /**
  * 倒推后台菜单数组
- * $str String '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
- * $status int 获取的menu是否含全部状态，还是仅status=1。不为0和1时,不限制
- * $arr boolean 是否返回全部数据数组，默认假，仅返回ids
  * @author rainfer <81818832@qq.com>
+ * @param String $str '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
+ * @param int $status 获取的menu是否含全部状态，还是仅status=1。不为0和1时,不限制
+ * @param  boolean $arr 是否返回全部数据数组，默认假，仅返回ids
+ * @return array
  */
  function get_menus_admin($str='',$status=1,$arr=false){
 	$str=empty($str)?Request::instance()->controller().'/'.Request::instance()->action():$str;
 	if(strpos($str,'/')===false){
-		$str.=Request::instance()->controller();
+		$str=Request::instance()->controller().'/'.$str;//仅方法时加上控制器名
 	}
 	//model的cmslist cmsadd cmsedit
 	if(strtolower($str)=='model/cmslist' || strtolower($str)=='model/cmsadd' || strtolower($str)=='model/cmsedit')
@@ -78,7 +84,6 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
 /**
  * 所有用到密码的不可逆加密方式
  * @author rainfer <81818832@qq.com>
- *
  * @param string $password
  * @param string $password_salt
  * @return string
@@ -90,12 +95,11 @@ function encrypt_password($password, $password_salt)
 /**
  * 列出本地目录的文件
  * @author rainfer <81818832@qq.com>
- *
- * @param string $filename
+ * @param string $path
  * @param string $pattern
  * @return array
  */
-function list_file($filename, $pattern = '*')
+function list_file($path, $pattern = '*')
 {
     if (strpos($pattern, '|') !== false) {
         $patterns = explode('|', $pattern);
@@ -104,11 +108,11 @@ function list_file($filename, $pattern = '*')
     }
     $i = 0;
     $dir = array();
-    if (is_dir($filename)) {
-        $filename = rtrim($filename, '/') . '/';
+    if (is_dir($path)) {
+        $path = rtrim($path, '/') . '/';
     }
     foreach ($patterns as $pattern) {
-        $list = glob($filename . $pattern);
+        $list = glob($path . $pattern);
         if ($list !== false) {
             foreach ($list as $file) {
                 $dir [$i] ['filename'] = basename($file);
@@ -150,7 +154,8 @@ function list_file($filename, $pattern = '*')
 /**
  * 删除文件夹
  * @author rainfer <81818832@qq.com>
- *
+ * @param string
+ * @param int
  */
 function remove_dir($dir, $time_thres = -1)
 {
@@ -176,6 +181,11 @@ function format_bytes($size, $delimiter = '') {
     for ($i = 0; $size >= 1024 && $i < 5; $i++) $size /= 1024;
     return round($size, 2) . $delimiter . $units[$i];
 }
+/**
+ * 版本检测
+ * @return string
+ * @author rainfer <81818832@qq.com>
+ */
 function checkVersion(){
 	if(extension_loaded('curl')){
 		$url = 'http://www.yfcmf.net/index.php?m=home&c=upgrade&a=check';
@@ -195,6 +205,16 @@ function checkVersion(){
 		return '';
 	}
 }
+/**
+ * curl访问
+ * @author rainfer <81818832@qq.com>
+ * @param  string $url
+ * @param boolean $data
+ * @param string $err_msg
+ * @param int $timeout
+ * @param array $cert_info
+ * @return string
+ */
 function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $cert_info = array()){
 	$type = strtoupper($type);
     if ($type == 'GET' && is_array($data)) {
@@ -250,13 +270,14 @@ function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $c
  *
  * @param $key
  * @param $value
+ * @return boolean
  */
 function sys_config_setbykey($key, $value)
 {
     $file = ROOT_PATH.'data/conf/config.php';
     $cfg = array();
     if (file_exists($file)) {
-        $cfg = (include $file);
+        $cfg = include $file;
     }
     $item = explode('.', $key);
     switch (count($item)) {
@@ -273,6 +294,7 @@ function sys_config_setbykey($key, $value)
  * 设置全局配置到文件
  *
  * @param array
+ * @return boolean
  */
 function sys_config_setbyarr($data)
 {
@@ -289,7 +311,7 @@ function sys_config_setbyarr($data)
  * 获取全局配置
  *
  * @param $key
- * @return null
+ * @return array|null
  */
 function sys_config_get($key)
 {
@@ -315,6 +337,7 @@ function get_host(){
  * @param string $msg   信息，一般用于错误信息提示
  * @param int $code     错误码，0-未出现错误|其他出现错误
  * @param array $extend 扩展数据
+ * @return string
  */
 function ajax_return($data = [], $msg = "", $code = 0, $extend = [])
 {
@@ -325,18 +348,19 @@ function ajax_return($data = [], $msg = "", $code = 0, $extend = [])
 }
 /**
  * 根据用户id获取用户组,返回值为数组
- * @param  uid int     用户id
+ * @param   int $uid    用户id
+ * @return string
  */
-function get_Groups($uid) {
+function get_groups($uid) {
     $auth = new Auth();
     $group = $auth->getGroups($uid);
     return $group[0]['title'];
 }
 /**
  * 随机字符
- * @param number $length 长度
+ * @param int $length 长度
  * @param string $type 类型
- * @param number $convert 转换大小写
+ * @param int $convert 转换大小写 1大写 0小写
  * @return string
  */
 function random($length=10, $type='letter', $convert=0){
@@ -362,13 +386,17 @@ function random($length=10, $type='letter', $convert=0){
 }
 /**
  * 是否存在控制器
- * @param string $path 控制器路径
- * @param string $name 待判定控制器名
+ * @param string $module 模块
+ * @param string $controller 待判定控制器名
  * @return boolean
  */
-function has_controller($path,$name){
-    $arr=\ReadClass::readDir($path);
-    if((!empty($arr[$name])) && $arr[$name]['class_name']==$name){
+function has_controller($module,$controller){
+	$arr=cache('controllers'.'_'.$module);
+	if(empty($arr)){
+		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
+		cache('controllers'.'_'.$module,$arr);
+	}
+    if((!empty($arr[$controller])) && $arr[$controller]['class_name']==$controller){
         return true;
     }else{
         return false;
@@ -376,18 +404,19 @@ function has_controller($path,$name){
 }
 /**
  * 是否存在方法
- * @param string $path 控制器路径
- * @param string $name 待判定控制器名
+ * @param string $module 模块
+ * @param string $controller 待判定控制器名
  * @param string $action 待判定控制器名
  * @return number 方法结果，0不存在控制器 1存在控制器但是不存在方法 2存在控制和方法
  */
-function has_action($path,$name,$action){
-    $arr=\ReadClass::readDir($path);
-    if((!empty($arr[$name])) && $arr[$name]['class_name']==$name ){
-        $method_name=array();
-        foreach($arr[$name]['method'] as $v){
-            $method_name[]=$v['name'];
-        }
+function has_action($module,$controller,$action){
+	$arr=cache('controllers'.'_'.$module);
+	if(empty($arr)){
+		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
+		cache('controllers'.'_'.$module,$arr);
+	}
+    if((!empty($arr[$controller])) && $arr[$controller]['class_name']==$controller ){
+		$method_name=array_map('array_shift',$arr[$controller]['method']);
         if(in_array($action, $method_name)){
            return 2;
         }else{
@@ -401,10 +430,10 @@ function has_action($path,$name,$action){
  * 返回不含前缀的数据库表数组
  *
  * @author rainfer <81818832@qq.com>
- *
+ * @param bool
  * @return array
  */
-function db_get_tables($prefix=fasle)
+function db_get_tables($prefix=false)
 {
     $db_prefix =config('database.prefix');
     $list  = Db::query('SHOW TABLE STATUS FROM '.config('database.database'));
@@ -505,6 +534,7 @@ function db_get_db_prefix_holder()
  * @author rainfer <81818832@qq.com>
  *
  * @param string $filename
+ * @param string $content
  */
 function force_download_content($filename, $content)
 {
@@ -611,6 +641,8 @@ function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
 /**
  * 生成参数列表,以数组形式返回
  * @author rainfer <81818832@qq.com>
+ * @param string
+ * @return array
  */
 function param2array($tag = ''){
     $param = array();
@@ -627,6 +659,9 @@ function param2array($tag = ''){
 /**
  * 数字到字母列
  * @author rainfer <81818832@qq.com>
+ * @param int
+ * @param int
+ * @return string
  */
 function num2alpha($index, $start = 65)
 {
@@ -639,7 +674,8 @@ function num2alpha($index, $start = 65)
 /**
  * 读取excel文件到数组
  * @param string $filename,excel文件名（含路径）
- * @param string $type,excel文件类型 'Excel2007', 'Excel5', 'Excel2003XML','OOCalc', 'SYLK', 'Gnumeric', 'HTML','CSV',
+ * @param string $type,excel文件类型 'Excel2007', 'Excel5', 'Excel2003XML','OOCalc', 'SYLK', 'Gnumeric', 'HTML','CSV'
+ * @return array
  * @author rainfer <81818832@qq.com>
  */
 function read($filename,$type='Excel5'){
@@ -661,11 +697,11 @@ function read($filename,$type='Excel5'){
  * 获取新闻分类ids
  * @author rainfer <81818832@qq.com>
  *
- * $id 待获取的id
- * $self 是否返回自身，默认false
- * $open int 1表示只显示menu_open=1的，0表示只显示menu_open=0的，2表示不限制
- * $field string 默认只返回id数组(一维),其它如:"*"表示全部字段，"id,menu_name"表示返回二维数组
- * $lang 是否只返回当前语言下分类，默认false
+ * @param int $id 待获取的id
+ * @param  boolean $self 是否返回自身，默认false
+ * @param int $open 1表示只显示menu_open=1的，0表示只显示menu_open=0的，2表示不限制
+ * @param string $field 默认只返回id数组(一维),其它如:"*"表示全部字段，"id,menu_name"表示返回二维数组
+ * @param boolean $lang 是否只返回当前语言下分类，默认false
  * @return array
  */
 function get_menu_byid($id=0,$self=false,$open=0,$field='id',$lang=false){
@@ -702,6 +738,14 @@ function get_menu_byid($id=0,$self=false,$open=0,$field='id',$lang=false){
         return $arr;
     }
 }
+/**
+ * 截取文字
+ * @author rainfer <81818832@qq.com>
+ *
+ * @param string $text
+ * @param int $length
+ * @return string
+ */
 function subtext($text, $length)
 {
     if(mb_strlen($text, 'utf8') > $length)
@@ -711,8 +755,6 @@ function subtext($text, $length)
 /**
  * 将内容存到Storage中，返回转存后的文件路径
  * @author rainfer <81818832@qq.com>
- *
- * @param string $dir
  * @param string $ext
  * @param string $content
  * @return string
@@ -738,6 +780,7 @@ function save_storage_content($ext = null, $content = null)
 /**
  * 获取后台管理设置的网站信息，此类信息一般用于前台
  * @author rainfer <81818832@qq.com>
+ * @return array
  */
 function get_site_options(){
 	$site_options = cache("site_options");
@@ -757,7 +800,7 @@ function get_site_options(){
 /**
  * 获取所有友情连接
  * @author rainfer <81818832@qq.com>
- *
+ * @param int
  * @return array
  */
 function get_links($type=1){
@@ -766,17 +809,31 @@ function get_links($type=1){
 }
 /**
  * 返回指定id的菜单
+ * @param int $id 表示获得这个ID下的所有子级
+ * @param string $top_ul_id 顶级菜单ul的id
+ * @param string $childtpl 子菜单模板
+ * @param string $parenttpl 父菜单模板
+ * @param int $showlevel 直接显示层级数，其余为异步显示，0为全部限制
+ * @param string $ul_class 子菜单ul样式
+ * @param string $li_class 子菜单li样式
+ * @param string $top_ul_class 顶级菜单ul的样式
+ * @param string $dropdown 有子元素时li的class
+ * @return string
  */
-function get_menu($id="main",$effected_id="mainmenu",$childtpl="<span class='file'>\$label</span>",$parenttpl="<span class='folder'>\$label</span>",$ul_class="" ,$li_class="" ,$style="filetree",$showlevel=6,$dropdown='hasChild'){
-	$navs=cache("site_nav_".$id);
+function get_menu($id=0,$top_ul_id="",$childtpl="<span class='file'>\$label</span>",$parenttpl="<span class='folder'>\$label</span>",$ul_class="" ,$li_class="" ,$top_ul_class="filetree",$showlevel=6,$dropdown='hasChild'){
+	$navs=cache("site_nav");
 	if(empty($navs)){
-		$navs=get_menu_datas($id);
+		$navs=get_menu_datas();
 	}
 	$tree = new \Tree();
 	$tree->init($navs);
-	return $tree->get_treeview_menu(0,$effected_id, $childtpl, $parenttpl,  $showlevel,$ul_class,$li_class,  $style,  1, FALSE, $dropdown);
+	return $tree->get_treeview_menu($id,$top_ul_id, $childtpl, $parenttpl,  $showlevel,$ul_class,$li_class,  $top_ul_class,  1, FALSE, $dropdown);
 }
-function get_menu_datas($id){
+/**
+ * 返回指定id的菜单
+ * @return array
+ */
+function get_menu_datas(){
     $navs= Db::name("menu")->where('menu_l',Lang::detect())->where(array('menu_open'=>1))->order(array("listorder" => "ASC"))->select();
     foreach ($navs as $key=>$nav){
         if($nav['menu_type']==2){
@@ -787,22 +844,27 @@ function get_menu_datas($id){
         }else{
 			$nav['href']=url('Listn/index',array('id'=>$nav['id']));
             if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
-                $nav['href']=url('Index/index');
+                $nav['href']=url('home/Index/index');
             }
 		}
         $navs[$key]=$nav;
     }
-    cache("site_nav_".$id,$navs);
+    cache("site_nav",$navs);
     return $navs;
 }
-function get_menu_tree($id="main"){
-    $navs=cache("site_nav_".$id);
+/**
+ * 返回指定id的菜单
+ * @param int
+ * @return array
+ */
+function get_menu_tree($id){
+    $navs=cache("site_nav");
     if(empty($navs)){
-        $navs=get_menu_datas($id);
+        $navs=get_menu_datas();
     }
     $tree = new \Tree();
     $tree->init($navs);
-    return $tree->get_tree_array(0, "");
+    return $tree->get_tree_array($id);
 }
 /**
  * 查询文章列表，支持分页或不分页
@@ -1044,6 +1106,15 @@ function html_trim($html, $max, $suffix='...')
     }
     return $html;
 }
+/**
+ * 获取当前request参数数组,去除值为空
+ * @param string
+ * @param int
+ * @param int
+ * @param string
+ * @param bool
+ * @return string
+ */
 function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
     if(function_exists("mb_substr"))
         $slice = mb_substr($str, $start, $length, $charset);
@@ -1174,6 +1245,7 @@ function sendMail($to, $title, $content) {
 /**
  * 获取后台管理设置的邮件连接
  * @author rainfer <81818832@qq.com>
+ * @return array
  */
 function get_email_options(){
     $email_options = cache("email_options");
@@ -1191,6 +1263,7 @@ function get_email_options(){
 /**
  * 获取后台管理设置的邮件激活连接
  * @author rainfer <81818832@qq.com>
+ * @return array
  */
 function get_active_options(){
     $active_options = cache("active_options");
@@ -1312,12 +1385,18 @@ function get_query(){
 }
 /**
  * 货币转换
- * @return 
+ * @param float
+ * @return string
  */
 function long_currency($long)
 {
     return sprintf('%d.%02d', intval($long / 100), intval($long % 100));
 }
+/**
+ * 货币转换
+ * @param string
+ * @return float
+ */
 function currency_long($currency)
 {
     $s = explode('.', trim($currency));
@@ -1336,14 +1415,15 @@ function currency_long($currency)
 }
 /**
  * 递归无限级分类获取任意节点下所有子孩子
- * @param array $arr 待排序的数组
+ * @param array $arr 待处理的数组
  * @param int $parent_id 父级节点
- * @param string $pid 层级数
+ * @param string $pid 父级字段
+ * @param string $id 数组id字段
  * @param array $ids ids数组
  * @param boolean $itself 是否包含自身
  * @return array $arrTree 排序后的数组
  */
-function getMenuTree($arr, $parent_id = 0,$pid='pid',&$ids=array(),$itself=true)
+function getMenuTree($arr, $parent_id = 0,$pid='pid',$id='id',&$ids=array(),$itself=true)
 {
     static  $arrTree = array();
     if( empty($arr)) return array();
@@ -1352,18 +1432,23 @@ function getMenuTree($arr, $parent_id = 0,$pid='pid',&$ids=array(),$itself=true)
         if($value[$pid] == $parent_id)
         {
             $arrTree[] = $value;
-            $ids[]=$value[ 'id'];
+            $ids[]=$value[$id];
             unset($arr[$key]);
-            getMenuTree($arr, $value[ 'id'], $pid,$ids,$itself);
+            getMenuTree($arr, $value[$id], $pid,$id,$ids,$itself);
         }
-        if($itself && $value['id']==$parent_id){
+        if($itself && $value[$id]==$parent_id){
             $arrTree[] = $value;
-            $ids[]=$value[ 'id'];
+            $ids[]=$value[$id];
         }
     }
     return $arrTree;
 }
-//返回前台菜单含model_name model_id model_title的菜单数组
+/**
+ * 返回前台菜单含model_name model_id model_title的菜单数组
+ * @author  rainfer520@qq.com
+ * @param array
+ * @return array
+ */
 function get_menu_model($menus)
 {
     $rst=array();
@@ -1379,7 +1464,24 @@ function get_menu_model($menus)
     }
     return $rst;
 }
-//通用获取数据函数
+/**
+ * 通用获取数据表数据
+ * @author  rainfer520@qq.com
+ * @param string $table 如'news'不含前缀形式
+ * @param string $join 如 'member_list'不含前缀形式
+ * @param string $joinon 'a.news_auto =b.member_list_id'字符串形式,$table为a表,$join为b表
+ * @param string $ids 如'id:1,2,3'形式或'1,2,3'形式
+ * @param string $cid 如'cid:1,2,3'形式或'1,2,3'形式
+ * @param string $field 多个字段用','隔开，类似sql如'a,b,c,d'形式
+ * @param string $limit 类似sql的limit如'5,10'或'5'形式
+ * @param string $order 类似sql的order如'a,b desc,c'形式
+ * @param string $where_str 类似sql的where字符串如"news_open=1 and news_title='aa'"形式
+ * @param boolean $ispage 是否分页
+ * @param int $pagesize 单页分页数
+ * @param string $key 搜索的关键字
+ * @param int $page 取第几页
+ * @return array
+ */
 function get_data($table,$join,$joinon,$ids,$cid,$field,$limit,$order,$where_str,$ispage,$pagesize,$key,$page=0)
 {	
 	$where=array();
@@ -1454,4 +1556,149 @@ function get_data($table,$join,$joinon,$ids,$cid,$field,$limit,$order,$where_str
 	$content['data']=$data;
 	$content['count']=$count;
 	return $content;
+}
+/**
+ * 获取客户端浏览器信息 添加win10 edge浏览器判断
+ * @author  Jea杨
+ * @return string
+ */
+function getBroswer()
+{
+	$sys = $_SERVER['HTTP_USER_AGENT'];  //获取用户代理字符串
+	if (stripos($sys, "Firefox/") > 0) {
+		preg_match("/Firefox\/([^;)]+)+/i", $sys, $b);
+		$exp[0] = "Firefox";
+		$exp[1] = $b[1];  //获取火狐浏览器的版本号
+	} elseif (stripos($sys, "Maxthon") > 0) {
+		preg_match("/Maxthon\/([\d\.]+)/", $sys, $aoyou);
+		$exp[0] = "傲游";
+		$exp[1] = $aoyou[1];
+	} elseif (stripos($sys, "MSIE") > 0) {
+		preg_match("/MSIE\s+([^;)]+)+/i", $sys, $ie);
+		$exp[0] = "IE";
+		$exp[1] = $ie[1];  //获取IE的版本号
+	} elseif (stripos($sys, "OPR") > 0) {
+		preg_match("/OPR\/([\d\.]+)/", $sys, $opera);
+		$exp[0] = "Opera";
+		$exp[1] = $opera[1];
+	} elseif (stripos($sys, "Edge") > 0) {
+		//win10 Edge浏览器 添加了chrome内核标记 在判断Chrome之前匹配
+		preg_match("/Edge\/([\d\.]+)/", $sys, $Edge);
+		$exp[0] = "Edge";
+		$exp[1] = $Edge[1];
+	} elseif (stripos($sys, "Chrome") > 0) {
+		preg_match("/Chrome\/([\d\.]+)/", $sys, $google);
+		$exp[0] = "Chrome";
+		$exp[1] = $google[1];  //获取google chrome的版本号
+	} elseif (stripos($sys, 'rv:') > 0 && stripos($sys, 'Gecko') > 0) {
+		preg_match("/rv:([\d\.]+)/", $sys, $IE);
+		$exp[0] = "IE";
+		$exp[1] = $IE[1];
+	} elseif (stripos($sys, 'Safari') > 0) {
+		preg_match("/safari\/([^\s]+)/i", $sys, $safari);
+		$exp[0] = "Safari";
+		$exp[1] = $safari[1];
+	} else {
+		$exp[0] = "未知浏览器";
+		$exp[1] = "";
+	}
+	return $exp[0] . '(' . $exp[1] . ')';
+}
+
+/**
+ * 获取客户端操作系统信息包括win10
+ * @author  Jea杨
+ * @return string
+ */
+function getOs()
+{
+	$agent = $_SERVER['HTTP_USER_AGENT'];
+
+	if (preg_match('/win/i', $agent) && strpos($agent, '95')) {
+		$os = 'Windows 95';
+	} else if (preg_match('/win 9x/i', $agent) && strpos($agent, '4.90')) {
+		$os = 'Windows ME';
+	} else if (preg_match('/win/i', $agent) && preg_match('/98/i', $agent)) {
+		$os = 'Windows 98';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 6.0/i', $agent)) {
+		$os = 'Windows Vista';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 6.1/i', $agent)) {
+		$os = 'Windows 7';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 6.2/i', $agent)) {
+		$os = 'Windows 8';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 10.0/i', $agent)) {
+		$os = 'Windows 10';#添加win10判断
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 5.1/i', $agent)) {
+		$os = 'Windows XP';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt 5/i', $agent)) {
+		$os = 'Windows 2000';
+	} else if (preg_match('/win/i', $agent) && preg_match('/nt/i', $agent)) {
+		$os = 'Windows NT';
+	} else if (preg_match('/win/i', $agent) && preg_match('/32/i', $agent)) {
+		$os = 'Windows 32';
+	} else if (preg_match('/linux/i', $agent)) {
+		$os = 'Linux';
+	} else if (preg_match('/unix/i', $agent)) {
+		$os = 'Unix';
+	} else if (preg_match('/sun/i', $agent) && preg_match('/os/i', $agent)) {
+		$os = 'SunOS';
+	} else if (preg_match('/ibm/i', $agent) && preg_match('/os/i', $agent)) {
+		$os = 'IBM OS/2';
+	} else if (preg_match('/Mac/i', $agent)) {
+		$os = 'Mac';
+	} else if (preg_match('/PowerPC/i', $agent)) {
+		$os = 'PowerPC';
+	} else if (preg_match('/AIX/i', $agent)) {
+		$os = 'AIX';
+	} else if (preg_match('/HPUX/i', $agent)) {
+		$os = 'HPUX';
+	} else if (preg_match('/NetBSD/i', $agent)) {
+		$os = 'NetBSD';
+	} else if (preg_match('/BSD/i', $agent)) {
+		$os = 'BSD';
+	} else if (preg_match('/OSF1/i', $agent)) {
+		$os = 'OSF1';
+	} else if (preg_match('/IRIX/i', $agent)) {
+		$os = 'IRIX';
+	} else if (preg_match('/FreeBSD/i', $agent)) {
+		$os = 'FreeBSD';
+	} else if (preg_match('/teleport/i', $agent)) {
+		$os = 'teleport';
+	} else if (preg_match('/flashget/i', $agent)) {
+		$os = 'flashget';
+	} else if (preg_match('/webzip/i', $agent)) {
+		$os = 'webzip';
+	} else if (preg_match('/offline/i', $agent)) {
+		$os = 'offline';
+	} elseif (preg_match('/ucweb|MQQBrowser|J2ME|IUC|3GW100|LG-MMS|i60|Motorola|MAUI|m9|ME860|maui|C8500|gt|k-touch|X8|htc|GT-S5660|UNTRUSTED|SCH|tianyu|lenovo|SAMSUNG/i', $agent)) {
+		$os = 'mobile';
+	} else {
+		$os = '未知操作系统';
+	}
+	return $os;
+}
+/**
+ * 返回按层级加前缀的菜单数组
+ * @author  rainfer
+ * @param array $menu 待处理菜单数组
+ * @param string $id_field 主键id字段名
+ * @param string $pid_field 父级字段名
+ * @param string $lefthtml 前缀
+ * @param int $pid 父级id
+ * @param int $lvl 当前lv
+ * @param int $leftpin 左侧距离
+ * @return array
+ */
+function menu_left($menu,$id_field='id',$pid_field='pid',$lefthtml = '─' , $pid=0 , $lvl=0, $leftpin=0){
+    $arr=array();
+    foreach ($menu as $v){
+        if($v[$pid_field]==$pid){
+            $v['lvl']=$lvl + 1;
+            $v['leftpin']=$leftpin;
+            $v['lefthtml']='├'.str_repeat($lefthtml,$lvl);
+            $arr[]=$v;
+            $arr= array_merge($arr,menu_left($menu,$id_field,$pid_field,$lefthtml,$v[$id_field], $lvl+1 ,$leftpin+20));
+        }
+    }
+    return $arr;
 }

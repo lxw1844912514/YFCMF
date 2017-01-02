@@ -25,6 +25,9 @@ class Model extends Base
     public function model_list()
     {
 		$models=Db::name('model')->order('create_time desc')->select();
+        $admin_rule=Db::name('auth_rule')->order('sort')->select();
+        $admin_rule = menu_left($admin_rule);
+        $this->assign('admin_rule',$admin_rule);
 		$this->assign('models',$models);
 		return $this->fetch();
 	}
@@ -52,13 +55,20 @@ class Model extends Base
             //添加顶级菜单
             $rst=Db::name('auth_rule')->where('name','Model/cmslist?id='.$model_id)->find();
             if(empty($rst)){
+                $admin_rule_pid=input('admin_rule_pid',0,'intval');
+                if($admin_rule_pid==0){
+                    $level=0;
+                }else{
+                    $rule_pid=Db::name('auth_rule')->find($admin_rule_pid);
+                    $level=$rule_pid['level'];
+                }
                 //不存在
                 $sldata=array(
                     'name'=>'Model',
                     'title'=>input('menu_name',$model['model_title']),
                     'css'=>input('css','fa-list'),
-                    'pid'=>0,
-                    'level'=>1,
+                    'pid'=>$admin_rule_pid,
+                    'level'=>$level+1,
                     'sort'=>input('sort',50,'intval'),
                     'addtime'=>time()
                 );
@@ -69,7 +79,7 @@ class Model extends Base
                         'name'=>'Model/cmsadd?id='.$model_id,
                         'title'=>'增加'.$model['model_title'],
                         'pid'=>$pid1,
-                        'level'=>2,
+                        'level'=>$level+2,
                         'sort'=>20,
                         'addtime'=>time()
                     );
@@ -79,7 +89,7 @@ class Model extends Base
                             'name'=>'cmsrunadd',
                             'title'=>'增加操作',
                             'pid'=>$pid2,
-                            'level'=>3,
+                            'level'=>$level+3,
                             'sort'=>10,
                             'status'=>0,
                             'addtime'=>time()
@@ -93,7 +103,7 @@ class Model extends Base
                         'name'=>'Model/cmslist?id='.$model_id,
                         'title'=>$model['model_title'].'列表',
                         'pid'=>$pid1,
-                        'level'=>2,
+                        'level'=>$level+2,
                         'sort'=>10,
                         'addtime'=>time()
                     );
@@ -101,12 +111,12 @@ class Model extends Base
                     if($pid2){
                         //删除、状态、编辑显示、编辑操作、排序、全部删除
                         $sldata=[
-                            ['name'=>'Model/cmsdel','title'=>'删除操作','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsstate','title'=>'状态操作','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsorder','title'=>'排序操作','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsalldel','title'=>'全部删除','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsedit','title'=>'编辑显示','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsrunedit','title'=>'编辑操作','pid'=>$pid2,'level'=>3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsdel','title'=>'删除操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsstate','title'=>'状态操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsorder','title'=>'排序操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsalldel','title'=>'全部删除','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsedit','title'=>'编辑显示','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'Model/cmsrunedit','title'=>'编辑操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
                         ];
                         Db::name('auth_rule')->insertAll($sldata);
                         Cache::clear();
@@ -158,7 +168,7 @@ class Model extends Base
                     $pid=$rule['pid'];//顶级菜单
                     $arr=Db::name('auth_rule')->select();
                     $ids=array();
-                    $arrTree=getMenuTree($arr, $pid,'pid',$ids);
+                    $arrTree=getMenuTree($arr, $pid,'pid','id',$ids);
                     if(!empty($arrTree)){
                         Db::name('auth_rule')->where('id','in',$ids)->delete();
                         Cache::clear();
@@ -726,9 +736,9 @@ class Model extends Base
 						break;	
 					case 'switch' :
 						if ($vv) {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
 						} else {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="关闭"><div><button class="btn btn-minier btn-danger">关闭</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已禁用"><div><button class="btn btn-minier btn-danger">禁用</button></div></a>';
 						}
 						break;
 					case 'bigtext' :
@@ -754,9 +764,8 @@ class Model extends Base
             $fields[$key]=$this->cms_fields[$key];
         }
         //栏目数据
-        $nav = new \Leftnav;
         $menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
-        $arr = $nav::menu_n($menu_next);
+        $arr = menu_left($menu_next,'id','parentid');
         $this->assign('menu',$arr);
         $this->assign('model_cid',$model_cid);
 		$this->assign('page',$show);
@@ -1180,9 +1189,8 @@ class Model extends Base
                     if($k!=$this->cms_cid){
                         $fields_data [$k] ['option'] = $this->cms_field_option_conv($fields_data [$k] ['data']);
                     }else{
-                        $nav = new \Leftnav;
                         $arr=Db::name('menu')->where(['menu_modelid'=>$model_id,'menu_type'=>3])->select();
-                        $fields_data [$k] ['option']=$nav::menu_n($arr);
+                        $fields_data [$k] ['option']=menu_left($arr,'id','parentid');
                     }
                     break;
                 case 'checkbox' :

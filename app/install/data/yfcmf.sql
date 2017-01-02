@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=276 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=294 ;
 
 INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES
 (1, 'Sys', '系统设置', 1, 1, 'fa-tachometer', '', 0, 1, 1, 1446535750),
@@ -110,21 +110,20 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (23, 'Help/soft', '软件下载', 1, 1, '', '', 22, 2, 10, 1446711421),
 (24, 'Help/soft', '下载列表', 1, 1, '', '', 23, 3, 10, 1446711448),
 (25, 'News/news_back', '回收站', 1, 1, '', '', 7, 2, 30, 1447039310),
-(26, 'Sys/pay', '支付配置', 1, 0, '', '', 2, 3, 60, 1447231369),
+(26, 'Sys/paysys', '支付配置', 1, 1, '', '', 2, 3, 35, 1447231369),
 (27, 'Member', '会员管理', 1, 1, 'fa-users', '', 0, 1, 5, 1447231507),
-(28, 'Plug', '其它管理', 1, 1, 'fa-plug', '', 0, 1, 90, 1447231590),
+(28, 'Plug', '扩展管理', 1, 1, 'fa-plug', '', 0, 1, 90, 1447231590),
 (239, 'Sys/logsys', '日志显示', 1, 0, '', '', 228, 4, 10, 1482844815),
 (30, 'Member/member_score', '积分管理', 1, 0, '', '', 27, 2, 30, 1447232133),
 (31, 'Plug/plug_link_list', '友情链接', 1, 1, '', '', 28, 2, 10, 1447232183),
 (32, 'Plug/plug_link_list', '链接列表', 1, 1, '', '', 31, 3, 10, 1447639935),
 (129, 'Plug/plug_link_del', '删除操作', 1, 0, '', '', 32, 4, 20, 1460345954),
 (34, 'Plug/plug_linktype_list', '所属栏目', 1, 1, '', '', 31, 3, 20, 1447640839),
-(35, 'We', '微信基本功能', 1, 0, 'fa-weixin', '', 0, 1, 80, 1447842435),
-(36, 'We/we_menu_list', '菜单管理', 1, 1, '', '', 35, 2, 10, 1447842477),
+(35, 'We', '微信基本功能', 1, 1, 'fa-weixin', '', 0, 1, 80, 1447842435),
 (44, 'Plug/plug_ad_list', '广告管理', 1, 1, '', '', 28, 2, 20, 1450314265),
 (37, 'Member/member_list', '会员列表', 1, 1, '', '', 27, 2, 10, 1448413219),
 (38, 'Member/member_group_list', '会员组', 1, 1, '', '', 27, 2, 20, 1448413248),
-(39, 'We/we_menu_list', '自定义菜单', 1, 1, '', '', 36, 3, 10, 1448501584),
+(39, 'We/menu_list', '菜单管理', 1, 1, '', '', 35, 2, 10, 1448501584),
 (40, 'Sys/excel_export', 'Excel导入/导出', 1, 1, '', '', 1, 2, 40, 1448613588),
 (41, 'Sys/excel_import', 'Excel导入', 1, 1, '', '', 40, 3, 20, 1448613614),
 (42, 'Sys/excel_export', 'Excel导出', 1, 1, '', '', 40, 3, 10, 1448613651),
@@ -203,13 +202,13 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (118, 'Member/member_group_order', '排序操作', 1, 0, '', '', 38, 3, 40, 1460344255),
 (119, 'Member/member_group_edit', '编辑显示', 1, 0, '', '', 38, 3, 50, 1460344294),
 (120, 'Member/member_group_runedit', '编辑操作', 1, 0, '', '', 38, 3, 60, 1460344347),
-(121, 'We/we_menu_runadd', '添加操作', 1, 0, '', '', 39, 4, 15, 1460345046),
-(122, 'We/we_menu_state', '状态操作', 1, 0, '', '', 39, 4, 20, 1460345151),
-(123, 'We/we_menu_order', '排序操作', 1, 0, '', '', 39, 4, 30, 1460345176),
-(124, 'We/we_menu_edit', '编辑显示', 1, 0, '', '', 39, 4, 40, 1460345280),
-(125, 'We/we_menu_runedit', '编辑操作', 1, 0, '', '', 39, 4, 50, 1460345306),
-(126, 'We/we_menu_del', '删除操作', 1, 0, '', '', 39, 4, 60, 1460345332),
-(127, 'We/we_menu_make', '生成菜单', 1, 0, '', '', 39, 4, 70, 1460345377),
+(121, 'We/menu_runadd', '添加操作', 1, 0, '', '', 39, 3, 15, 1460345046),
+(122, 'We/menu_state', '状态操作', 1, 0, '', '', 39, 3, 20, 1460345151),
+(123, 'We/menu_order', '排序操作', 1, 0, '', '', 39, 3, 30, 1460345176),
+(124, 'We/menu_edit', '编辑显示', 1, 0, '', '', 39, 3, 40, 1460345280),
+(125, 'We/menu_runedit', '编辑操作', 1, 0, '', '', 39, 3, 50, 1460345306),
+(126, 'We/menu_del', '删除操作', 1, 0, '', '', 39, 3, 60, 1460345332),
+(127, 'We/menu_make', '生成菜单', 1, 0, '', '', 39, 3, 70, 1460345377),
 (128, 'Plug/plug_link_runadd', '添加操作', 1, 0, '', '', 32, 4, 15, 1460345848),
 (130, 'Plug/plug_link_state', '状态操作', 1, 0, '', '', 32, 4, 30, 1460345976),
 (131, 'Plug/plug_link_edit', '编辑显示', 1, 0, '', '', 32, 4, 40, 1460345999),
@@ -246,7 +245,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (165, 'Plug/plug_ad_list', '列表显示', 1, 0, '', '', 45, 4, 10, 1460368637),
 (166, 'Plug/plug_linktype_list', '列表显示', 1, 0, '', '', 34, 4, 10, 1460368656),
 (167, 'Plug/plug_link_list', '列表显示', 1, 0, '', '', 32, 4, 10, 1460368676),
-(168, 'We/we_menu_list', '列表显示', 1, 0, '', '', 39, 4, 10, 1460368744),
+(168, 'We/menu_list', '列表显示', 1, 0, '', '', 39, 3, 10, 1460368744),
 (169, 'Member/member_group_list', '列表显示', 1, 0, '', '', 38, 3, 10, 1460368780),
 (170, 'Member/member_list', '列表显示', 1, 0, '', '', 37, 3, 10, 1460368804),
 (171, 'News/news_menu_add', '添加显示', 1, 0, '', '', 14, 3, 10, 1460369022),
@@ -265,7 +264,7 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (184, 'Sys/oauthsys', '第三方登录', 1, 1, '', '', 2, 3, 40, 1463045567),
 (185, 'Comment', '评论管理', 1, 1, 'fa-comment', '', 0, 1, 15, 1463305461),
 (186, 'Comment/comment_list', '评论列表', 1, 1, '', '', 185, 2, 10, 1463305496),
-(190, 'Sys/urlsys', 'URL设置', 1, 1, '', '', 2, 3, 15, 1464341076),
+(190, 'Sys/urlsetsys', 'URL设置', 1, 1, '', '', 2, 3, 15, 1464341076),
 (198, 'Sys', '安全检测', 1, 1, 'fa-warning', '', 0, 1, 97, 1480333173),
 (199, 'Sys/security_list', '安全文件', 1, 1, '', '', 198, 2, 50, 1480333751),
 (200, 'Sys/security_check', '检测文件', 1, 0, '', '', 199, 3, 60, 1480336068),
@@ -320,7 +319,15 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (272, 'Model/cmsorder', '排序操作', 1, 0, '', '', 269, 3, 0, 1482821140),
 (273, 'Model/cmsalldel', '全部删除', 1, 0, '', '', 269, 3, 0, 1482821140),
 (274, 'Model/cmsedit', '编辑显示', 1, 0, '', '', 269, 3, 0, 1482821140),
-(275, 'Model/cmsrunedit', '编辑操作', 1, 0, '', '', 269, 3, 0, 1482821140);
+(275, 'Model/cmsrunedit', '编辑操作', 1, 0, '', '', 269, 3, 0, 1482821140),
+(276, 'WebLog', '操作日志', 1, 1, 'fa-tasks', '', 0, 1, 19, 1483091169),
+(277, 'WebLog/weblog_list', '操作日志列表', 1, 1, '', '', 276, 2, 10, 1483091198),
+(278, 'WebLog/weblog_setting', '操作日志设置', 1, 1, '', '', 276, 2, 20, 1483091220),
+(279, 'Sys/paysys', '设置显示', 1, 0, '', '', 26, 4, 10, 1483325524),
+(280, 'Sys/runpaysys', '设置操作', 1, 0, '', '', 26, 4, 20, 1483325553),
+(281, 'Sys/smssys', '短信设置', 1, 1, '', '', 2, 3, 33, 1483327040),
+(282, 'Sys/smssys', '设置显示', 1, 0, '', '', 281, 4, 10, 1483327064),
+(283, 'Sys/runsmssys', '设置操作', 1, 0, '', '', 281, 4, 20, 1483327089);
 
 DROP TABLE IF EXISTS `yf_faq`;
 CREATE TABLE IF NOT EXISTS `yf_faq` (
@@ -4156,7 +4163,15 @@ CREATE TABLE IF NOT EXISTS `yf_route` (
   `listorder` int(5) DEFAULT '0' COMMENT '排序，优先级，越小优先级越高',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态，1：启用 ;0：不启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='url路由表' AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='url路由表' AUTO_INCREMENT=7 ;
+
+INSERT INTO `yf_route` (`id`, `full_url`, `url`, `listorder`, `status`) VALUES
+(1, 'Listn/index?id=1', 'about', 0, 1),
+(2, 'Listn/index?id=8', 'about_en', 0, 1),
+(3, 'Listn/index?id=4', 'contacts', 0, 1),
+(4, 'Listn/index?id=11', 'contacts_en', 0, 1),
+(5, 'Listn/index', 'list/:id', 0, 1),
+(6, 'News/index', 'news/:id', 0, 1);
 
 
 DROP TABLE IF EXISTS `yf_source`;
@@ -4208,6 +4223,30 @@ INSERT INTO `yf_test` (`test_id`, `test_order`, `test_cid`, `m_text`, `m_map_lng
 (10, 47, 7, '文本测试数据文本测试数据文本测试数据文本测试数据文本测试数据', 22, 22, 'http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg', 'http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg,http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg,http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg', '1', 22, 9999999999999, 8888888, 1486563521, 1486563521, 1, '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。有人统计说企业每投在品牌形象设计上1美元，所获得的收益是227美元。如此诱人的投资回报率，无怪乎企业界对品牌设计趋之若鹜。那么，品牌设计究竟是什么？其魅力来自何处？\r\n \r\n1、设计是冰山一角，却至关重要！如果我们把品牌理解成一座冰山。品牌或企业所属的文化制度、员工行为、组织结构、核心技术、营销方式等要素是构成这座冰山的主体，尽管隐于水下，却是品牌发展最强有力的支撑与原动力。\r\n但这一切都必须通过一系列完整有效的视觉设计与品牌推广来被大众所认知。', '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。', 0, '1,2,5,6'),
 (12, 50, 8, '文本测试数据文本测试数据文本测试数据文本测试数据文本测试数据', 22, 22, 'http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg', 'http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg,http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg,http://ohjmksy46.bkt.clouddn.com/image/iw7u817c_3ljeuzemth44584179bf73a10.jpg', '1', 22, 9999999999999, 8888888, 1486563521, 1486563521, 1, '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。有人统计说企业每投在品牌形象设计上1美元，所获得的收益是227美元。如此诱人的投资回报率，无怪乎企业界对品牌设计趋之若鹜。那么，品牌设计究竟是什么？其魅力来自何处？\r\n \r\n1、设计是冰山一角，却至关重要！如果我们把品牌理解成一座冰山。品牌或企业所属的文化制度、员工行为、组织结构、核心技术、营销方式等要素是构成这座冰山的主体，尽管隐于水下，却是品牌发展最强有力的支撑与原动力。\r\n但这一切都必须通过一系列完整有效的视觉设计与品牌推广来被大众所认知。', '当世界进入品牌竞争的时代，当品牌成为中华大地上商界的热点时，品牌设计也成为人们常挂在嘴边的时髦词汇。', 0, '1,2,5,6'),
 (13, 50, 2, '', 22, 22, 'http://ohjmksy46.bkt.clouddn.com/image/ix66veqg_5sgky011nh0c58612b67ba135.png', 'http://ohjmksy46.bkt.clouddn.com/image/ix66vilc_6cgtqvbo9cg858612b6ccbef1.png,http://ohjmksy46.bkt.clouddn.com/image/ix66vilc_63fw80lz0dgk58612b6cc41f1.png,', '1', 22, 0, 11, 1482762857, 1482681600, 1, '', '', 0, '');
+
+DROP TABLE IF EXISTS `yf_web_log`;
+CREATE TABLE IF NOT EXISTS `yf_web_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  `uid` smallint(5) unsigned NOT NULL COMMENT '用户id',
+  `ip` char(15) NOT NULL COMMENT '访客ip',
+  `location` varchar(255) NOT NULL COMMENT '访客地址',
+  `os` varchar(255) NOT NULL COMMENT '操作系统',
+  `browser` varchar(255) NOT NULL COMMENT '浏览器',
+  `url` varchar(255) NOT NULL COMMENT 'url',
+  `module` char(6) NOT NULL COMMENT '模块',
+  `controller` varchar(255) NOT NULL COMMENT '控制器',
+  `action` varchar(255) NOT NULL DEFAULT '' COMMENT '操作方法',
+  `method` varchar(10) NOT NULL DEFAULT 'GET' COMMENT '请求类型',
+  `data` text NOT NULL COMMENT '请求的param数据，serialize后的',
+  `otime` int(10) unsigned NOT NULL COMMENT '操作时间',
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `ip` (`ip`),
+  KEY `otime` (`otime`),
+  KEY `module` (`module`),
+  KEY `controller` (`controller`),
+  KEY `method` (`method`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='网站日志' AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `yf_we_menu`;
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (

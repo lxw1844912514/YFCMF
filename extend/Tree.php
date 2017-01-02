@@ -2,6 +2,8 @@
 
 /**
  * 通用的树型类，可以生成任何树型结构
+ * author:phpcms
+ * edit：rainfer
  */
 class Tree {
 
@@ -15,13 +17,16 @@ class Tree {
      * 生成树型结构所需修饰符号，可以换成图片
      * @var array
      */
-    public $icon = array('│', '├', '└');
-    public $nbsp = "&nbsp;";
-
-    /**
-     * @access private
-     */
-    public $ret = '';
+    private $icon = array('│', '├', '└');
+    private $nbsp = '&nbsp;';
+    private $str='';
+    private $ret = '';
+    private $config=array(
+        'id'=>'id',
+        'parentid'=>'parentid',
+        'name'=>'name',
+        'child'=>'child',
+    );
 
     /**
      * 构造函数，初始化类
@@ -35,29 +40,30 @@ class Tree {
      *      6 => array('id'=>'6','parentid'=>3,'name'=>'三级栏目一'),
      *      7 => array('id'=>'7','parentid'=>3,'name'=>'三级栏目二')
      *      )
-     * return boolean
+     * @param array $config 配置数组字段名称
+     * @return boolean
      */
-    public function init($arr=array()) {
+    public function init($arr=array(),$config=array()) {
         $this->arr = $arr;
         $this->ret = '';
 		$this->str='';
+		if($config) $this->config=array_merge($this->config,$config);
         return is_array($arr);
     }
 
     /**
      * 得到父级数组的同级数组
-     * @param int
+     * @param int $myid 菜单id
      * @return array
      */
     public function get_parent($myid) {
         $newarr = array();
-        if (!isset($this->arr[$myid]))
-            return false;
-        $pid = $this->arr[$myid]['parentid'];//父级id
-        $pid = $this->arr[$pid]['parentid'];//祖级id
+        if (!isset($this->arr[$myid])) return false;
+        $pid = $this->arr[$myid][$this->config['parentid']];//父级id
+        $pid = $this->arr[$pid][$this->config['parentid']];//祖级id
         if (is_array($this->arr)) {
             foreach ($this->arr as $id => $a) {
-                if ($a['parentid'] == $pid)
+                if ($a[$this->config['parentid']] == $pid)
                     $newarr[$id] = $a;
             }
         }
@@ -66,14 +72,14 @@ class Tree {
 
     /**
      * 得到子级数组的同级数组
-     * @param int
+     * @param int $myid
      * @return array
      */
     public function get_child($myid) {
-        $a = $newarr = array();
+        $newarr = array();
         if (is_array($this->arr)) {
             foreach ($this->arr as $id => $a) {
-                if ($a['parentid'] == $myid)
+                if ($a[$this->config['parentid']] == $myid)
                     $newarr[$id] = $a;
             }
         }
@@ -83,14 +89,14 @@ class Tree {
     /**
      * 得到当前位置数组
      * @param int
+     * @param array
      * @return array
      */
     public function get_pos($myid, &$newarr) {
         $a = array();
-        if (!isset($this->arr[$myid]))
-            return false;
+        if (!isset($this->arr[$myid])) return false;
         $newarr[] = $this->arr[$myid];
-        $pid = $this->arr[$myid]['parentid'];
+        $pid = $this->arr[$myid][$this->config['parentid']];
         if (isset($this->arr[$pid])) {
             $this->get_pos($pid, $newarr);
         }
@@ -98,7 +104,7 @@ class Tree {
         if (is_array($newarr)) {
             krsort($newarr);//降序排序
             foreach ($newarr as $v) {
-                $a[$v['id']] = $v;
+                $a[$v[$this->config['id']]] = $v;
             }
         }
         return $a;
@@ -106,9 +112,11 @@ class Tree {
 
     /**
      * 得到树型结构
-     * @param int ID，表示获得这个ID下的所有子级
-     * @param string 生成树型结构的基本代码，例如："<option value=\$id \$selected>\$spacer\$name</option>"
-     * @param int 被选中的ID，比如在做树型下拉框的时候需要用到
+     * @param int $myid，表示获得这个ID下的所有子级
+     * @param string $str 生成树型结构的基本代码，例如："<option value=\$id \$selected>\$spacer\$name</option>"
+     * @param int $sid 被选中的ID, 比如在做树形下拉框的时候需要用到
+     * @param string $adds
+     * @param string $str_group
      * @return string
      */
     public function get_tree($myid, $str, $sid = 0, $adds = '', $str_group = '') {
@@ -128,10 +136,10 @@ class Tree {
                 $spacer = $adds ? $adds . $j : '';
                 $selected = $id == $sid ? 'selected' : '';
                 @extract($value);
-                $parentid == 0 && $str_group ? eval("\$nstr = \"$str_group\";") : eval("\$nstr = \"$str\";");
+                $parentid == 0 && $str_group ? eval("\$nstr = \"$str_group\";") : eval("\$nstr = \"$str\";");//顶级
                 $this->ret .= $nstr;
                 $nbsp = $this->nbsp;
-                $this->get_tree($id, $str, $sid, $adds . $k . $nbsp, $str_group);//子级数组
+                $this->get_tree($id, $str, $sid, $adds . $k . $nbsp, $str_group);//递归子级数组
                 $number++;
             }
         }
@@ -140,29 +148,29 @@ class Tree {
     
     /**
      * 得到树型结构数组
-     * @param int ID，表示获得这个ID下的所有子级
-     * @param string 生成树型结构的基本代码，例如："<option value=\$id \$selected>\$spacer\$name</option>"
-     * @param int 被选中的ID，比如在做树型下拉框的时候需要用到
-     * @return string
+     * @param int $myid，表示获得这个ID下的所有子级
+     * @return array
      */
-    public function get_tree_array($myid, $str, $sid = 0, $adds = '', $str_group = '') {
+    public function get_tree_array($myid) {
         $retarray = array();
         //一级栏目数组
         $child = $this->get_child($myid);
         if (is_array($child)) {
-            //数组长度
-            $total = count($child);
             foreach ($child as $id => $value) {
-                @extract($value);
-                $retarray[$value['id']] = $value;
-                $retarray[$value['id']]["child"] = $this->get_tree_array($id, '');
+                $retarray[$value[$this->config['id']]] = $value;
+                $retarray[$value[$this->config['id']]][$this->config['child']] = $this->get_tree_array($id);
             }
         }
         return $retarray;
     }
 
     /**
-     * 同上一方法类似,但允许多选
+     * 同get_tree,但允许多选
+     * @param int $myid，表示获得这个ID下的所有子级
+     * @param string $str 生成树型结构的基本代码，例如："<option value=\$id \$selected>\$spacer\$name</option>"
+     * @param int $sid 被选中的ID, 比如在做树形下拉框的时候需要用到
+     * @param string $adds
+     * @return string
      */
     public function get_tree_multi($myid, $str, $sid = 0, $adds = '') {
         $number = 1;
@@ -178,12 +186,11 @@ class Tree {
                     $k = $adds ? $this->icon[0] : '';
                 }
                 $spacer = $adds ? $adds . $j : '';
-
                 $selected = $this->have($sid, $id) ? 'selected' : '';
                 @extract($a);
                 eval("\$nstr = \"$str\";");
                 $this->ret .= $nstr;
-                $this->get_tree_multi($id, $str, $sid, $adds . $k . '&nbsp;');
+                $this->get_tree_multi($id, $str, $sid, $adds . $k . $this->nbsp);
                 $number++;
             }
         }
@@ -191,11 +198,12 @@ class Tree {
     }
 
     /**
-     * @param integer $myid 要查询的ID
+     * @param int $myid 要查询的ID
      * @param string $str   第一种HTML代码方式
      * @param string $str2  第二种HTML代码方式
-     * @param integer $sid  默认选中
-     * @param integer $adds 前缀
+     * @param int $sid  默认选中
+     * @param string $adds 前缀
+     * @return string $adds 前缀
      */
     public function get_tree_category($myid, $str, $str2, $sid = 0, $adds = '') {
         $number = 1;
@@ -211,7 +219,6 @@ class Tree {
                     $k = $adds ? $this->icon[0] : '';
                 }
                 $spacer = $adds ? $adds . $j : '';
-
                 $selected = $this->have($sid, $id) ? 'selected' : '';
                 @extract($a);
                 if (empty($html_disabled)) {
@@ -220,7 +227,7 @@ class Tree {
                     eval("\$nstr = \"$str2\";");
                 }
                 $this->ret .= $nstr;
-                $this->get_tree_category($id, $str, $str2, $sid, $adds . $k . '&nbsp;');
+                $this->get_tree_category($id, $str, $str2, $sid, $adds . $k . $this->nbsp);
                 $number++;
             }
         }
@@ -229,14 +236,15 @@ class Tree {
 
     /**
      * 同上一类方法，jquery treeview 风格，可伸缩样式（需要treeview插件支持）
-     * @param $myid 表示获得这个ID下的所有子级
-     * @param $effected_id 需要生成treeview目录数的id
-     * @param $str 末级样式
-     * @param $str2 目录级别样式
-     * @param $showlevel 直接显示层级数，其余为异步显示，0为全部限制
-     * @param $style 目录样式 默认 filetree 可增加其他样式如'filetree treeview-famfamfam'
-     * @param $currentlevel 计算当前层级，递归使用 适用改函数时不需要用该参数
-     * @param $recursion 递归使用 外部调用时为FALSE
+     * @param int $myid 表示获得这个ID下的所有子级
+     * @param string $effected_id 需要生成treeview目录数的id
+     * @param string $str 末级样式
+     * @param string $str2 目录级别样式
+     * @param int $showlevel 直接显示层级数，其余为异步显示，0为全部限制
+     * @param string $style 目录样式 默认 filetree 可增加其他样式如'filetree treeview-famfamfam'
+     * @param int $currentlevel 计算当前层级，递归使用 适用改函数时不需要用该参数
+     * @param boolean $recursion 递归使用 外部调用时为FALSE
+     * @return string
      */
     function get_treeview($myid, $effected_id='example', $str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>", $showlevel = 0, $style='filetree ', $currentlevel = 1, $recursion=FALSE) {
         $child = $this->get_child($myid);
@@ -278,96 +286,68 @@ class Tree {
     }
     
     /**
-     * 同上一类方法，jquery treeview 风格，可伸缩样式（需要treeview插件支持）
-     * @param $myid 表示获得这个ID下的所有子级
-     * @param $effected_id 需要生成treeview目录数的id
-     * @param $str 末级样式
-     * @param $str2 目录级别样式
-     * @param $showlevel 直接显示层级数，其余为异步显示，0为全部限制
-     * @param $style 目录样式 默认 filetree 可增加其他样式如'filetree treeview-famfamfam'
-     * @param $currentlevel 计算当前层级，递归使用 适用改函数时不需要用该参数
-     * @param $recursion 递归使用 外部调用时为FALSE
-     * @param $dropdown 有子元素时li的class
+     * 生成树形菜单
+     * @param int $myid 表示获得这个ID下的所有子级
+     * @param string $top_ul_id 顶级菜单ul的id
+     * @param string $childtpl 子菜单模板
+     * @param string $parenttpl 父菜单模板
+     * @param int $showlevel 直接显示层级数，其余为异步显示，0为全部限制
+     * @param string $ul_class 子菜单ul样式
+     * @param string $li_class 子菜单li样式
+     * @param string $top_ul_class 顶级菜单ul的样式
+     * @param int $currentlevel 计算当前层级，递归使用 适用改函数时不需要用该参数
+     * @param boolean $recursion 递归使用 外部调用时为FALSE,内部为true
+     * @param string $dropdown 有子元素时li的class
+     * @return string
      */
     
-    function get_treeview_menu($myid,$effected_id='example', $str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>", $showlevel = 0,  $ul_class="" ,$li_class="" , $style='filetree ', $currentlevel = 1, $recursion=FALSE, $dropdown='hasChild') {
-    	
+    function get_treeview_menu($myid,$top_ul_id='', $childtpl="<a href='\$href' class='sf-with-ul'>\$menu_name</a>", $parenttpl="<a href='#' class='sf-with-ul'>\$menu_name<span class='sf-sub-indicator'><i class='fa fa-angle-down'></i></span></a>", $showlevel = 0,  $ul_class="" ,$li_class="" , $top_ul_class='filetree ', $currentlevel = 1, $recursion=FALSE, $dropdown='hasChild') {
+        //取出子菜单数组
     	$child = $this->get_child($myid);
     	if (!defined('EFFECTED_INIT')) {
-    		$effected = ' id="' . $effected_id . '"';
+    		$effected = ' id="' . $top_ul_id . '"';
     		define('EFFECTED_INIT', 1);
     	} else {
     		$effected = '';
     	}
-	$placeholder = '<ul><li><span class="placeholder"></span></li></ul>';
+	    $placeholder = '<ul><li><span class="placeholder"></span></li></ul>';
     	if (!$recursion){
-    		$this->str .='<ul' . $effected . '  class="' . $style . '">';
+    		$this->str .='<ul' . $effected . '  class="' . $top_ul_class . '">';//顶级菜单ul
     	}
-    		
     	foreach ($child as $id => $a) {
-    		
     		@extract($a);
-    		if ($showlevel > 0 && is_array($this->get_child($a['id']))){
-    			$floder_status = " class='$dropdown $li_class'";
+    		if ($showlevel > 0 && is_array($this->get_child($a[$this->config['id']]))){
+    			$class_str = " class='$dropdown $li_class'";
     		}else{
-    			$floder_status = " class='$li_class'";;
+    			$class_str = " class='$li_class'";
     		}
-    		$this->str .= $recursion ? "<ul class='$ul_class'><li  $floder_status id= 'menu-item-$id'>" : "<li  $floder_status   id= 'menu-item-$id'>";
+    		$this->str .= $recursion ? "<ul class='$ul_class'><li  $class_str id= 'menu-item-$id'>" : "<li  $class_str   id= 'menu-item-$id'>";
     		$recursion = FALSE;
-    		//判断是否为终极栏目
-    		if ($this->get_child($a['id'])) {
-    			eval("\$nstr = \"$str2\";");
+    		//判断是否含有子菜单
+    		if ($this->get_child($a[$this->config['id']])) {
+    			eval("\$nstr = \"$parenttpl\";");
     			$this->str .= $nstr;
     			if ($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
-					$this->get_treeview_menu($a['id'], $effected_id, $str, $str2, $showlevel,   $ul_class ,$li_class ,$style, $currentlevel + 1, TRUE);
+					$this->get_treeview_menu($a[$this->config['id']], $top_ul_id, $childtpl, $parenttpl, $showlevel,   $ul_class ,$li_class ,$top_ul_class, $currentlevel + 1, TRUE,$dropdown);
     			} elseif ($showlevel > 0 && $showlevel == $currentlevel) {
-    				//$this->str .= $placeholder;
+    				$this->str .= $placeholder;
     			}
     		} else {
-    			eval("\$nstr = \"$str\";");
+    			eval("\$nstr = \"$childtpl\";");
     			$this->str .= $nstr;
     		}
     		$this->str .=$recursion ? '</li></ul>' : '</li>';
     	}
-    	if (!$recursion)
-    		$this->str .='</ul>';
+    	if (!$recursion) $this->str .='</ul>';
     	return $this->str;
-    }
-
-    /**
-     * 获取子栏目json
-     * Enter description here ...
-     * @param unknown_type $myid
-     */
-    public function creat_sub_json($myid, $str='') {
-        $sub_cats = $this->get_child($myid);
-        $n = 0;
-        if (is_array($sub_cats))
-            foreach ($sub_cats as $c) {
-                $data[$n]['id'] = iconv(CHARSET, 'utf-8', $c['catid']);
-                if ($this->get_child($c['catid'])) {
-                    $data[$n]['liclass'] = 'hasChildren';
-                    $data[$n]['children'] = array(array('text' => '&nbsp;', 'classes' => 'placeholder'));
-                    $data[$n]['classes'] = 'folder';
-                    $data[$n]['text'] = iconv(CHARSET, 'utf-8', $c['catname']);
-                } else {
-                    if ($str) {
-                        @extract(array_iconv($c, CHARSET, 'utf-8'));
-                        eval("\$data[$n]['text'] = \"$str\";");
-                    } else {
-                        $data[$n]['text'] = iconv(CHARSET, 'utf-8', $c['catname']);
-                    }
-                }
-                $n++;
-            }
-        return json_encode($data);
     }
     /**
      * 某list是否有某item
+     * @param string $list
+     * @param string $item
+     * @return int|boolean
      */	
     private function have($list, $item) {
         return(strpos(',,' . $list . ',', ',' . $item . ','));
     }
-
 }
-

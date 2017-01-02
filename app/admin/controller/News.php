@@ -67,9 +67,8 @@ class News extends Base {
 		$this->assign('page',$show);
 		$diyflag_list=Db::name('diyflag')->select();//文章属性数据
 		//栏目数据
-		$nav = new \Leftnav;
 		$menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
-		$arr = $nav::menu_n($menu_next);
+		$arr = menu_left($menu_next,'id','parentid');
 		$this->assign('menu',$arr);
 		$this->assign('opentype_check',$opentype_check);
 		$this->assign('news_columnid',$news_columnid);
@@ -88,10 +87,9 @@ class News extends Base {
 	}
 	//添加文章
 	public function news_add(){
-		$nav = new \Leftnav;
 		$menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l Desc,listorder') -> select();
 		$diyflag=Db::name('diyflag')->select();
-		$arr = $nav::menu_n($menu_next);
+		$arr = menu_left($menu_next,'id','parentid');
 		$source=Db::name('source')->select();
 		$this->assign('source',$source);
 		$this->assign('menu',$arr);
@@ -228,10 +226,9 @@ class News extends Base {
 		$text = $news_list['news_pic_allurl'];
 		$pic_list = array_filter(explode(",", $text));
 		$this->assign('pic_list',$pic_list);
-		$nav = new \Leftnav;
 		$menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l Desc,listorder') -> select();
 		$diyflag=Db::name('diyflag')->select();
-		$arr = $nav::menu_n($menu_next);
+		$arr = menu_left($menu_next,'id','parentid');
 		$source=Db::name('source')->select();//来源
 		$this->assign('source',$source);
 		$this->assign('news_extra',$news_extra);
@@ -509,7 +506,6 @@ class News extends Base {
 	public function news_menu_list(){
 		//TODO 分页
 		$menu_l=input('menu_l');
-		$nav = new \Leftnav;
 		$where=array();
 		if(!empty($menu_l)){
 			$where['menu_l']=array('eq',$menu_l);
@@ -517,7 +513,7 @@ class News extends Base {
 		$menus=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->select();
         $menus=get_menu_model($menus);
 		$show='';
-		$arr = $nav::menu_n($menus);
+		$arr = menu_left($menus,'id','parentid');
 		$this->assign('arr',$arr);
 		$this->assign('menu_l',$menu_l);
 		$this->assign('page',$show);

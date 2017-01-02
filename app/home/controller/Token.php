@@ -9,14 +9,14 @@ class Token
         $qq = \thinksdk\ThinkOauth::getInstance('Qq', $token);
 
         $data = $qq->call('user/get_user_info'); //调用接口 
-        if (empty($data['ret'])) {
+        if (isset($data['ret']) && empty($data['ret'])) {
 			$userInfo['type'] = 'QQ';
 			$userInfo['name'] = $data['nickname'];
 			$userInfo['nick'] = $data['nickname'];
 			$userInfo['head'] = $data['figureurl_2'];
 			return $userInfo;
         } else {
-            exception(lang('get qq info failed')."：{$data['msg']}");
+            throw new Exception(lang('get qq info failed')."：{$data['msg']}");
         }
     }
 
@@ -25,14 +25,14 @@ class Token
     {
         $sina = \thinksdk\ThinkOauth::getInstance('sina', $token);
         $data = $sina->call('users/show', "uid={$sina->openid()}");
-        if (empty($data['error_code'])) {
+        if (isset($data['error_code']) && empty($data['error_code'])) {
             $userInfo['type'] = 'SINA';
             $userInfo['name'] = $data['name'];
             $userInfo['nick'] = $data['screen_name'];
             $userInfo['head'] = $data['avatar_large'];
             return $userInfo;
         } else {
-            exception(lang('get sina weibo info failed')."：{$data['error']}");
+            throw new Exception(lang('get sina weibo info failed')."：{$data['error']}");
         }
     }
 }

@@ -47,7 +47,7 @@ class ReadClass
 
     /**
      * 读取某个路径的类和方法
-     * @param $dir
+     * @param string $path
      * @param bool $parents
      * @return array|bool
      */

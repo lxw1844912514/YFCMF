@@ -74,8 +74,12 @@
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:url('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;{:lang('weibo login')}</a></li>
+                                {if condition="!empty(config('think_sdk_sina.display'))"}
+								<li><a href="{:url('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;{:lang('weibo login')}</a></li>
+								{/if}
+								{if condition="!empty(config('think_sdk_qq.display'))"}
                                 <li><a href="{:url('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('qq login')}</a></li>
+								{/if}
                                 <li><a href="{:url('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;{:lang('login')}</a></li>
                                 <li><a href="{:url('Register/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('register')}</a></li>
                             </ul>

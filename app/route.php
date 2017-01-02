@@ -9,14 +9,9 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+//调用extend的路由类
+$Route = new \Route;
+$Route->route();
 return [
-//单页
-'about'=>'Listn/index?id=1',
-'about_en'=>'Listn/index?id=8',
-'contacts'=>'Listn/index?id=4',
-'contacts_en'=>'Listn/index?id=11',
-//频道页
-'list/:id'=>'Listn/index',
-//新闻
-'news/:id'=>'News/index',
+	//也可以这里添加路由规则
 ];

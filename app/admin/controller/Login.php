@@ -88,7 +88,7 @@ class Login extends Common {
 				session('admin_realname',$admin['admin_realname']);
 				session('admin_avatar',$admin['admin_avatar']);
 				session('admin_last_change_pwd_time', $admin ['admin_changepwd']);
-				$this->success('恭喜您，登陆成功',url('Index/index'));
+				$this->success('恭喜您，登陆成功',url('admin/Index/index'));
 			}
 		}
 	}

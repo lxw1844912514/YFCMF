@@ -18,4 +18,9 @@ class Ajax extends Base{
 		$list=Db::name("region")->where($map)->select();
 		return json($list);
 	}
+	public function getController(){
+		$module=input('request_module','admin');
+		$list=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
+		return json($list);
+	}
 }

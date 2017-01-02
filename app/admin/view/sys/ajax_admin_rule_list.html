@@ -6,11 +6,11 @@
 		<td>{$v.name}</td>
 		<td>
 			{if condition="$v['status'] eq 1"}
-				<a class="red display-btn" href="{:url('admin_rule_state')}" data-id="{$v.id}" title="显示">
+				<a class="red display-btn" href="{:url('admin_rule_state')}" data-id="{$v.id}" title="已显示">
 					<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">显示</button></div>
 				</a>
 				{else/}
-				<a class="red display-btn" href="{:url('admin_rule_state')}" data-id="{$v.id}" title="隐藏">
+				<a class="red display-btn" href="{:url('admin_rule_state')}" data-id="{$v.id}" title="已隐藏">
 					<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">隐藏</button></div>
 				</a>
 			{/if}

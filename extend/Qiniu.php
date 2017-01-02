@@ -31,7 +31,6 @@ class Qiniu
     /**
      * 构造方法，用于构造上传实例
      * @param array $config  配置
-     * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
      */
     public function __construct($config = [])
     {
@@ -105,7 +104,7 @@ class Qiniu
      * @param $file_path
      * @param string $prefix 文件名前缀，可以模拟目录
      * @param null $name
-     * @param null $ext 后缀
+     * @param string $ext 后缀
      * @param null $token
      * @param null $params
      * @param string $mime
@@ -190,9 +189,11 @@ class Qiniu
     }
 	/**
      * 抓取远程url资源
-     * @param $url 远程资源url
-     * @param $name 保存文件名
-     * * @param $bucket 空间
+     * @param string $url 远程资源url
+     * @param string $prefix
+     * @param string $name 保存文件名
+     * @param string $ext
+     * @param string $bucket 空间
      * @return array
      */
 	public function uploadcatch($url,$prefix="",$name="",$ext="",$bucket=""){
@@ -216,7 +217,10 @@ class Qiniu
 	}
     /**
      * 列表文件
-     * @param $file_post
+     * @param string
+     * @param string
+     * @param string
+     * @param int
      * @return array
      */
     public function listfile($prefix='',$bucket='', $marker='', $limit=1000){
@@ -264,6 +268,7 @@ class Qiniu
     /**
      * 检查上传的文件
      * @param array $file 文件信息
+     * @return boolean
      */
     private function check($file)
     {
@@ -335,6 +340,7 @@ class Qiniu
     /**
      * 检查文件大小是否合法
      * @param integer $size 数据
+     * @return boolean
      */
     private function checkSize($size)
     {
@@ -344,6 +350,7 @@ class Qiniu
     /**
      * 检查上传的文件MIME类型是否合法
      * @param string $mime 数据
+     * @return boolean
      */
     private function checkMime($mime)
     {
@@ -353,6 +360,7 @@ class Qiniu
     /**
      * 检查上传的文件后缀是否合法
      * @param string $ext 后缀
+     * @return boolean
      */
     private function checkExt($ext)
     {
