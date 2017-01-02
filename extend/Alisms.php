@@ -17,6 +17,7 @@ class Alisms
         'SignatureMethod'     => 'HMAC-SHA1', 
         'SignatureVersion'      => "1.0", 
         'signName'      => '', //管理控制台中配置的短信签名（状态必须是验证通过）
+        'TemplateCode'      => '', 
         'AccessKeyId'      => '', 
         'accessKeySecret '      => '', 
 
@@ -37,6 +38,8 @@ class Alisms
 	    */
         if(config('think_sdk_sms.AccessKeyId')) $conf['AccessKeyId']=config('think_sdk_sms.AccessKeyId');
         if(config('think_sdk_sms.accessKeySecret')) $conf['accessKeySecret']=config('think_sdk_sms.accessKeySecret');
+        if(config('think_sdk_sms.signName')) $conf['signName']=config('think_sdk_sms.signName');
+        if(config('think_sdk_sms.TemplateCode')) $conf['TemplateCode']=config('think_sdk_sms.TemplateCode');
         $this->config = array_merge($this->config, $conf);
         $this->config = array_merge($this->config, $config);
         if(!config('think_sdk_sms.sms_open')){
@@ -53,24 +56,31 @@ class Alisms
 	*@code 短信模板的模板CODE
 	*@ParamString  短信模板中的变量；,参数格式{“no”:”123456”}， 个人用户每个变量长度必须小于15个字符
 	*/
-	public function smsend($mobile,$code,$ParamString){
+	public function smsend($mobile,$ParamString,$code=''){
         date_default_timezone_set("GMT");
-        $dateTimeFormat = 'Y-m-d\TH:i:s\Z'; // ISO8601规范  
-		$params = array(
-			'Action' => 'SingleSendSms',
-			'TemplateCode'       => $code,
-			'RecNum'             => $mobile,
-			'ParamString'        => $ParamString,
+        $dateTimeFormat = 'Y-m-d\TH:i:s\Z'; // ISO8601规范 
+        if(!$code){
+            $code = $this->config['TemplateCode'];
+        } 
+        $data = array(
             'SignName'           => $this->config['signName'],
-            'Timestamp'          => date($dateTimeFormat),
-            'SignatureNonce'     => md5('estxiu.com').rand(100000,999999).uniqid(), //唯一随机数
+            'Format'             => $this->config['Format'],
+            'Version'            => $this->config['Version'],
             'AccessKeyId'        => $this->config['AccessKeyId'],
-		);
-        $params['Signature'] = $this->computeSignature($params,$this->config['accessKeySecret']);
-        $params = array_merge($this->config, $params);
-        $data = $this->http($this->api, $params, $this->method);
+            'SignatureVersion'   => $this->config['SignatureVersion'],
+            'SignatureMethod'    => $this->config['SignatureMethod'],
+            'SignatureNonce'     => md5('estxiu.com').rand(100000,999999).uniqid(), //唯一随机数
+            'Timestamp'          => date($dateTimeFormat),
+            // 接口参数 
+            'Action'             => 'SingleSendSms',
+            'TemplateCode'       => $code,
+            'RecNum'             => $mobile,
+            'ParamString'        => $ParamString,
+        );
+        $data['Signature'] = $this->computeSignature($data,$this->config['accessKeySecret']);
+        //var_dump($data);exit;
+        $data = $this->http($this->api, $data, $this->method);
         return $data;
-		//var_dump($data);
 	}
 
     /**
