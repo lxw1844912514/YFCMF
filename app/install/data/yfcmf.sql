@@ -435,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `yf_member_list` (
   `member_list_city` int(6) NOT NULL COMMENT '市县',
   `member_list_town` int(6) NOT NULL COMMENT '乡镇',
   `member_list_sex` tinyint(2) NOT NULL DEFAULT '3' COMMENT '1=男  2=女 3=保密',
-  `member_list_headpic` varchar(100) NOT NULL COMMENT '会员头像路径',
+  `member_list_headpic` varchar(200) NOT NULL COMMENT '会员头像路径',
   `member_list_tel` varchar(20) NOT NULL COMMENT '手机',
   `member_list_email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
   `member_list_open` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
@@ -618,6 +618,7 @@ CREATE TABLE IF NOT EXISTS `yf_oauth_user` (
   `access_token` varchar(512) NOT NULL,
   `expires_date` int(11) NOT NULL COMMENT 'access_token过期时间',
   `openid` varchar(40) NOT NULL COMMENT '第三方用户id',
+  `unionid` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT  '' COMMENT 'weixin wechat的unionid',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='第三方用户表' AUTO_INCREMENT=1 ;
 

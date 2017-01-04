@@ -10,10 +10,13 @@ namespace app\home\controller;
 use think\Db;
 class Oauth extends Base {
 	
-	public function login($type = null){
+	public function login($type = null,$redirect = null){
 		empty($type) && $this->error(lang('parameter error'));
-		session('login_http_referer',$_SERVER["HTTP_REFERER"]);
+		if(!empty($redirect)){session('login_http_referer',$redirect);}
 		$sns  = \thinksdk\ThinkOauth::getInstance($type);
+		if(request()->isMobile()){
+			$sns->setDisplay('mobile');
+		}
 		$this->redirect($sns->getRequestCodeURL());
 	}
 
@@ -27,15 +30,18 @@ class Oauth extends Base {
 		if($type == 'tencent'){
 			$extend = array('openid' => input("openid"), 'openkey' => input("openkey"));
 		}
+		$ignore_stat = true;  //验证stat 防刷
 		$token = $sns->getAccessToken($code , $extend);
 		//获取当前登录用户信息
 		if(is_array($token)){
-			$user_info = controller('Token')->$type($token);
+			$user_info = $sns->userinfo();
 			$oauth_bang_s=session('oauth_bang');
 			if(!empty($oauth_bang_s)){
 				$this->_bang_handle($user_info, $type, $token);
+				
 			}else{
 				$this->_login_handle($user_info, $type, $token);
+				
 			}
 		}else{
 			$this->success(lang('login failed'),$this->_get_login_redirect());
@@ -64,7 +70,8 @@ class Oauth extends Base {
 	private function _bang_handle($user_info, $type, $token){
 		$current_uid=session('hid');
 		$type=strtolower($type);
-		$find_oauth_user = Db::name('OauthUser')->where(array("oauth_from"=>$type,"openid"=>$token['openid']))->find();
+		$oauth_id=($type=='wechat' || $type=='weixin')?'unionid':'openid';
+		$find_oauth_user = Db::name('OauthUser')->where(array("oauth_from"=>$type,$oauth_id=>$token[$oauth_id]))->find();
 		$need_bang=true;
 		if($find_oauth_user){
 			if($find_oauth_user['uid']==$current_uid){
@@ -81,24 +88,27 @@ class Oauth extends Base {
 						'oauth_from' => $type,
 						'name' => $user_info['name'],
 						'head_img' => $user_info['head'],
-						'create_time' =>date("Y-m-d H:i:s"),
+						'create_time' =>time(),
 						'uid' => $current_uid,
-						'last_login_time' => date("Y-m-d H:i:s"),
+						'last_login_time' => time(),
 						'last_login_ip' => request()->ip(),
 						'login_times' => 1,
 						'user_status' => 1,
 						'access_token' => $token['access_token'],
 						'expires_date' => (int)(time()+$token['expires_in']),
-						'openid' => $token['openid'],
+						$oauth_id => $token[$oauth_id],
 				);
 				$new_oauth_user_id=Db::name('OauthUser')->insertGetId($new_oauth_user_data);
 				if($new_oauth_user_id){
 					$this->success(lang('bind success'),url('Center/bang'));
+					session_unset("oauth_bang");
 				}else{
 					$this->error(lang('bind failed'),url('Center/bang'));
+					session_unset("oauth_bang");
 				}
 			}else{
 				$this->error(lang('bind failed'),url('Center/bang'));
+				session_unset("oauth_bang");
 			}
 		}
 	}
@@ -106,9 +116,20 @@ class Oauth extends Base {
 	//登陆
 	private function _login_handle($user_info, $type, $token){
 		$type=strtolower($type);
-		$find_oauth_user = Db::name('OauthUser')->where(array("oauth_from"=>$type,"openid"=>$token['openid']))->find();
+		$oauth_id=($type=='wechat' || $type=='weixin')?'unionid':'openid';
+		$find_oauth_user = Db::name('OauthUser')->where(array("oauth_from"=>$type,$oauth_id=>$token[$oauth_id]))->find();
 		$need_register=true;
 		if($find_oauth_user){
+			//更新第三方表
+			$data=array(
+				'last_login_time' => time(),
+				'last_login_ip' => request()->ip(),
+				'access_token' => $token['access_token'],
+				'expires_date' => (int)(time()+$token['expires_in']),
+				'name' => $user_info['name'],
+				'head_img' => $user_info['head'],
+			);
+			Db::name('OauthUser')->where(array("oauth_from"=>$type,$oauth_id=>$token[$oauth_id]))->update($data);
 			$find_user = Db::name("member_list")->where(array("member_list_id"=>$find_oauth_user['uid']))->find();
 			if($find_user){
 				$need_register=false;
@@ -174,7 +195,7 @@ class Oauth extends Base {
 					'user_status' => 1,
 					'access_token' => $token['access_token'],
 					'expires_date' => (int)(time()+$token['expires_in']),
-					'openid' => $token['openid'],
+					$oauth_id => $token[$oauth_id],
 				);
 				$new_oauth_user_id=Db::name("OauthUser")->insertGetId($new_oauth_user_data);
 				if($new_oauth_user_id){

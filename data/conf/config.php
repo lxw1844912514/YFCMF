@@ -86,8 +86,8 @@ return array (
       4 => 'admin/Ueditor',
       5 => 'admin/WebLog',
     ),
-    'not_log_action' => NULL,
-    'not_log_data' => NULL,
+    'not_log_action' => '',
+    'not_log_data' => '',
     'not_log_request_method' => 
     array (
       0 => 'GET',
@@ -99,7 +99,7 @@ return array (
     'app_key' => '',
     'app_secret' => '',
     'display' => false,
-    'callback' => 'http://www.rainfer.cn/home/oauth/callback/type/facebook.html',
+    'callback' => '',
   ),
   'payment' => 
   array (
@@ -144,5 +144,26 @@ return array (
     array (
       'business' => '',
     ),
+  ),
+  'think_sdk_weixin' => 
+  array (
+    'app_key' => '',
+    'app_secret' => '',
+    'display' => false,
+    'callback' => '',
+  ),
+  'think_sdk_wechat' => 
+  array (
+    'app_key' => '',
+    'app_secret' => '',
+    'display' => false,
+    'callback' => '',
+  ),
+  'think_sdk_google' => 
+  array (
+    'app_key' => '',
+    'app_secret' => '',
+    'display' => false,
+    'callback' => '',
   ),
 );

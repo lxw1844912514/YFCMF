@@ -11,7 +11,26 @@ namespace thinksdk;
 
 abstract class ThinkOauth
 {
-
+    /**
+     * 第三方配置属性
+     * @var type String
+     */
+    protected $config = '';
+    /**
+     * 获取到的第三方Access Token
+     * @var type Array
+     */
+    protected $accessToken = null;
+    /**
+     * 请求授权页面展现形式
+     * @var type String
+     */
+    protected $display = 'default';
+    /**
+     * 授权后获取到的TOKEN信息
+     * @var array
+     */
+    protected $token = null;
     /**
      * oauth版本
      * @var string
@@ -29,6 +48,7 @@ abstract class ThinkOauth
      * @var string
      */
     protected $AppSecret = '';
+    protected $Display = '';
 
     /**
      * 授权类型 response_type 目前只能为code
@@ -53,58 +73,35 @@ abstract class ThinkOauth
      * @var string
      */
     protected $Authorize = '';
-
-    /**
-     * 获取request_code请求的URL
-     * @var string
-     */
-    protected $GetRequestCodeURL = '';
-
-    /**
-     * 获取access_token请求的URL
-     * @var string
-     */
-	protected $GetAccessTokenURL = 'https://graph.qq.com/oauth2.0/token';
-
-    /**
-     * API根路径
-     * @var string
-     */
-    protected $ApiBase = '';
-
-    /**
-     * 授权后获取到的TOKEN信息
-     * @var array
-     */
-    protected $Token = null;
-
-    /**
-     * 调用接口类型
-     * @var string
-     */
     private $Type = '';
+    protected $timestamp = '';
 
-    /**
-     * 构造方法，配置应用信息
-     * @param array $token
-     */
-    public function __construct($token = null)
-    {
-        //设置SDK类型
+    private function __construct($token = null) {
+         //设置SDK类型
         $class = get_class($this);
         $this->Type = strtoupper(substr($class, 0, strlen($class) - 3));
-
         //获取应用配置
         $config = config("think_sdk_{$this->Type}");
-
-        if (empty($config['app_key']) || empty($config['app_secret'])) {
-            exception('请配置您申请的app_key和app_secret');
+        if (empty($config['app_key']) || empty($config['app_secret']) || empty($config['display'])) {
+            exception('你尚未配置应用或未开启');
         } else {
-            $this->AppKey = $config['app_key'];
-            $this->AppSecret = $config['app_secret'];
-            $this->Token = $token; //设置获取到的TOKEN
+            $_config         = array('response_type' =>$this->ResponseType,'grant_type'=>$this->GrantType);
+            $this->config    = array_merge($config, $_config);
+            $this->timestamp = time();
+           // $this->Token = $token; 
         }
     }
+
+    /**
+     * 设置授权页面样式，PC或者Mobile
+     * @param type $display
+     */
+    public function setDisplay($display) {
+        if (in_array($display, array('default', 'mobile'))) {
+            $this->display = $display;
+        }
+    }
+
 
     /**
      * 取得Oauth实例
@@ -122,88 +119,67 @@ abstract class ThinkOauth
         }
     }
 
-    /**
-     * 初始化配置
-     */
-    private function config()
-    {
-        $config = config("think_sdk_{$this->Type}");
-        if (!empty($config['authorize']))
-            $this->Authorize = $config['authorize'];
-        if (!empty($config['callback']))
-            $this->Callback = $config['callback'];
-        else
-            exception('请配置回调页面地址');
-    }
-
-    /**
-     * 请求code
-     */
-    public function getRequestCodeURL()
-    {
-        $this->config();
-        //Oauth 标准参数
-        $params = array(
-            'client_id' => $this->AppKey,
-            'redirect_uri' => $this->Callback,
-            'response_type' => $this->ResponseType,
-        );
-
-        //获取额外参数
-        if ($this->Authorize) {
-            parse_str($this->Authorize, $_param);
-            if (is_array($_param)) {
-                $params = array_merge($params, $_param);
-            } else {
-                exception('authorize配置不正确！');
-            }
-        }
-        return $this->GetRequestCodeURL . '?' . http_build_query($params);
-    }
-
-    /**
-     * 获取access_token
-     * @param string $code 上一步请求到的code
-     *      $code = $_GET['code']
-     */
-    public function getAccessToken($code, $extend = null)
-    {
-        $this->config();
-        $params = array(
-            'client_id' => $this->AppKey,
-            'client_secret' => $this->AppSecret,
-            'grant_type' => $this->GrantType,
-            'code' => $code,
-            'redirect_uri' => $this->Callback,
-        );
-        
-        $data = $this->http($this->GetAccessTokenURL, $params, 'POST');
-        $this->Token = $this->parseToken($data, $extend);
-        return $this->Token;
-    }
-
-    /**
+     /**
      * 合并默认参数和额外参数
-     * @param array $params 默认参数
-     * @param array /string $param 额外参数
+     * @param array $params  默认参数
+     * @param array/string $param 额外参数
      * @return array:
      */
-    protected function param($params, $param)
-    {
-        if (is_string($param))
+    protected function param($params, $param) {
+        if (is_string($param)) {
             parse_str($param, $param);
+        }
         return array_merge($params, $param);
     }
-
     /**
+     * 默认的AccessToken请求参数
+     * @return type
+     */
+    protected function _params() {
+        $params = array(
+            'client_id'     => $this->config['app_key'],
+            'client_secret' => $this->config['app_secret'],
+            'grant_type'    => $this->GrantType,
+            'code'          => $_GET['code'],
+            'redirect_uri'  => $this->config['callback'],
+        );
+        return $params;
+    }
+      /**
      * 获取指定API请求的URL
      * @param  string $api API名称
      * @param  string $fix api后缀
      * @return string      请求的完整URL
      */
-    protected function url($api, $fix = '')
-    {
+    protected function url($api, $fix = '') {
         return $this->ApiBase . $api . $fix;
+    }
+    /**
+     * 获取access_token
+     */
+    public function getAccessToken($ignore_stat = false) {
+        if ($ignore_stat === false && isset($_COOKIE['A_S']) && $_GET['state'] != $_COOKIE['A_S']) {
+            throw new Exception('传递的STATE参数不匹配！');
+        } else {
+            $this->initConfig();
+            $params      = $this->_params();
+            $data = $this->http($this->GetAccessTokenURL, $params, 'POST');
+            $this->token = $this->parseToken($data);
+            setcookie('A_S', $this->timestamp, $this->timestamp - 600, '/');
+            return $this->token;
+        }
+    }
+
+    /**
+     * 初始化一些特殊配置
+     */
+    protected function initConfig() {
+        /*用与后续扩展*/
+        $callback = array(
+             'default' => $this->config['callback'],
+             'mobile'  => $this->config['callback'],
+            );
+        $this->config['callback'] = $callback[$this->display];
     }
 
     /**
@@ -250,23 +226,30 @@ abstract class ThinkOauth
         return $data;
     }
 
+
+
+     /**
+     * 抽象方法
+     * 得到请求code的地址
+     */
+    abstract public function getRequestCodeURL();
     /**
-     * 抽象方法，在SNSSDK中实现
+     * 抽象方法
      * 组装接口调用参数 并调用接口
      */
-    abstract protected function call($api, $param = '', $method = 'GET', $multi = false);
-
+    abstract protected function call($api, $param = '', $method = 'GET');
     /**
-     * 抽象方法，在SNSSDK中实现
+     * 抽象方法
      * 解析access_token方法请求后的返回值
      */
-    abstract protected function parseToken($result, $extend);
-
+    abstract protected function parseToken($result);
     /**
-     * 抽象方法，在SNSSDK中实现
+     * 抽象方法
      * 获取当前授权用户的SNS标识
      */
     abstract public function openid();
+    abstract public function userinfo();
+
     
 
 }

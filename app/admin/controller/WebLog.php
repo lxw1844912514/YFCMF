@@ -105,11 +105,11 @@ class WebLog extends Base {
     public function weblog_setting(){
 		$web_log=config('web_log');
 		//模块
-		$web_log['not_log_module']=isset($web_log['not_log_module'])?join(',',$web_log['not_log_module']):'';
-		$web_log['not_log_controller']=isset($web_log['not_log_controller'])?join(',',$web_log['not_log_controller']):'';
-		$web_log['not_log_action']=isset($web_log['not_log_action'])?join(',',$web_log['not_log_action']):'';
-		$web_log['not_log_data']=isset($web_log['not_log_data'])?join(',',$web_log['not_log_data']):'';
-		$web_log['not_log_request_method']=isset($web_log['not_log_request_method'])?join(',',$web_log['not_log_request_method']):'';
+		$web_log['not_log_module']=(isset($web_log['not_log_module']) && $web_log['not_log_module'])?join(',',$web_log['not_log_module']):'';
+		$web_log['not_log_controller']=(isset($web_log['not_log_controller']) && $web_log['not_log_controller'])?join(',',$web_log['not_log_controller']):'';
+		$web_log['not_log_action']=(isset($web_log['not_log_action']) && $web_log['not_log_action'])?join(',',$web_log['not_log_action']):'';
+		$web_log['not_log_data']=(isset($web_log['not_log_data']) && $web_log['not_log_data'])?join(',',$web_log['not_log_data']):'';
+		$web_log['not_log_request_method']=(isset($web_log['not_log_request_method']) && $web_log['not_log_request_method'])?join(',',$web_log['not_log_request_method']):'';
 		//控制器 模块
 		$controllers=array();
 		$actions=array();

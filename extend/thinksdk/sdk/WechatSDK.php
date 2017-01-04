@@ -8,30 +8,30 @@
 // +----------------------------------------------------------------------
 use thinksdk\ThinkOauth;
 
-class QqSDK extends ThinkOauth{
+class WechatSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://graph.qq.com/oauth2.0/authorize';
+	protected $GetRequestCodeURL = 'https://open.weixin.qq.com/connect/oauth2/authorize';
 	
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://graph.qq.com/oauth2.0/token';
+	protected $GetAccessTokenURL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
 	
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase  = 'https://graph.qq.com/';
+	protected $ApiBase  = 'https://api.weixin.qq.com/sns/';
 	/**
 	 * 获取scope的额外参数,可在配置中修改 URL查询字符串格式
 	 * @var string
 	 */
-	protected $scope    = 'get_user_info,add_share';
+	protected $scope    = 'snsapi_login';
 
 	/**
      * 请求Authorize访问地址
@@ -41,13 +41,13 @@ class QqSDK extends ThinkOauth{
         $this->initConfig();
         //Oauth 标准参数
         $params = array(
-            'response_type' => $this->config['response_type'],
-            'client_id'     => $this->config['app_key'],
+            'appid'         => $this->config['app_key'],
             'redirect_uri'  => $this->config['callback'],
-            'state'         => $this->timestamp,
+            'response_type' => $this->config['response_type'],
             'scope'         => $this->scope,
-            'display'       => $this->display
+            'state'         => $this->timestamp,
         );
+
         return $this->GetRequestCodeURL . '?' . http_build_query($params);
     }
 
@@ -61,11 +61,10 @@ class QqSDK extends ThinkOauth{
 	public function call($api, $param = '', $method = 'GET', $multi = false){
 		/* 腾讯QQ调用公共参数 */
 		$params = array(
-			'oauth_consumer_key' => $this->config['app_key'],
-			'access_token'       => $this->token['access_token'],
-			'openid'             => $this->openid(),
-			'format'             => 'json'
-		);
+            'access_token' => $this->token['access_token'],
+            'openid'       => $this->openid(),
+            'lang'         => 'zh_CN'
+        );
 		$data = $this->http($this->url($api), $this->param($params, $param), $method);
 		return json_decode($data, true);
 	}
@@ -77,14 +76,12 @@ class QqSDK extends ThinkOauth{
      */
     protected function parseToken($result) {
         parse_str($result, $data);
-        var_dump($data);
-        //$data = json_decode($data, true);
-        if ($data['access_token'] && $data['expires_in']) {
+        if ($data['access_token'] && $data['expires_in'] && $data['openid']) {
             $this->token    = $data;
             $data['openid'] = $this->openid();
             return $data;
         } else {
-            throw new Exception("获取腾讯QQ ACCESS_TOKEN 出错：{$result}");
+            throw new Exception("获取微信 ACCESS_TOKEN 出错：{$result}");
         }
     }
     /**
@@ -92,32 +89,24 @@ class QqSDK extends ThinkOauth{
      * @return string
      */
     public function openid() {
-        $data = $this->token;
-        if (isset($data['openid'])) {
+         $data = $this->token;
+        if (isset($data['openid']))
             return $data['openid'];
-        } elseif ($data['access_token']) {
-            $data = $this->http($this->url('oauth2.0/me'), array('access_token' => $data['access_token']));
-			$data = json_decode(trim(substr($data, 9), " );\n"), true);
-            if (isset($data['openid'])) {
-                return $data['openid'];
-            } else {
-                throw new Exception("获取用户openid出错：{$data['error_description']}");
-            }
-        } else {
-            throw new Exception('没有获取到openid！');
-        }
+        else
+            throw new Exception('没有获取到微信用户ID！');
     }
     /**
      * 获取授权用户的用户信息
      */
     public function userinfo() {
-        $rsp = $this->call('user/get_user_info');
-        if (!$rsp || $rsp['ret'] != 0) {
+        $rsp = $this->call('userinfo');
+        if (!$rsp || (isset($rsp['errcode']) && $rsp['errcode'] != 0)) {
             throw new Exception('接口访问失败！' . $rsp['msg']);
         } else {
             $userinfo = array(
                 'openid'  => $this->openid(),
                 'name' => $rsp['nickname'],
+                'unionid' => isset($this->token['unionid']) ? $this->token['unionid'] : '',
                 'head'    => $rsp['figureurl']
             );
             return $userinfo;

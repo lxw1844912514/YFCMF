@@ -419,10 +419,14 @@ class Sys extends Base {
 	public function oauthsys(){
 		$oauth_qq=sys_config_get('think_sdk_qq');
 		$oauth_sina=sys_config_get('think_sdk_sina');
+		$oauth_weixin=sys_config_get('think_sdk_weixin');
+		$oauth_wechat=sys_config_get('think_sdk_wechat');
 		$oauth_facebook=sys_config_get('think_sdk_facebook');
 		$oauth_google=sys_config_get('think_sdk_google');
 		$this->assign('oauth_qq',$oauth_qq);
 		$this->assign('oauth_sina',$oauth_sina);
+		$this->assign('oauth_wechat',$oauth_wechat);
+		$this->assign('oauth_weixin',$oauth_weixin);
 		$this->assign('oauth_facebook',$oauth_facebook);
 		$this->assign('oauth_google',$oauth_google);
 		return $this->fetch();
@@ -439,6 +443,24 @@ class Sys extends Base {
 					'app_secret' => input('qq_appkey'),
 					'display' => input('qq_display',0,'intval')?true:false,
 					'callback'   => $host.url('home/oauth/callback','type=qq'),
+				),
+				'think_sdk_weixin' => array(
+					'app_key'    => input('weixin_appid'),
+					'app_secret' => input('weixin_appkey'),
+					'display' => input('weixin_display',0,'intval')?true:false,
+					'callback'   => $host.url('home/oauth/callback','type=weixin'),
+				),
+				'think_sdk_wechat' => array(
+					'app_key'    => input('wechat_appid'),
+					'app_secret' => input('wechat_appkey'),
+					'display' => input('wechat_display',0,'intval')?true:false,
+					'callback'   => $host.url('home/oauth/callback','type=wechat'),
+				),
+				'think_sdk_google' => array(
+					'app_key'    => input('google_appid'),
+					'app_secret' => input('google_appkey'),
+					'display' => input('google_display',0,'intval')?true:false,
+					'callback'   => $host.url('home/oauth/callback','type=google'),
 				),
 				'think_sdk_facebook' => array(
 					'app_key'    => input('facebook_appid'),

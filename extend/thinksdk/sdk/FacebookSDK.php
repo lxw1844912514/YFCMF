@@ -8,30 +8,31 @@
 // +----------------------------------------------------------------------
 use thinksdk\ThinkOauth;
 
-class QqSDK extends ThinkOauth{
+class FacebookSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://graph.qq.com/oauth2.0/authorize';
+	protected $GetRequestCodeURL = 'https://www.facebook.com/dialog/oauth';
 	
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://graph.qq.com/oauth2.0/token';
+	protected $GetAccessTokenURL = 'https://graph.facebook.com/oauth/access_token';
 	
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase  = 'https://graph.qq.com/';
+	protected $ApiBase  = 'https://graph.facebook.com/v2.3/';
 	/**
 	 * 获取scope的额外参数,可在配置中修改 URL查询字符串格式
 	 * @var string
 	 */
-	protected $scope    = 'get_user_info,add_share';
+	protected $scope    = 'email';
+
 
 	/**
      * 请求Authorize访问地址
@@ -46,7 +47,6 @@ class QqSDK extends ThinkOauth{
             'redirect_uri'  => $this->config['callback'],
             'state'         => $this->timestamp,
             'scope'         => $this->scope,
-            'display'       => $this->display
         );
         return $this->GetRequestCodeURL . '?' . http_build_query($params);
     }
@@ -59,15 +59,10 @@ class QqSDK extends ThinkOauth{
 	 * @return json
 	 */
 	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* 腾讯QQ调用公共参数 */
-		$params = array(
-			'oauth_consumer_key' => $this->config['app_key'],
-			'access_token'       => $this->token['access_token'],
-			'openid'             => $this->openid(),
-			'format'             => 'json'
-		);
-		$data = $this->http($this->url($api), $this->param($params, $param), $method);
-		return json_decode($data, true);
+		 $params = array('access_token'=>$this->token['access_token'],);
+        $header = array();
+        $data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+        return json_decode($data, true);
 	}
 
 	
@@ -77,14 +72,13 @@ class QqSDK extends ThinkOauth{
      */
     protected function parseToken($result) {
         parse_str($result, $data);
-        var_dump($data);
-        //$data = json_decode($data, true);
-        if ($data['access_token'] && $data['expires_in']) {
+        if ($data['access_token'] && $data['expires']) {
+            $data['expires_in'] = $data['expires'];
             $this->token    = $data;
             $data['openid'] = $this->openid();
             return $data;
         } else {
-            throw new Exception("获取腾讯QQ ACCESS_TOKEN 出错：{$result}");
+            throw new Exception("获取Facebook ACCESS_TOKEN 出错：{$result}");
         }
     }
     /**
@@ -96,10 +90,11 @@ class QqSDK extends ThinkOauth{
         if (isset($data['openid'])) {
             return $data['openid'];
         } elseif ($data['access_token']) {
-            $data = $this->http($this->url('oauth2.0/me'), array('access_token' => $data['access_token']));
-			$data = json_decode(trim(substr($data, 9), " );\n"), true);
-            if (isset($data['openid'])) {
-                return $data['openid'];
+            $data = $this->http($this->url('me'), array('access_token' => $data['access_token']));
+            $data = json_decode ($data,true);
+            //var_dump($data);exit;
+            if ($data['id']) {
+                return $data['id'];
             } else {
                 throw new Exception("获取用户openid出错：{$data['error_description']}");
             }
@@ -111,14 +106,14 @@ class QqSDK extends ThinkOauth{
      * 获取授权用户的用户信息
      */
     public function userinfo() {
-        $rsp = $this->call('user/get_user_info');
-        if (!$rsp || $rsp['ret'] != 0) {
+        $rsp = $this->call('me');
+        if (!$rsp) {
             throw new Exception('接口访问失败！' . $rsp['msg']);
         } else {
             $userinfo = array(
                 'openid'  => $this->openid(),
-                'name' => $rsp['nickname'],
-                'head'    => $rsp['figureurl']
+                'name' => $rsp['name'],
+                'head'    => "http://graph.facebook.com/".$rsp['id']."/picture?type=normal"
             );
             return $userinfo;
         }

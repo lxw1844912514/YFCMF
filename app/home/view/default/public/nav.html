@@ -80,6 +80,15 @@
 								{if condition="config('think_sdk_qq.display')"}
                                 <li><a href="{:url('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('qq login')}</a></li>
 								{/if}
+								{if condition="config('think_sdk_facebook.display')"}
+                                <li><a href="{:url('Oauth/login',array('type'=>'facebook'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('facebook login')}</a></li>
+                                {/if}
+                                {if condition="config('think_sdk_weixin.display')"}
+                                <li><a href="{:url('Oauth/login',array('type'=>'weixin'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('weixin login')}</a></li>
+                                {/if}
+								{if condition="config('think_sdk_wechat.display')"}
+                                <li><a href="{:url('Oauth/login',array('type'=>'wechat'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('wechat login')}</a></li>
+                                {/if}
                                 <li><a href="{:url('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;{:lang('login')}</a></li>
                                 <li><a href="{:url('Register/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('register')}</a></li>
                             </ul>
