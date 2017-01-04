@@ -25,7 +25,8 @@
         "phpmailer/phpmailer": "^5.2",
         "topthink/think-helper": "^1.0",
         "yfcmf/geetest": "^1.0",
-        "qiniu/php-sdk": "^7.1"
+        "qiniu/php-sdk": "^7.1",
+        "phpoffice/phpexcel": "^1.8"
     },
     "extra": {
         "think-path": "thinkphp"
