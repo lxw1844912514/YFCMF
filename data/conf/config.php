@@ -76,7 +76,7 @@ return array (
   'web_log' => 
   array (
     'weblog_on' => false,
-    'not_log_module' => 'install',
+    'not_log_module' => ['install'],
     'not_log_controller' => 
     array (
       0 => 'home/Error',
@@ -86,8 +86,8 @@ return array (
       4 => 'admin/Ueditor',
       5 => 'admin/WebLog',
     ),
-    'not_log_action' => '',
-    'not_log_data' => '',
+    'not_log_action' => [],
+    'not_log_data' => [],
     'not_log_request_method' => 
     array (
       0 => 'GET',

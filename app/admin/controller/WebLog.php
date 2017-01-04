@@ -113,7 +113,7 @@ class WebLog extends Base {
 		//控制器 模块
 		$controllers=array();
 		$actions=array();
-		$modules=['home','admin'];
+		$modules=['home','admin','install'];
 		foreach($modules as $module){
 			$arr=cache('controllers_'.$module);
 			if(empty($arr)){

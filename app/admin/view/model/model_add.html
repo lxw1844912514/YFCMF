@@ -429,11 +429,11 @@
     //删除字段
     function delete_field(obj) {
         var trs=$("table#dynamic-table tr"),
-            index=trs.index($(obj).closest("tr")),
+            $index=trs.index($(obj).closest("tr")),
             $info=$(obj).data('info');
         layer.confirm($info, {icon: 3}, function (index) {
             layer.close(index);
-            $('#fields-data').find('tr').eq(index-1).remove();
+            $('#fields-data').find('tr').eq($index-1).remove();
         });
         return false;
     }
