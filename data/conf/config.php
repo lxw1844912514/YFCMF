@@ -1,6 +1,6 @@
 <?php
 return array (
-  'yfcmf_version' => 'V2.0.2',
+  'yfcmf_version' => 'V2.1.0',
   'update_check' => false,
   'think_sdk_qq' => 
   array (
@@ -105,30 +105,53 @@ return array (
   array (
     'alipay' => 
     array (
-      'email' => '',
-      'key' => '',
+      'account' => '',
+      'account_name' => '',
       'partner' => '',
+      'md5_key' => '',
+      'rsa_private_key' => '/data/config/rsa_private_key.pem',
+      'notify_url' => 'http://www.rainfer.cn/home/payment/ali_notify_url',
+      'return_url' => 'http://www.rainfer.cn/home/payment/success',
+      'time_expire' => '14',
+      'sign_type' => 'MD5',
       'display' => '1',
     ),
     'aliwappay' => 
     array (
-      'email' => '',
-      'key' => '',
+      'account' => '',
+      'account_name' => '',
       'partner' => '',
+      'md5_key' => '',
+      'rsa_private_key' => '/data/config/rsa_private_key.pem',
+      'notify_url' => 'http://www.rainfer.cn/home/payment/ali_notify_url',
+      'return_url' => 'http://www.rainfer.cn/home/payment/success',
+      'time_expire' => '14',
+      'sign_type' => 'MD5',
+      'display' => '1',
+    ),
+    'wxpayqrcode' => 
+    array (
+      'app_id' => '',
+      'md5_key' => '',
+      'mch_id' => '',
+      'notify_url' => 'http://www.rainfer.cn/home/payment/wxqrcode_notify_url',
+      'time_expire' => '14',
+      'cert_path' => 'F:\\phpStudy\\WWW\\yfcms_dev\\YFCMF\\data\\conf\\wx\\apiclient_cert.pem',
+      'key_path' => 'F:\\phpStudy\\WWW\\yfcms_dev\\YFCMF\\data\\conf\\wx\\apiclient_key.pem',
+      'display' => '1',
+    ),
+    'wxpaypub' => 
+    array (
+      'app_id' => 'wxxxxx',
+      'md5_key' => 'xxxxxx',
+      'mch_id' => 'xxxxx',
+      'notify_url' => 'http://www.rainfer.cn/home/payment/wxpub_notify_url',
+      'cert_path' => 'F:\\phpStudy\\WWW\\yfcms_dev\\YFCMF\\data\\conf\\wx\\apiclient_cert.pem',
+      'key_path' => 'F:\\phpStudy\\WWW\\yfcms_dev\\YFCMF\\data\\conf\\wx\\apiclient_key.pem',
     ),
     'wxqrcode' => 
     array (
-      'appid' => '',
-      'appsecret' => '',
-      'mchid' => '',
-      'key' => '',
-    ),
-    'wxjspi' => 
-    array (
-      'appid' => '',
-      'appsecret' => '',
-      'mchid' => '',
-      'key' => '',
+      'time_expire' => '14',
     ),
     'tenpay' => 
     array (
@@ -165,5 +188,16 @@ return array (
     'app_secret' => '',
     'display' => false,
     'callback' => '',
+  ),
+  'we_options' => 
+  array (
+    'we_name' => '',
+    'we_id' => '',
+    'we_number' => '',
+    'app_id' => '',
+    'secret' => '',
+    'token' => '',
+    'aes_key' => '',
+    'we_type' => '',
   ),
 );

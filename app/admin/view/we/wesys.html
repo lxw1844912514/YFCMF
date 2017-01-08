@@ -20,11 +20,11 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公众号名称： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[wesys_name]" id="wesys_name" value="{$sys.wesys_name}"  placeholder="请输入公众号名称"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="we_options[we_name]" id="we_name" value="{$sys.we_name}"  placeholder="请输入公众号名称"  class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="resone"></span>
-											</span>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -32,11 +32,11 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公众号原始id： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[wesys_id]" id="wesys_id" value="{$sys.wesys_id}" placeholder="请输入公众号原始id"   class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="we_options[we_id]" id="we_id" value="{$sys.we_id}" placeholder="请输入公众号原始id"   class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="restwo"></span>
-											</span>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="restwo"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -44,22 +44,22 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信号： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[wesys_number]" id="wesys_number" value="{$sys.wesys_number}"  placeholder="请输入微信号"  class="col-xs-10 col-sm-5" required/>
+							<input type="text" name="we_options[we_number]" id="we_number" value="{$sys.we_number}"  placeholder="请输入微信号"  class="col-xs-10 col-sm-5" required/>
 							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="resthr"></span>
-											</span>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AppID（公众号）： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AppID： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[wesys_appid]" id="wesys_appid" value="{$sys.wesys_appid}" placeholder="请输入AppID（公众号）"   class="col-xs-10 col-sm-5" required/>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="resthr"></span>
-											</span>
+							<input type="text" name="we_options[app_id]" id="app_id" value="{$sys.app_id}" placeholder="请输入AppID（公众号）"   class="col-xs-10 col-sm-5" required/>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -67,28 +67,46 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AppSecret： </label>
 						<div class="col-sm-9">
-							<input type="text" name="options[wesys_appsecret]" id="wesys_appsecret" value="{$sys.wesys_appsecret}"  placeholder="请输入AppSecret（公众号）"  class="col-xs-10 col-sm-5" required/>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="resthr"></span>
-											</span>
+							<input type="text" name="we_options[secret]" id="secret" value="{$sys.secret}"  placeholder="请输入AppSecret（公众号）"  class="col-xs-10 col-sm-5" required/>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>
-
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Token： </label>
+						<div class="col-sm-9">
+							<input type="text" name="we_options[token]" id="token" value="{$sys.token}"  placeholder="请输入Token（公众号）"  class="col-xs-10 col-sm-5"/>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> EncodingAESKey： </label>
+						<div class="col-sm-9">
+							<input type="text" name="we_options[aes_key]" value="{$sys.aes_key}"  placeholder="请输入EncodingAESKey（公众号）"  class="col-xs-10 col-sm-5"/>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信号类型： </label>
 						<div class="col-sm-9">
-							<select name="options[wesys_type]"  class="col-sm-4" required>
+							<select name="we_options[we_type]"  class="col-sm-4" required>
 								<option value="">请选择公众号类型</option>
-								<option value="1" {if condition="$sys['wesys_type'] eq 1"}selected{/if}>普通订阅号</option>
-								<option value="2" {if condition="$sys['wesys_type'] eq 2"}selected{/if}>普通服务号</option>
-								<option value="3" {if condition="$sys['wesys_type'] eq 3"}selected{/if}>认证订阅号</option>
-								<option value="4" {if condition="$sys['wesys_type'] eq 4"}selected{/if}>认证服务号</option>
-
+								<option value="1" {if condition="$sys['we_type'] eq 1"}selected{/if}>普通订阅号</option>
+								<option value="2" {if condition="$sys['we_type'] eq 2"}selected{/if}>普通服务号</option>
+								<option value="3" {if condition="$sys['we_type'] eq 3"}selected{/if}>认证订阅号</option>
+								<option value="4" {if condition="$sys['we_type'] eq 4"}selected{/if}>认证服务号</option>
 							</select>
-                                            <span class="help-inline col-xs-12 col-sm-7">
-												<span class="middle" id="resthr"></span>
-											</span>
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
 						</div>
 					</div>
 					<div class="space-4"></div>

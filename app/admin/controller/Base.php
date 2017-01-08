@@ -22,7 +22,7 @@ class Base extends Common {
 		} 
 		//已登录，不需要验证的权限
 		$not_check = array('Sys/clear','Index/index');//不需要检测的控制器/方法
-		$not_check_id = [1,3];//不需要检测的控制器/方法
+		$not_check_id = [1];//不需要检测的管理员ID
 		//当前操作的请求                 模块名/方法名
 		//不在不需要检测的控制器/方法且管理员id!=1时才检测
 		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && !in_array($aid_s,$not_check_id)){
@@ -34,15 +34,13 @@ class Base extends Common {
 		//获取有权限的菜单tree
 		$menus=cache('menus_admin_'.$aid_s);
 		if(empty($menus)){
-			$data = Db::name('auth_rule')->where(array('status'=>1))->order('sort')->select();
-			if(!in_array($aid_s,$not_check_id)){
-				$auth = new Auth();
-				foreach ($data as $k=>$v){
-					if(!$auth->check($v['name'], $aid_s)){
-						unset($data[$k]);
-					}
-				}
-			}
+		    $where['status']=1;
+		    if(!in_array($aid_s,$not_check_id)){
+                $auth = new Auth();
+                $rule_ids=$auth->getAuthIds($aid_s);
+                $where['id']=array('in',$rule_ids);
+            }
+			$data = Db::name('auth_rule')->where($where)->order('sort')->select();
 			$menus=node_merge($data);
 			cache('menus_admin_'.$aid_s,$menus);
 		}

@@ -85,7 +85,11 @@ CREATE TABLE IF NOT EXISTS `yf_auth_rule` (
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=294 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=322 ;
+
+--
+-- 转存表中的数据 `yf_auth_rule`
+--
 
 INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `condition`, `pid`, `level`, `sort`, `addtime`) VALUES
 (1, 'Sys', '系统设置', 1, 1, 'fa-tachometer', '', 0, 1, 1, 1446535750),
@@ -327,7 +331,35 @@ INSERT INTO `yf_auth_rule` (`id`, `name`, `title`, `type`, `status`, `css`, `con
 (280, 'Sys/runpaysys', '设置操作', 1, 0, '', '', 26, 4, 20, 1483325553),
 (281, 'Sys/smssys', '短信设置', 1, 1, '', '', 2, 3, 33, 1483327040),
 (282, 'Sys/smssys', '设置显示', 1, 0, '', '', 281, 4, 10, 1483327064),
-(283, 'Sys/runsmssys', '设置操作', 1, 0, '', '', 281, 4, 20, 1483327089);
+(283, 'Sys/runsmssys', '设置操作', 1, 0, '', '', 281, 4, 20, 1483327089),
+(294, 'We/reply_list', '自动回复', 1, 1, '', '', 35, 2, 20, 1483616060),
+(295, 'We/mats_list', '素材管理', 1, 1, '', '', 35, 2, 30, 1483617538),
+(296, 'We/menu_get', '同步菜单', 1, 0, '', '', 39, 3, 80, 1483789025),
+(297, 'We/reply_list', '回复列表', 1, 0, '', '', 294, 3, 10, 1483789065),
+(298, 'We/reply_edit', '回复编辑', 1, 0, '', '', 294, 3, 20, 1483789096),
+(299, 'We/reply_runedit', '编辑操作', 1, 0, '', '', 294, 3, 30, 1483789123),
+(300, 'We/reply_runadd', '添加操作', 1, 0, '', '', 294, 3, 40, 1483789149),
+(301, 'We/reply_state', '状态操作', 1, 0, '', '', 294, 3, 50, 1483789174),
+(302, 'We/reply_alldel', '全部删除', 1, 0, '', '', 294, 3, 60, 1483789197),
+(303, 'We/reply_del', '删除操作', 1, 0, '', '', 294, 3, 70, 1483789219),
+(304, 'We/mats_list', '素材列表', 1, 0, '', '', 295, 3, 10, 1483789249),
+(305, 'We/mats_get', '同步素材', 1, 0, '', '', 295, 3, 20, 1483789271),
+(306, 'We/mats_edit', '编辑素材', 1, 0, '', '', 295, 3, 30, 1483789295),
+(307, 'We/mats_runedit', '编辑操作', 1, 0, '', '', 295, 3, 40, 1483789317),
+(308, 'We/mats_add', '增加显示', 1, 0, 'fa-plug', '', 295, 3, 40, 1483789367),
+(309, 'We/mats_runadd', '增加操作', 1, 0, 'fa-plug', '', 295, 3, 50, 1483789393),
+(310, 'We/mats_del', '删除操作', 1, 0, 'fa-plug', '', 295, 3, 60, 1483789418),
+(311, 'We/mats_alldel', '全选删除', 1, 0, 'fa-plug', '', 295, 3, 70, 1483789443),
+(312, 'Model', '订单管理', 1, 1, '', '', 28, 2, 50, 1483867059),
+(313, 'Model/cmsadd?id=3', '增加订单支付', 1, 1, '', '', 312, 3, 20, 1483867059),
+(314, 'cmsrunadd', '增加操作', 1, 0, '', '', 313, 4, 10, 1483867059),
+(315, 'Model/cmslist?id=3', '订单支付列表', 1, 1, '', '', 312, 3, 10, 1483867059),
+(316, 'Model/cmsdel', '删除操作', 1, 0, '', '', 315, 4, 0, 1483867059),
+(317, 'Model/cmsstate', '状态操作', 1, 0, '', '', 315, 4, 0, 1483867059),
+(318, 'Model/cmsorder', '排序操作', 1, 0, '', '', 315, 4, 0, 1483867059),
+(319, 'Model/cmsalldel', '全部删除', 1, 0, '', '', 315, 4, 0, 1483867059),
+(320, 'Model/cmsedit', '编辑显示', 1, 0, '', '', 315, 4, 0, 1483867059),
+(321, 'Model/cmsrunedit', '编辑操作', 1, 0, '', '', 315, 4, 0, 1483867059);
 
 DROP TABLE IF EXISTS `yf_faq`;
 CREATE TABLE IF NOT EXISTS `yf_faq` (
@@ -519,12 +551,13 @@ CREATE TABLE IF NOT EXISTS `yf_model` (
   `model_status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   `model_engine` varchar(25) NOT NULL DEFAULT 'MyISAM' COMMENT '数据库引擎',
   PRIMARY KEY (`model_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='文档模型表' AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='文档模型表' AUTO_INCREMENT=4 ;
 
 
 INSERT INTO `yf_model` (`model_id`, `model_name`, `model_title`, `model_pk`, `model_cid`, `model_order`, `model_sort`, `model_fields`, `model_list`, `model_edit`, `model_indexes`, `search_list`, `create_time`, `update_time`, `model_status`, `model_engine`) VALUES
 (1, 'test', '测试模型', 'test_id', 'test_cid', 'test_order', 'test_order', '{"m_text":{"name":"m_text","title":"\\u6587\\u672c\\u5b57\\u6bb5","type":"text","data":"","description":"\\u6587\\u672c\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"readonly","default":""},"m_map":{"name":"m_map","title":"\\u5730\\u56fe\\u5b57\\u6bb5","type":"baidu_map","data":"","description":"\\u5730\\u56fe\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":"22,22"},"m_imagefile":{"name":"m_imagefile","title":"\\u5355\\u56fe\\u7247\\u5b57\\u6bb5","type":"imagefile","data":"","description":"\\u5355\\u56fe\\u7247\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""},"m_images":{"name":"m_images","title":"\\u591a\\u56fe\\u7247\\u5b57\\u6bb5","type":"images","data":"","description":"\\u591a\\u56fe\\u7247\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""},"m_selecttext":{"name":"m_selecttext","title":"\\u9009\\u62e9\\u6587\\u672c","type":"selecttext","data":"auth_group|id|title|id","description":"\\u9009\\u62e9\\u6587\\u672c\\u8bf4\\u660e","length":"","rules":"required","default":""},"m_cur":{"name":"m_cur","title":"\\u8d27\\u5e01\\u5b57\\u6bb5","type":"currency","data":"","description":"\\u8d27\\u5e01\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"unsigned","default":"22"},"m_long":{"name":"m_long","title":"\\u957f\\u6574\\u6570\\u5b57\\u6bb5","type":"large_number","data":"","description":"\\u957f\\u6574\\u6570\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":"0"},"m_int":{"name":"m_int","title":"\\u6574\\u6570\\u5b57\\u6bb5","type":"number","data":"","description":"\\u6574\\u6570\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"required","default":"11"},"m_datatime":{"name":"m_datatime","title":"\\u65e5\\u671f\\u65f6\\u95f4\\u5b57\\u6bb5","type":"datetime","data":"","description":"\\u65e5\\u671f\\u65f6\\u95f4\\u5b57\\u6bb5","length":"","rules":"","default":""},"m_date":{"name":"m_date","title":"\\u65e5\\u671f\\u5b57\\u6bb5","type":"date","data":"","description":"\\u65e5\\u671f\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""},"m_selectnumber":{"name":"m_selectnumber","title":"\\u9009\\u62e9\\u6570\\u5b57\\u5b57\\u6bb5","type":"selectnumber","data":"1:a,2:b,3:c","description":"\\u9009\\u62e9\\u6570\\u5b57\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"readonly","default":""},"m_richtext":{"name":"m_richtext","title":"\\u5bcc\\u6587\\u672c\\u5b57\\u6bb5","type":"richtext","data":"","description":"\\u5bcc\\u6587\\u672c\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""},"m_bigtext":{"name":"m_bigtext","title":"\\u6587\\u672c\\u57df\\u5b57\\u6bb5","type":"bigtext","data":"","description":"\\u6587\\u672c\\u57df\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""},"m_switch":{"name":"m_switch","title":"\\u5f00\\u5173\\u5b57\\u6bb5","type":"switch","data":"","description":"\\u5f00\\u5173\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":"0"},"m_check":{"name":"m_check","title":"\\u591a\\u9009\\u6846\\u5b57\\u6bb5","type":"checkbox","data":"diyflag|diyflag_id|diyflag_name|diyflag_order","description":"\\u591a\\u9009\\u6846\\u5b57\\u6bb5\\u8bf4\\u660e","length":"","rules":"","default":""}}', 'test_id,m_selecttext,m_date,m_switch,m_imagefile', '', '', '', 1482231462, 1482402443, 1, 'MyISAM'),
-(2, 'faq', '常见问题', 'faq_id', 'faq_cid', 'faq_order', 'faq_order', '{"faq_title":{"name":"faq_title","title":"\\u6807\\u9898","type":"text","data":"","description":"\\u6807\\u9898","length":"","rules":"required","default":""},"faq_answer":{"name":"faq_answer","title":"\\u7b54\\u590d","type":"bigtext","data":"","description":"\\u7b54\\u590d","length":"","rules":"required","default":""}}', '', '', '', '', 1482821043, 1482821382, 1, 'MyISAM');
+(2, 'faq', '常见问题', 'faq_id', 'faq_cid', 'faq_order', 'faq_order', '{"faq_title":{"name":"faq_title","title":"\\u6807\\u9898","type":"text","data":"","description":"\\u6807\\u9898","length":"","rules":"required","default":""},"faq_answer":{"name":"faq_answer","title":"\\u7b54\\u590d","type":"bigtext","data":"","description":"\\u7b54\\u590d","length":"","rules":"required","default":""}}', '', '', '', '', 1482821043, 1482821382, 1, 'MyISAM'),
+(3, 'payment', '订单支付', 'payment_id', 'payment_cid', 'create_time', 'create_time', '{"out_trade_no":{"name":"out_trade_no","title":"\\u5546\\u54c1\\u8ba2\\u5355","type":"text","data":"","description":"","length":"100","rules":"unique","default":""},"pay_trade_no":{"name":"pay_trade_no","title":"\\u652f\\u4ed8\\u8ba2\\u5355\\u53f7","type":"text","data":"","description":"","length":"100","rules":"unique","default":"NULL"},"money":{"name":"money","title":"\\u8ba2\\u5355\\u91d1\\u989d","type":"currency","data":"","description":"","length":"","rules":"","default":""},"status":{"name":"status","title":"\\u8ba2\\u5355\\u72b6\\u6001","type":"number","data":"","description":"1:\\u5f85\\u652f\\u4ed82:\\u6d4b\\u8bd5\\u8ba2\\u53558:\\u6210\\u529f\\u652f\\u4ed80:\\u5220\\u9664\\u8ba2\\u5355","length":"","rules":"","default":""},"type":{"name":"type","title":"\\u652f\\u4ed8\\u65b9\\u5f0f","type":"text","data":"","description":"","length":"50","rules":"","default":""},"uid":{"name":"uid","title":"\\u4ed8\\u6b3euid","type":"number","data":"","description":"","length":"","rules":"","default":""},"create_time":{"name":"create_time","title":"\\u8ba2\\u5355\\u521b\\u5efa\\u65f6\\u95f4","type":"datetime","data":"","description":"","length":"","rules":"","default":""},"update_time":{"name":"update_time","title":"\\u8ba2\\u5355\\u66f4\\u65b0\\u65f6\\u95f4","type":"datetime","data":"","description":"","length":"","rules":"","default":""},"client_ip":{"name":"client_ip","title":"\\u652f\\u4ed8ip","type":"text","data":"","description":"","length":"50","rules":"","default":""},"product_name":{"name":"product_name","title":"\\u5546\\u54c1\\u540d\\u79f0","type":"text","data":"","description":"","length":"200","rules":"","default":""},"product_body":{"name":"product_body","title":"\\u5546\\u54c1\\u63cf\\u8ff0","type":"text","data":"","description":"","length":"200","rules":"","default":""},"product_url":{"name":"product_url","title":"\\u5546\\u54c1\\u5730\\u5740","type":"text","data":"","description":"","length":"100","rules":"","default":""},"extra_param":{"name":"extra_param","title":"\\u7279\\u6b8a\\u6269\\u5c55","type":"text","data":"","description":"","length":"500","rules":"","default":""}}', 'out_trade_no,pay_trade_no,product_name,money,type,update_time,status', '', '', '', 1483620293, 1483620293, 1, 'MyISAM');
 
 -- --------------------------------------------------------
 DROP TABLE IF EXISTS `yf_news`;
@@ -4249,6 +4282,40 @@ CREATE TABLE IF NOT EXISTS `yf_web_log` (
   KEY `method` (`method`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='网站日志' AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `yf_we_mats`;
+CREATE TABLE IF NOT EXISTS `yf_we_mats` (
+  `mats_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `mats_name` varchar(100) NOT NULL DEFAULT '' COMMENT '素材名',
+  `mats_type` varchar(10) NOT NULL DEFAULT 'image' COMMENT '素材类型',
+  `url_lc` varchar(255) DEFAULT '' COMMENT '素材本地url',
+  `news_content` text COMMENT '图文返回或设置内容',
+  `news_index` tinyint(2) DEFAULT '0' COMMENT '多图文索引从0开始',
+  `video_content` text COMMENT '视频返回或设置内容',
+  `media_id` varchar(100) NOT NULL DEFAULT '' COMMENT '素材id',
+  `url` varchar(255) DEFAULT '' COMMENT '素材url',
+  `create_time` int(11) NOT NULL COMMENT '上传时间',
+  `update_time` int(11) NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`mats_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+
+--
+-- 转存表中的数据 `yf_we_mats`
+--
+
+INSERT INTO `yf_we_mats` (`mats_id`, `mats_name`, `mats_type`, `url_lc`, `news_content`, `news_index`, `video_content`, `media_id`, `url`, `create_time`, `update_time`) VALUES
+(1, 'girl.jpg', 'image', '', '', 0, NULL, 'KdpdmrH0vQi-14__8hxsuNGesZG3wQgnf9zajn4nw9w', 'http://mmbiz.qpic.cn/mmbiz/gLO17UPS6FS2xsypf378iaNhWacZ1G1UplZYWEYfwvuU6Ont96b1roYsCNFwaRrSaKTPCUdBK9DgEHicsKwWCBRQ/0', 1483622035, 1483622035),
+(2, 'boy.jpg', 'image', '', '', 0, NULL, 'KdpdmrH0vQi-14__8hxsuOhetEVshLk7MTCoTIrUjeE', 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX13NZvOgT9cdygib8icSngXfAvVmbvUg530cgoVHLAvAibp7ETfNNfoJpFIujnDTUA928rUulaC3icPm2w/0?wx_fmt=jpeg', 1483618551, 1483618551),
+(3, '标题', 'video', '', '', 0, NULL, 'KdpdmrH0vQi-14__8hxsuD_SIO-sM4B8jsiNHByhtDA', '', 1483621917, 1483621917),
+(4, 'a.mp3', 'voice', '', '', 0, NULL, 'KdpdmrH0vQi-14__8hxsuJhtMm36AWCjujVrnOQy-Kk', '', 1483619629, 1483619629),
+(5, '图文', 'news', '', '{"title":"\\u56fe\\u6587","author":"rainfer","digest":"\\u5355\\u56fe\\u6587\\u6d88\\u606f\\u624d\\u6709\\u6458\\u8981","content":"<p><img src=\\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/bBGqHGSmX13NZvOgT9cdygib8icSngXfAvVmbvUg530cgoVHLAvAibp7ETfNNfoJpFIujnDTUA928rUulaC3icPm2w\\/0?wx_fmt=jpeg\\" alt=\\"0?wx_fmt=jpeg\\"\\/><\\/p><p>\\u56fe\\u6587\\u6d88\\u606f\\u7684\\u5177\\u4f53\\u5185\\u5bb9\\uff0c\\u652f\\u6301HTML\\u6807\\u7b7e<\\/p><p><img src=\\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz\\/gLO17UPS6FS2xsypf378iaNhWacZ1G1UplZYWEYfwvuU6Ont96b1roYsCNFwaRrSaKTPCUdBK9DgEHicsKwWCBRQ\\/0\\" alt=\\"0\\"\\/><\\/p>","content_source_url":"http:\\/\\/www.rainfer.cn","thumb_media_id":"KdpdmrH0vQi-14__8hxsuNGesZG3wQgnf9zajn4nw9w","show_cover_pic":0,"url":"http:\\/\\/mp.weixin.qq.com\\/s?__biz=MzIzMzM4NDg0MQ==&mid=100000007&idx=1&sn=9cb9083207911fc248bea6096d332a2e&chksm=68873fe15ff0b6f7904c35344049ed50e28fddab949318a81b8c806681b6fb2b90e25bae4fa5#rd","thumb_url":"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/bBGqHGSmX13NZvOgT9cdygib8icSngXfAvibLwibW4jwgOaedmdejP2vvug6ZLcZsGIV8rmiaRHwMhibpFWkE0fLU1qA\\/0?wx_fmt=jpeg"}', 0, NULL, 'KdpdmrH0vQi-14__8hxsuMAdAzRcc0BgrPlVD_jrsmw', '', 1483622501, 1483711027),
+(6, 'test', 'image', '', NULL, 0, NULL, 'KdpdmrH0vQi-14__8hxsuEE5FPTRd6TL_mb_-oZHJ_M', 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtjoKHVib0W5XicyjEqibb0NmLvX18LG6wLxwDc1TpaQx54c6RH6ty4yXfQ/0?wx_fmt=jpeg', 1483776570, 1483776570),
+(7, '测试声音', 'voice', '', NULL, 0, NULL, 'KdpdmrH0vQi-14__8hxsuOfyREwfA3efqZ32Sfck70s', '', 1483776641, 1483776641),
+(8, '测试视频', 'video', '', NULL, 0, '{"title":"\\u89c6\\u9891\\u6807\\u9898","introduction":"\\u89c6\\u9891\\u63cf\\u8ff0"}', 'KdpdmrH0vQi-14__8hxsuHOJUm63PtG7qRJxTwzbkmk', '', 1483776792, 1483776792),
+(9, '测试缩略图', 'thumb', '', NULL, 0, NULL, 'KdpdmrH0vQi-14__8hxsuNnDHsNXliG-ck9AEumsssw', '', 1483776876, 1483776876),
+(10, '图文1', 'news', '', '{"title":"\\u56fe\\u65871","thumb_media_id":"KdpdmrH0vQi-14__8hxsuPcF4KagNmpPbDxkYsgKtxA","author":"\\u56fe\\u65871","digest":"\\u56fe\\u65871","show_cover_pic":"1","content_source_url":"http:\\/\\/www.rainfer.cn","content":"<p>asdfsdf<\\/p><p><img src=\\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtUjU6ich2ciaRayUqJV06jl2OKFDxDzJ3APXw7E7pbR27DkZWibRz54seQ\\/0\\" title=\\"5870a3b014020.jpg\\" alt=\\"5870a3b014020.jpg\\"\\/><\\/p><p><img src=\\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz\\/gLO17UPS6FS2xsypf378iaNhWacZ1G1UplZYWEYfwvuU6Ont96b1roYsCNFwaRrSaKTPCUdBK9DgEHicsKwWCBRQ\\/0\\" style=\\"\\"\\/><\\/p><p><br\\/><\\/p>"}', 0, NULL, 'KdpdmrH0vQi-14__8hxsuJVMs7ryz_4oPHpWz43-ZcQ', '', 1483776950, 1483776950),
+(11, 'test2', 'image', '', NULL, 0, NULL, 'KdpdmrH0vQi-14__8hxsuJT5egvgUxI4nQaKlJ1VwdY', 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtmX2EsuiaVkWTBj4MfNiabvTsOZatPDe3hrXIEG0gz1xlT1oalTJkhFAw/0?wx_fmt=png', 1483782052, 1483782052);
+
+-- --------------------------------------------------------
 DROP TABLE IF EXISTS `yf_we_menu`;
 CREATE TABLE IF NOT EXISTS `yf_we_menu` (
   `we_menu_id` tinyint(11) NOT NULL AUTO_INCREMENT,
@@ -4270,6 +4337,94 @@ INSERT INTO `yf_we_menu` (`we_menu_id`, `we_menu_name`, `we_menu_leftid`, `we_me
 (6, '二级菜单', 4, 1, '', 1, 50, 'zh-cn'),
 (7, '三级菜单', 5, 1, '', 1, 50, 'zh-cn'),
 (8, '联系我们', 1, 1, '', 1, 50, 'zh-cn');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `yf_we_pic`
+--
+DROP TABLE IF EXISTS `yf_we_pic`;
+CREATE TABLE IF NOT EXISTS `yf_we_pic` (
+  `pic_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `url` varchar(255) DEFAULT '' COMMENT '素材url',
+  `mtime` int(11) NOT NULL COMMENT '上传时间',
+  PRIMARY KEY (`pic_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+
+--
+-- 转存表中的数据 `yf_we_pic`
+--
+
+INSERT INTO `yf_we_pic` (`pic_id`, `url`, `mtime`) VALUES
+(1, 'http://mmbiz.qpic.cn/mmbiz/gLO17UPS6FS2xsypf378iaNhWacZ1G1UplZYWEYfwvuU6Ont96b1roYsCNFwaRrSaKTPCUdBK9DgEHicsKwWCBRQ/0', 1483622035),
+(2, 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX13NZvOgT9cdygib8icSngXfAvVmbvUg530cgoVHLAvAibp7ETfNNfoJpFIujnDTUA928rUulaC3icPm2w/0?wx_fmt=jpeg', 1483618551),
+(7, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUD0Ff9n81k9c0ZhA99xrMlVeLyhqEVlQ1I7zVBibrnzaPt4IAJqLL3pA/0', 1483704413),
+(6, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUt2zBAsDGdCqwaFD9wGdJjaLPFLcDiahMSeE97ZYicia5WFDO6p0O0CpOA/0', 1483703469),
+(8, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUD0Ff9n81k9c0ZhA99xrMlVeLyhqEVlQ1I7zVBibrnzaPt4IAJqLL3pA/0', 1483705963),
+(9, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUA2XSgrhrEfdiaXrxkbSKMQaH1icL4Pu4Ap8hPcP6jIdJuElkvbp5EibKg/0', 1483706148),
+(10, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUsByB9AGojicSRZ7nxR0cxib4NmOvqt2Pbw2X6K2OzhwpaRIiacic34gyNA/0', 1483707520),
+(11, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fU9reIEv9ZPf1C0VBmUr3tEI5uohK3ljwaiarzo4S7HR9OicY0sVVKMKqQ/0', 1483707548),
+(12, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUA2XSgrhrEfdiaXrxkbSKMQaH1icL4Pu4Ap8hPcP6jIdJuElkvbp5EibKg/0', 1483707618),
+(13, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUA2XSgrhrEfdiaXrxkbSKMQaH1icL4Pu4Ap8hPcP6jIdJuElkvbp5EibKg/0', 1483707927),
+(14, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fUD0Ff9n81k9c0ZhA99xrMlVeLyhqEVlQ1I7zVBibrnzaPt4IAJqLL3pA/0', 1483708083),
+(15, 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fU2o4hwr63JMdRqSdoiapTEHWuz9TqibY0c7hvonRjdK5ZkegcEpsiaZTtA/0', 1483708730),
+(16, 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtjoKHVib0W5XicyjEqibb0NmLvX18LG6wLxwDc1TpaQx54c6RH6ty4yXfQ/0?wx_fmt=jpeg', 1483776570),
+(17, 'http://mmbiz.qpic.cn/mmbiz_jpg/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtUjU6ich2ciaRayUqJV06jl2OKFDxDzJ3APXw7E7pbR27DkZWibRz54seQ/0', 1483776945),
+(18, 'http://mmbiz.qpic.cn/mmbiz_png/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtmX2EsuiaVkWTBj4MfNiabvTsOZatPDe3hrXIEG0gz1xlT1oalTJkhFAw/0?wx_fmt=png', 1483782052);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `yf_we_reply`
+--
+DROP TABLE IF EXISTS `yf_we_reply`;
+CREATE TABLE IF NOT EXISTS `yf_we_reply` (
+  `we_reply_id` int(11) NOT NULL AUTO_INCREMENT,
+  `we_reply_key` varchar(255) NOT NULL COMMENT '关键字',
+  `we_reply_type` varchar(20) NOT NULL,
+  `we_replytext_content` varchar(255) NOT NULL COMMENT '回复内容',
+  `we_reply_addtime` int(11) NOT NULL COMMENT '添加时间',
+  `we_reply_open` tinyint(1) NOT NULL DEFAULT '0',
+  `we_replynews` text NOT NULL,
+  `we_replyimage_mediaid` varchar(200) NOT NULL,
+  `we_replyvoice_mediaid` varchar(200) NOT NULL,
+  PRIMARY KEY (`we_reply_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+
+--
+-- 转存表中的数据 `yf_we_reply`
+--
+
+INSERT INTO `yf_we_reply` (`we_reply_id`, `we_reply_key`, `we_reply_type`, `we_replytext_content`, `we_reply_addtime`, `we_reply_open`, `we_replynews`, `we_replyimage_mediaid`, `we_replyvoice_mediaid`) VALUES
+(1, 'yfcmf', 'text', '轻量级企业网站管理系统 运行环境:PHP5.4+, MySQL5.0', 1466497576, 1, '', '', ''),
+(2, 'kk', 'news', '', 1483711089, 1, '{"title":"tttt","description":"aaaaa","url":"http:\\/\\/www.rainfer.cn","image":"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/bBGqHGSmX10eyug9GJeVX5A8wuzcia8fU2o4hwr63JMdRqSdoiapTEHWuz9TqibY0c7hvonRjdK5ZkegcEpsiaZTtA\\/0"}', '', ''),
+(3, 'ff', 'image', '', 1483712501, 1, '', 'KdpdmrH0vQi-14__8hxsuMAdAzRcc0BgrPlVD_jrsmw', ''),
+(4, 'girl', 'image', '', 1483712585, 1, '', 'KdpdmrH0vQi-14__8hxsuNGesZG3wQgnf9zajn4nw9w', ''),
+(5, 'tw', 'news', '', 1483776982, 1, '{"title":"asdf","description":"asdf","url":"http:\\/\\/www.rainfer.cn","image":"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtjoKHVib0W5XicyjEqibb0NmLvX18LG6wLxwDc1TpaQx54c6RH6ty4yXfQ\\/0?wx_fmt=jpeg"}', '', ''),
+(10, 'subscribe', 'news', '', 1483783147, 1, '{"title":"\\u6b22\\u8fce\\u60a8\\u7684\\u5173\\u6ce8!","description":"\\u6b22\\u8fce\\u60a8\\u7684\\u5173\\u6ce8!","url":"http:\\/\\/www.rainfer.cn","image":"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_png\\/bBGqHGSmX10B1cCLzD5Vg16ZSlSyOQJtmX2EsuiaVkWTBj4MfNiabvTsOZatPDe3hrXIEG0gz1xlT1oalTJkhFAw\\/0?wx_fmt=png"}', '', ''),
+(12, '下载地址', 'text', 'https://git.oschina.net/rainfer/YFCMF', 1483784536, 1, '', '', '');
+
+DROP TABLE IF EXISTS `yf_payment`;
+CREATE TABLE IF NOT EXISTS `yf_payment` (
+  `payment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `out_trade_no` varchar(100) DEFAULT '' COMMENT '商品订单',
+  `pay_trade_no` varchar(100) DEFAULT NULL COMMENT '支付订单号',
+  `money` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '订单状态',
+  `type` varchar(50) DEFAULT '' COMMENT '支付方式',
+  `uid` int(11) DEFAULT NULL COMMENT '付款uid',
+  `create_time` int(11) DEFAULT NULL COMMENT '排序',
+  `update_time` int(10) unsigned DEFAULT NULL COMMENT '订单更新时间',
+  `client_ip` varchar(50) DEFAULT '' COMMENT '支付ip',
+  `product_name` varchar(200) DEFAULT '' COMMENT '商品名称',
+  `product_body` varchar(200) DEFAULT '' COMMENT '商品描述',
+  `product_url` varchar(100) DEFAULT '' COMMENT '商品地址',
+  `extra_param` varchar(500) DEFAULT '' COMMENT '特殊扩展',
+  `payment_cid` varchar(100) NOT NULL DEFAULT '未填写' COMMENT '前台栏目',
+  PRIMARY KEY (`payment_id`),
+  UNIQUE KEY `out_trade_no` (`out_trade_no`),
+  UNIQUE KEY `pay_trade_no` (`pay_trade_no`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

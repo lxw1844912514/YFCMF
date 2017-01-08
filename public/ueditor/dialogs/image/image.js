@@ -911,7 +911,12 @@
                         }
                     })(img));
                     img.width = 113;
-                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+					//用于微信公众平台在线图片显示 by:rainfer
+					if(list[i].url.indexOf('mmbiz.qpic.cn')==-1){
+						img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+					}else{
+						img.setAttribute('src', urlPrefix + list[i].url);
+					}
                     img.setAttribute('_src', urlPrefix + list[i].url);
                     domUtils.addClass(icon, 'icon');
 

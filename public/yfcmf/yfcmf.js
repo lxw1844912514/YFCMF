@@ -610,6 +610,42 @@ $(function () {
         return false;
     });
 });
+/* 微信关键词回复编辑 */
+$(function () {
+	$('body').on('click','.replyedit-btn',function () {
+        var $url = this.href,
+            val = $(this).data('id');
+        $.post($url, {we_reply_id: val}, function (data) {
+            if (data.code == 1) {
+                $("#myModaledit").show(300);
+                $("#editwe_reply_id").val(data.we_reply_id);
+                $("#editwe_reply_key").val(data.we_reply_key);
+                $("#editwe_reply_type").val(data.we_reply_type);
+				var Modal=$("#editwe_reply_type").parents('.modal');
+				if(data.we_reply_type=='news'){
+					Modal.find("#input-text").hide();
+					Modal.find("#input-news").show();
+					$("#editnews_title").val(data.we_reply_content.title);
+					$("#editnews_description").val(data.we_reply_content.description);
+					$("#editnews_url").val(data.we_reply_content.url);
+					$("#editnews_image").val(data.we_reply_content.image);
+				}else{
+					Modal.find("#input-news").hide();
+					Modal.find("#input-text").show();
+					$("#editwe_reply_content").val(data.we_reply_content);
+				}
+                if(data.we_reply_open){
+                    $("#editwe_reply_open").prop("checked",true);
+                }else{
+                    $("#editwe_reply_open").prop("checked",false);
+                }
+            } else {
+                layer.alert(data.msg, {icon: 5});
+            }
+        }, "json");
+        return false;
+    });
+});
 /*************************************************************************** 单图/多图操作********************************************************/
 /* 单图上传 */
 $("#file0").change(function () {

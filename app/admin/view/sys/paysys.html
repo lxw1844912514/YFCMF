@@ -61,18 +61,19 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签约账户 </label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="config[alipay][email]" placeholder="签约账户" value="{$payment.alipay.email}"  class="col-xs-10 col-sm-5">
+                                        <input type="text" name="config[alipay][account]" placeholder="签约账户" value="{$payment.alipay.account}"  class="col-xs-10 col-sm-5">
                                 <span class="help-inline col-xs-12 col-sm-7">
-                                    <span class="middle">*</span>
+                                    <span class="middle">*xxxx@alipay.com</span>
                                 </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签约密钥 </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 账户名称 </label>
                                     <div class="col-sm-9">
-                                       <input type="password" name="config[alipay][key]" value="{$payment.alipay.key}" placeholder="签约密钥"  class="col-xs-10 col-sm-5">
-                                    <span class="help-inline col-xs-12 col-sm-7">
-                                   <span class="middle">*</span></span>
+                                        <input type="text" name="config[alipay][account_name]" placeholder="签约名称" value="{$payment.alipay.account_name}"  class="col-xs-10 col-sm-5">
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <span class="middle">*</span>
+                                </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -83,6 +84,51 @@
                                    <span class="middle">*</span></span>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> MD5密钥 </label>
+                                    <div class="col-sm-9">
+                                       <input type="password" name="config[alipay][md5_key]" value="{$payment.alipay.md5_key}" placeholder="MD5密钥"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 开发者应用私钥 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[alipay][rsa_private_key]" value="{$payment.alipay.rsa_private_key}" placeholder="开发者应用私钥"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*开发者应用私钥(完整路径)</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 支付异步通知 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[alipay][notify_url]" value="{$payment.alipay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*https://api.xx.com/receive_notify.html</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 成功跳转 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[alipay][return_url]" value="{$payment.alipay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
+                                       <input type="text" hidden="" name="config[alipay][time_expire]" value="14"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*https://api.xx.com/receive_return.html</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签名方式 </label>
+                                    <div class="col-sm-9">
+                                <select name="config[alipay][sign_type]" class="col-sm-4" required="">
+                                <option value="MD5" {if condition="$payment.alipay.sign_type eq 'MD5'"}selected{/if}>MD5</option>
+                                <option value="RSA" {if condition="$payment.alipay.sign_type eq 'RSA'"}selected{/if}>RSA</option>                         
+                                </select>
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*目前支持:RSA   MD5</span></span>
+                                    </div>
+                                </div>
+                                
                                 <div class="space-4"></div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
@@ -94,37 +140,82 @@
                         </div>
                         <!--支付宝配置结束-->
                         <div id="aliwappay" class="tab-pane fade">                           
-                               <div class="form-group">
+                              <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签约账户 </label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="config[aliwappay][email]" placeholder="签约账户" value="{$payment['aliwappay']['email']}"  class="col-xs-10 col-sm-5">
+                                        <input type="text" name="config[aliwappay][account]" placeholder="签约账户" value="{$payment.aliwappay.account}"  class="col-xs-10 col-sm-5">
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <span class="middle">*xxxx@aliwappay.com</span>
+                                </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 账户名称 </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="config[aliwappay][account_name]" placeholder="签约名称" value="{$payment.aliwappay.account_name}"  class="col-xs-10 col-sm-5">
                                 <span class="help-inline col-xs-12 col-sm-7">
                                     <span class="middle">*</span>
                                 </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签约密钥 </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> partner </label>
                                     <div class="col-sm-9">
-                                       <input type="password" name="config[aliwappay][key]" value="{$payment['aliwappay']['key']}" placeholder="签约密钥"  class="col-xs-10 col-sm-5">
+                                       <input type="text" name="config[aliwappay][partner]" value="{$payment.aliwappay.partner}" placeholder="partner"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*</span></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> partner </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> MD5密钥 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[aliwappay][partner]"value="{$payment['aliwappay']['partner']}" placeholder="partner"  class="col-xs-10 col-sm-5">
+                                       <input type="password" name="config[aliwappay][md5_key]" value="{$payment.aliwappay.md5_key}" placeholder="MD5密钥"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*</span></span>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 开发者应用私钥 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[aliwappay][rsa_private_key]" value="{$payment.aliwappay.rsa_private_key}" placeholder="开发者应用私钥"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*开发者应用私钥(完整路径)</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 支付异步通知 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[aliwappay][notify_url]" value="{$payment.aliwappay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*https://api.xx.com/receive_notify.html</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 成功跳转 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[aliwappay][return_url]" value="{$payment.aliwappay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
+                                       <input type="text" hidden="" name="config[aliwappay][time_expire]" value="14"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*https://api.xx.com/receive_return.html</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 签名方式 </label>
+                                    <div class="col-sm-9">
+                                <select name="config[aliwappay][sign_type]" class="col-sm-4" required="">
+                                <option value="MD5" {if condition="$payment.aliwappay.sign_type eq 'MD5'"}selected{/if}>MD5</option>
+                                <option value="RSA" {if condition="$payment.aliwappay.sign_type eq 'RSA'"}selected{/if}>RSA</option>                         
+                                </select>
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*目前支持:RSA   MD5</span></span>
+                                    </div>
+                                </div>
+                                
                                 <div class="space-4"></div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
-                                    <div class="col-sm-9" style="padding-top:5px;">
-                                                           
-                                    <input name="config[aliwappay][display]" {if condition="!empty($payment['aliwappay']['display']) eq 1"}checked{/if}value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+                                    <div class="col-sm-9" style="padding-top:5px;">                                                              
+                                    <input name="config[aliwappay][display]"  {if condition="!empty($payment.aliwappay.display) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
                                     <span class="lbl middle help-inline" >&nbsp;&nbsp;* 默认关闭</span>
                                     </div>
                                 </div>
@@ -134,16 +225,16 @@
                                <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份标识(appid) </label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="config[wxqrcode][appid]" placeholder="身份标识(appid)" value="{$payment['wxqrcode']['appid']}"  class="col-xs-10 col-sm-5">
+                                        <input type="text" name="config[wxpayqrcode][app_id]" placeholder="身份标识(appid)" value="{$payment['wxpayqrcode']['app_id']}"  class="col-xs-10 col-sm-5">
                                 <span class="help-inline col-xs-12 col-sm-7">
                                     <span class="middle">*</span>
                                 </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份密钥(appsecret) </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份密钥(md5_key) </label>
                                     <div class="col-sm-9">
-                                       <input type="password" name="config[wxqrcode][appsecret]" value="{$payment['wxqrcode']['appsecret']}" placeholder="身份密钥(appsecret)"  class="col-xs-10 col-sm-5">
+                                       <input type="password" name="config[wxpayqrcode][md5_key]" value="{$payment['wxpayqrcode']['md5_key']}" placeholder="身份密钥(appsecret)"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle" >*</span></span>
                                     </div>
@@ -151,25 +242,43 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信商户号(mchid) </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[wxqrcode][mchid]" value="{$payment['wxqrcode']['mchid']}" placeholder="微信商户号(mchid)"  class="col-xs-10 col-sm-5">
+                                       <input type="text" name="config[wxpayqrcode][mch_id]" value="{$payment['wxpayqrcode']['mch_id']}" placeholder="微信商户号(mchid)"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*</span></span>
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通信密钥 </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通知地址 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[wxqrcode][key]" value="{$payment['wxqrcode']['key']}" placeholder="微信通信密钥"  class="col-xs-10 col-sm-5">
+                                       <input type="text" name="config[wxpayqrcode][notify_url]" value="{$payment['wxpayqrcode']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
+                                        <input type="text" hidden="" name="config[wxpayqrcode][time_expire]" value="14"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle" >*</span></span>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> cert_path </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[wxpayqrcode][cert_path]" value="{$payment['wxpayqrcode']['cert_path']}" placeholder="cert_path"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> key_path </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[wxpayqrcode][key_path]" value="{$payment['wxpayqrcode']['key_path']}" placeholder="key_path"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*</span></span>
+                                    </div>
+                                </div>
+
                                 <div class="space-4"></div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
                                     <div class="col-sm-9" style="padding-top:5px;">                                 
-                                    <input name="config[wxqrcode][display]"  {if condition="!empty($payment['wxqrcode']['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+                                    <input name="config[wxpayqrcode][display]"  {if condition="!empty($payment['wxpayqrcode']['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
                                     <span class="lbl middle help-inline" >&nbsp;&nbsp;* 默认关闭</span>
                                     </div>
                                 </div>
@@ -179,42 +288,60 @@
                                <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份标识(appid) </label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="config[wxjspi][appid]" placeholder="身份标识(appid)" value="{$payment['wxjspi']['appid']}"  class="col-xs-10 col-sm-5">
+                                        <input type="text" name="config[wxpaypub][app_id]" placeholder="身份标识(appid)" value="{$payment['wxpaypub']['app_id']}"  class="col-xs-10 col-sm-5">
                                 <span class="help-inline col-xs-12 col-sm-7">
-                                    <span class="middle" >*</span>
+                                    <span class="middle">*</span>
                                 </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份密钥(appsecret) </label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份密钥(md5_key) </label>
                                     <div class="col-sm-9">
-                                       <input type="password" name="config[wxjspi][appsecret]" value="{$payment['wxjspi']['appsecret']}" placeholder="身份密钥(appsecret)"  class="col-xs-10 col-sm-5">
+                                       <input type="password" name="config[wxpaypub][md5_key]" value="{$payment['wxpaypub']['md5_key']}" placeholder="身份密钥(appsecret)"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
-                                   <span class="middle">*</span></span>
+                                   <span class="middle" >*</span></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信商户号(mchid) </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[wxjspi][mchid]" value="{$payment['wxjspi']['mchid']}" placeholder="微信商户号(mchid)"  class="col-xs-10 col-sm-5">
-                                    <span class="help-inline col-xs-12 col-sm-7">
-                                   <span class="middle" >*</span></span>
-                                    </div>
-                                </div>
-                                <div class="space-4"></div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通信密钥 </label>
-                                    <div class="col-sm-9">
-                                       <input type="text" name="config[wxjspi][key]" value="{$payment['wxjspi']['key']}" placeholder="微信通信密钥"  class="col-xs-10 col-sm-5">
+                                       <input type="text" name="config[wxpaypub][mch_id]" value="{$payment['wxpaypub']['mch_id']}" placeholder="微信商户号(mchid)"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*</span></span>
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
                                 <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通知地址 </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[wxpaypub][notify_url]" value="{$payment['wxpaypub']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
+                                        <input type="text" hidden="" name="config[wxqrcode][time_expire]" value="14"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle" >*</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> cert_path </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[wxpaypub][cert_path]" value="{$payment['wxpaypub']['cert_path']}" placeholder="cert_path"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> key_path </label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="config[wxpaypub][key_path]" value="{$payment['wxpaypub']['key_path']}" placeholder="key_path"  class="col-xs-10 col-sm-5">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                   <span class="middle">*</span></span>
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+                                <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
-                                    <div class="col-sm-9" style="padding-top:5px;">                                    
-                                    <input name="config[wxjspi][display]"  {if condition="!empty($payment['wxjspi']['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+                                    <div class="col-sm-9" style="padding-top:5px;">                                 
+                                    <input name="config[wxpaypub][display]"  {if condition="!empty($payment['wxpaypub']['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
                                     <span class="lbl middle help-inline" >&nbsp;&nbsp;* 默认关闭</span>
                                     </div>
                                 </div>

@@ -26,7 +26,9 @@
         "topthink/think-helper": "^1.0",
         "yfcmf/geetest": "^1.0",
         "qiniu/php-sdk": "^7.1",
-        "phpoffice/phpexcel": "^1.8"
+        "overtrue/wechat": "~3.1",
+        "phpoffice/phpexcel": "^1.8",
+		"riverslei/payment": "~2.0"
     },
     "extra": {
         "think-path": "thinkphp"

@@ -11,6 +11,7 @@ use app\common\controller\Common;
 use think\Db;
 class Ueditor extends Common {
 	protected $config;
+	protected $type;
 	function _initialize() {
 		parent::_initialize();
 		$adminid=session('aid');
@@ -20,9 +21,10 @@ class Ueditor extends Common {
 		}
 	}
 	function upload(){
+		$this->type=input('edit_type','');
 		date_default_timezone_set("Asia/chongqing");
 		error_reporting(E_ERROR);
-		header("Content-Type: text/html; charset=utf-8");		
+		header("Content-Type: text/html; charset=utf-8");
 		$CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("./public/ueditor/config.json")), true);
 		$storage_domain=config('storage.domain');
 		$config_qiniu=array(
@@ -33,7 +35,7 @@ class Ueditor extends Common {
 			"fileUrlPrefix" => $storage_domain, /* 文件访问路径前缀 */
 			"imageManagerUrlPrefix" => $storage_domain, /* 图片访问路径前缀 */
 		);
-		if(config('storage.storage_open')){
+		if(config('storage.storage_open') && $this->type!='mats'){
 			$CONFIG=array_merge($CONFIG,$config_qiniu);
 		}
 		$this->config=$CONFIG;
@@ -110,7 +112,23 @@ class Ueditor extends Common {
 		$size = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : $listSize;
 		$start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 		$end = intval($start) + intval($size);
-		if(config('storage.storage_open')){
+        if($this->type=='mats'){
+            //微信公众平台图片列表
+            $files=Db::name('we_pic')->field('mtime,url')->select();
+            if(empty($files)){
+                return json_encode(array(
+                    "state" => "no match file",
+                    "list" => array(),
+                    "start" => $start,
+                    "total" => count($files)
+                ));
+            }
+            /* 获取指定范围的列表 */
+            $len = count($files);
+            for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
+                $list[] = $files[$i];
+            }
+        }elseif(config('storage.storage_open')){
 			//七牛
 			$upload = \Qiniu::instance();
 			$files = $upload->listfile($prefix);
@@ -130,22 +148,22 @@ class Ueditor extends Common {
 				$list[]=$tmp;
 			}
 		}else{
-			/* 获取文件列表 */
-			$path = './data/upload/';
-			$files = $this->getfiles($path, $allowFiles);
-			if (!count($files)) {
-				return json_encode(array(
-					"state" => "no match file",
-					"list" => array(),
-					"start" => $start,
-					"total" => count($files)
-				));
-			}
-			/* 获取指定范围的列表 */
-			$len = count($files);
-			for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
-				$list[] = $files[$i];
-			}
+            /* 获取文件列表 */
+            $path = './data/upload/';
+            $files = $this->getfiles($path, $allowFiles);
+            if (!count($files)) {
+                return json_encode(array(
+                    "state" => "no match file",
+                    "list" => array(),
+                    "start" => $start,
+                    "total" => count($files)
+                ));
+            }
+            /* 获取指定范围的列表 */
+            $len = count($files);
+            for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
+                $list[] = $files[$i];
+            }
 		}
 		/* 返回数据 */
 		$result = json_encode(array(
@@ -193,7 +211,38 @@ class Ueditor extends Common {
 		if(!empty($config)){
 			$this->config=array_merge($this->config,$config);;
 		}
-		if(config('storage.storage_open')){
+		if($this->type=='mats'){
+            $file = request()->file('upfile');
+            if($file){
+                $validate=array(
+                    'size'=>1024*1024 ,// 设置附件上传大小1M
+                    'ext'=>array('jpg', 'png'),
+                );
+                $info = $file->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
+                if($info) {
+                    $imgurl=ROOT_PATH.config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
+                    //上传微信
+                    $material = $this->app->material;
+                    $result = $material->uploadArticleImage($imgurl);
+                    $url = $result->url;
+                    if(!empty($url)){
+                        $data['mtime']=time();
+                        $data['url']=$url;
+                        Db::name('we_pic')->insert($data);
+                        $title =$info->getFilename();
+                        $state = 'SUCCESS';
+                    }else{
+                        $state ='上传微信平台失败';
+                    }
+                    $file = null;
+                    @unlink($imgurl);
+                }else{
+                    $state = $file->getError();
+                }
+            }else{
+                $state = '未接收到文件';
+            }
+        }elseif(config('storage.storage_open')){
 			//七牛云存储
 			$upload = \Qiniu::instance();
 			$info = $upload->upload();
@@ -248,7 +297,28 @@ class Ueditor extends Common {
 		if (empty ($data)) {
 			$state= 'Scrawl Data Empty!';
 		} else {
-			if(config('storage.storage_open')){
+            if($this->type=='mats'){
+                //本地存储
+                $img = base64_decode($data);
+                if(strlen($img)>1024*1024){
+                    $state ='文件超过1M';
+                }else{
+                    $savepath = save_storage_content('png', $img);
+                    //上传微信
+                    $material = $this->app->material;
+                    $result = $material->uploadArticleImage(ROOT_PATH.$savepath);
+                    $url = $result->url;
+                    if(!empty($url)){
+                        $sldata['mtime']=time();
+                        $sldata['url']=$url;
+                        Db::name('we_pic')->insert($sldata);
+                        $state = 'SUCCESS';
+                    }else{
+                        $state ='上传微信平台失败';
+                    }
+                    @unlink(ROOT_PATH.$savepath);
+                }
+            }elseif(config('storage.storage_open')){
 				//七牛
 				$upload = \Qiniu::instance();
 				$info = $upload->uploadOne('data:image/png;base64,'.$data,"image/");
@@ -303,7 +373,48 @@ class Ueditor extends Common {
 					$ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
 					if (in_array('.' . $ext, $this->config ['catcherAllowFiles'])) {
 						if ($img = file_get_contents($f)) {
-							if(config('storage.storage_open') && stripos($f,config('storage.domain'))===false){
+                            if($this->type=='mats' && in_array($ext,array('jpg','png')) && strlen($img)<1024*1024){
+                                //本地
+                                $savepath = save_storage_content($ext, $img);
+                                if ($savepath) {
+                                    //上传微信
+                                    $material = $this->app->material;
+                                    $result = $material->uploadArticleImage(ROOT_PATH.$savepath);
+                                    $url = $result->url;
+                                    if(!empty($url)){
+                                        $sldata['mtime']=time();
+                                        $sldata['url']=$url;
+                                        Db::name('we_pic')->insert($sldata);
+                                        $savelist [] = array(
+                                            'state' => 'SUCCESS',
+                                            'url' => $url,
+                                            'size' => strlen($img),
+                                            'title' => '',
+                                            'original' => '',
+                                            'source' => htmlspecialchars($f)
+                                        );
+                                    }else{
+                                        $savelist [] = array(
+                                            'state' => 'Save remote file error!',
+                                            'url' => '',
+                                            'size' => '',
+                                            'title' => '',
+                                            'original' => '',
+                                            'source' => htmlspecialchars($f),
+                                        );
+                                    }
+                                    @unlink(ROOT_PATH.$savepath);
+                                } else {
+                                    $savelist [] = array(
+                                        'state' => 'Save remote file error!',
+                                        'url' => '',
+                                        'size' => '',
+                                        'title' => '',
+                                        'original' => '',
+                                        'source' => htmlspecialchars($f),
+                                    );
+                                }
+                            }elseif(config('storage.storage_open') && stripos($f,config('storage.domain'))===false){
 								//七牛
 								$upload = \Qiniu::instance();
 								$info = $upload->uploadcatch($f,'','',$ext);

@@ -98,6 +98,7 @@ class Oauth extends Base {
 						'expires_date' => (int)(time()+$token['expires_in']),
 						$oauth_id => $token[$oauth_id],
 				);
+				$new_oauth_user_data['openid']=$user_info['openid'];
 				$new_oauth_user_id=Db::name('OauthUser')->insertGetId($new_oauth_user_data);
 				if($new_oauth_user_id){
 					$this->success(lang('bind success'),url('Center/bang'));
@@ -197,6 +198,7 @@ class Oauth extends Base {
 					'expires_date' => (int)(time()+$token['expires_in']),
 					$oauth_id => $token[$oauth_id],
 				);
+				$new_oauth_user_data['openid']=$user_info['openid'];
 				$new_oauth_user_id=Db::name("OauthUser")->insertGetId($new_oauth_user_data);
 				if($new_oauth_user_id){
 					session('hid',$new_user_id);

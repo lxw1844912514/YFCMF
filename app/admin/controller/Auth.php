@@ -108,6 +108,60 @@ class Auth{
         return $groups[$uid];
     }
     /**
+     * 获得权限rule表id数组
+     * @param integer $uid  用户id
+     * @param integer $type
+     */
+    public function getAuthIds($uid,$type=1) {
+        static $_authIds = array(); //保存用户验证通过的权限ruel表ids
+        $t = implode(',',(array)$type);
+        if (isset($_authIds[$uid.$t])) {
+            return $_authIds[$uid.$t];
+        }
+        if( $this->_config['auth_type']==2 && isset($_SESSION['_AUTH_IDS_'.$uid.$t])){
+            return $_SESSION['_AUTH_IDS_'.$uid.$t];
+        }
+        //读取用户所属用户组
+        $groups = $this->getGroups($uid);
+        $ids = array();//保存用户所属用户组设置的所有权限规则id
+        foreach ($groups as $g) {
+            $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
+        }
+        $ids = array_unique($ids);
+        if (empty($ids)) {
+            $_authIds[$uid.$t] = array();
+            return array();
+        }
+
+        $map = array(
+            'id'     => array('in', $ids),
+            'type'   => $type,
+        );
+        //读取用户组所有权限规则
+        $rules = db()->name($this->_config['auth_rule'])->where($map)->field('id,condition')->select();
+        //循环规则，判断结果。
+        $authIds = array();   //
+        foreach ($rules as $rule) {
+            if (!empty($rule['condition'])) { //根据condition进行验证
+                $user = $this->getUserInfo($uid);//获取用户信息,一维数组
+                $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
+                @(eval('$condition=(' . $command . ');'));
+                if ($condition) {
+                    $authIds[] = $rule['id'];
+                }
+            } else {
+                //只要存在就记录
+                $authIds[] = $rule['id'];
+            }
+        }
+        $_authIds[$uid.$t] = $authIds;
+        if($this->_config['auth_type']==2){
+            //规则列表结果保存到session
+            session('_AUTH_IDS_'.$uid.$t,$authIds);
+        }
+        return $authIds;
+    }
+    /**
      * 获得权限列表
      * @param integer $uid  用户id
      * @param integer $type 
