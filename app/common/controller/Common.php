@@ -45,7 +45,7 @@ class Common extends Controller{
         'log' => [
             'level'      => 'debug',
             'permission' => 0777,
-            'file'       => RUNTIME_PATH.'temp/easywechat.log',
+            'file'       => '/data/runtime/temp/easywechat.log',
         ],
         /**
          * OAuth 配置

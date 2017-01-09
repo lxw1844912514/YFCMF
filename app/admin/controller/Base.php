@@ -38,6 +38,7 @@ class Base extends Common {
 		    if(!in_array($aid_s,$not_check_id)){
                 $auth = new Auth();
                 $rule_ids=$auth->getAuthIds($aid_s);
+				if(empty($rule_ids)) $this->error('该账户未分配权限',url('Login/login'));
                 $where['id']=array('in',$rule_ids);
             }
 			$data = Db::name('auth_rule')->where($where)->order('sort')->select();

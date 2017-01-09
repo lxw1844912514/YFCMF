@@ -51,6 +51,7 @@ class Login extends Common {
 			if (!$admin||encrypt_password($password,$admin['admin_pwd_salt'])!==$admin['admin_pwd']){
 				$this->error('用户名或者密码错误，重新输入',url('Login/login'));
 			}else{
+				if(empty($admin['admin_open'])) $this->error('此账号已被禁用',url('Login/login'));
 				//检查是否弱密码
 				session('admin_weak_pwd', false);
 				$weak_pwd_reg = array(
