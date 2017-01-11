@@ -479,7 +479,8 @@ function db_get_insert_sqls($table)
             foreach ($data_rows as &$v) {
                 foreach ($v as &$vv) {
                     //TODO mysql_real_escape_string替换方法
-                    $vv = "'" . @mysql_real_escape_string($vv) . "'";
+                    //$vv = "'" . @mysql_real_escape_string($vv) . "'";
+					$vv = "'" . addslashes(str_replace(array("\r","\n"),array('\r','\n'),$vv)) . "'";
                 }
                 $data_values [] = '(' . join(',', $v) . ')';
             }

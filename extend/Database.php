@@ -11,7 +11,8 @@
 use think\Db;
 
 //数据导出模型
-class Database{
+class Database
+{
     /**
      * 文件指针
      * @var resource
@@ -51,7 +52,7 @@ class Database{
      * 打开一个卷，用于写入数据
      * @param  integer $size 写入数据的大小
      */
-    private function open($size){
+    private function open($size = 0){
         if($this->fp){
             $this->size += $size;
             if($this->size > $this->config['part']){
@@ -80,12 +81,12 @@ class Database{
      */
     public function create(){
         $sql  = "-- -----------------------------\n";
-        $sql .= "-- Think MySQL Data Transfer \n";
-        $sql .= "-- \n";
-        $sql .= "-- Host     : " . config('dabase.hostname') . "\n";
-        $sql .= "-- Port     : " . config('dabase.hostport') . "\n";
-        $sql .= "-- Database : " . config('dabase.database') . "\n";
-        $sql .= "-- \n";
+        $sql .= "-- MySQL Data Transfer\n";
+        $sql .= "--\n";
+        $sql .= "-- Host     : " . config('database.hostname') . "\n";
+        $sql .= "-- Port     : " . config('database.hostport') . "\n";
+        $sql .= "-- Database : " . config('database.database') . "\n";
+        $sql .= "--\n";
         $sql .= "-- Part : #{$this->file['part']}\n";
         $sql .= "-- Date : " . date("Y-m-d H:i:s") . "\n";
         $sql .= "-- -----------------------------\n\n";
@@ -98,7 +99,7 @@ class Database{
      * @param  string $sql 要写入的SQL语句
      * @return boolean     true - 写入成功，false - 写入失败！
      */
-    private function write($sql){
+    private function write($sql = ''){
         $size = strlen($sql);
         
         //由于压缩原因，无法计算出压缩后的长度，这里假设压缩率为50%，
@@ -115,10 +116,11 @@ class Database{
      * @param  integer $start 起始行数
      * @return boolean        false - 备份失败
      */
-    public function backup($table, $start){
-        //备份表结构
+    public function backup($table = '', $start = 0){
+        // 备份表结构
         if(0 == $start){
             $result = Db::query("SHOW CREATE TABLE `{$table}`");
+
             $sql  = "\n";
             $sql .= "-- -----------------------------\n";
             $sql .= "-- Table structure for `{$table}`\n";
@@ -147,9 +149,8 @@ class Database{
             //备份数据记录
             $result = Db::query("SELECT * FROM `{$table}` LIMIT {$start}, 1000");
             foreach ($result as $row) {
-                //TODO mysql_real_escape_string替换方法
-                $row = @array_map('mysql_real_escape_string', $row);
-                $sql = "INSERT INTO `{$table}` VALUES ('" . implode("', '", $row) . "');\n";
+                $row = array_map('addslashes', $row);
+                $sql = "INSERT INTO `{$table}` VALUES ('" . str_replace(array("\r","\n"),array('\r','\n'),implode("', '", $row)) . "');\n";
                 if(false === $this->write($sql)){
                     return false;
                 }
@@ -163,7 +164,7 @@ class Database{
         return 0;
     }
 
-    public function import($start){
+    public function import($start = 0){
         //还原数据
         if($this->config['compress']){
             $gz   = gzopen($this->file[1], 'r');
