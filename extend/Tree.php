@@ -257,29 +257,30 @@ class Tree {
         $placeholder = '<ul><li><span class="placeholder"></span></li></ul>';
         if (!$recursion)
             $this->str .='<ul' . $effected . '  class="' . $style . '">';
-        foreach ($child as $id => $a) {
-
-            @extract($a);
-            if ($showlevel > 0 && $showlevel == $currentlevel && $this->get_child($id))
-                $folder = 'hasChildren'; //如设置显示层级模式@2011.07.01
-            $floder_status = isset($folder) ? ' class="' . $folder . '"' : '';
-            $this->str .= $recursion ? '<ul><li' . $floder_status . ' id=\'' . $id . '\'>' : '<li' . $floder_status . ' id=\'' . $id . '\'>';
-            $recursion = FALSE;
-            //判断是否为终极栏目
-            if ($child == 1) {
-                eval("\$nstr = \"$str2\";");
-                $this->str .= $nstr;
-                if ($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
-                    $this->get_treeview($id, $effected_id, $str, $str2, $showlevel, $style, $currentlevel + 1, TRUE);
-                } elseif ($showlevel > 0 && $showlevel == $currentlevel) {
-                    $this->str .= $placeholder;
-                }
-            } else {
-                eval("\$nstr = \"$str\";");
-                $this->str .= $nstr;
-            }
-            $this->str .=$recursion ? '</li></ul>' : '</li>';
-        }
+		if (is_array($child)) {
+			foreach ($child as $id => $a) {
+				@extract($a);
+				if ($showlevel > 0 && $showlevel == $currentlevel && $this->get_child($id))
+					$folder = 'hasChildren'; //如设置显示层级模式@2011.07.01
+				$floder_status = isset($folder) ? ' class="' . $folder . '"' : '';
+				$this->str .= $recursion ? '<ul><li' . $floder_status . ' id=\'' . $id . '\'>' : '<li' . $floder_status . ' id=\'' . $id . '\'>';
+				$recursion = FALSE;
+				//判断是否为终极栏目
+				if ($child == 1) {
+					eval("\$nstr = \"$str2\";");
+					$this->str .= $nstr;
+					if ($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
+						$this->get_treeview($id, $effected_id, $str, $str2, $showlevel, $style, $currentlevel + 1, TRUE);
+					} elseif ($showlevel > 0 && $showlevel == $currentlevel) {
+						$this->str .= $placeholder;
+					}
+				} else {
+					eval("\$nstr = \"$str\";");
+					$this->str .= $nstr;
+				}
+				$this->str .=$recursion ? '</li></ul>' : '</li>';
+			}		
+		}
         if (!$recursion)
             $this->str .='</ul>';
         return $this->str;
@@ -314,30 +315,32 @@ class Tree {
     	if (!$recursion){
     		$this->str .='<ul' . $effected . '  class="' . $top_ul_class . '">';//顶级菜单ul
     	}
-    	foreach ($child as $id => $a) {
-    		@extract($a);
-    		if ($showlevel > 0 && is_array($this->get_child($a[$this->config['id']]))){
-    			$class_str = " class='$dropdown $li_class'";
-    		}else{
-    			$class_str = " class='$li_class'";
-    		}
-    		$this->str .= $recursion ? "<ul class='$ul_class'><li  $class_str id= 'menu-item-$id'>" : "<li  $class_str   id= 'menu-item-$id'>";
-    		$recursion = FALSE;
-    		//判断是否含有子菜单
-    		if ($this->get_child($a[$this->config['id']])) {
-    			eval("\$nstr = \"$parenttpl\";");
-    			$this->str .= $nstr;
-    			if ($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
-					$this->get_treeview_menu($a[$this->config['id']], $top_ul_id, $childtpl, $parenttpl, $showlevel,   $ul_class ,$li_class ,$top_ul_class, $currentlevel + 1, TRUE,$dropdown);
-    			} elseif ($showlevel > 0 && $showlevel == $currentlevel) {
-    				$this->str .= $placeholder;
-    			}
-    		} else {
-    			eval("\$nstr = \"$childtpl\";");
-    			$this->str .= $nstr;
-    		}
-    		$this->str .=$recursion ? '</li></ul>' : '</li>';
-    	}
+		if (is_array($child)) {
+			foreach ($child as $id => $a) {
+				@extract($a);
+				if ($showlevel > 0 && is_array($this->get_child($a[$this->config['id']]))){
+					$class_str = " class='$dropdown $li_class'";
+				}else{
+					$class_str = " class='$li_class'";
+				}
+				$this->str .= $recursion ? "<ul class='$ul_class'><li  $class_str id= 'menu-item-$id'>" : "<li  $class_str   id= 'menu-item-$id'>";
+				$recursion = FALSE;
+				//判断是否含有子菜单
+				if ($this->get_child($a[$this->config['id']])) {
+					eval("\$nstr = \"$parenttpl\";");
+					$this->str .= $nstr;
+					if ($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
+						$this->get_treeview_menu($a[$this->config['id']], $top_ul_id, $childtpl, $parenttpl, $showlevel,   $ul_class ,$li_class ,$top_ul_class, $currentlevel + 1, TRUE,$dropdown);
+					} elseif ($showlevel > 0 && $showlevel == $currentlevel) {
+						$this->str .= $placeholder;
+					}
+				} else {
+					eval("\$nstr = \"$childtpl\";");
+					$this->str .= $nstr;
+				}
+				$this->str .=$recursion ? '</li></ul>' : '</li>';
+			}		
+		}
     	if (!$recursion) $this->str .='</ul>';
     	return $this->str;
     }

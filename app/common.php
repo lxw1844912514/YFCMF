@@ -597,10 +597,12 @@ function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
     $order = !empty($tag['order']) ? $tag['order'] : '';
     $where=array();
     if (!empty($tag['where'])) {
-        $where['_string'] = $tag['where'];
+        $where_str = $tag['where'];
+    }else{
+		$where_str='';
     }
     //处理数据
-    $data= Db::name($table)->field(join(",",$fields))->where($where)->order($order)->limit($limit)->select();
+    $data= Db::name($table)->field(join(",",$fields))->where($where_str)->where($where)->order($order)->limit($limit)->select();
     //import("Org.Util.PHPExcel");
     error_reporting(E_ALL);
     date_default_timezone_set('Asia/chongqing');
@@ -922,13 +924,15 @@ function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=arra
         $where['n_id'] = array('in',$tag['ids']);
     }
     if (!empty($tag['where'])) {
-        $where['_string'] = $tag['where'];
+        $where_str = $tag['where'];
+    }else{
+		$where_str='';
     }
     if($ispage){
         //使用分页
         $pagesize=$pagesize?$pagesize:config('paginate.list_rows');
-        $count=Db::name("news")->field($field)->where($where)->count();
-        $news=Db::name("news")->alias("a")->join(config('database.prefix').'member_list b','a.news_auto =b.member_list_id')->field($field)->where($where)->order($order)->paginate($pagesize,false,$config);
+        $count=Db::name("news")->field($field)->where($where_str)->where($where)->count();
+        $news=Db::name("news")->alias("a")->join(config('database.prefix').'member_list b','a.news_auto =b.member_list_id')->field($field)->where($where_str)->where($where)->order($order)->paginate($pagesize,false,$config);
         $show=$news->render();
         $content['page']=$show;
         $content['news']=$news;
@@ -936,7 +940,7 @@ function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=arra
         return $content;
     }else{
         //不使用分页
-        $news=Db::name("news")->alias("a")->join(config('database.prefix').'member_list b','a.news_auto =b.member_list_id')->field($field)->where($where)->order($order)->limit($limit)->select();
+        $news=Db::name("news")->alias("a")->join(config('database.prefix').'member_list b','a.news_auto =b.member_list_id')->field($field)->where($where_str)->where($where)->order($order)->limit($limit)->select();
         return $news;
     }
 }
@@ -1531,23 +1535,19 @@ function get_data($table,$join,$joinon,$ids,$cid,$field,$limit,$order,$where_str
 			}
 		}			
 	}
-	//处理$where
-	if($where_str){
-		$where['_string'] = $where_str;
-	}
-	$count=Db::name($table)->field($field)->where($where)->count();
+	$count=Db::name($table)->field($field)->where($where_str)->where($where)->count();
 	if($ispage=='true'){
 		if($join && $joinon){
-			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where)->order($order)->paginate($pagesize,false,$config);
+			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where_str)->where($where)->order($order)->paginate($pagesize,false,$config);
 		}else{
-			$data=Db::name($table)->field($field)->where($where)->order($order)->paginate($pagesize,false,$config);
+			$data=Db::name($table)->field($field)->where($where_str)->where($where)->order($order)->paginate($pagesize,false,$config);
 		}
 		$show=$data->render();
 	}else{
 		if($join && $joinon){
-			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where)->order($order)->limit($limit)->select();
+			$data=Db::name($table)->alias('a')->join(config('database.prefix').$join.' b',$joinon)->field($field)->where($where_str)->where($where)->order($order)->limit($limit)->select();
 		}else{
-			$data=Db::name($table)->field($field)->where($where)->order($order)->limit($limit)->select();
+			$data=Db::name($table)->field($field)->where($where_str)->where($where)->order($order)->limit($limit)->select();
 		}
 		$show='';
 	}
