@@ -1265,7 +1265,7 @@ class Model extends Base
                         $postdata[$k]=input('pic_oldlist','').$picall_url;
                         break;
                     case 'imagefile':
-                        $file = request()->file('pic_one');
+                        $file = request()->file('pic_one_'.$k);
                         $img_one='';
                         if(!empty($file)){
                             if(config('storage.storage_open')){
@@ -1274,8 +1274,8 @@ class Model extends Base
                                 $info = $upload->upload();
                                 $error = $upload->getError();
                                 if ($info) {
-                                    if(!empty($info['pic_one'])){
-                                        $img_one= config('storage.domain').$info['pic_one'][0]['key'];
+                                    if(!empty($info['pic_one_'.$k])){
+                                        $img_one= config('storage.domain').$info['pic_one_'.$k][0]['key'];
                                     }else{
                                         $img_one= config('storage.domain').$info[0]['key'];
                                     }

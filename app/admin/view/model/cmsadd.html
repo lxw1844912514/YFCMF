@@ -148,14 +148,14 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
                                 <div class="col-sm-10">
-                                    <input type="hidden" name="checkpic" id="checkpic" value="{$f.value}" />
-                                    <input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$f.value}" />
+                                    <input type="hidden" name="checkpic_{$k}" id="checkpic_{$k}" value="{$f.value}" />
+                                    <input type="hidden" name="oldcheckpic_{$k}" id="oldcheckpic_{$k}" value="{$f.value}" />
                                     <a href="javascript:;" class="file" title="点击选择所要上传的图片">
-                                        <input type="file" name="pic_one[]" id="file0" multiple="multiple"/>
+                                        <input type="file" data-field="{$k}" name="pic_one_{$k}[]" id="file_{$k}" multiple="multiple"/>
                                         选择上传文件
                                     </a>
-                                    <span class="lbl">&nbsp;&nbsp;<img src="{$f.value|get_imgurl}" width="100" height="70" id="img0" ></span>
-                                    <a href="javascript:;" onclick="return backpic('{$f.value|get_imgurl}');" title="还原修改前的图片" class="file">
+                                    <span class="lbl">&nbsp;&nbsp;<img src="{$f.value|get_imgurl}" width="100" height="70" id="img_{$k}" ></span>
+                                    <a href="javascript:;" onclick="return backpic2('{$f.value|get_imgurl}','{$k}');" title="还原修改前的图片" class="file">
                                         撤销修改
                                     </a>
                                     <span class="lbl">&nbsp;&nbsp;<span class="red"></span>{$f.description|htmlspecialchars}</span>

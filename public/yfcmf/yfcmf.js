@@ -655,6 +655,14 @@ $("#file0").change(function () {
         $("#img0").attr("src", objUrl);
     }
 });
+//
+$("input[id^=file_]").change(function () {
+    var field=$(this).data('field'),objUrl = getObjectURL2(this.files[0],field);
+    console.log("objUrl = " + objUrl);
+    if (objUrl) {
+        $("#img_"+field).attr("src", objUrl);
+    }
+});
 function getObjectURL(file) {
     var url = null;
     if (window.createObjectURL != undefined) { // basic
@@ -668,6 +676,25 @@ function getObjectURL(file) {
         url = window.webkitURL.createObjectURL(file);
     }
     return url;
+}
+function getObjectURL2(file,field) {
+    var url = null;
+    if (window.createObjectURL != undefined) { // basic
+        $("#oldcheckpic_"+field).val("nopic");
+        url = window.createObjectURL(file);
+    } else if (window.URL != undefined) { // mozilla(firefox)
+        $("#oldcheckpic_"+field).val("nopic");
+        url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) { // webkit or chrome
+        $("#oldcheckpic_"+field).val("nopic");
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+}
+function backpic2(picurl,field) {
+    $("#img_"+field).attr("src", picurl);//还原修改前的图片
+    $("#file_"+field).val("");//清空文本框的值
+    $("#oldcheckpic_"+field).val(picurl);//清空文本框的值
 }
 function backpic(picurl) {
     $("#img0").attr("src", picurl);//还原修改前的图片
@@ -710,6 +737,7 @@ function delall(id, url) {
     $optimize = $("#optimize"), $repair = $("#repair");
 
     $optimize.add($repair).click(function () {
+		var that=this;
         $.post(this.href, $form.serialize(), function (data) {
             if (data.code==1) {
                 layer.alert(data.msg, {icon: 6}, function (index) {
@@ -731,6 +759,7 @@ function delall(id, url) {
     $export.click(function () {
         $export.children().addClass("disabled");
         $export.children().text("正在发送备份请求...");
+		var that=this;
         $.post(
             $form.attr("action"),
             $form.serialize(),
@@ -759,6 +788,7 @@ function delall(id, url) {
 
     function backup(tab, status) {
         status && showmsg(tab.id, "开始备份...(0%)");
+		var that=this;
         $.get($form.attr("action"), tab, function (data) {
             if (data.code==1) {
                 showmsg(tab.id, data.msg);
@@ -767,7 +797,9 @@ function delall(id, url) {
                     $export.children().text("备份完成，点击重新备份");
                     window.onbeforeunload = null;
                 }
-                backup(data.tab, tab.id != data.tab.id);
+				if(data.tab !=undefined){
+					backup(data.tab, tab.id != data.tab.id);					
+				}
             } else {
                 updateAlert(data.msg, 'alert-error');
                 $export.children().removeClass("disabled");
