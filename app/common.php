@@ -995,8 +995,11 @@ function get_ads($plug_ad_adtypeid,$limit=5,$order = "plug_ad_order ASC"){
  */
 function html_trim($html, $max, $suffix='...')
 {
-    $non_paired_tags = array('br', 'hr', 'img', 'input', 'param'); // 非成对标签
     $html = trim($html);
+    if(strlen($html)<= $max){
+		return $html;
+    }
+	$non_paired_tags = array('br', 'hr', 'img', 'input', 'param'); // 非成对标签
     $html = preg_replace('/<img([^>]+)>/i', '', $html);
     $count = 0; // 有效字符计数(一个HTML实体字符算一个有效字符)
     $tag_status = 0; // (0:非标签, 1:标签开始, 2:标签名开始, 3:标签名结束)
