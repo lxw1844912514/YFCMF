@@ -1,7 +1,7 @@
 {include file='public:header' /}
 
 <!-- 整个页面内容开始 -->
-<div class="main-container" id="main-container">
+<div class="main-container ace-save-state" id="main-container">
 	<!-- 菜单栏开始 -->
 	{include file='public:left_nav' /}
 	<!-- 菜单栏结束 -->
@@ -12,7 +12,6 @@
 			<!-- 右侧主要内容页顶部标题栏开始 -->
 			{include file='public:head_nav' /}
 			<!-- 右侧主要内容页顶部标题栏结束 -->
-
 			<!-- 右侧下主要内容开始 -->
 			{block name="main-content"}{/block}
 			<!-- 右侧下主要内容结束 -->
@@ -29,6 +28,7 @@
 </div><!-- 整个页面内结束 -->
 
 <!-- ace的js,可以通过打包生成,避免引入文件数多 -->
+<script src="__PUBLIC__/ace/js/ace.js"></script>
 <script src="__PUBLIC__/ace/js/ace.min.js"></script>
 <!-- jquery.form、layer、yfcmf的js -->
 <script src="__PUBLIC__/others/jquery.form.js"></script>
