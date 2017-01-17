@@ -6,11 +6,11 @@
 // +----------------------------------------------------------------------
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\controller;
+namespace app\wechat\controller;
 use think\Db;
 use think\Validate;
 use EasyWeChat\Message\Article;
-class We extends Base {
+class We extends WeBase {
 	protected function _initialize(){
 		parent::_initialize();
 		$config=config('we_options');

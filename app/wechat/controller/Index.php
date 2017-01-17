@@ -12,7 +12,7 @@ use EasyWeChat\Message\Text;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Voice;
 use EasyWeChat\Message\News;
-class Index extends Base {
+class Index extends WeBase {
     protected function _initialize(){
         parent::_initialize();
         config('app_debug',false);

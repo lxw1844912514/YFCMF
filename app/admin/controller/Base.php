@@ -21,14 +21,14 @@ class Base extends Common {
 			$this->redirect('admin/Login/login');
 		} 
 		//已登录，不需要验证的权限
-		$not_check = array('Sys/clear','Index/index');//不需要检测的控制器/方法
+		$not_check = array('admin/Sys/clear','admin/Index/index');//不需要检测的模块/控制器/方法
 		$not_check_id = [1];//不需要检测的管理员ID
 		//当前操作的请求                 模块名/方法名
 		//不在不需要检测的控制器/方法且管理员id!=1时才检测
-		if(!in_array(CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && !in_array($aid_s,$not_check_id)){
+		if(!in_array(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME, $not_check) && !in_array($aid_s,$not_check_id)){
 			$auth = new Auth();
-			if(!$auth->check(CONTROLLER_NAME.'/'.ACTION_NAME,$aid_s)){
-				$this->error('没有权限',url('Index/index'));
+			if(!$auth->check(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME,$aid_s)){
+				$this->error('没有权限',url('admin/Index/index'));
 			}
 		}
 		//获取有权限的菜单tree

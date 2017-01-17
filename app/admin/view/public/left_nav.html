@@ -24,7 +24,7 @@
 		{foreach name="menus" item="v"}
 			{if condition="!empty($v['_child'])"}
 				<li class="{if condition="(count($menus_curr) egt 1) AND ($menus_curr[0] eq $v['id'])"}open{/if}">
-			<a href="#" class="dropdown-toggle">
+			<a href="javascript:void(0);" class="dropdown-toggle">
 				<i class="menu-icon fa {$v.css}"></i>
 				<span class="menu-text">{$v.title}</span>
 				<b class="arrow fa fa-angle-down"></b>
@@ -34,7 +34,7 @@
 				{foreach name="v._child" item="vv"}
 					{if condition="!empty($vv['_child'])"}
 						<li class="{if condition="(count($menus_curr) egt 2) AND ($menus_curr[1] eq $vv['id'])"}active open{/if}">
-					<a href="#" class="dropdown-toggle">
+					<a href="javascript:void(0);" class="dropdown-toggle">
 						<i class="menu-icon fa fa-caret-right"></i>
 						{$vv.title}
 						<b class="arrow fa fa-angle-down"></b>

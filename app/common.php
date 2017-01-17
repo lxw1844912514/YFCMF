@@ -41,12 +41,12 @@ function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child
  * @return array
  */
  function get_menus_admin($str='',$status=1,$arr=false){
-	$str=empty($str)?Request::instance()->controller().'/'.Request::instance()->action():$str;
+	$str=empty($str)?Request::instance()->module().'/'.Request::instance()->controller().'/'.Request::instance()->action():$str;
 	if(strpos($str,'/')===false){
-		$str=Request::instance()->controller().'/'.$str;//仅方法时加上控制器名
+		$str=Request::instance()->module().'/'.Request::instance()->controller().'/'.$str;//仅方法时加上控制器名
 	}
 	//model的cmslist cmsadd cmsedit
-	if(strtolower($str)=='model/cmslist' || strtolower($str)=='model/cmsadd' || strtolower($str)=='model/cmsedit')
+	if(strtolower($str)=='admin/model/cmslist' || strtolower($str)=='admin/model/cmsadd' || strtolower($str)=='admin/model/cmsedit')
 	{
 		$id=get_query();
 		$id=$id['id'];

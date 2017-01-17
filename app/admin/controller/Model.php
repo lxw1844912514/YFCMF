@@ -86,7 +86,7 @@ class Model extends Base
                     $pid2=Db::name('auth_rule')->insertGetId($sldata);
                     if($pid2){
                         $sldata=array(
-                            'name'=>'cmsrunadd',
+                            'name'=>'Model/cmsrunadd',
                             'title'=>'增加操作',
                             'pid'=>$pid2,
                             'level'=>$level+3,
