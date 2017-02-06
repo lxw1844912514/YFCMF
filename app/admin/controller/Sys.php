@@ -853,8 +853,11 @@ class Sys extends Base {
 		$level=input('level',0);
 		$id_str=input('id','pid');
 		$admin_rule=Db::name('auth_rule')->where('pid',$pid)->order('sort')->select();
+		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
 		$arr = menu_left($admin_rule,'id','pid','─',$pid,$level,$level*20);
+		$arr_all = menu_left($admin_rule_all,'id','pid','─',0,$level,$level*20);
 		$this->assign('admin_rule',$arr);
+		$this->assign('admin_rule_all',$arr_all);
 		$this->assign('pid',$id_str);
 		if(request()->isAjax()){
 			return $this->fetch('ajax_admin_rule_list');

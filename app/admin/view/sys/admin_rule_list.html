@@ -16,7 +16,7 @@
 						<small>
 							<select name="pid" required>
 								<option value="0">--默认顶级--</option>
-								{foreach name="admin_rule" item="v"}
+								{foreach name="admin_rule_all" item="v"}
 									<option value="{$v.id}" style="margin-left:55px;">{$v.lefthtml}{$v.title}</option>
 								{/foreach}
 							</select>
