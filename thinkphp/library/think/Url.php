@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -10,11 +10,6 @@
 // +----------------------------------------------------------------------
 
 namespace think;
-
-use think\Config;
-use think\Loader;
-use think\Request;
-use think\Route;
 
 class Url
 {
@@ -89,7 +84,8 @@ class Url
             throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
             // 检查别名路由
-            $alias = Route::rules('alias');
+            $alias      = Route::rules('alias');
+            $matchAlias = false;
             if ($alias) {
                 // 别名路由解析
                 foreach ($alias as $key => $val) {
@@ -97,11 +93,13 @@ class Url
                         $val = $val[0];
                     }
                     if (0 === strpos($url, $val)) {
-                        $url = $key . substr($url, strlen($val));
+                        $url        = $key . substr($url, strlen($val));
+                        $matchAlias = true;
                         break;
                     }
                 }
-            } else {
+            }
+            if (!$matchAlias) {
                 // 路由标识不存在 直接解析
                 $url = self::parseUrl($url, $domain);
             }
@@ -155,7 +153,8 @@ class Url
         // 检测域名
         $domain = self::parseDomain($url, $domain);
         // URL组装
-        $url             = $domain . (self::$root ?: Request::instance()->root()) . '/' . ltrim($url, '/');
+        $url = $domain . rtrim(self::$root ?: Request::instance()->root(), '/') . '/' . ltrim($url, '/');
+
         self::$bindCheck = false;
         return $url;
     }
@@ -250,7 +249,7 @@ class Url
                                     $domain .= $rootDomain;
                                 }
                                 break;
-                            } else if (false !== strpos($key, '*')) {
+                            } elseif (false !== strpos($key, '*')) {
                                 if (!empty($rootDomain)) {
                                     $domain .= $rootDomain;
                                 }
