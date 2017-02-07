@@ -12,9 +12,16 @@ use EasyWeChat\Message\Text;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Voice;
 use EasyWeChat\Message\News;
+use EasyWeChat\Foundation\Application;
+/**
+微信消息处理服务
+微信平台url设置:http://yourdomain/wechat/index/index.html
+*/
 class Index extends WeBase {
     protected function _initialize(){
-        parent::_initialize();
+        $config=config('we_options');
+        if(!empty($config)) $this->options=array_merge($this->options,$config);
+        $this->app = new Application($this->options);
         config('app_debug',false);
         config('app_trace',false);
         if(input('echostr') && $this->checkSignature()){
