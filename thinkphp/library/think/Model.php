@@ -1422,15 +1422,20 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @param mixed   $operator 比较操作符
      * @param integer $count    个数
      * @param string  $id       关联表的统计字段
-     * @return Model
+     * @return Relation|Query
      */
     public static function has($relation, $operator = '>=', $count = 1, $id = '*')
     {
-        $model = new static();
-        if (is_array($operator) || $operator instanceof \Closure) {
-            return $model->$relation()->hasWhere($operator);
+        $model    = new static();
+        $relation = $model->$relation();
+        if ($relation instanceof HasMany) {
+            if (is_array($operator) || $operator instanceof \Closure) {
+                return $relation->hasWhere($operator);
+            }
+            return $relation->has($operator, $count, $id);
+        } else {
+            return $relation;
         }
-        return $model->$relation()->has($operator, $count, $id);
     }
 
     /**
@@ -1438,12 +1443,17 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @access public
      * @param string $relation 关联方法名
      * @param mixed  $where    查询条件（数组或者闭包）
-     * @return Model
+     * @return Relation|Query
      */
     public static function hasWhere($relation, $where = [])
     {
-        $model = new static();
-        return $model->$relation()->hasWhere($where);
+        $model    = new static();
+        $relation = $model->$relation();
+        if ($relation instanceof HasMany) {
+            return $relation->hasWhere($where);
+        } else {
+            return $relation;
+        }
     }
 
     /**
@@ -1483,7 +1493,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $closure  = $relation;
                 $relation = $key;
             }
-            if (strpos($relation, '.')) {
+            if (is_array($relation)) {
+                $subRelation = $relation;
+                $relation    = $key;
+            } elseif (strpos($relation, '.')) {
                 list($relation, $subRelation) = explode('.', $relation, 2);
             }
             $method                = Loader::parseName($relation, 1, false);
@@ -1509,7 +1522,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $closure  = $relation;
                 $relation = $key;
             }
-            if (strpos($relation, '.')) {
+            if (is_array($relation)) {
+                $subRelation = $relation;
+                $relation    = $key;
+            } elseif (strpos($relation, '.')) {
                 list($relation, $subRelation) = explode('.', $relation, 2);
             }
             $relation = Loader::parseName($relation, 1, false);
@@ -1535,7 +1551,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $closure  = $relation;
                 $relation = $key;
             }
-            if (strpos($relation, '.')) {
+            if (is_array($relation)) {
+                $subRelation = $relation;
+                $relation    = $key;
+            } elseif (strpos($relation, '.')) {
                 list($relation, $subRelation) = explode('.', $relation, 2);
             }
             $relation = Loader::parseName($relation, 1, false);
@@ -1559,10 +1578,16 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             if ($relation instanceof \Closure) {
                 $closure  = $relation;
                 $relation = $key;
+            } elseif (is_string($key)) {
+                $name     = $relation;
+                $relation = $key;
             }
             $relation = Loader::parseName($relation, 1, false);
             $count    = $this->$relation()->relationCount($result, $closure);
-            $result->setAttr(Loader::parseName($relation) . '_count', $count);
+            if (!isset($name)) {
+                $name = Loader::parseName($relation) . '_count';
+            }
+            $result->setAttr($name, $count);
         }
     }
 
