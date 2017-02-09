@@ -78,7 +78,12 @@ class Sys extends Base {
             $geetest_on=input('geetest_on',0,'intval')?true:false;
             $captcha_id=input('captcha_id','');
             $private_key=input('private_key','');
+			if(empty($captcha_id) || empty($private_key)) $geetest_on=false;
             sys_config_setbykey('geetest',['geetest_on'=>$geetest_on,'captcha_id'=>$captcha_id,'private_key'=>$private_key]);
+			if($geetest_on){
+				//自动开启路由
+				sys_config_setbykey('url_route_on',true);
+			}
 			$checkpic=input('checkpic');
 			$oldcheckpic=input('oldcheckpic');
 			$options=input('post.options/a');
