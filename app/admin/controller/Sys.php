@@ -291,7 +291,7 @@ class Sys extends Base {
 		$url_route_mode=input('url_route_mode','');
 		sys_config_setbykey('url_route_on',$route_on);
 		sys_config_setbykey('url_route_must',$route_must);
-		sys_config_setbykey('url_complete_matcht',$complete_match);
+		sys_config_setbykey('route_complete_match',$complete_match);
 		sys_config_setbykey('url_html_suffix',$html_suffix);
 		sys_config_setbykey('url_route_mode',$url_route_mode);
         Cache::rm('routes');

@@ -47,7 +47,7 @@ return array (
   'upload_path' => '/data/upload',
   'url_route_on' => false,
   'url_route_must' => false,
-  'url_complete_matcht' => false,
+  'route_complete_match' => false,
   'url_html_suffix' => 'html',
   'storage' => 
   array (
