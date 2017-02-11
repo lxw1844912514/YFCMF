@@ -3,7 +3,7 @@
 class Route
 {
 
-    public  function route()
+    public  function route_rule()
     {
         $routes = $this->get_route();
         if (is_array($routes)) {
