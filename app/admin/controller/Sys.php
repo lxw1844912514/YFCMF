@@ -888,29 +888,48 @@ class Sys extends Base {
 			$pid=Db::name('auth_rule')->where(array('id'=>input('pid')))->field('level')->find();
 			$level=$pid['level']+1;
 			//检测name是否有效
+			$name=input('name');
+			$arr=explode('/',$name);
 			if($level==1){
-				$name=input('name');
-				if (!has_controller('admin',$name)) {
-					$this->error('不存在 '.$name.' 的控制器',url('admin_rule_list'));
+				if(count($arr)==1){
+					$module='admin';
+					$controller=$name;
+				}elseif(count($arr)>1){
+					$module=$arr[0];
+					$controller=$arr[1];
 				}
+				if (!has_controller($module,$controller)) {
+					$this->error('不存在 '.$controller.' 的控制器',url('admin_rule_list'));
+				}
+				$name=strtolower($module).'/'.ucfirst(strtolower($controller));
 			}elseif($level==2){
 				//不检测
 			}else{
-				//是否存在控制器/方法
-				$arr=explode('/',input('name'));
+				//是否存在模块/控制器/方法
 				if(count($arr)==2){
-					$rst=has_action('admin',$arr[0],$arr[1]);
-					if($rst==0){
-						$this->error('不存在 '.$arr[0].' 的控制器',url('admin_rule_list'));
-					}elseif($rst==1){
-						$this->error('控制器'.$arr[0].'不存在方法'.$arr[1],url('admin_rule_list'));
-					}
+					$module='admin';
+					$controller=$arr[0];
+					$action=$arr[1];
+				}elseif(count($arr)>2){
+					$module=$arr[0];
+					$controller=$arr[1];
+					$action=$arr[2];
 				}else{
 					$this->error('提交名称不规范',url('admin_rule_list'));
 				}
+				//处理是否含'?'
+				$arr=explode('?',$action);
+				$_action=(count($arr)==1)?$action:$arr[0];
+				$rst=has_action($module,$controller,$_action);
+				if($rst==0){
+					$this->error('不存在 '.$controller.' 的控制器',url('admin_rule_list'));
+				}elseif($rst==1){
+					$this->error('控制器'.$controller.'不存在方法'.$_action,url('admin_rule_list'));
+				}
+				$name=strtolower($module).'/'.ucfirst(strtolower($controller)).'/'.$action;
 			}
 			$sldata=array(
-				'name'=>input('name'),
+				'name'=>$name,
 				'title'=>input('title'),
 				'status'=>input('status',0,'intval'),
 				'sort'=>input('sort',50,'intval'),
