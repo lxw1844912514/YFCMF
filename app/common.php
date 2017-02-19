@@ -13,75 +13,6 @@ use app\admin\controller\Auth;
 use think\Lang;
 // 应用公共文件
 /**
- * 递归重组节点信息为多维数组
- * @param array
- * @param int
- * @param string
- * @param string
- * @param string
- * @return array
- */
-function node_merge(&$node, $pid = 0, $id_name = 'id', $pid_name = 'pid', $child_name = '_child')
-{
-    $arr = array();
-    foreach ($node as $v) {
-        if ($v [$pid_name] == $pid) {
-            $v [$child_name] = node_merge($node, $v [$id_name], $id_name, $pid_name, $child_name);
-            $arr [] = $v;
-        }
-    }
-    return $arr;
-}
-/**
- * 倒推后台菜单数组
- * @author rainfer <81818832@qq.com>
- * @param String $str '方法名'或'控制器名/方法名'，为空则为'当前控制器/当前方法'
- * @param int $status 获取的menu是否含全部状态，还是仅status=1。不为0和1时,不限制
- * @param  boolean $arr 是否返回全部数据数组，默认假，仅返回ids
- * @return array
- */
- function get_menus_admin($str='',$status=1,$arr=false){
-	$str=empty($str)?Request::instance()->module().'/'.Request::instance()->controller().'/'.Request::instance()->action():$str;
-	if(strpos($str,'/')===false){
-		$str=Request::instance()->module().'/'.Request::instance()->controller().'/'.$str;//仅方法时加上控制器名
-	}
-	//model的cmslist cmsadd cmsedit
-	if(strtolower($str)=='admin/model/cmslist' || strtolower($str)=='admin/model/cmsadd' || strtolower($str)=='admin/model/cmsedit')
-	{
-		$id=get_query();
-		$id=$id['id'];
-		$str.='?id='.$id;
-	}
-	$status=empty($status)?1:$status;
-	$arr=empty($arr)?false:true;
-	$where['name']=$str;
-	if($status==0 || $status==1){
-		$where['status']=$status;
-	}
-	$arr_rst=array();
-	$rst=Db::name('auth_rule')->where($where)->order('level desc,sort')->limit(1)->select();
-	if($rst){
-		$rst=$rst[0];
-		if($arr){
-			$arr_rst[]=$rst;
-		}else{
-			$arr_rst[]=$rst['id'];
-		}
-		$pid=$rst['pid'];
-		while(intval($pid)!=0) {
-			//非顶级
-			$rst=Db::name('auth_rule')->where(array('id'=>$pid))->find();
-			if($arr){
-				$arr_rst[]=$rst;
-			}else{
-				$arr_rst[]=$rst['id'];
-			}
-			$pid=$rst['pid'];	
-		} 
-	}
-	return array_reverse($arr_rst);
-}
-/**
  * 所有用到密码的不可逆加密方式
  * @author rainfer <81818832@qq.com>
  * @param string $password
@@ -176,7 +107,8 @@ function remove_dir($dir, $time_thres = -1)
  * @return string            格式化后的带单位的大小
  * @author rainfer <81818832@qq.com>
  */
-function format_bytes($size, $delimiter = '') {
+function format_bytes($size, $delimiter = '')
+{
     $units = array(' B', ' KB', ' MB', ' GB', ' TB', ' PB');
     for ($i = 0; $size >= 1024 && $i < 5; $i++) $size /= 1024;
     return round($size, 2) . $delimiter . $units[$i];
@@ -186,7 +118,8 @@ function format_bytes($size, $delimiter = '') {
  * @return string
  * @author rainfer <81818832@qq.com>
  */
-function checkVersion(){
+function checkVersion()
+{
 	if(extension_loaded('curl')){
 		$url = 'http://www.yfcmf.net/index.php?m=home&c=upgrade&a=check';
 		$params = array(
@@ -209,13 +142,15 @@ function checkVersion(){
  * curl访问
  * @author rainfer <81818832@qq.com>
  * @param  string $url
+ * @param string $type
  * @param boolean $data
  * @param string $err_msg
  * @param int $timeout
  * @param array $cert_info
  * @return string
  */
-function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $cert_info = array()){
+function go_curl($url, $type, $data = false, &$err_msg = null, $timeout = 20, $cert_info = array())
+{
 	$type = strtoupper($type);
     if ($type == 'GET' && is_array($data)) {
         $data = http_build_query($data);
@@ -326,7 +261,8 @@ function sys_config_get($key)
  * 返回带协议的域名
  * @author rainfer <81818832@qq.com>
  */
-function get_host(){
+function get_host()
+{
     $host=$_SERVER["HTTP_HOST"];
     $protocol=Request::instance()->isSsl()?"https://":"http://";
     return $protocol.$host;
@@ -351,7 +287,8 @@ function ajax_return($data = [], $msg = "", $code = 0, $extend = [])
  * @param   int $uid    用户id
  * @return string
  */
-function get_groups($uid) {
+function get_groups($uid)
+{
     $auth = new Auth();
     $group = $auth->getGroups($uid);
     return $group[0]['title'];
@@ -363,7 +300,8 @@ function get_groups($uid) {
  * @param int $convert 转换大小写 1大写 0小写
  * @return string
  */
-function random($length=10, $type='letter', $convert=0){
+function random($length=10, $type='letter', $convert=0)
+{
     $config = array(
         'number'=>'1234567890',
         'letter'=>'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -390,7 +328,8 @@ function random($length=10, $type='letter', $convert=0){
  * @param string $controller 待判定控制器名
  * @return boolean
  */
-function has_controller($module,$controller){
+function has_controller($module,$controller)
+{
 	$arr=cache('controllers'.'_'.$module);
 	if(empty($arr)){
 		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
@@ -409,7 +348,8 @@ function has_controller($module,$controller){
  * @param string $action 待判定控制器名
  * @return number 方法结果，0不存在控制器 1存在控制器但是不存在方法 2存在控制和方法
  */
-function has_action($module,$controller,$action){
+function has_action($module,$controller,$action)
+{
 	$arr=cache('controllers'.'_'.$module);
 	if(empty($arr)){
 		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
@@ -509,12 +449,14 @@ function db_is_valid_table_name($table)
  * @author rainfer <81818832@qq.com>
  *
  * @param $file
+ * @param $prefix
  */
-function db_restore_file($file)
+function db_restore_file($file,$prefix='')
 {
+    $prefix=$prefix?:db_get_db_prefix_holder();
     $db_prefix=config('database.prefix');
     $sqls = file_get_contents($file);
-    $sqls = str_replace(db_get_db_prefix_holder(), $db_prefix, $sqls);
+    $sqls = str_replace($prefix, $db_prefix, $sqls);
     $sqlarr = explode(";\n", $sqls);
     foreach ($sqlarr as &$sql) {
         Db::execute($sql);
@@ -562,7 +504,8 @@ function force_download_content($filename, $content)
  *      order:排序方式，如：post_date desc
  *      where:查询条件，字符串形式，和sql语句一样
  */
-function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
+function export2excel($table,$file='',$fields='',$field_titles='',$tag='')
+{
     //处理传递的参数
     if(stripos($table,config('database.prefix'))==0){
         //含前缀的表,去除表前缀
@@ -647,7 +590,8 @@ function export2excel($table,$file='',$fields='',$field_titles='',$tag=''){
  * @param string
  * @return array
  */
-function param2array($tag = ''){
+function param2array($tag = '')
+{
     $param = array();
     $array = explode(';',$tag);
     foreach ($array as $v){
@@ -681,7 +625,8 @@ function num2alpha($index, $start = 65)
  * @return array
  * @author rainfer <81818832@qq.com>
  */
-function read($filename,$type='Excel5'){
+function read($filename,$type='Excel5')
+{
     $objReader = \PHPExcel_IOFactory::createReader($type);
     $objPHPExcel = $objReader->load($filename);
     $objWorksheet = $objPHPExcel->getActiveSheet();
@@ -705,9 +650,10 @@ function read($filename,$type='Excel5'){
  * @param int $open 1表示只显示menu_open=1的，0表示只显示menu_open=0的，2表示不限制
  * @param string $field 默认只返回id数组(一维),其它如:"*"表示全部字段，"id,menu_name"表示返回二维数组
  * @param boolean $lang 是否只返回当前语言下分类，默认false
- * @return array
+ * @return array|mixed
  */
-function get_menu_byid($id=0,$self=false,$open=0,$field='id',$lang=false){
+function get_menu_byid($id=0,$self=false,$open=0,$field='id',$lang=false)
+{
     if(empty($open)){
         $where['menu_open']=0;
     }elseif($open==1){
@@ -720,15 +666,9 @@ function get_menu_byid($id=0,$self=false,$open=0,$field='id',$lang=false){
 	}
     $arr=Db::name('menu')->where($where)->where(array('id'=>$id))->select();
     if($arr){
-        $rst=$self?array($id):array();
-        $menu=Db::name('menu')->where($where)->where(array('parentid'=>$id))->field('id')->select();
-        foreach($menu as $v){
-            $rst[]=intval($v['id']);
-            $arr=Db::name('menu')->where($where)->where(array('parentid'=>$v['id']))->field('id')->select();
-            if($arr){
-                $rst=array_merge($rst,get_menu_byid($v['id'],false,$open,'id',$lang));
-            }
-        }
+        $tree=new \Tree();
+        $tree->init($arr);
+        $rst=$tree->get_childs($arr,$id,true,true);
     }else{
         $rst=$self?array($id):array();
     }
@@ -781,32 +721,13 @@ function save_storage_content($ext = null, $content = null)
     return $newfile;
 }
 /**
- * 获取后台管理设置的网站信息，此类信息一般用于前台
- * @author rainfer <81818832@qq.com>
- * @return array
- */
-function get_site_options(){
-	$site_options = cache("site_options");
-	if(empty($site_options)){
-		$option = Db::name("Options")->where('option_l',Lang::detect())->where("option_name='site_options'")->find();
-		if($option){
-			$site_options = json_decode($option['option_value'],true);
-			$site_options['site_copyright']=htmlspecialchars_decode($site_options['site_copyright']);
-		}else{
-			$site_options = array();
-		}
-		cache("site_options", $site_options);
-	}
-	$site_options['site_tongji']=htmlspecialchars_decode($site_options['site_tongji']);
-	return $site_options;	
-}
-/**
  * 获取所有友情连接
  * @author rainfer <81818832@qq.com>
  * @param int
- * @return array
+ * @return array|mixed
  */
-function get_links($type=1){
+function get_links($type=1)
+{
 	$links=Db::name("plug_link")->where('plug_link_l',Lang::detect())->where(array('plug_link_typeid'=>$type,'plug_link_open'=>1))->order("plug_link_order ASC")->select();
 	return $links;
 }
@@ -823,7 +744,8 @@ function get_links($type=1){
  * @param string $dropdown 有子元素时li的class
  * @return string
  */
-function get_menu($id=0,$top_ul_id="",$childtpl="<span class='file'>\$label</span>",$parenttpl="<span class='folder'>\$label</span>",$ul_class="" ,$li_class="" ,$top_ul_class="filetree",$showlevel=6,$dropdown='hasChild'){
+function get_menu($id=0,$top_ul_id="",$childtpl="<span class='file'>\$label</span>",$parenttpl="<span class='folder'>\$label</span>",$ul_class="" ,$li_class="" ,$top_ul_class="filetree",$showlevel=6,$dropdown='hasChild')
+{
 	$navs=cache("site_nav");
 	if(empty($navs)){
 		$navs=get_menu_datas();
@@ -834,18 +756,19 @@ function get_menu($id=0,$top_ul_id="",$childtpl="<span class='file'>\$label</spa
 }
 /**
  * 返回指定id的菜单
- * @return array
+ * @return array|mixed
  */
-function get_menu_datas(){
+function get_menu_datas()
+{
     $navs= Db::name("menu")->where('menu_l',Lang::detect())->where(array('menu_open'=>1))->order(array("listorder" => "ASC"))->select();
     foreach ($navs as $key=>$nav){
         if($nav['menu_type']==2){
             $nav['href']=$nav['menu_address'];
         }elseif($nav['menu_type']==4){
 			//为了匹配单页路由
-			$nav['href']=url('Listn/index?id='.$nav['id']);
+			$nav['href']=url('home/Listn/index?id='.$nav['id']);
         }else{
-			$nav['href']=url('Listn/index',array('id'=>$nav['id']));
+			$nav['href']=url('home/Listn/index',array('id'=>$nav['id']));
             if(strtolower($nav['menu_enname'])=='home' && $nav['parentid']==0){
                 $nav['href']=url('home/Index/index');
             }
@@ -860,7 +783,8 @@ function get_menu_datas(){
  * @param int
  * @return array
  */
-function get_menu_tree($id){
+function get_menu_tree($id)
+{
     $navs=cache("site_nav");
     if(empty($navs)){
         $navs=get_menu_datas();
@@ -885,9 +809,10 @@ function get_menu_tree($id){
  * @param string $v 当查询类型为'cid'或'keyword'时,待搜索的值
  * @param array $where 查询条件，（暂只支持数组），格式和thinkphp where方法一样；
  * @param int $currentPage
- * @return array
+ * @return array|mixed
  */
-function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=array(),$currentPage=null){
+function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=array(),$currentPage=null)
+{
     $where=is_array($where)?$where:array();
     $tag=param2array($tag);
     $field = !empty($tag['field']) ? $tag['field'] : '*';
@@ -949,9 +874,10 @@ function get_news($tag,$ispage=false,$pagesize=10,$type=null,$v=null,$where=arra
  * 获取评论
  * @param string $tag
  * @param array $where //按照thinkphp where array格式
- * @return array
+ * @return array|mixed
  */
-function get_comments($tag="field:*;limit:0,5;order:createtime desc;",$where=array()){
+function get_comments($tag="field:*;limit:0,5;order:createtime desc;",$where=array())
+{
     $where=is_array($where)?$where:array();
     $tag=param2array($tag);
     $field = !empty($tag['field']) ? $tag['field'] : '*';
@@ -974,9 +900,10 @@ function get_comments($tag="field:*;limit:0,5;order:createtime desc;",$where=arr
  * @param int $plug_ad_adtypeid 广告位id
  * @param int $limit
  * @param string $order
- * @return array;
+ * @return array|mixed;
  */
-function get_ads($plug_ad_adtypeid,$limit=5,$order = "plug_ad_order ASC"){
+function get_ads($plug_ad_adtypeid,$limit=5,$order = "plug_ad_order ASC")
+{
     if($order == ''){
         $order = "plug_ad_order ASC";
     }
@@ -999,91 +926,81 @@ function html_trim($html, $max, $suffix='...')
     if(strlen($html)<= $max){
 		return $html;
     }
-	$non_paired_tags = array('br', 'hr', 'img', 'input', 'param'); // 非成对标签
+	$non_paired_tags = array('br', 'hr', 'img', 'input', 'param');
     $html = preg_replace('/<img([^>]+)>/i', '', $html);
-    $count = 0; // 有效字符计数(一个HTML实体字符算一个有效字符)
-    $tag_status = 0; // (0:非标签, 1:标签开始, 2:标签名开始, 3:标签名结束)
-    $nodes = array(); // 存放解析出的节点(文本节点:array(0, '文本内容', 'text', 0), 标签节点:array(1, 'tag', 'tag_name', '标签性质:0:非成对标签,1:成对标签的开始标签,2:闭合标签'))
-    $segment = ''; // 文本片段
-    $tag_name = ''; // 标签名
+    $count = 0;
+    $tag_status = 0;
+    $nodes = array();
+    $segment = '';
+    $tag_name = '';
     for($i=0;$i<strlen($html);$i++)
     {
-        $char = $html[$i]; // 当前字符
-        $segment .= $char; // 保存文本片段
+        $char = $html[$i];
+        $segment .= $char;
         if($tag_status == 4)
         {
             $tag_status = 0;
         }
         if($tag_status == 0 && $char == '<')
         {
-            // 没有开启标签状态,设置标签开启状态
             $tag_status = 1;
         }
         if($tag_status == 1 && $char != '<')
         {
-            // 标签状态设置为开启后,用下一个字符来确定是一个标签的开始
-            $tag_status = 2; //标签名开始
-            $tag_name = ''; // 清空标签名
-            // 确认标签开启,将标签之前保存的字符版本存为文本节点
+            $tag_status = 2;
+            $tag_name = '';
             $nodes[] = array(0, substr($segment, 0, strlen($segment)-2), 'text', 0);
-            $segment = '<'.$char; // 重置片段,以标签开头
+            $segment = '<'.$char;
         }
         if($tag_status == 2)
         {
-            // 提取标签名
             if($char == ' ' || $char == '>' || $char == "\t")
             {
-                $tag_status = 3; // 标签名结束
+                $tag_status = 3;
             }else
             {
-                $tag_name .= $char; // 增加标签名字符
+                $tag_name .= $char;
             }
         }
         if($tag_status == 3 && $char == '>')
         {
-            $tag_status = 4; // 重置标签状态
+            $tag_status = 4;
             $tag_name = strtolower($tag_name);
-            // 跳过成对标签的闭合标签
             $tag_type = 1;
             if(in_array($tag_name, $non_paired_tags))
             {
-                // 非成对标签
                 $tag_type = 0;
             }elseif($tag_name[0] == '/')
             {
                 $tag_type = 2;
             }
-            // 标签结束,保存标签节点
             $nodes[] = array(1, $segment, $tag_name, $tag_type);
-            $segment = ''; // 清空片段
+            $segment = '';
         }
         if($tag_status == 0)
         {
-            //echo $char.')'.$count."\n";
             if($char == '&')
             {
-                // 处理HTML实体,10个字符以内碰到';',则认为是一个HTML实体
                 for($e=1;$e<=10;$e++)
                 {
                     if($html[$i+$e] == ';')
                     {
-                        $segment .= substr($html, $i+1, $e); // 保存实体
-                        $i += $e; // 跳过实体字符所占长度
+                        $segment .= substr($html, $i+1, $e);
+                        $i += $e;
                         break;
                     }
                 }
             }else
             {
-                // 非标签情况下检查有效文本
-                $char_code = ord($char); // 字符编码
-                if($char_code >= 224) // 三字节字符
+                $char_code = ord($char);
+                if($char_code >= 224)
                 {
-                    $segment .= $html[$i+1].$html[$i+2]; // 保存字符
-                    $i += 2; // 跳过下2个字符的长度
-                }elseif($char_code >= 129) // 双字节字符
+                    $segment .= $html[$i+1].$html[$i+2];
+                    $i += 2;
+                }elseif($char_code >= 129)
                 {
                     $segment .= $html[$i+1];
-                    $i += 1; // 跳过下一个字符的长度
+                    $i += 1;
                 }
             }
             $count ++;
@@ -1095,20 +1012,20 @@ function html_trim($html, $max, $suffix='...')
         }
     }
     $html = '';
-    $tag_open_stack = array(); // 成对标签的开始标签栈
+    $tag_open_stack = array();
     for($i=0;$i<count($nodes);$i++)
     {
         $node = $nodes[$i];
         if($node[3] == 1)
         {
-            array_push($tag_open_stack, $node[2]); // 开始标签入栈
+            array_push($tag_open_stack, $node[2]);
         }elseif($node[3] == 2)
         {
-            array_pop($tag_open_stack); // 碰到一个结束标签,出栈一个开始标签
+            array_pop($tag_open_stack);
         }
         $html .= $node[1];
     }
-    while($tag_name = array_pop($tag_open_stack)) // 用剩下的未出栈的开始标签补齐未闭合的成对标签
+    while($tag_name = array_pop($tag_open_stack))
     {
         $html .= '</'.$tag_name.'>';
     }
@@ -1123,7 +1040,8 @@ function html_trim($html, $max, $suffix='...')
  * @param bool
  * @return string
  */
-function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
+function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true)
+{
     if(function_exists("mb_substr"))
         $slice = mb_substr($str, $start, $length, $charset);
     elseif(function_exists('iconv_substr')) {
@@ -1148,7 +1066,8 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
  * @param int $id 菜单id
  * @return array;
  */
-function get_menu_one($id){
+function get_menu_one($id)
+{
     $rst=array();
     if($id){
         $rst=Db::name('menu')->where('menu_l',Lang::detect())->where(array('menu_type'=>4,'id'=>$id))->find();
@@ -1163,7 +1082,8 @@ function get_menu_one($id){
  * @param int $expire 距离上次访问的最小时间单位s，0表示不限制，大于0表示最后访问$expire秒后才可以访问
  * @return true 可访问，false不可访问
  */
-function check_user_action($object="",$count_limit=1,$ip_limit=false,$expire=0){
+function check_user_action($object="",$count_limit=1,$ip_limit=false,$expire=0)
+{
     $action=request()->module()."-".request()->controller()."-".request()->action();
     $userid=session('hid')?session('hid'):0;
     $ip=request()->ip();
@@ -1194,7 +1114,8 @@ function check_user_action($object="",$count_limit=1,$ip_limit=false,$expire=0){
  * @param int $object_id 收藏内容的id
  * @return string
  */
-function get_favorite_key($table,$object_id){
+function get_favorite_key($table,$object_id)
+{
     $key=encrypt_password($table.'-'.$object_id,$table);
     return $key;
 }
@@ -1206,7 +1127,8 @@ function get_favorite_key($table,$object_id){
  * @param string $content 内容
  * @return array
  */
-function sendMail($to, $title, $content) {
+function sendMail($to, $title, $content)
+{
     $email_options=get_email_options();
     if($email_options && $email_options['email_open']){
         $mail = new PHPMailer(); //实例化
@@ -1255,7 +1177,8 @@ function sendMail($to, $title, $content) {
  * @author rainfer <81818832@qq.com>
  * @return array
  */
-function get_email_options(){
+function get_email_options()
+{
     $email_options = cache("email_options");
     if(empty($email_options)){
         $option = Db::name("Options")->where('option_l',Lang::detect())->where("option_name='email_options'")->find();
@@ -1273,7 +1196,8 @@ function get_email_options(){
  * @author rainfer <81818832@qq.com>
  * @return array
  */
-function get_active_options(){
+function get_active_options()
+{
     $active_options = cache("active_options");
     if(empty($active_options)){
         $option = Db::name("Options")->where('option_l',Lang::detect())->where("option_name='active_options'")->find();
@@ -1292,7 +1216,8 @@ function get_active_options(){
  * @param  string $class 输出样式（success:成功，error:失败）
  * @author huajie <banhuajie@163.com>
  */
-function showmsg($msg, $class = ''){
+function showmsg($msg, $class = '')
+{
     echo "<script type=\"text/javascript\">showmsg(\"{$msg}\", \"{$class}\")</script>";
     flush();
     ob_flush();
@@ -1355,7 +1280,8 @@ function jiemi($txt, $key = null)
  * @param int $cat 待获取图片类别 0为文章 1前台头像 2后台头像
  * @return string 完整图片imgurl
  */
-function get_imgurl($url,$cat=0){
+function get_imgurl($url,$cat=0)
+{
     if(stripos($url,'http')!==false){
         //网络图片
         return $url;
@@ -1381,7 +1307,8 @@ function get_imgurl($url,$cat=0){
  * 获取当前request参数数组,去除值为空
  * @return array
  */
-function get_query(){
+function get_query()
+{
 	$param=request()->except(['s']);
 	$rst=array();
 	foreach($param as $k=>$v){
@@ -1420,36 +1347,6 @@ function currency_long($currency)
             return $s[0] * 100 + $s[1];
     }
     return 0;
-}
-/**
- * 递归无限级分类获取任意节点下所有子孩子
- * @param array $arr 待处理的数组
- * @param int $parent_id 父级节点
- * @param string $pid 父级字段
- * @param string $id 数组id字段
- * @param array $ids ids数组
- * @param boolean $itself 是否包含自身
- * @return array $arrTree 排序后的数组
- */
-function getMenuTree($arr, $parent_id = 0,$pid='pid',$id='id',&$ids=array(),$itself=true)
-{
-    static  $arrTree = array();
-    if( empty($arr)) return array();
-    foreach($arr as $key => $value)
-    {
-        if($value[$pid] == $parent_id)
-        {
-            $arrTree[] = $value;
-            $ids[]=$value[$id];
-            unset($arr[$key]);
-            getMenuTree($arr, $value[$id], $pid,$id,$ids,$itself);
-        }
-        if($itself && $value[$id]==$parent_id){
-            $arrTree[] = $value;
-            $ids[]=$value[$id];
-        }
-    }
-    return $arrTree;
 }
 /**
  * 返回前台菜单含model_name model_id model_title的菜单数组
@@ -1684,7 +1581,7 @@ function getOs()
 /**
  * 返回按层级加前缀的菜单数组
  * @author  rainfer
- * @param array $menu 待处理菜单数组
+ * @param array|mixed $menu 待处理菜单数组
  * @param string $id_field 主键id字段名
  * @param string $pid_field 父级字段名
  * @param string $lefthtml 前缀
@@ -1693,7 +1590,8 @@ function getOs()
  * @param int $leftpin 左侧距离
  * @return array
  */
-function menu_left($menu,$id_field='id',$pid_field='pid',$lefthtml = '─' , $pid=0 , $lvl=0, $leftpin=0){
+function menu_left($menu,$id_field='id',$pid_field='pid',$lefthtml = '─' , $pid=0 , $lvl=0, $leftpin=0)
+{
     $arr=array();
     foreach ($menu as $v){
         if($v[$pid_field]==$pid){
@@ -1705,4 +1603,34 @@ function menu_left($menu,$id_field='id',$pid_field='pid',$lefthtml = '─' , $pi
         }
     }
     return $arr;
+}
+/**
+ * 返回后台news相关菜单层级text数组
+ * @author  rainfer
+ * @return array|mixed
+ */
+function menu_text()
+{
+	$menu_text=cache('menu_text');
+	if(empty($menu_text)){
+		$menu_text=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
+		$menu_text = menu_left($menu_text,'id','parentid');
+		cache('menu_text',$menu_text);
+	}
+	return $menu_text;
+}
+/**
+ * 数据签名
+ * @param array $data 被认证的数据
+ * @return string 签名
+ */
+function data_signature($data = [])
+{
+    if(!is_array($data)){
+        $data = (array)$data;
+    }
+    ksort($data);
+    $code = http_build_query($data);
+    $sign = sha1($code);
+    return $sign;
 }

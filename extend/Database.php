@@ -43,7 +43,8 @@ class Database
      * @param array  $config 备份配置信息
      * @param string $type   执行类型，export - 备份数据， import - 还原数据
      */
-    public function __construct($file, $config, $type = 'export'){
+    public function __construct($file, $config, $type = 'export')
+    {
         $this->file   = $file;
         $this->config = $config;
     }
@@ -52,7 +53,8 @@ class Database
      * 打开一个卷，用于写入数据
      * @param  integer $size 写入数据的大小
      */
-    private function open($size = 0){
+    private function open($size = 0)
+    {
         if($this->fp){
             $this->size += $size;
             if($this->size > $this->config['part']){
@@ -79,7 +81,8 @@ class Database
      * 写入初始数据
      * @return boolean true - 写入成功，false - 写入失败
      */
-    public function create(){
+    public function create()
+    {
         $sql  = "-- -----------------------------\n";
         $sql .= "-- MySQL Data Transfer\n";
         $sql .= "--\n";
@@ -99,7 +102,8 @@ class Database
      * @param  string $sql 要写入的SQL语句
      * @return boolean     true - 写入成功，false - 写入失败！
      */
-    private function write($sql = ''){
+    private function write($sql = '')
+    {
         $size = strlen($sql);
         
         //由于压缩原因，无法计算出压缩后的长度，这里假设压缩率为50%，
@@ -116,7 +120,8 @@ class Database
      * @param  integer $start 起始行数
      * @return boolean        false - 备份失败
      */
-    public function backup($table = '', $start = 0){
+    public function backup($table = '', $start = 0)
+    {
         // 备份表结构
         if(0 == $start){
             $result = Db::query("SHOW CREATE TABLE `{$table}`");
@@ -164,7 +169,8 @@ class Database
         return 0;
     }
 
-    public function import($start = 0){
+    public function import($start = 0)
+    {
         //还原数据
         if($this->config['compress']){
             $gz   = gzopen($this->file[1], 'r');
@@ -197,7 +203,8 @@ class Database
     /**
      * 析构方法，用于关闭文件资源
      */
-    public function __destruct(){
+    public function __destruct()
+    {
         $this->config['compress'] ? @gzclose($this->fp) : @fclose($this->fp);
     }
 }

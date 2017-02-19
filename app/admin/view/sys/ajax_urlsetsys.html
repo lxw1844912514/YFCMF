@@ -5,22 +5,22 @@
 		<td>{$v.url}</td>
 		<td class="hidden-xs">
 			{if condition="$v['status'] eq 1"}
-				<a class="red open-btn" href="{:url('route_state')}" data-id="{$v.id}" title="启用">
+				<a class="red open-btn" href="{:url('admin/Sys/route_state')}" data-id="{$v.id}" title="启用">
 					<div id="zt{$v.id}"><button class="btn btn-minier btn-yellow">启用</button></div>
 				</a>
 				{else/}
-				<a class="red open-btn" href="{:url('route_state')}" data-id="{$v.id}" title="禁用">
+				<a class="red open-btn" href="{:url('admin/Sys/route_state')}" data-id="{$v.id}" title="禁用">
 					<div id="zt{$v.id}"><button class="btn btn-minier btn-danger">禁用</button></div>
 				</a>
 			{/if}
 		</td>
-		<td><input name="{$v.id}" value=" {$v.listorder}" class="list_order"/></td>
+		<td><input name="{$v.id}" value="{$v.listorder}" class="list_order center"/></td>
 		<td>
 			<div class="hidden-sm hidden-xs action-buttons">
-				<a class="green routeedit-btn"  href="{:url('route_edit')}" data-toggle="modal" data-target="#myModaledit" data-id="{$v.id}"  title="修改">
+				<a class="green routeedit-btn"  href="{:url('admin/Sys/route_edit')}" data-toggle="modal" data-target="#myModaledit" data-id="{$v.id}"  title="修改">
 					<i class="ace-icon fa fa-pencil bigger-130"></i>
 				</a>
-				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('route_del',array('id'=>$v['id']))}" title="删除">
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('admin/Sys/route_del',array('id'=>$v['id']))}" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>
 				</a>
 			</div>
@@ -31,7 +31,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 						<li>
-							<a href="{:url('route_edit')}" data-id="{$v.id}" class="tooltip-success sourceedit-btn" data-rel="tooltip" title="" data-original-title="修改">
+							<a href="{:url('admin/Sys/route_edit')}" data-id="{$v.id}" class="tooltip-success sourceedit-btn" data-rel="tooltip" title="" data-original-title="修改">
 						<span class="green">
 							<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 						</span>
@@ -39,7 +39,7 @@
 						</li>
 
 						<li>
-							<a href="{:url('route_del',array('id'=>$v['id']))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
+							<a href="{:url('admin/Sys/route_del',array('id'=>$v['id']))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
 						<span class="red">
 							<i class="ace-icon fa fa-trash-o bigger-120"></i>
 						</span>

@@ -26,12 +26,13 @@ class ArrayUtil
                 continue;
             } else {
                 if (! is_array($para[$key])) {
-                    $para[$key] = trim($para[$key]);
+                    $para[$key] = is_bool($para[$key]) ? $para[$key] : trim($para[$key]);
                 }
 
                 $para_filter[$key] = $para[$key];
             }
         }
+
         return $para_filter;
     }
 
@@ -79,9 +80,14 @@ class ArrayUtil
      * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
      * @param array $para 需要拼接的数组
      * @return string
+     * @throws \Exception
      */
     public static function createLinkstring($para)
     {
+        if (! is_array($para)) {
+            throw new \Exception('必须传入数组参数');
+        }
+
         reset($para);
         $arg  = "";
         while (list ($key, $val) = each ($para)) {

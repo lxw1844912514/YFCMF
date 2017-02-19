@@ -8,7 +8,8 @@
 // +----------------------------------------------------------------------
 use thinksdk\ThinkOauth;
 
-class QqSDK extends ThinkOauth{
+class QqSDK extends ThinkOauth
+{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
@@ -36,7 +37,8 @@ class QqSDK extends ThinkOauth{
 	/**
      * 请求Authorize访问地址
      */
-    public function getRequestCodeURL() {
+    public function getRequestCodeURL()
+    {
         setcookie('A_S', $this->timestamp, $this->timestamp + 600, '/');
         $this->initConfig();
         //Oauth 标准参数
@@ -58,7 +60,8 @@ class QqSDK extends ThinkOauth{
 	 * @param  string $method HTTP请求方法 默认为GET
 	 * @return json
 	 */
-	public function call($api, $param = '', $method = 'GET', $multi = false){
+	public function call($api, $param = '', $method = 'GET', $multi = false)
+    {
 		/* 腾讯QQ调用公共参数 */
 		$params = array(
 			'oauth_consumer_key' => $this->config['app_key'],
@@ -75,7 +78,8 @@ class QqSDK extends ThinkOauth{
      * 解析access_token方法请求后的返回值
      * @param string $result 获取access_token的方法的返回值
      */
-    protected function parseToken($result) {
+    protected function parseToken($result)
+    {
         parse_str($result, $data);
         var_dump($data);
         //$data = json_decode($data, true);
@@ -91,7 +95,8 @@ class QqSDK extends ThinkOauth{
      * 获取当前授权应用的openid
      * @return string
      */
-    public function openid() {
+    public function openid()
+    {
         $data = $this->token;
         if (isset($data['openid'])) {
             return $data['openid'];
@@ -110,7 +115,8 @@ class QqSDK extends ThinkOauth{
     /**
      * 获取授权用户的用户信息
      */
-    public function userinfo() {
+    public function userinfo()
+    {
         $rsp = $this->call('user/get_user_info');
         if (!$rsp || $rsp['ret'] != 0) {
             throw new Exception('接口访问失败！' . $rsp['msg']);

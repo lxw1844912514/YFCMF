@@ -118,7 +118,6 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
             'query' => [
                 'access_token' => $token->getToken(),
                 'openid' => $token['openid'],
-                'lang' => 'zh_CN',
             ],
         ]);
 
@@ -168,20 +167,21 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
     public function getAccessToken($code)
     {
         $response = $this->getHttpClient()->get($this->getTokenUrl(), [
+            'headers' => ['Accept' => 'application/json'],
             'query' => $this->getTokenFields($code),
         ]);
 
-        return $this->parseAccessToken($response->getBody()->getContents());
+        return $this->parseAccessToken($response->getBody());
     }
 
     /**
      * Detect wechat open platform.
      *
-     * @return mixed
+     * @return bool
      */
     protected function isOpenPlatform()
     {
-        return $this->config->get('wechat.open_platform');
+        return (bool) $this->config->get('wechat.open_platform');
     }
 
     /**

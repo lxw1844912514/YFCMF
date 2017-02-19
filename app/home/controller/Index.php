@@ -7,14 +7,19 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Cache;
 use think\Db;
 use think\captcha\Captcha;
-class Index extends Base {
-	public function index(){
+
+class Index extends Base
+{
+	public function index()
+    {
 		return $this->view->fetch(':index');
 	}
-	public function visit(){
+	public function visit()
+    {
 		$user=Db::name("member_list")->where(array("member_list_id"=>input('id',0,'intval')))->find();
 		if(empty($user)){
 			$this->error(lang('member not exist'));
@@ -46,10 +51,11 @@ class Index extends Base {
 					cookie('think_var', 'zh-cn');
 			}
 			Cache::clear();
-			$this->success(lang('success'),url('index'));
+			$this->success(lang('success'),url('home/Index/index'));
 		}
 	}
-	public function addmsg(){
+	public function addmsg()
+    {
 		if (!request()->isAjax()){
 			$this->error(lang('submission mode incorrect'));
 		}else{

@@ -23,7 +23,7 @@
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form class="form-light verify-ajax-form" id="pwd_reset" action="{:url('Login/runpwd_reset')}" method="post">
+										<form class="form-light verify-ajax-form" id="pwd_reset" action="{:url('home/Login/runpwd_reset')}" method="post">
 											<input type="hidden" id="hash" name="hash" value="{$hash}">
 											<div>
 												<input type="password" id="input_password" name="password" class="form-control" placeholder="密码" required>
@@ -38,7 +38,7 @@
 													<input type="text" class="form-control" placeholder="" id="verify" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:url('Login/verify_reset')}" onClick="this.src='{:url('Login/verify_reset')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:url('home/Login/verify_reset')}" onClick="this.src='{:url('home/Login/verify_reset')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -50,10 +50,10 @@
 											<div style="text-align: center;">
 												<div class="row">
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:url('Register/index')}">现在注册</a>
+														<a href="{:url('home/Register/index')}">现在注册</a>
 													</div>
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:url('Login/index')}">现在登录</a>
+														<a href="{:url('home/Login/index')}">现在登录</a>
 													</div>
 												</div>
 											</div>

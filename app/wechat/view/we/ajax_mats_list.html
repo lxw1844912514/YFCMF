@@ -25,11 +25,11 @@
 		<td>
 			<div class="hidden-sm hidden-xs action-buttons">
 				{if condition="$v['mats_type'] eq 'news'"}
-				<a class="green" href="{:url('mats_edit',['mats_id'=>$v['mats_id']])}" data-toggle="tooltip" title="修改">
+				<a class="green" href="{:url('wechat/We/mats_edit',['mats_id'=>$v['mats_id']])}" data-toggle="tooltip" title="修改">
 					<i class="ace-icon fa fa-pencil bigger-130"></i>
 				</a>
 				{/if}
-				<a class="red confirm-rst-url-btn" href="{:url('mats_del',array('mats_id'=>$v['mats_id']))}" data-info="您确定要删除吗？" data-toggle="tooltip" title="删除">
+				<a class="red confirm-rst-url-btn" href="{:url('wechat/We/mats_del',array('mats_id'=>$v['mats_id']))}" data-info="您确定要删除吗？" data-toggle="tooltip" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>
 			</div>
 			<div class="hidden-md hidden-lg">
@@ -40,7 +40,7 @@
 					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 						{if condition="$v['mats_type'] eq 'news'"}
 						<li>
-							<a href="{:url('mats_edit',['mats_id'=>$v['mats_id']])}" class="tooltip-success" data-rel="tooltip" title="修改" data-original-title="修改">
+							<a href="{:url('wechat/We/mats_edit',['mats_id'=>$v['mats_id']])}" class="tooltip-success" data-rel="tooltip" title="修改" data-original-title="修改">
 										<span class="green">
 											<i class="ace-icon fa fa-pencil bigger-120"></i>
 										</span>
@@ -48,7 +48,7 @@
 						</li>
 						{/if}
 						<li>
-							<a href="{:url('mats_del',array('mats_id'=>$v['mats_id']))}"  data-info="您确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
+							<a href="{:url('wechat/We/mats_del',array('mats_id'=>$v['mats_id']))}"  data-info="您确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
 							<span class="red">
 								<i class="ace-icon fa fa-trash-o bigger-120"></i>
 							</span>

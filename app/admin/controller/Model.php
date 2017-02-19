@@ -7,8 +7,10 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use think\Db;
 use think\Cache;
+
 class Model extends Base
 {
     protected $cms_pk='id';
@@ -21,7 +23,9 @@ class Model extends Base
     protected $cms_fields_search=[];
     protected $cms_fields=[];
     protected $cms_allfields=[];
-    //模型列表
+    /**
+     * 模型列表
+     */
     public function model_list()
     {
 		$models=Db::name('model')->order('create_time desc')->select();
@@ -31,8 +35,11 @@ class Model extends Base
 		$this->assign('models',$models);
 		return $this->fetch();
 	}
-	//模型switch操作
-	public function model_state(){
+    /**
+     * 模型状态操作
+     */
+	public function model_state()
+    {
 		$id=input('x');
 		$status=Db::name('model')->where(array('model_id'=>$id))->value('model_status');//判断当前状态情况
 		if($status==1){
@@ -45,12 +52,15 @@ class Model extends Base
 			$this->success('状态开启');
 		}
 	}
-    //模型添加到后台menu
-    public function model_addmenu(){
+    /**
+     * 模型后台菜单添加
+     */
+    public function model_addmenu()
+    {
         $model_id=input('model_id');
         $model=Db::name('model')->where('model_id',$model_id)->find();
         if (empty($model)){
-            $this->error('参数错误',url('model_list'));
+            $this->error('参数错误',url('admin/Model/model_list'));
         }else{
             //添加顶级菜单
             $rst=Db::name('auth_rule')->where('name','Model/cmslist?id='.$model_id)->find();
@@ -96,7 +106,7 @@ class Model extends Base
                         );
                         Db::name('auth_rule')->insert($sldata);
                     }else{
-                        $this -> error("添加失败，请稍后重试",url('model_list'));
+                        $this -> error("添加失败，请稍后重试",url('admin/Model/model_list'));
                     }
                     //添加列表
                     $sldata=array(
@@ -120,24 +130,27 @@ class Model extends Base
                         ];
                         Db::name('auth_rule')->insertAll($sldata);
                         Cache::clear();
-                        $this->success('菜单添加成功',url('model_list'));
+                        $this->success('菜单添加成功',url('admin/Model/model_list'));
                     }else{
-                        $this -> error("添加失败，请稍后重试",url('model_list'));
+                        $this -> error("添加失败，请稍后重试",url('admin/Model/model_list'));
                     }
                 }else{
-                    $this -> error("添加失败，请稍后重试",url('model_list'));
+                    $this -> error("添加失败，请稍后重试",url('admin/Model/model_list'));
                 }
             }else{
-                $this -> error("已存在，请确认！",url('model_list'));
+                $this -> error("已存在，请确认！",url('admin/Model/model_list'));
             }
         }
     }
-    //模型删除
-    public function model_del(){
+    /**
+     * 模型删除
+     */
+    public function model_del()
+    {
         $model_id=input('model_id');
         $model=Db::name('model')->where('model_id',$model_id)->find();
         if (empty($model)){
-            $this->error('参数错误',url('model_list'));
+            $this->error('参数错误',url('admin/Model/model_list'));
         }else{
             //备份
             static $db = null;
@@ -157,7 +170,7 @@ class Model extends Base
             $sql="DROP TABLE `$db_prefix$tablename`;";
             $rst=$db->execute($sql);
             if($rst===false){
-                $this -> error("模型删除失败！",url('model_list'));
+                $this -> error("模型删除失败！",url('admin/Model/model_list'));
             }
             //删模型
             $rst=Db::name('model')->where('model_id',$model_id)->delete();
@@ -167,24 +180,31 @@ class Model extends Base
                 if($rule){
                     $pid=$rule['pid'];//顶级菜单
                     $arr=Db::name('auth_rule')->select();
-                    $ids=array();
-                    $arrTree=getMenuTree($arr, $pid,'pid','id',$ids);
-                    if(!empty($arrTree)){
-                        Db::name('auth_rule')->where('id','in',$ids)->delete();
+                    $tree=new \Tree();
+                    $tree->init($arr,['parentid'=>'pid']);
+                    $arrTree=$tree->get_childs($arr,$pid,true,true);
+                    if($arrTree){
+                        Db::name('auth_rule')->where('id','in',$arrTree)->delete();
                         Cache::clear();
                     }
                 }
 
-                $this->success('模型删除成功',url('model_list'));
+                $this->success('模型删除成功',url('admin/Model/model_list'));
             }else{
-                $this -> error("模型删除失败！",url('model_list'));
+                $this -> error("模型删除失败！",url('admin/Model/model_list'));
             }
         }
     }
+    /**
+     * 模型添加
+     */
     public function model_add()
     {
 		return $this->fetch();
-	} 
+	}
+    /**
+     * 模型添加操作
+     */
     public function model_runadd()
     {
 		static $db = null;
@@ -403,8 +423,11 @@ class Model extends Base
             default :
                 $this->error('不支持的数据库类型');
         }
-        $this->success('创建模型成功',url('model_list'));
+        $this->success('创建模型成功',url('admin/Model/model_list'));
     }
+    /**
+     * 模型编辑
+     */
     public function model_edit()
     {
 		$model_id = input('model_id');
@@ -414,6 +437,9 @@ class Model extends Base
 		$this->assign('fields',$fields);
 		return $this->fetch();
 	}
+    /**
+     * 模型复制
+     */
     public function model_copy()
     {
         $model_id = input('model_id');
@@ -423,6 +449,9 @@ class Model extends Base
         $this->assign('fields',$fields);
         return $this->fetch();
     }
+    /**
+     * 模型编辑操作
+     */
     public function model_runedit()
     {
 		static $db = null;
@@ -662,8 +691,11 @@ class Model extends Base
             default :
                 $this->error('不支持的数据库类型');
         }
-        $this->success('编辑模型成功，原数据已备份',url('model_list'));
+        $this->success('编辑模型成功，原数据已备份',url('admin/Model/model_list'));
     }
+    /**
+     * 具体模型数据列表
+     */
     public function cmslist()
     {
         $model_id=input('id',0);
@@ -736,9 +768,9 @@ class Model extends Base
 						break;	
 					case 'switch' :
 						if ($vv) {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('admin/Model/cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已开启"><div><button class="btn btn-minier btn-yellow">开启</button></div></a>';
 						} else {
-							$item [$kk] = '<a class="red open-btn" href="'.url('cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已禁用"><div><button class="btn btn-minier btn-danger">禁用</button></div></a>';
+							$item [$kk] = '<a class="red open-btn" href="'.url('admin/Model/cmsstate',['key'=>$kk,'id'=>$model_id]).'" data-id="'.$v[$this->cms_pk].'" title="已禁用"><div><button class="btn btn-minier btn-danger">禁用</button></div></a>';
 						}
 						break;
 					case 'bigtext' :
@@ -780,7 +812,9 @@ class Model extends Base
 			return $this->fetch();
 		}
     }
-    //模型增加
+    /**
+     * 具体模型数据添加
+     */
     public function cmsadd()
     {
         $model_id=input('id',0);
@@ -796,7 +830,9 @@ class Model extends Base
 		$this->assign('fields_data', $fields_data);
 		return $this->fetch();
     }
-    //模型添加
+    /**
+     * 具体模型数据添加操作
+     */
     public function cmsrunadd()
     {
         $model_id=input('id',0);
@@ -806,12 +842,14 @@ class Model extends Base
         $postdata=$this->handle_postdata(0,$this->cms_allfields,false,true);
         $rst=Db::name($this->cms_table)->insert($postdata);
         if($rst!==false){
-            $this->success('增加成功',url('cmslist',['id'=>$model_id]));
+            $this->success('增加成功',url('admin/Model/cmslist',['id'=>$model_id]));
         }else{
             $this->error('增加失败');
         }
-    }	
-	//模型编辑
+    }
+    /**
+     * 具体模型数据编辑
+     */
     public function cmsedit()
     {
         $model_id=input('id',0);
@@ -830,7 +868,9 @@ class Model extends Base
 		$this->assign('fields_data', $fields_data);
 		return $this->fetch();
 	}
-    //模型编辑
+    /**
+     * 具体模型数据编辑操作
+     */
     public function cmsrunedit()
     {
         $model_id=input('id',0);
@@ -841,12 +881,14 @@ class Model extends Base
         $postdata=$this->handle_postdata($model_pkid,$this->cms_fields_edit,true);
         $rst=Db::name($this->cms_table)->where($this->cms_pk,$model_pkid)->update($postdata);
         if($rst!==false){
-            $this->success('修改成功',url('cmslist',['id'=>$model_id]));
+            $this->success('修改成功',url('admin/Model/cmslist',['id'=>$model_id]));
         }else{
             $this->error('修改失败');
         }
     }
-    //模型删除
+    /**
+     * 具体模型数据删除(单个)
+     */
     public function cmsdel()
     {
         $model_id=input('id',0);
@@ -858,13 +900,16 @@ class Model extends Base
         $model_pkid=input($model['model_pk'],0);
         $rst=Db::name($model['model_name'])->where($model['model_pk'],$model_pkid)->delete();
         if($rst!==false){
-            $this->success('删除成功',url('cmslist',['id'=>$model_id]));
+            $this->success('删除成功',url('admin/Model/cmslist',['id'=>$model_id]));
         }else{
-            $this -> error("删除失败！",url('cmslist',['id'=>$model_id]));
+            $this -> error("删除失败！",url('admin/Model/cmslist',['id'=>$model_id]));
         }
     }
-    //全选删除
-    public function cmsalldel(){
+    /**
+     * 具体模型数据全选删除
+     */
+    public function cmsalldel()
+    {
         $model_id=input('id',0);
         $model=Db::name('model')->where('model_id',$model_id)->find();
         if(empty($model)){
@@ -872,17 +917,21 @@ class Model extends Base
         }
         $ids = input($model['model_pk'].'/a');
         if(empty($ids)){
-            $this -> error("请选择要删除的ID",url('cmslist',['id'=>$model_id]));
+            $this -> error("请选择要删除的ID",url('admin/Model/cmslist',['id'=>$model_id]));
         }
         $ids=is_array($ids)?$ids:(array)$ids;
         $rst=Db::name($model['model_name'])->where($model['model_pk'],'in',$ids)->delete();
         if($rst!==false){
-            $this->success("全部删除成功",url('cmslist',['id'=>$model_id]));
+            $this->success("全部删除成功",url('admin/Model/cmslist',['id'=>$model_id]));
         }else{
-            $this -> error("删除失败！",url('cmslist',['id'=>$model_id]));
+            $this -> error("删除失败！",url('admin/Model/cmslist',['id'=>$model_id]));
         }
     }
-    public function cmsstate(){
+    /**
+     * 具体模型数据状态操作
+     */
+    public function cmsstate()
+    {
         $model_id=input('id',0);
         $model=Db::name('model')->where('model_id',$model_id)->find();
         if(empty($model)){
@@ -901,19 +950,23 @@ class Model extends Base
             $this->success('状态开启');
         }
     }
-	public function cmsorder(){
+    /**
+     * 具体模型数据排序
+     */
+	public function cmsorder()
+    {
 		$model_id=input('id',0);
 		$model=Db::name('model')->where('model_id',$model_id)->find();
 		if(empty($model)){
 			$this->error('不存在的模型');
 		}
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('cmslist',['id'=>$model_id]));
+			$this->error('提交方式不正确',url('admin/Model/cmslist',['id'=>$model_id]));
 		}else{
 			foreach (input('post.') as $cms_id => $cms_order){
 				Db::name($model['model_name'])->where($model['model_pk'],$cms_id)->setField($model['model_order'] , $cms_order);
 			}
-			$this->success('排序更新成功',url('cmslist',['id'=>$model_id]));
+			$this->success('排序更新成功',url('admin/Model/cmslist',['id'=>$model_id]));
 		}
     }
     //model_fields处理
@@ -1002,6 +1055,7 @@ class Model extends Base
         }
         return true;
     }
+    //判断表是否存在
 	protected function build_table_exists($table)
     {
         static $tables = null;

@@ -7,83 +7,48 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
+use app\admin\model\AuthRule;
+use app\admin\model\Options;
 use think\Db;
 use think\Cache;
 
-class Sys extends Base {
-	//站点设置显示
-	public function sys(){
+class Sys extends Base
+{
+    /**
+     * 站点设置
+     */
+	public function sys()
+	{
 		//主题
-		$arr=list_file(APP_PATH.'home/view/');
-		$tpls=array();
-		foreach($arr as $v){
-			if($v['isDir'] && strtolower($v['filename']!='public')){
-				$tpls[]=$v['filename'];
-			}
-		}
+		$tpls=Options::themes();
 		$this->assign('templates',$tpls);
-		$arr=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'site_options'))->find();
-		if(empty($arr)){
-			$data['option_name']='site_options';
-			$data['option_value']='';
-			$data['autoload']=1;
-			$data['option_l']=$this->lang;
-			Db::name('options')->insert($data);
-		}
-		$sys=array(
-			'map_lat'=>'',
-			'map_lng'=>'',
-			'site_name'=>'',
-			'site_host'=>'',
-			'site_tpl'=>'',
-			'site_logo'=>'',
-			'site_icp'=>'',
-			'site_tongji'=>'',
-			'site_copyright'=>'',
-			'site_co_name'=>'',
-			'site_address'=>'',
-			'site_tel'=>'',
-			'site_admin_email'=>'',
-			'site_qq'=>'',
-			'site_seo_title'=>'',
-			'site_seo_keywords'=>'',
-			'site_seo_description'=>'',
-		);
-		$sys=empty($arr['option_value'])?$sys:array_merge($sys,json_decode($arr['option_value'],true));
-		$map_lat=empty($sys['map_lat'])?'':$sys['map_lat'];
-		$map_lng=empty($sys['map_lng'])?'':$sys['map_lng'];
-		if((empty($map_lat) || empty($map_lng)) && !empty($sys['site_co_name'])){
-			$strUrl="http://api.map.baidu.com/place/v2/search?query=".$sys['site_co_name']."&region=全国&city_limit=false&output=json&ak=".config('baidumap_ak');//自己去申请ak
-			//接受json数据  
-			$jsonStr = file_get_contents($strUrl);
-			//进行json字符串编码  
-			$map = json_decode($jsonStr,TRUE);
-			if(!empty($map['results']) && !empty($map['results'][0]['location'])){
-				$map_lat=$map['results'][0]['location']['lat'];
-				$map_lng=$map['results'][0]['location']['lng'];
-			}
-		}
-		$this->assign('map_lat',$map_lat);
-		$this->assign('map_lng',$map_lng);
+		$sys=Options::get_options('site_options',$this->lang);
+		$map=Options::map($this->lang);
+		$this->assign('map_lat',$map['map_lat']);
+		$this->assign('map_lng',$map['map_lng']);
 		$this->assign('sys',$sys);
 		return $this->fetch();
 	}
-	//保存站点设置
-	public function runsys(){
+    /**
+     * 站点设置保存
+     */
+	public function runsys()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('sys'));
+			$this->error('提交方式不正确',url('admin/Sys/sys'));
 		}else{
+		    //自动更新
 			$update_check=input('update_check',0,'intval')?true:false;;
 			sys_config_setbykey('update_check',$update_check);
+			//极验验证
             $geetest_on=input('geetest_on',0,'intval')?true:false;
             $captcha_id=input('captcha_id','');
             $private_key=input('private_key','');
 			if(empty($captcha_id) || empty($private_key)) $geetest_on=false;
             sys_config_setbykey('geetest',['geetest_on'=>$geetest_on,'captcha_id'=>$captcha_id,'private_key'=>$private_key]);
-			if($geetest_on){
-				//自动开启路由
-				sys_config_setbykey('url_route_on',true);
-			}
+			if($geetest_on) sys_config_setbykey('url_route_on',true);
+			//logo图片
 			$checkpic=input('checkpic');
 			$oldcheckpic=input('oldcheckpic');
 			$options=input('post.options/a');
@@ -99,7 +64,7 @@ class Sys extends Base {
 						if ($info) {
 							$img_url= config('storage.domain').$info[0]['key'];
 						}else{
-							$this->error($error,url('sys'));//否则就是上传错误，显示错误原因
+							$this->error($error,url('admin/Sys/sys'));//否则就是上传错误，显示错误原因
 						}
 					}else{
 						//本地
@@ -113,7 +78,7 @@ class Sys extends Base {
 							$data['path']=$img_url;
 							Db::name('plug_files')->insert($data);
 						}else{
-							$this->error($file->getError(),url('sys'));//否则就是上传错误，显示错误原因
+							$this->error($file->getError(),url('admin/Sys/sys'));//否则就是上传错误，显示错误原因
 						}
 					}
 					$options['site_logo']=$img_url;
@@ -122,48 +87,64 @@ class Sys extends Base {
 				//原有图片
 				$options['site_logo']=input('oldcheckpicname');
 			}
-			$rst=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'site_options'))->setField('option_value',json_encode($options));
+			//更新
+            $rst=Options::set_options($options,'site_options',$this->lang);
 			if($rst!==false){
-				cache("site_options", $options);
-				$this->success('站点设置保存成功',url('sys'));
+				cache('site_options_'.$this->lang, $options);
+				$this->success('站点设置保存成功',url('admin/Sys/sys'));
 			}else{
-				$this->error('提交参数不正确',url('sys'));
+				$this->error('提交参数不正确',url('admin/Sys/sys'));
 			}
 		}
 	}
-	//多语言设置显示
-	public function langsys(){
+	/**
+	 * 多语言设置显示
+	 */
+	public function langsys()
+	{
 		return $this->fetch();
 	}
-	//多语言设置
-	public function runlangsys(){
+	/**
+	 * 多语言设置保存
+	 */
+	public function runlangsys()
+	{
 		$lang_switch_on=input('lang_switch_on',0,'intval')?true:false;
 		$default_lang=input('default_lang','');
 		sys_config_setbykey('lang_switch_on',$lang_switch_on);
 		sys_config_setbykey('default_lang',$default_lang);
 		cache::clear();
 		cookie('think_var', null);
-		$this->success('多语言设置成功',url('langsys'));
+		$this->success('多语言设置成功',url('admin/Sys/langsys'));
 	}
-    //日志设置显示
-    public function logsys(){
+	/**
+	 * 日志设置
+	 */
+    public function logsys()
+	{
 	    $log=config('log');
 	    $log['level']=empty($log['level'])?join(',',['log', 'error', 'info', 'sql', 'notice', 'alert', 'debug']):join(',',$log['level']);
         $this->assign('log',$log);
         return $this->fetch();
     }
-    //日志设置
-    public function runlogsys(){
+	/**
+	 * 日志设置保存
+	 */
+    public function runlogsys()
+	{
         $log_level=input('log_level/a');
         $log['clear_on']=input('clear_on',0,'intval')?true:false;
         $log['timebf']=input('timebf',2592000,'intval');
         $log['level']=(count($log_level)==7 || empty($log_level))?[]:$log_level;
         sys_config_setbykey('log',$log);
         cache::clear();
-        $this->success('日志设置成功',url('logsys'));
+        $this->success('日志设置成功',url('admin/Sys/logsys'));
     }
-    //url 美化
-	public function urlsetsys(){
+	/**
+	 * URL美化
+	 */
+	public function urlsetsys()
+	{
 		$routes=Db::name('route')->order('listorder')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 		$show = $routes->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
@@ -179,23 +160,25 @@ class Sys extends Base {
      * 添加路由规则操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_runadd(){
+	public function route_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('urlsetsys'));
+			$this->error('提交方式不正确',url('admin/Sys/urlsetsys'));
 		}		
         Db::name('route')->insert(input('post.'));
         $p=input('p',1,'intval');
         if(config('url_route_mode')=='2') Cache::rm('routes');
-        $this->success('路由规则添加成功',url('urlsetsys',array('p'=>$p)),1);
+        $this->success('路由规则添加成功',url('admin/Sys/urlsetsys',array('p'=>$p)),1);
 		
 	}
 	/*
      * 修改路由规则操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_runedit(){
+	public function route_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('sys'));
+			$this->error('提交方式不正确',url('admin/Sys/sys'));
 		}
         $p=input('p',1,'intval');
         $sl_data=array(
@@ -208,16 +191,17 @@ class Sys extends Base {
         $rst=Db::name('route')->update($sl_data);
         if($rst!==false){
             if(config('url_route_mode')=='2') Cache::rm('routes');
-            $this->success('路由规则修改成功',url('urlsetsys',array('p'=>$p)));
+            $this->success('路由规则修改成功',url('admin/Sys/urlsetsys',array('p'=>$p)));
         }else{
-            $this->error('路由规则修改失败',url('urlsetsys',array('p'=>$p)));
+            $this->error('路由规则修改失败',url('admin/Sys/urlsetsys',array('p'=>$p)));
         }
 	}
 	/*
      * 路由规则修改返回值操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_edit(){
+	public function route_edit()
+	{
 		$id=input('id');
 		$route=Db::name('route')->where(array('id'=>$id))->find();
         $route['code']=1;
@@ -227,39 +211,42 @@ class Sys extends Base {
      * 路由规则排序
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_order(){
+	public function route_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('urlsetsys'));
+			$this->error('提交方式不正确',url('admin/Sys/urlsetsys'));
 		}	
         $route=Db::name('route');
         foreach (input('post.') as $id => $listorder){
             $route->where(array('id' => $id ))->setField('listorder' , $listorder);
         }
         if(config('url_route_mode')=='2') Cache::rm('routes');
-        $this->success('排序更新成功',url('urlsetsys'));
+        $this->success('排序更新成功',url('admin/Sys/urlsetsys'));
 	}
 	/*
      * 路由规则删除操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_del(){
+	public function route_del()
+	{
 		$rst=Db::name('route')->where(array('id'=>input('id')))->delete();
         if($rst!==false){
 			$p=input('p',1,'intval');
             if(config('url_route_mode')=='2') Cache::rm('routes');
-            $this->success('路由规则删除成功',url('urlsetsys',array('p'=>$p)));
+            $this->success('路由规则删除成功',url('admin/Sys/urlsetsys',array('p'=>$p)));
         }else{
-            $this->error('路由规则删除失败',url('urlsetsys'));
+            $this->error('路由规则删除失败',url('admin/Sys/urlsetsys'));
         }
 	}
 	/*
      * 修改路由规则状态
 	 * @author rainfer <81818832@qq.com>
      */
-	public function route_state(){
+	public function route_state()
+	{
 		$id=input('x');
 		if (empty($id)){
-			$this->error('规则ID不存在',url('urlsetsys'));
+			$this->error('规则ID不存在',url('admin/Sys/urlsetsys'));
 		}
 		$status=Db::name('route')->where(array('id'=>$id))->value('status');//判断当前状态情况
 		if($status==1){
@@ -275,7 +262,9 @@ class Sys extends Base {
 		}
 	}
 
-	//url设置显示
+	/**
+	 * URL设置显示
+	 */
 	public function urlsys(){
 		return $this->fetch();
 	}
@@ -283,7 +272,8 @@ class Sys extends Base {
      * 路由规则设置
 	 * @author rainfer <81818832@qq.com>
      */
-	public function runurlsys(){
+	public function runurlsys()
+	{
 		$route_on=input('route_on',0,'intval')?true:false;
 		$route_must=input('route_must',0,'intval')?true:false;;
 		$complete_match=input('complete_match',0,'intval')?true:false;;
@@ -295,112 +285,107 @@ class Sys extends Base {
 		sys_config_setbykey('url_html_suffix',$html_suffix);
 		sys_config_setbykey('url_route_mode',$url_route_mode);
         Cache::rm('routes');
-		$this->success('URL基本设置成功',url('urlsetsys#basic'));
+		$this->success('URL基本设置成功',url('admin/Sys/urlsetsys#basic'));
 	}
-	//发送邮件设置
-	public function emailsys(){
-		$arr=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'email_options'))->find();
-		if(empty($arr)){
-			$data['option_name']='email_options';
-			$data['option_value']='';
-			$data['autoload']=1;
-			$data['option_l']=$this->lang;
-			Db::name('options')->insert($data);
-		}
-		$sys=array(
-			'email_open'=>0,
-			'email_rename'=>'',
-			'email_name'=>'',
-			'email_smtpname'=>'',
-			'smtpsecure'=>'',
-			'smtp_port'=>'',
-			'email_emname'=>'',
-			'email_pwd'=>'',
-		);
-		$sys=empty($arr['option_value'])?$sys:array_merge($sys,json_decode($arr['option_value'],true));
+	/**
+	 * 发送邮件设置显示
+	 */
+	public function emailsys()
+	{
+		$sys=Options::get_options('email_options',$this->lang);
 		$this->assign('sys',$sys);
 		return $this->fetch();
 	}
-	//保存邮箱设置
-	public function runemail(){
+	/**
+	 * 发送邮件设置保存
+	 */
+	public function runemail()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('emailsys'));
+			$this->error('提交方式不正确',url('admin/Sys/emailsys'));
 		}else{
-			$rst=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'email_options'))->setField('option_value',json_encode(input('post.options/a')));
+		    $options=input('post.options/a');
+		    $rst=Options::set_options($options,'email_options',$this->lang);
 			if($rst!==false){
 				cache("email_options",null);
-				$this->success('邮箱设置保存成功',url('emailsys'));
+				$this->success('邮箱设置保存成功',url('admin/Sys/emailsys'));
 			}else{
-				$this->error('提交参数不正确',url('emailsys'));
+				$this->error('提交参数不正确',url('admin/Sys/emailsys'));
 			}
 		}
 	}
-	//帐号激活设置
-	public function activesys(){
-		$arr=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'active_options'))->find();
-		if(empty($arr)){
-			$data['option_name']='active_options';
-			$data['option_value']='';
-			$data['autoload']=1;
-			$data['option_l']=$this->lang;
-			Db::name('options')->insert($data);
-		}
-		$sys=array(
-			'email_active'=>0,
-			'email_title'=>'',
-			'email_tpl'=>'',
-		);
-		$sys=empty($arr['option_value'])?$sys:array_merge($sys,json_decode($arr['option_value'],true));
+	/**
+	 * 帐号激活设置显示
+	 */
+	public function activesys()
+	{
+        $sys=Options::get_options('active_options',$this->lang);
 		$this->assign('sys',$sys);
 		return $this->fetch();
 	}
-	//保存帐号激活设置
-	public function runactive(){
+	/**
+	 * 帐号激活设置保存
+	 */
+	public function runactive()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('activesys'));
+			$this->error('提交方式不正确',url('admin/Sys/activesys'));
 		}else{
 			$options=input('post.options/a');
 			$options['email_tpl']=htmlspecialchars_decode($options['email_tpl']);
-			$rst=Db::name('options')->where('option_l',$this->lang)->where(array('option_name'=>'active_options'))->setField('option_value',json_encode($options));
+            $rst=Options::set_options($options,'active_options',$this->lang);
 			if($rst!==false){
 				cache("active_options",null);
-				$this->success('帐号激活设置保存成功',url('activesys'));
+				$this->success('帐号激活设置保存成功',url('admin/Sys/activesys'));
 			}else{
-				$this->error('提交参数不正确',url('activesys'));
+				$this->error('提交参数不正确',url('admin/Sys/activesys'));
 			}
 		}
 	}
-	//支付配置
-	public function paysys(){
+	/**
+	 * 支付设置
+	 */
+	public function paysys()
+	{
 		$payment=sys_config_get('payment');
 		$this->assign('payment',$payment);
 		return $this->fetch();
 
 	}
-	public function runpaysys(){
+	/**
+	 * 支付设置保存
+	 */
+	public function runpaysys()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('paysys'));
+			$this->error('提交方式不正确',url('admin/Sys/paysys'));
 		}else{
 		    $config = input('config/a');
 			$rst=sys_config_setbyarr(['payment'=>$config]);
 			if($rst!==false){
 				Cache::clear();
-				$this->success('设置保存成功',url('paysys'));
+				$this->success('设置保存成功',url('admin/Sys/paysys'));
 			}else{
-				$this->error('设置保存失败',url('paysys'));
+				$this->error('设置保存失败',url('admin/Sys/paysys'));
 			}
 		}
 	}
-	//短信配置显示
-	public function smssys(){
+	/**
+	 * 短信设置
+	 */
+	public function smssys()
+	{
 		$sms_sys=sys_config_get('think_sdk_sms');
 		$this->assign('sms_sys',$sms_sys);
 		return $this->fetch();
 	}
-	//保存短信配置
-	public function runsmssys(){
+	/**
+	 * 短信设置保存
+	 */
+	public function runsmssys()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('smssys'));
+			$this->error('提交方式不正确',url('admin/Sys/smssys'));
 		}else{
             $data = array(
                 'think_sdk_sms' => array(
@@ -414,14 +399,17 @@ class Sys extends Base {
 			$rst=sys_config_setbyarr($data);
 			if($rst!==false){
 				Cache::clear();
-				$this->success('设置保存成功',url('smssys'));
+				$this->success('设置保存成功',url('admin/Sys/smssys'));
 			}else{
-				$this->error('设置保存失败',url('smssys'));
+				$this->error('设置保存失败',url('admin/Sys/smssys'));
 			}
 		}
 	}
-	//第三方登录设置显示
-	public function oauthsys(){
+	/**
+	 * 第三方登录设置
+	 */
+	public function oauthsys()
+	{
 		$oauth_qq=sys_config_get('think_sdk_qq');
 		$oauth_sina=sys_config_get('think_sdk_sina');
 		$oauth_weixin=sys_config_get('think_sdk_weixin');
@@ -436,10 +424,13 @@ class Sys extends Base {
 		$this->assign('oauth_google',$oauth_google);
 		return $this->fetch();
 	}
-	//保存第三方登录设置
-	public function runoauthsys(){
+	/**
+	 * 第三方登录设置保存
+	 */
+	public function runoauthsys()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('oauthsys'));
+			$this->error('提交方式不正确',url('admin/Sys/oauthsys'));
 		}else{
 			$host=get_host();
 			$data = array(
@@ -447,56 +438,62 @@ class Sys extends Base {
 					'app_key'    => input('qq_appid'),
 					'app_secret' => input('qq_appkey'),
 					'display' => input('qq_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=qq'),
+					'callback'   => $host.url('home/Oauth/callback','type=qq'),
 				),
 				'think_sdk_weixin' => array(
 					'app_key'    => input('weixin_appid'),
 					'app_secret' => input('weixin_appkey'),
 					'display' => input('weixin_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=weixin'),
+					'callback'   => $host.url('home/Oauth/callback','type=weixin'),
 				),
 				'think_sdk_wechat' => array(
 					'app_key'    => input('wechat_appid'),
 					'app_secret' => input('wechat_appkey'),
 					'display' => input('wechat_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=wechat'),
+					'callback'   => $host.url('home/Oauth/callback','type=wechat'),
 				),
 				'think_sdk_google' => array(
 					'app_key'    => input('google_appid'),
 					'app_secret' => input('google_appkey'),
 					'display' => input('google_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=google'),
+					'callback'   => $host.url('home/Oauth/callback','type=google'),
 				),
 				'think_sdk_facebook' => array(
 					'app_key'    => input('facebook_appid'),
 					'app_secret' => input('facebook_appkey'),
 					'display' => input('facebook_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=facebook'),
+					'callback'   => $host.url('home/Oauth/callback','type=facebook'),
 				),
 				'think_sdk_sina' => array(
 					'app_key'    => input('sina_appid'),
 					'app_secret' => input('sina_appkey'),
 					'display' => input('sina_display',0,'intval')?true:false,
-					'callback'   => $host.url('home/oauth/callback','type=sina'),
+					'callback'   => $host.url('home/Oauth/callback','type=sina'),
 				),
 			);
 			$rst=sys_config_setbyarr($data);
 			if($rst){
 				Cache::clear();
-				$this->success('设置保存成功',url('oauthsys'));
+				$this->success('设置保存成功',url('admin/Sys/oauthsys'));
 			}else{
-				$this->error('设置保存失败',url('oauthsys'));
+				$this->error('设置保存失败',url('admin/Sys/oauthsys'));
 			}
 		}
 	}
-	//云存储设置
-	public function storagesys(){
+	/**
+	 * 云存储设置
+	 */
+	public function storagesys()
+	{
 		$storage=config('storage');
 		$this->assign('storage',$storage);
 		return $this->fetch();
 	}
-	//保存云存储设置
-	public function runstorage(){
+	/**
+	 * 云存储设置保存
+	 */
+	public function runstorage()
+	{
 		$storage=array(
 			'storage_open'=>input('storage_open',0)?true:false,
 			'accesskey'=>input('accesskey',''),
@@ -507,16 +504,17 @@ class Sys extends Base {
 		$rst=sys_config_setbyarr(array('storage'=>$storage));
 		if($rst){
 			Cache::clear();
-			$this->success('设置保存成功',url('storagesys'));
+			$this->success('设置保存成功',url('admin/Sys/storagesys'));
 		}else{
-			$this->error('设置保存失败',url('storagesys'));
+			$this->error('设置保存失败',url('admin/Sys/storagesys'));
 		}
 	}
 	/*
 	 * 文章来源列表
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_list(){
+	public function source_list()
+	{
 		$source=Db::name('source')->order('source_order,source_id desc')->paginate(config('paginate.list_rows'));
 		$page = $source->render();
 		$this->assign('source',$source);
@@ -527,33 +525,36 @@ class Sys extends Base {
 	 * 添加来源操作
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_runadd(){
+	public function source_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('source_list'));
+			$this->error('提交方式不正确',url('admin/Sys/source_list'));
 		}else{
 			$data=input('post.');
 			Db::name('source')->insert($data);
-			$this->success('来源添加成功',url('source_list'));
+			$this->success('来源添加成功',url('admin/Sys/source_list'));
 		}
 	}
 	/*
 	 * 来源删除操作
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_del(){
+	public function source_del()
+	{
 		$p=input('p');
 		$rst=Db::name('source')->where(array('source_id'=>input('source_id')))->delete();
 		if($rst!==false){
-			$this->success('来源删除成功',url('source_list',array('p' => $p)));
+			$this->success('来源删除成功',url('admin/Sys/source_list',array('p' => $p)));
 		}else{
-			$this->error('来源删除失败',url('source_list',array('p' => $p)));
+			$this->error('来源删除失败',url('admin/Sys/source_list',array('p' => $p)));
 		}
 	}
 	/*
 	 * 来源修改返回值操作
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_edit(){
+	public function source_edit()
+	{
 		$source_id=input('source_id');
 		$source=Db::name('source')->where(array('source_id'=>$source_id))->find();
 		$sl_data['source_id']=$source['source_id'];
@@ -566,9 +567,10 @@ class Sys extends Base {
 	 * 修改来源操作
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_runedit(){
+	public function source_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('source_list'));
+			$this->error('提交方式不正确',url('admin/Sys/source_list'));
 		}else{
 			$sl_data=array(
 				'source_id'=>input('source_id'),
@@ -577,9 +579,9 @@ class Sys extends Base {
 			);
 			$rst=Db::name('source')->update($sl_data);
 			if($rst!==false){
-				$this->success('来源修改成功',url('source_list'));
+				$this->success('来源修改成功',url('admin/Sys/source_list'));
 			}else{
-				$this->error('来源修改失败',url('source_list'));
+				$this->error('来源修改失败',url('admin/Sys/source_list'));
 			}
 		}
 	}
@@ -587,282 +589,31 @@ class Sys extends Base {
 	 * 来源排序
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function source_order(){
+	public function source_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('source_list'));
+			$this->error('提交方式不正确',url('admin/Sys/source_list'));
 		}else{
 			foreach (input('post.') as $source_id => $source_order){
 				Db::name('source')->where(array('source_id' => $source_id ))->setField('source_order' , $source_order);
 			}
-			$this->success('排序更新成功',url('source_list'));
+			$this->success('排序更新成功',url('admin/Sys/source_list'));
 		}
 	}
-	//管理员列表
-	public function admin_list(){
-		$val=input('val');
-		$this->assign('testval',$val);
-		$map=array();
-		if($val){
-			$map['admin_username']= array('like',"%".$val."%");
-		}
-		$admin_list=Db::name('admin')->where($map)->order('admin_id')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
-		$page = $admin_list->render();
-		$this->assign('admin_list',$admin_list);
-		$this->assign('page',$page);
-		return $this->fetch();
-	}
-	//管理员添加
-	public function admin_add(){
-		$auth_group=Db::name('auth_group')->select();
-		$this->assign('auth_group',$auth_group);
-		return $this->fetch();
-	}
-	//管理员添加操作
-	public function admin_runadd(){
-		$check_user=Db::name('admin')->where(array('admin_username'=>input('admin_username')))->find();
-		if ($check_user){
-			$this->error('用户已存在，请重新输入用户名',url('admin_list'));
-		}
-		$admin_pwd_salt=random(10);
-		$sldata=array(
-			'admin_username'=>input('admin_username'),
-			'admin_pwd_salt' => $admin_pwd_salt,
-			'admin_pwd'=>encrypt_password(input('admin_pwd'),$admin_pwd_salt),
-			'admin_email'=>input('admin_email',''),
-			'admin_tel'=>input('admin_tel',''),
-			'admin_open'=>input('admin_open',0),
-			'admin_realname'=>input('admin_realname',''),
-			'admin_ip'=>request()->ip(),
-			'admin_addtime'=>time(),
-			'admin_changepwd'=>time(),
-		);
-		$result=Db::name('admin')->insertGetId($sldata);
-		if($result){
-			$accdata=array(
-				'uid'=>$result,
-				'group_id'=>input('group_id'),
-			);
-			//添加管理组
-			Db::name('auth_group_access')->insert($accdata);
-			//添加会员
-			$sldata=array(
-				'member_list_username'=>input('admin_username'),
-				'member_list_salt' => $admin_pwd_salt,
-				'member_list_pwd'=>encrypt_password(input('admin_pwd'),$admin_pwd_salt),
-				'member_list_groupid'=>1,
-				'member_list_nickname'=>input('admin_realname',''),
-				'member_list_email'=>input('admin_email',''),
-				'member_list_tel'=>input('admin_tel',''),
-				'member_list_open'=>1,
-				'last_login_ip'=>request()->ip(),
-				'member_list_addtime'=>time(),
-				'last_login_time'=>time(),
-				'user_status'=>1,
-			);
-			$member_id=Db::name('member_list')->insertGetId($sldata);
-			if($member_id){
-				Db::name('admin')->where('admin_id',$result)->setField('member_id', $member_id);
-			}
-			$this->success('管理员添加成功',url('admin_list'));
-		}else{
-			$this->error('管理员添加失败',url('admin_list'));
-		}
-	}
-	//管理员修改
-	public function admin_edit(){
-		$auth_group=Db::name('auth_group')->select();
-		$admin_list=Db::name('admin')->where(array('admin_id'=>input('admin_id')))->find();
-		$auth_group_access=Db::name('auth_group_access')->where(array('uid'=>$admin_list['admin_id']))->value('group_id');
-		$this->assign('admin_list',$admin_list);
-		$this->assign('auth_group',$auth_group);
-		$this->assign('auth_group_access',$auth_group_access);
-		return $this->fetch();
-	}
-	//管理员修改操作
-	public function admin_runedit(){
-		$admin_pwd=input('admin_pwd');
-		$group_id=input('group_id');
-		$admindata['admin_id']=input('admin_id');
-		if ($admin_pwd){
-			$admin_pwd_salt=random(10);
-			$admindata['admin_pwd_salt']=$admin_pwd_salt;
-			$admindata['admin_pwd']=encrypt_password(input('admin_pwd'),$admin_pwd_salt);
-			$admindata['admin_changepwd']=time();
-		}
-		$admindata['admin_email']=input('admin_email');
-		$admindata['admin_tel']=input('admin_tel','');
-		$admindata['admin_realname']=input('admin_realname');
-		$admindata['admin_open']=input('admin_open',0,'intval');
-		$rst=Db::name('admin')->update($admindata);
-		if($group_id){
-			$rst=Db::name('auth_group_access')->where(array('uid'=>input('admin_id')))->find();
-			if($rst){
-				//修改
-				$rst=Db::name('auth_group_access')->where(array('uid'=>input('admin_id')))->setField('group_id',$group_id);
-			}else{
-				//增加
-				$data['uid']=input('admin_id');
-				$data['group_id']=$group_id;
-				$rst=Db::name('auth_group_access')->insert($data);
-			}
-		}
-		if($rst!==false){
-			$this->success('管理员修改成功',url('admin_list'));
-		}else{
-			$this->error('管理员修改失败',url('admin_list'));
-		}
-	}
-	//管理员删除
-	public function admin_del(){
-		$admin_id=input('admin_id');
-		if (empty($admin_id)){
-			$this->error('用户ID不存在',url('admin_list'));
-		}
-		//对应会员ID
-		$member_id=Db::name('admin')->where(array('admin_id'=>input('admin_id')))->value('member_id');
-		Db::name('admin')->where(array('admin_id'=>input('admin_id')))->delete();
-		//删除对应会员
-		if($member_id){
-			Db::name('member_list')->where('member_list_id',$member_id)->delete();
-		}
-		$rst=Db::name('auth_group_access')->where(array('uid'=>input('admin_id')))->delete();
-		if($rst!==false){
-			$this->success('管理员删除成功',url('admin_list'));
-		}else{
-			$this->error('管理员删除失败',url('admin_list'));
-		}
-	}
-	//管理员开启、禁止
-	public function admin_state(){
-		$id=input('x');
-		if (empty($id)){
-			$this->error('用户ID不存在',url('admin_list'));
-		}
-		$status=Db::name('admin')->where(array('admin_id'=>$id))->value('admin_open');//判断当前状态情况
-		if($status==1){
-			$statedata = array('admin_open'=>0);
-			Db::name('admin')->where(array('admin_id'=>$id))->setField($statedata);
-			$this->success('状态禁止');
-		}else{
-			$statedata = array('admin_open'=>1);
-			Db::name('admin')->where(array('admin_id'=>$id))->setField($statedata);
-			$this->success('状态开启');
-		}
-	}
-	//用户组管理
-	public function admin_group_list(){
-		$auth_group=Db::name('auth_group')->select();
-		$this->assign('auth_group',$auth_group);
-		return $this->fetch();
-	}
-	//用户组增加
-	public function admin_group_add(){
-		return $this->fetch();
-	}
-	//用户组增加操作
-	public function admin_group_runadd(){
-		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('admin_group_list'));
-		}else{
-			$sldata=array(
-				'title'=>input('title'),
-				'status'=>input('status',0),
-				'addtime'=>time(),
-			);
-			$rst=Db::name('auth_group')->insert($sldata);
-			if($rst!==false){
-				$this->success('用户组添加成功',url('admin_group_list'));
-			}else{
-				$this->error('用户组添加失败',url('admin_group_list'));
-			}
-		}
-	}
-	//用户组删除操作
-	public function admin_group_del(){
-		$rst=Db::name('auth_group')->where(array('id'=>input('id')))->delete();
-		if($rst!==false){
-			$this->success('用户组删除成功',url('admin_group_list'));
-		}else{
-			$this->error('用户组删除失败',url('admin_group_list'));
-		}
-	}
-	//用户组编辑
-	public function admin_group_edit(){
-		$group=Db::name('auth_group')->where(array('id'=>input('id')))->find();
-		$this->assign('group',$group);
-		return $this->fetch();
-	}
-	//用户组编辑操作
-	public function admin_group_runedit(){
-		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('admin_group_list'));
-		}else{
-			$sldata=array(
-				'id'=>input('id'),
-				'title'=>input('title'),
-				'status'=>input('status'),
-			);
-			Db::name('auth_group')->update($sldata);
-			$this->success('用户组修改成功',url('admin_group_list'));
-		}
-	}
-	//用户组开启禁用
-	public function admin_group_state(){
-		$id=input('x');
-		$status=Db::name('auth_group')->where(array('id'=>$id))->value('status');//判断当前状态情况
-		if($status==1){
-			$statedata = array('status'=>0);
-			Db::name('auth_group')->where(array('id'=>$id))->setField($statedata);
-			$this->success('状态禁止');
-		}else{
-			$statedata = array('status'=>1);
-			Db::name('auth_group')->where(array('id'=>$id))->setField($statedata);
-			$this->success('状态开启');
-		}
-	}
-	//四重权限配置
-	public function admin_group_access(){
-		$admin_group=Db::name('auth_group')->where(array('id'=>input('id')))->find();
-		$data = Db::name('auth_rule')->field('id,name,title')->where('pid=0')->select();
-		foreach ($data as $k=>$v){
-			$data[$k]['sub'] = Db::name('auth_rule')->field('id,name,title')->where('pid='.$v['id'])->select();
-			foreach ($data[$k]['sub'] as $kk=>$vv){
-				$data[$k]['sub'][$kk]['sub'] = Db::name('auth_rule')->field('id,name,title')->where('pid='.$vv['id'])->select();
-				foreach ($data[$k]['sub'][$kk]['sub'] as $kkk=>$vvv){
-					$data[$k]['sub'][$kk]['sub'][$kkk]['sub'] = Db::name('auth_rule')->field('id,name,title')->where('pid='.$vvv['id'])->select();
-				}
-			}
-		}
-		$this->assign('admin_group',$admin_group);
-		$this->assign('datab',$data);
-		return $this->fetch();
-	}
-	//权限配置设置
-	public function admin_group_runaccess(){
-		$new_rules = input('new_rules/a');
-		$imp_rules = implode(',', $new_rules).',';
-		$sldata=array(
-			'id'=>input('id'),
-			'rules'=>$imp_rules,
-		);
-		if(Db::name('auth_group')->update($sldata)!==false){
-			Cache::clear();
-			$this->success('权限配置成功',url('admin_group_list'));
-		}else{
-			$this->error('权限配置失败',url('admin_group_list'));
-		}
-	}
-	//权限规则列表
-	public function admin_rule_list(){
+	/**
+	 * 权限(后台菜单)列表
+	 */
+	public function admin_rule_list()
+	{
 		$pid=input('pid',0);
 		$level=input('level',0);
 		$id_str=input('id','pid');
 		$admin_rule=Db::name('auth_rule')->where('pid',$pid)->order('sort')->select();
-		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
+        $admin_rule_all=Db::name('auth_rule')->order('sort')->select();
 		$arr = menu_left($admin_rule,'id','pid','─',$pid,$level,$level*20);
-		$arr_all = menu_left($admin_rule_all,'id','pid','─',0,$level,$level*20);
+        $arr_all = menu_left($admin_rule_all,'id','pid','─',0,$level,$level*20);
 		$this->assign('admin_rule',$arr);
-		$this->assign('admin_rule_all',$arr_all);
+        $this->assign('admin_rule_all',$arr_all);
 		$this->assign('pid',$id_str);
 		if(request()->isAjax()){
 			return $this->fetch('ajax_admin_rule_list');
@@ -870,8 +621,11 @@ class Sys extends Base {
 			return $this->fetch();
 		}
 	}
-	//权限规则添加
-	public function admin_rule_add(){
+	/**
+	 * 权限(后台菜单)添加
+	 */
+	public function admin_rule_add()
+	{
 		$pid=input('pid',0);
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
@@ -880,71 +634,43 @@ class Sys extends Base {
 		$this->assign('pid',$pid);
 		return $this->fetch();
 	}
-	//权限规则添加操作
-	public function admin_rule_runadd(){
+	/**
+	 * 权限(后台菜单)添加操作
+	 */
+	public function admin_rule_runadd()
+	{
 		if(!request()->isAjax()){
-			$this->error('提交方式不正确',url('admin_rule_list'));
+			$this->error('提交方式不正确',url('admin/Sys/admin_rule_list'));
 		}else{
 			$pid=Db::name('auth_rule')->where(array('id'=>input('pid')))->field('level')->find();
 			$level=$pid['level']+1;
-			//检测name是否有效
 			$name=input('name');
-			$arr=explode('/',$name);
-			if($level==1){
-				if(count($arr)==1){
-					$module='admin';
-					$controller=$name;
-				}elseif(count($arr)>1){
-					$module=$arr[0];
-					$controller=$arr[1];
-				}
-				if (!has_controller($module,$controller)) {
-					$this->error('不存在 '.$controller.' 的控制器',url('admin_rule_list'));
-				}
-				$name=strtolower($module).'/'.ucfirst(strtolower($controller));
-			}elseif($level==2){
-				//不检测
+			$name=AuthRule::check_name($name,$level);
+			if($name){
+				$sldata=array(
+					'name'=>$name,
+					'title'=>input('title'),
+					'status'=>input('status',0,'intval'),
+					'sort'=>input('sort',50,'intval'),
+					'pid'=>input('pid'),
+                    'notcheck'=>input('notcheck',0,'intval'),
+					'addtime'=>time(),
+					'css'=>input('css',''),
+					'level'=>$level,
+				);
+				Db::name('auth_rule')->insert($sldata);
+				Cache::clear();
+				$this->success('权限添加成功',url('admin/Sys/admin_rule_list'),1);
 			}else{
-				//是否存在模块/控制器/方法
-				if(count($arr)==2){
-					$module='admin';
-					$controller=$arr[0];
-					$action=$arr[1];
-				}elseif(count($arr)>2){
-					$module=$arr[0];
-					$controller=$arr[1];
-					$action=$arr[2];
-				}else{
-					$this->error('提交名称不规范',url('admin_rule_list'));
-				}
-				//处理是否含'?'
-				$arr=explode('?',$action);
-				$_action=(count($arr)==1)?$action:$arr[0];
-				$rst=has_action($module,$controller,$_action);
-				if($rst==0){
-					$this->error('不存在 '.$controller.' 的控制器',url('admin_rule_list'));
-				}elseif($rst==1){
-					$this->error('控制器'.$controller.'不存在方法'.$_action,url('admin_rule_list'));
-				}
-				$name=strtolower($module).'/'.ucfirst(strtolower($controller)).'/'.$action;
+				$this->error('控制器或方法不存在,或提交格式不规范',url('admin/Sys/admin_rule_list'));
 			}
-			$sldata=array(
-				'name'=>$name,
-				'title'=>input('title'),
-				'status'=>input('status',0,'intval'),
-				'sort'=>input('sort',50,'intval'),
-				'addtime'=>time(),
-				'pid'=>input('pid'),
-				'css'=>input('css',''),
-				'level'=>$level,
-			);
-			Db::name('auth_rule')->insert($sldata);
-			Cache::clear();
-			$this->success('权限添加成功',url('admin_rule_list'),1);
 		}
 	}
-	//权限规则开启禁止
-	public function admin_rule_state(){
+	/**
+	 * 权限(后台菜单)显示/隐藏
+	 */
+	public function admin_rule_state()
+	{
 		$id=input('x');
 		$statusone=Db::name('auth_rule')->where(array('id'=>$id))->value('status');//判断当前状态情况
 		if($statusone==1){
@@ -959,20 +685,45 @@ class Sys extends Base {
 			$this->success('状态开启');
 		}
 	}
-	//权限规则排序
-	public function admin_rule_order(){
+    /**
+     * 权限(后台菜单)检测/不检测
+     */
+    public function admin_rule_notcheck()
+    {
+        $id=input('x');
+        $statusone=Db::name('auth_rule')->where(array('id'=>$id))->value('notcheck');//判断当前状态情况
+        if($statusone==1){
+            $statedata = array('notcheck'=>0);
+            Db::name('auth_rule')->where(array('id'=>$id))->setField($statedata);
+            Cache::clear();
+            $this->success('检测');
+        }else{
+            $statedata = array('notcheck'=>1);
+            Db::name('auth_rule')->where(array('id'=>$id))->setField($statedata);
+            Cache::clear();
+            $this->success('不检测');
+        }
+    }
+	/**
+	 * 权限(后台菜单)排序
+	 */
+	public function admin_rule_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('admin_rule_list'));
+			$this->error('提交方式不正确',url('admin/Sys/admin_rule_list'));
 		}else{
 			foreach ($_POST as $id => $sort){
 				Db::name('auth_rule')->where(array('id' => $id ))->setField('sort' , $sort);
 			}
 			Cache::clear();
-			$this->success('排序更新成功',url('admin_rule_list'));
+			$this->success('排序更新成功',url('admin/Sys/admin_rule_list'));
 		}
 	}
-	//权限规则编辑
-	public function admin_rule_edit(){
+	/**
+	 * 权限(后台菜单)编辑
+	 */
+	public function admin_rule_edit()
+	{
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
 		$arr = menu_left($admin_rule_all);
@@ -982,8 +733,11 @@ class Sys extends Base {
 		$this->assign('rule',$admin_rule);
 		return $this->fetch();
 	}
-	//权限规则复制
-	public function admin_rule_copy(){
+	/**
+	 * 权限(后台菜单)通过复制添加
+	 */
+	public function admin_rule_copy()
+	{
 		//全部规则
 		$admin_rule_all=Db::name('auth_rule')->order('sort')->select();
 		$arr = menu_left($admin_rule_all);
@@ -993,184 +747,92 @@ class Sys extends Base {
 		$this->assign('rule',$admin_rule);
 		return $this->fetch();
 	}
-	//权限规则编辑操作
-	public function admin_rule_runedit(){
+	/**
+	 * 权限(后台菜单)编辑操作
+	 */
+	public function admin_rule_runedit()
+	{
 		if(!request()->isAjax()){
-			$this->error('提交方式不正确',url('admin_rule_list'));
+			$this->error('提交方式不正确',url('admin/Sys/admin_rule_list'));
 		}else{
-			$pid=Db::name('auth_rule')->where(array('id'=>input('pid')))->field('level')->find();
-			$level=$pid['level']+1;
-			$sldata=array(
-				'id'=>input('id',1,'intval'),
-				'name'=>input('name'),
-				'title'=>input('title'),
-				'status'=>input('status',0),
-				'pid'=>input('pid',0,'intval'),
-				'css'=>input('css'),
-				'sort'=>input('sort'),
-				'level'=>$level,
-			);
-			$rst=Db::name('auth_rule')->update($sldata);
-			if($rst!==false){
-				Cache::clear();
-				$this->success('权限修改成功',url('admin_rule_list'));
+			$name=input('name');
+			$old_pid=input('old_pid');
+			$old_level=input('old_level',0,'intval');
+			$pid=input('pid');
+			$level_diff=0;
+			//判断是否更改了pid
+			if($pid!=$old_pid){
+				$level=Db::name('auth_rule')->where('id',$pid)->value('level')+1;
+				$level_diff=($level>$old_level)?($level-$old_level):($old_level-$level);
 			}else{
-				$this->error('权限修改失败',url('admin_rule_list'));
+				$level=$old_level;
+			}
+			$name=AuthRule::check_name($name,$level);
+			if($name){
+				$sldata=array(
+					'id'=>input('id',1,'intval'),
+					'name'=>$name,
+					'title'=>input('title'),
+					'status'=>input('status',0,'intval'),
+                    'notcheck'=>input('notcheck',0,'intval'),
+					'pid'=>input('pid',0,'intval'),
+					'css'=>input('css'),
+					'sort'=>input('sort'),
+					'level'=>$level
+				);
+				$rst=Db::name('auth_rule')->update($sldata);
+				if($rst!==false){
+					if($pid!=$old_pid){
+						//更新子孙级菜单的level
+						$auth_rule=Db::name('auth_rule')->order('sort')->select();
+						$tree=new \Tree();
+						$tree->init($auth_rule,['parentid'=>'pid']);
+						$ids=$tree->get_childs($auth_rule,$sldata['id'],true,false);
+						if($ids){
+							if($level>$old_level){
+								Db::name('auth_rule')->where('id','in',$ids)->setInc('level',$level_diff);
+							}else{
+								Db::name('auth_rule')->where('id','in',$ids)->setDec('level',$level_diff);
+							}
+						}
+					}
+					Cache::clear();
+					$this->success('权限修改成功',url('admin/Sys/admin_rule_list'));
+				}else{
+					$this->error('权限修改失败',url('admin/Sys/admin_rule_list'));
+				}
+			}else{
+				$this->error('控制器或方法不存在,或提交格式不规范',url('admin/Sys/admin_rule_list'));
 			}
 		}
 	}
-	//权限规则删除
-	public function admin_rule_del(){
+	/**
+	 * 权限(后台菜单)删除
+	 */
+	public function admin_rule_del()
+	{
         $pid=input('id');
         $arr=Db::name('auth_rule')->select();
-        $ids=array();
-        $arrTree=getMenuTree($arr, $pid,'pid','id',$ids);
-        if(!empty($arrTree)){
-            $rst=Db::name('auth_rule')->where('id','in',$ids)->delete();
+        $tree=new \Tree();
+        $tree->init($arr,['parentid'=>'pid']);
+        $arrTree=$tree->get_childs($arr,$pid,true,true);
+        if($arrTree){
+            $rst=Db::name('auth_rule')->where('id','in',$arrTree)->delete();
             if($rst!==false){
                 Cache::clear();
-                $this->success('权限删除成功',url('admin_rule_list'));
+                $this->success('权限删除成功',url('admin/Sys/admin_rule_list'));
             }else{
-                $this->error('权限删除失败',url('admin_rule_list'));
+                $this->error('权限删除失败',url('admin/Sys/admin_rule_list'));
             }
         }else{
-            $this->error('权限删除失败',url('admin_rule_list'));
+            $this->error('权限删除失败',url('admin/Sys/admin_rule_list'));
         }
 	}
-	public function security_list()
+	/*
+	 * 数据备份显示
+	 */
+	public function database($type = null)
 	{
-		$security_dir=ROOT_PATH.'data/security/';
-		if (!file_exists($security_dir)) {
-			@mkdir($security_dir);
-		}
-		$finger_files = list_file($security_dir, '*.finger');
-		$this->assign('finger_files',$finger_files);
-		return $this->fetch();
-	}
-	public function security_generate()
-	{
-		$security_dir=ROOT_PATH.'data/security/';
-		if (!file_exists($security_dir)) {
-			@mkdir($security_dir);
-		}
-		$filename = $security_dir . 'file_finger_' . date('YmdHi') . '_' . random(10) . '.finger';
-		$f = fopen($filename, 'w');
-		fwrite($f, "GENE: RCF V" . THINK_VERSION . "\n");
-		fwrite($f, "TIME: " . date('Y-m-d H:i:s') . "\n");
-		fwrite($f, "ROOT: \n");
-		$files_md5 = array();
-		foreach (array(
-					//检测目录
-					 'vendor',
-					 'app',
-					 'extend',
-					 'public',
-					 'thinkphp'
-				 ) as $dir) {
-			foreach ($this->security_filefingergenerate('./' . $dir . '/', $dir . '/') as $file_md5) {
-				$files_md5 [] = $file_md5;
-				fwrite($f, $file_md5 [1] . '|' . $file_md5 [0] . "\n");
-			}
-		}
-		fclose($f);
-		$this->success('成功生成安全文件',url('security_list'));
-	}
-	public function security_delete()
-	{
-		$security_dir=ROOT_PATH.'data/security/';
-		if (!file_exists($security_dir)) {
-			$this->error('文件不存在',url('security_list'));
-		}
-		$file=input('file');
-		foreach (list_file($security_dir, '*.finger') as $f) {
-			if (md5($f ['filename']) == $file) {
-				@unlink($f ['pathname']);
-			}
-		}
-		$this->success('成功删除',url('security_list'));
-	}
-	public function security_check()
-	{
-		$security_dir=ROOT_PATH.'data/security/';
-		if (!file_exists($security_dir)) {
-			$this->error('文件不存在',url('security_list'));
-		}
-		$md5_file = null;
-		$file=input('file');
-		foreach (list_file($security_dir, '*.finger') as $f) {
-			if (md5($f ['filename']) == $file) {
-				$md5_file = $f ['pathname'];
-				break;
-			}
-		}
-		if (null != $md5_file) {
-			if (!file_exists($md5_file) || !is_file($md5_file)) {
-				$this->error('文件不存在',url('security_list'));
-			}
-			$lines = explode("\n", file_get_contents($md5_file));
-			if (count($lines) < 3) {
-				$this->error('安全文件错误',url('security_list'));
-			}
-			if (!preg_match('/^GENE: RCF V.*?$/', $lines [0]) || !preg_match('/^TIME: \\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+$/', $lines [1]) || !preg_match('/^ROOT: ([\\/\\.]*)/', $lines [2])) {
-				$this->error('安全文件错误',url('security_list'));
-			}
-			$finger_file_root = trim(substr($lines [2], 5));
-			$basedir = str_replace('\\', '/', rtrim(realpath($finger_file_root), '\\/')) . '/';
-			unset ($lines [0], $lines [1], $lines [2]);
-			$error_msgs = array();
-			$file_should_exists = array();
-			foreach ($lines as $line) {
-				$line = trim($line);
-				if ($line) {
-					$l = explode('|', $line);
-					if (count($l) == 2) {
-						$file = trim($l [1]);
-						$md5 = trim($l [0]);
-						$file_should_exists [$file] = $md5;
-						if (file_exists($filename = $basedir . $file)) {
-							if ($md5 != md5_file($filename)) {
-								$error_msgs [] = '文件被篡改 : ' . $file;
-							}
-						} else {
-							$error_msgs [] = '缺少文件 : ' . $file;
-						}
-					} else {
-						$error_msgs [] = '错误行 : ' . $line;
-					}
-				}
-			}
-			$this->assign('error_msgs',$error_msgs);
-			return $this->fetch();
-		}else{
-			$this->error('文件不存在',url('security_list'));
-		}
-	}
-	private function security_filefingergenerate($dir = '', $prefix = '')
-	{
-		static $allow_file_exts = array(
-			'php' => true,
-			'js' => true,
-			'html' => true,
-			'htm' => true
-		);
-		$file_arrs = array();
-		foreach (list_file($dir) as $file) {
-			if ($file ['isDir']) {
-				$file_arrs = array_merge($file_arrs, $this->security_filefingergenerate($file ['pathname'] . '/', $prefix . $file ['filename'] . '/'));
-			} else if ($file ['isFile']) {
-				if (isset ($allow_file_exts [$file ['ext']])) {
-					$file_saved = $prefix . str_replace('\\', '/', $file ['filename']);
-					$file_arrs [] = array(
-						$file_saved,
-						md5_file($file ['pathname'])
-					);
-				}
-			}
-		}
-		return $file_arrs;
-	}
-	//数据库备份
-	public function database($type = null){
 		if(empty($type)){
 			$type='export';
 		}
@@ -1236,8 +898,11 @@ class Sys extends Base {
 		$this->assign('data_list', $list);
 		return $this->fetch($type);
 	}
-	//数据库还原
-	public function import(){
+	/*
+	 * 数据还原显示
+	 */
+	public function import()
+	{
 		$path=config('db_path');
 		if (!is_dir($path)) {
 			mkdir($path, 0755, true);
@@ -1279,7 +944,8 @@ class Sys extends Base {
 	 * @param  String $tables 表名
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function optimize($tables = null){
+	public function optimize($tables = null)
+	{
 		if($tables) {
 			if(is_array($tables)){
 				$tables = implode('`,`', $tables);
@@ -1306,7 +972,8 @@ class Sys extends Base {
 	 * @param  String $tables 表名
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function repair($tables = null){
+	public function repair($tables = null)
+	{
 		if($tables) {
 			if(is_array($tables)){
 				$tables = implode('`,`', $tables);
@@ -1333,7 +1000,8 @@ class Sys extends Base {
 	 * @param  String $table 不含前缀表名
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function exportsql($table = null){
+	public function exportsql($table = null)
+	{
 		if($table){
 			if(stripos($table,config('database.prefix'))==0){
 				//含前缀的表,去除表前缀
@@ -1352,21 +1020,26 @@ class Sys extends Base {
 	 * @param  Integer $time 备份时间
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function del($time = 0){
+	public function del($time = 0)
+	{
 		if($time){
 			$name  = date('Ymd-His', $time) . '-*.sql*';
 			$path  = realpath(config('db_path')) . DS . $name;
 			array_map("unlink", glob($path));
 			if(count(glob($path))){
-				$this->error('备份文件删除失败，请检查权限！',url('import'));
+				$this->error('备份文件删除失败，请检查权限！',url('admin/Sys/import'));
 			} else {
-				$this->success('备份文件删除成功！',url('import'));
+				$this->success('备份文件删除成功！',url('admin/Sys/import'));
 			}
 		} else {
-			$this->error('参数错误！',url('import'));
+			$this->error('参数错误！',url('admin/Sys/import'));
 		}
 	}
-	public function restore($time = 0, $part = null, $start = null){
+	/*
+	 * 数据还原
+	 */
+	public function restore($time = 0, $part = null, $start = null)
+	{
 		//读取备份配置
 		$config = array(
 			'path'     => realpath(config('db_path')) . DS,
@@ -1407,7 +1080,7 @@ class Sys extends Base {
 					$this->restore(0,$part,0);
 				} else {
 					session('backup_list', null);
-					$this->success('还原完成！',url('Sys/import'));
+					$this->success('还原完成！',url('admin/Sys/import'));
 				}
 			} else {
 				$data = array('part' => $part, 'start' => $start[0]);
@@ -1422,7 +1095,11 @@ class Sys extends Base {
 			$this->error('参数错误！');
 		}
 	}
-	public function export($tables = null, $id = null, $start = null){
+	/*
+	 * 数据备份
+	 */
+	public function export($tables = null, $id = null, $start = null)
+	{
 		if(request()->isPost() && !empty($tables) && is_array($tables)){ //初始化
 			//读取备份配置
 			$config = array(
@@ -1485,12 +1162,18 @@ class Sys extends Base {
 			$this->error('参数错误！');
 		}
 	}
-	//Excel导入
-	public function excel_import(){
+	/*
+	 * Excel导入
+	 */
+	public function excel_import()
+	{
 		return $this->fetch();
 	}
-	//Excel导出
-	public function excel_export(){
+	/*
+	 * Excel导出
+	 */
+	public function excel_export()
+	{
 		$list  = Db::query('SHOW TABLE STATUS FROM '.config('database.database'));
 		$list  = array_map('array_change_key_case', $list);
 		//过滤非本项目前缀的表
@@ -1506,14 +1189,15 @@ class Sys extends Base {
 	 * 表格导入
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function excel_runimport(){
+	public function excel_runimport()
+	{
 		if (! empty ( $_FILES ['file_stu'] ['name'] )){
 			$tmp_file = $_FILES ['file_stu'] ['tmp_name'];
 			$file_types = explode ( ".", $_FILES ['file_stu'] ['name'] );
 			$file_type = $file_types [count ( $file_types ) - 1];
 			/*判别是不是.xls文件，判别是不是excel文件*/
 			if (strtolower ( $file_type ) != "xls"){
-				$this->error ( '不是Excel文件，重新上传',url('excel_import'));
+				$this->error ( '不是Excel文件，重新上传',url('admin/Sys/excel_import'));
 			}
 			/*设置上传路径*/
 			$savePath =ROOT_PATH. 'public/excel/';
@@ -1521,11 +1205,11 @@ class Sys extends Base {
 			$str = time ();
 			$file_name = $str . "." . $file_type;
 			if (! copy ( $tmp_file, $savePath . $file_name )){
-				$this->error ('上传失败',url('excel_import'));
+				$this->error ('上传失败',url('admin/Sys/excel_import'));
 			}
 			$res = read ( $savePath . $file_name );
 			if (!$res){
-				$this->error ('数据处理失败',url('excel_import'));
+				$this->error ('数据处理失败',url('admin/Sys/excel_import'));
 			}
 			$titles=array();
 			foreach ( $res as $k => $v ){
@@ -1539,141 +1223,29 @@ class Sys extends Base {
 					}
 					$result = Db::name ('news')->insert($data);
 					if (!$result){
-						$this->error ('导入数据库失败',url('excel_import'));
+						$this->error ('导入数据库失败',url('admin/Sys/excel_import'));
 					}
 				}else{
 					$titles=$v;
 				}
 			}
-			$this->success ('导入数据库成功',url('excel_import'));
+			$this->success ('导入数据库成功',url('admin/Sys/excel_import'));
 		}
 	}
 	/*
 	 * 数据导出功能
 	 * @author rainfer <81818832@qq.com>
 	 */
-	public function excel_runexport($table){
+	public function excel_runexport($table)
+	{
 		export2excel($table);
 	}
-	//清除缓存
-	public function clear(){
+	/*
+	 * 清理缓存
+	 */
+	public function clear()
+	{
 		Cache::clear();
 		$this->success ('清理缓存成功');
-	}
-	//日常维护
-	public function maintain()
-	{
-		$action=input('action');
-		switch ($action) {
-			case 'download_log' :
-			case 'view_log':
-				$logs = array();
-				foreach (list_file(LOG_PATH) as $f) {
-					if ($f ['isDir']) {
-						foreach (list_file($f ['pathname'] . '/', '*.log') as $ff) {
-							if ($ff ['isFile']) {
-								$spliter = '==========================';
-								$logs [] = $spliter . '  ' . $f ['filename'] . '/' . $ff ['filename'] . '  ' . $spliter . "\n\n" . file_get_contents($ff ['pathname']);
-							}
-						}
-					}
-				}
-				if ('download_log' == $action) {
-					force_download_content('log_' . date('Ymd_His') . '.log', join("\n\n\n\n", $logs));
-				} else {
-					echo '<pre>' . htmlspecialchars(join("\n\n\n\n", $logs)) . '</pre>';
-				}
-				break;
-			case 'clear_log' :
-				remove_dir(LOG_PATH);
-				$this->success ('清除日志成功',url('Index/index'));
-				break;
-			case 'debug_on' :
-				$data = array('app_debug'=>true);
-				$res=sys_config_setbyarr($data);
-				if($res === false){
-					$this->error('打开调试失败',url('Index/index'));
-				}else{
-					Cache::clear();
-					$this->success('已打开调试',url('Index/index'));
-				}
-				break;
-			case 'debug_off' :
-				$data = array('app_debug'=>false);
-				$res=sys_config_setbyarr($data);
-				if($res === false){
-					$this->error('关闭调试失败',url('Index/index'));
-				}else{
-					Cache::clear();
-					$this->success('已关闭调试',url('Index/index'));
-				}
-				break;
-			case 'trace_on' :
-				$data = array('app_trace'=>true);
-				$res=sys_config_setbyarr($data);
-				if($res === false){
-					$this->error('打开Trace失败',url('Index/index'));
-				}else{
-					Cache::clear();
-					$this->success('已打开Trace',url('Index/index'));
-				}
-				break;
-			case 'trace_off' :
-				$data = array('app_trace'=>false);
-				$res=sys_config_setbyarr($data);
-				if($res === false){
-					$this->error('关闭Trace失败',url('Index/index'));
-				}else{
-					Cache::clear();
-					$this->success('已关闭Trace',url('Index/index'));
-				}
-				break;
-		}
-	}
-	//管理员信息
-	public function profile(){
-		$admin=array();
-		if(session('aid')){
-			$admin=Db::name('admin')->alias("a")->join(config('database.prefix').'auth_group_access b','a.admin_id =b.uid')->join(config('database.prefix').'auth_group c','b.group_id = c.id')->where(array('a.admin_id'=>session('aid')))->find();
-			$news_count=Db::name('News')->where(array('news_auto'=>session('member_id')))->count();
-			$admin['news_count']=$news_count;
-		}
-		$this->assign('admin', $admin);
-		return $this->fetch();
-	}
-	//头像
-	public function avatar(){
-		$imgurl=input('imgurl');
-		//去'/'
-		$imgurl=str_replace('/','',$imgurl);
-		$url='/data/upload/avatar/'.$imgurl;
-		$state=false;
-		if(config('storage.storage_open')){
-			//七牛
-			$upload = \Qiniu::instance();
-			$info = $upload->uploadOne('.'.$url,"image/");
-			if ($info) {
-				$state=true;
-				$imgurl= config('storage.domain').$info['key'];
-				@unlink('.'.$url);
-			}
-		}
-		if($state !=true){
-			//本地
-			//写入数据库
-			$data['uptime']=time();
-			$data['filesize']=filesize('.'.$url);
-			$data['path']=$url;
-			Db::name('plug_files')->insert($data);
-		}
-		$admin=Db::name('admin')->where(array('admin_id'=>session('aid')))->find();
-		$admin['admin_avatar']=$imgurl;
-		$rst=Db::name('admin')->where(array('admin_id'=>session('aid')))->update($admin);
-		if($rst!==false){
-			session('admin_avatar',$imgurl);
-			$this->success ('头像更新成功',url('profile'));
-		}else{
-			$this->error ('头像更新失败',url('profile'));
-		}
 	}
 }

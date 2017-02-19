@@ -29,4 +29,23 @@ class StrUtil
         }
         return $str;
     }
+
+    /**
+     * 转码字符集转码  仅支持 转码 到 UTF-8
+     * @param string $str
+     * @param string $targetCharset
+     * @return mixed|string
+     */
+    public static function characet($str, $targetCharset)
+    {
+        if (empty($str)) {
+            return $str;
+        }
+
+        if (strcasecmp('UTF-8', $targetCharset) != 0) {
+            $str = mb_convert_encoding($str, $targetCharset, 'UTF-8');
+        }
+
+        return $str;
+    }
 }

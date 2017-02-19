@@ -7,37 +7,44 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\wechat\controller;
+
 use think\Db;
 use think\Validate;
 use EasyWeChat\Message\Article;
-class We extends WeBase {
-	protected function _initialize(){
+
+class We extends WeBase
+{
+	public function _initialize()
+    {
 		parent::_initialize();
 		$config=config('we_options');
 		if(!empty($config)) $this->options=array_merge($this->options,$config);
 	}
 	//微信设置显示
-	public function wesys(){
+	public function wesys()
+    {
 		$this->assign('sys',$this->options);
 		return $this->fetch();
 	}
 
 	//保存微信设置
-	public function runwesys(){
+	public function runwesys()
+    {
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('wesys'));
+			$this->error('提交方式不正确',url('wechat/We/wesys'));
 		}else{
 			$we_options=input('post.');
 			$rst=sys_config_setbyarr($we_options);
 			if($rst!==false){
 				$this->options=array_merge($this->options,$we_options['we_options']);
-				$this->success('微信设置保存成功',url('wesys'));
+				$this->success('微信设置保存成功',url('wechat/We/wesys'));
 			}else{
-				$this->error('提交参数不正确',url('wesys'));
+				$this->error('提交参数不正确',url('wechat/We/wesys'));
 			}
 		}
 	}
-    public function menu_list(){
+    public function menu_list()
+    {
         $menu=Db::name('we_menu')->order('we_menu_order')->select();
         $menu=menu_left($menu,'we_menu_id','we_menu_leftid');
         $this->assign('menu',$menu);
@@ -47,7 +54,8 @@ class We extends WeBase {
             return $this->fetch();
         }
     }
-    public function menu_runadd(){
+    public function menu_runadd()
+    {
         if(!request()->isAjax()){
             $this->error('提交方式不正确');
         }else{
@@ -70,12 +78,12 @@ class We extends WeBase {
             if($we_menu_leftid==0){
                 $top_menu=$we_menu->where(['we_menu_leftid'=>0,'we_menu_open'=>1])->count();
                 if ($top_menu>2){
-                    $this->error('顶级菜单不能超过3个',url('menu_list'));
+                    $this->error('顶级菜单不能超过3个',url('wechat/We/menu_list'));
                 }
             }else{
                 $child_menu=$we_menu->where(['we_menu_leftid'=>$we_menu_leftid,'we_menu_open'=>1])->count();
                 if ($child_menu>4){
-                    $this->error('子菜单不能超过5个',url('menu_list'));
+                    $this->error('子菜单不能超过5个',url('wechat/We/menu_list'));
                 }
             }
             $sldata=array(
@@ -88,13 +96,14 @@ class We extends WeBase {
             );
             $rst=$we_menu->insert($sldata);
             if($rst!==false){
-                $this->success('菜单添加成功',url('menu_list'));
+                $this->success('菜单添加成功',url('wechat/We/menu_list'));
             }else{
-                $this->error('菜单添加失败',url('menu_list'));
+                $this->error('菜单添加失败',url('wechat/We/menu_list'));
             }
         }
     }
-    public function menu_state(){
+    public function menu_state()
+    {
         $id=input('x');
         $we_menu=Db::name('we_menu');
         $statusone=$we_menu->where('we_menu_id',$id)->value('we_menu_open');
@@ -108,7 +117,8 @@ class We extends WeBase {
             $this->success('状态开启');
         }
     }
-    public function menu_order(){
+    public function menu_order()
+    {
         if (!request()->isAjax()){
             $this->error('提交方式不正确');
         }else{
@@ -116,27 +126,31 @@ class We extends WeBase {
             foreach (input('post.') as $id => $sort){
                 $we_menu->where('we_menu_id',$id)->setField('we_menu_order' , $sort);
             }
-            $this->success('排序更新成功',url('menu_list'));
+            $this->success('排序更新成功',url('wechat/We/menu_list'));
         }
     }
-    public function menu_del(){
+    public function menu_del()
+    {
         $menu=Db::name('we_menu')->select();
-        $ids=array();
-        getMenuTree($menu, input('we_menu_id'),'we_menu_leftid','we_menu_id',$ids,true);
+        $tree=new \Tree();
+        $tree->init($menu,['parentid'=>'we_menu_leftid','id'=>'we_menu_id']);
+        $ids=$tree->get_childs($menu,input('we_menu_id'),true,true);
         $rst=Db::name('we_menu')->where('we_menu_id','in',$ids)->delete();
         if($rst!==false){
-            $this->success('菜单删除成功',url('menu_list'));
+            $this->success('菜单删除成功',url('wechat/We/menu_list'));
         }else{
-            $this->error('菜单删除失败',url('menu_list'));
+            $this->error('菜单删除失败',url('wechat/We/menu_list'));
         }
     }
-    public function menu_edit(){
+    public function menu_edit()
+    {
         $we_menu_id=input('we_menu_id');
         $menu=Db::name('we_menu')->where('we_menu_id',$we_menu_id)->find();
         $menu['code']=1;
         return json($menu);
     }
-    public function menu_runedit(){
+    public function menu_runedit()
+    {
         if(!request()->isAjax()){
             $this->error('提交方式不正确');
         }else{
@@ -165,21 +179,22 @@ class We extends WeBase {
             );
             $rst=$we_menu->where('we_menu_id',input('we_menu_id'))->update($sldata);
             if($rst!==false){
-                $this->success('菜单编辑成功',url('menu_list'));
+                $this->success('菜单编辑成功',url('wechat/We/menu_list'));
             }else{
-                $this->error('菜单编辑失败',url('menu_list'));
+                $this->error('菜单编辑失败',url('wechat/We/menu_list'));
             }
         }
     }
-    public function menu_make(){
+    public function menu_make()
+    {
 		//判断是否配置
 		if(empty($this->options['app_id']) || empty($this->options['secret'])){
-			$this->error('微信配置不正确',url('menu_list'));
+			$this->error('微信配置不正确',url('wechat/We/menu_list'));
 		}
         //组装数据
         $we_menu=Db::name('we_menu')->where(array('we_menu_leftid'=>0,'we_menu_open'=>1))->order('we_menu_id')->limit(3)->select();
         if(empty($we_menu)){
-            $this->error('没有菜单需要生成',url('menu_list'));
+            $this->error('没有菜单需要生成',url('wechat/We/menu_list'));
         }
         $new_menu = array();
         $menu_count = 0;
@@ -219,13 +234,14 @@ class We extends WeBase {
 		$return=$menu->add($new_menu);
         $return=json_decode($return,true);
         if($return['errcode'] == 0){
-            $this->success('菜单已成功生成',url('menu_list'));
+            $this->success('菜单已成功生成',url('wechat/We/menu_list'));
         }else{
-            $this->error('生成失败,错误:'.$return['errcode'],url('menu_list'));
+            $this->error('生成失败,错误:'.$return['errcode'],url('wechat/We/menu_list'));
         }
     }
 	//同步服务端菜单到本地数据库
-	public function menu_get(){
+	public function menu_get()
+    {
 		$menu = $this->app->menu;
 		$menus=$menu->current();
 		$we_menu=Db::name('we_menu');
@@ -292,10 +308,11 @@ class We extends WeBase {
 			}
             $i=$i+10;
 		}
-        $this->success('菜单已同步到数据库',url('menu_list'));
+        $this->success('菜单已同步到数据库',url('wechat/We/menu_list'));
 	}
 	//自动回复
-	public function reply_list(){
+	public function reply_list()
+    {
         $reply_list=Db::name('we_reply')->paginate(config('paginate.list_rows'));
 		$show=$reply_list->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
@@ -307,7 +324,8 @@ class We extends WeBase {
             return $this->fetch();
         }
     }
-    public function reply_edit(){
+    public function reply_edit()
+    {
         $we_reply_id=input('we_reply_id');
         $reply=Db::name('we_reply')->where('we_reply_id',$we_reply_id)->find();
 		switch($reply['we_reply_type']){
@@ -328,7 +346,8 @@ class We extends WeBase {
         $reply['code']=1;
         return json($reply);
     }
-    public function reply_runedit(){
+    public function reply_runedit()
+    {
         if(!request()->isAjax()){
             $this->error('提交方式不正确');
         }else{
@@ -366,13 +385,14 @@ class We extends WeBase {
             );
             $rst=Db::name('we_reply')->where('we_reply_id',input('we_reply_id'))->update($sldata);
             if($rst!==false){
-                $this->success('关键词回复编辑成功',url('reply_list'));
+                $this->success('关键词回复编辑成功',url('wechat/We/reply_list'));
             }else{
-                $this->error('关键词回复编辑失败',url('reply_list'));
+                $this->error('关键词回复编辑失败',url('wechat/We/reply_list'));
             }
         }
     }
-    public function reply_runadd(){
+    public function reply_runadd()
+    {
         if(!request()->isAjax()){
             $this->error('提交方式不正确');
         }else{
@@ -411,13 +431,14 @@ class We extends WeBase {
             );
             $rst=Db::name('we_reply')->insert($sldata);
             if($rst!==false){
-                $this->success('关键词回复添加成功',url('reply_list'));
+                $this->success('关键词回复添加成功',url('wechat/We/reply_list'));
             }else{
-                $this->error('关键词回复添加失败',url('reply_list'));
+                $this->error('关键词回复添加失败',url('wechat/We/reply_list'));
             }
         }
     }
-    public function reply_state(){
+    public function reply_state()
+    {
         $id=input('x');
         $we_reply=Db::name('we_reply');
         $statusone=$we_reply->where('we_reply_id',$id)->value('we_reply_open');
@@ -432,33 +453,36 @@ class We extends WeBase {
         }
     }
 	//全选删除
-	public function reply_alldel(){
+	public function reply_alldel()
+    {
 		$p = input('p');
 		$ids = input('we_reply_id/a');
 		if(empty($ids)){
-			$this -> error("请选择删除的关键词回复",url('reply_list',array('p'=>$p)));
+			$this -> error("请选择删除的关键词回复",url('wechat/We/reply_list',array('p'=>$p)));
 		}
 		if(!is_array($ids)){
 			$ids[]=$ids;
 		}
 		$rst=Db::name('we_reply')->where('we_reply_id','in',$ids)->delete();
 		if($rst!==false){
-			$this->success("关键词回复删除成功",url('reply_list',array('p'=>$p)));
+			$this->success("关键词回复删除成功",url('wechat/We/reply_list',array('p'=>$p)));
 		}else{
-			$this -> error("关键词回复删除失败",url('reply_list',array('p'=>$p)));
+			$this -> error("关键词回复删除失败",url('wechat/We/reply_list',array('p'=>$p)));
 		}
 	}
-	public function reply_del(){
+	public function reply_del()
+    {
 		$p=input('p');
 		$we_reply_id=input('we_reply_id');
 		$rst=Db::name('we_reply')->where('we_reply_id',$we_reply_id)->delete();
 		if($rst!==false){
-			$this->success('关键词回复删除成功',url('reply_list',array('p'=>$p)));
+			$this->success('关键词回复删除成功',url('wechat/We/reply_list',array('p'=>$p)));
 		}else{
-			$this->error('关键词回复删除失败',url('reply_list',array('p'=>$p)));
+			$this->error('关键词回复删除失败',url('wechat/We/reply_list',array('p'=>$p)));
 		}
 	}
-	public function mats_list(){
+	public function mats_list()
+    {
         $mats_list=Db::name('we_mats')->paginate(config('paginate.list_rows'));
 		$show=$mats_list->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
@@ -471,7 +495,8 @@ class We extends WeBase {
         }
     }
 	//同步服务端素材到本地数据库
-	public function mats_get(){
+	public function mats_get()
+    {
 		$mats=Db::name('we_mats');
 		$material = $this->app->material;
 		$types=array('image','video','voice','news');
@@ -527,9 +552,10 @@ class We extends WeBase {
 			}
 		}
 		$mats->insertAll($data);
-		$this->success('同步素材列表成功',url('mats_list'));
+		$this->success('同步素材列表成功',url('wechat/We/mats_list'));
 	}
-	public function mats_edit(){
+	public function mats_edit()
+    {
 		$mats_id=input('mats_id');
         $mats_list=Db::name('we_mats')->find($mats_id);
 		$mats_list['news_content']=json_decode($mats_list['news_content'],true);
@@ -537,7 +563,8 @@ class We extends WeBase {
         $this->assign('mats_list',$mats_list);
         return $this->fetch();
     }
-	public function mats_runedit(){
+	public function mats_runedit()
+    {
 		$mats_id=input('mats_id');
 		$news_index=input('news_index',0,'intval');
         $mats_list_old=Db::name('we_mats')->find($mats_id);
@@ -571,18 +598,20 @@ class We extends WeBase {
                     'update_time'=>time()
                 );
                 Db::name('we_mats')->where('mats_id',$mats_id)->update($sldata);
-                $this->success('修改成功',url('mats_list'));
+                $this->success('修改成功',url('wechat/We/mats_list'));
             }else{
-                $this->error('修改失败',url('mats_list'));
+                $this->error('修改失败',url('wechat/We/mats_list'));
             }
 		}else{
-			$this->success('未修改,直接返回',url('mats_list'));
+			$this->success('未修改,直接返回',url('wechat/We/mats_list'));
 		}
     }
-    public function mats_add(){
+    public function mats_add()
+    {
         return $this->fetch();
     }
-    public function mats_runadd(){
+    public function mats_runadd()
+    {
         $mats_type=input('mats_type');
         $mats_name=input('mats_name');
         if($mats_type=='news'){
@@ -601,10 +630,10 @@ class We extends WeBase {
                     }else{
                         $file = null;
                         @unlink($file_url);
-                        $this->error('上传微信平台失败',url('mats_list'));
+                        $this->error('上传微信平台失败',url('wechat/We/mats_list'));
                     }
                 }else{
-                    $this->error($file->getError(),url('mats_list'));
+                    $this->error($file->getError(),url('wechat/We/mats_list'));
                 }
             }
             //加入素材数据库
@@ -631,9 +660,9 @@ class We extends WeBase {
                     'update_time'=>time()
                 );
                 Db::name('we_mats')->insert($sldata);
-                $this->success('上传成功',url('mats_list'));
+                $this->success('上传成功',url('wechat/We/mats_list'));
             }else{
-                $this->error('上传微信平台失败',url('mats_list'));
+                $this->error('上传微信平台失败',url('wechat/We/mats_list'));
             }
         }else{
             $url=$mediaId='';
@@ -684,37 +713,39 @@ class We extends WeBase {
                         Db::name('we_mats')->insert($sldata);
                         $file = null;
                         @unlink($file_url);
-                        $this->success('上传成功',url('mats_list'));
+                        $this->success('上传成功',url('wechat/We/mats_list'));
                     }else{
                         $file = null;
                         @unlink($file_url);
-                        $this->error('上传微信平台失败',url('mats_list'));
+                        $this->error('上传微信平台失败',url('wechat/We/mats_list'));
                     }
                 }else{
-                    $this->error($file->getError(),url('mats_list'));
+                    $this->error($file->getError(),url('wechat/We/mats_list'));
                 }
             }else{
-                $this->error('文件上传失败',url('mats_list'));
+                $this->error('文件上传失败',url('wechat/We/mats_list'));
             }
         }
     }
-    public function mats_del(){
+    public function mats_del()
+    {
         $mats_id=input('mats_id');
         $mast_list=Db::name('we_mats')->find($mats_id);
         if(empty($mast_list)){
-            $this->error('不存在此素材',url('mats_list'));
+            $this->error('不存在此素材',url('wechat/We/mats_list'));
         }
         $mediaId=$mast_list['media_id'];
         $result=$this->app->material->delete($mediaId);
         $result=json_decode($result,true);
         if(isset($result['errcode']) && $result['errcode']==0){
             Db::name('we_mats')->delete($mats_id);
-            $this->success('素材删除成功',url('mats_list'));
+            $this->success('素材删除成功',url('wechat/We/mats_list'));
         }else{
-            $this->error('素材删除失败',url('mats_list'));
+            $this->error('素材删除失败',url('wechat/We/mats_list'));
         }
     }
-    public function mats_alldel(){
+    public function mats_alldel()
+    {
         $mats_ids=input('mats_id_id/a');
         if(!is_array($mats_ids)){
             $mats_ids[]=$mats_ids;
@@ -733,6 +764,6 @@ class We extends WeBase {
                 continue;
             }
         }
-        $this->success('素材删除成功',url('mats_list'));
+        $this->success('素材删除成功',url('wechat/We/mats_list'));
     }
 }

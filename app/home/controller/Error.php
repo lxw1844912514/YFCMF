@@ -7,9 +7,12 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
-class Error extends Base{
+
+class Error extends Base
+{
     //空控制器
-    public function index(){
+    public function index()
+    {
         $this->error(lang('operation not valid'));
     }
 }

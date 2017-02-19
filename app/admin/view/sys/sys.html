@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
@@ -33,7 +33,7 @@
 						</a>
 					</li>
 				</ul>
-				<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:url('runsys')}">
+				<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:url('admin/Sys/runsys')}">
 					<fieldset>
 						<div class="tab-content">
 							<div id="basic" class="tab-pane fade in active">
@@ -60,20 +60,33 @@
 								<div class="space-4"></div>
 
 								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题 </label>
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题(PC) </label>
 									<div class="col-sm-9">
 										<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-7" required>
 											{foreach name="templates" item="vo"}
 												<option value="{$vo}" {if condition="$sys.site_tpl eq $vo"}selected="selected"{/if}>{$vo}</option>
 											{/foreach}
 										</select>
-						<span class="help-inline col-xs-12 col-sm-5">
-							<span class="middle" id="restwo">*</span>
-						</span>
+									<span class="help-inline col-xs-12 col-sm-5">
+										<span class="middle" id="restwo">*</span>
+									</span>
 									</div>
 								</div>
 								<div class="space-4"></div>
-
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题(手机) </label>
+									<div class="col-sm-9">
+										<select name="options[site_tpl_m]" id="site_tpl_m" class="col-xs-10 col-sm-7" required>
+											{foreach name="templates" item="vo"}
+											<option value="{$vo}" {if condition="$sys.site_tpl_m eq $vo"}selected="selected"{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+										<span class="help-inline col-xs-12 col-sm-5">
+										<span class="middle" id="restwo">*</span>
+									</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
 								<div class="form-group" id="pic_list">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 网站LOGO </label>
 									<div class="col-sm-9">
@@ -139,7 +152,8 @@
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 后台极验验证： </label>
 									<div class="col-sm-9" style="padding-top:5px;">
 										<input name="geetest_on" id="geetest_on" {if condition="config('geetest.geetest_on')"}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
-										<span class="lbl"><a href="http://www.geetest.com" target="_blank" style="margin-left: 10px;"><span class="label label-lg label-pink">申请：http://www.geetest.com</span></a> 需开启路由</span>
+										<span class="lbl"><a href="http://www.geetest.com" target="_blank" style="margin-left: 10px;"><span class="label label-lg label-pink">申请：http://www.geetest.com</span></a></span>
+										<span class="help-inline">需开启路由</span>
 									</div>
 								</div>
 								<div class="space-4"></div>
@@ -157,7 +171,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 极验private_key： </label>
 									<div class="col-sm-9">
-										<input type="text" name="private_key" id="private_key" value="{:config('geetest.private_key')}" class="col-xs-10 col-sm-7" />
+										<input type="password" name="private_key" id="private_key" value="{:config('geetest.private_key')}" class="col-xs-10 col-sm-7" />
 										<span class="help-inline col-xs-12 col-sm-5">
 									<span class="lbl"></span>
 								</span>

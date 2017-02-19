@@ -7,18 +7,20 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\wechat\controller;
+
 use think\Db;
 use EasyWeChat\Message\Text;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Voice;
 use EasyWeChat\Message\News;
 use EasyWeChat\Foundation\Application;
-/**
-微信消息处理服务
-微信平台url设置:http://yourdomain/wechat/index/index.html
-*/
-class Index extends WeBase {
-    protected function _initialize(){
+
+class Index extends WeBase
+{
+    public function _initialize()
+    {
+        //parent::_initialize();
+		//微信平台
         $config=config('we_options');
         if(!empty($config)) $this->options=array_merge($this->options,$config);
         $this->app = new Application($this->options);
@@ -29,7 +31,8 @@ class Index extends WeBase {
             return input('echostr');
         }
     }
-	public function index(){
+	public function index()
+    {
         //消息处理
         $this->app->server->setMessageHandler(function ($message) {
             switch ($message->MsgType) {

@@ -11,6 +11,7 @@
  * anthor helei
  */
 namespace app\home\controller;
+
 class PaymentNotify implements \Payment\Notify\PayNotifyInterface
 {
 

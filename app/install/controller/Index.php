@@ -1,15 +1,25 @@
 <?php
+// +----------------------------------------------------------------------
+// | YFCMF [ WE CAN DO IT MORE SIMPLE ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2015-2016 http://www.rainfer.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: rainfer <81818832@qq.com>
+// +----------------------------------------------------------------------
 namespace app\install\controller;
+
 use think\Controller;
-use think\Db;
+
 /**
  * 首页
  */
-class Index extends Controller {
+class Index extends Controller
+{
     //判断是否已安装
-    protected function _initialize() {
+    protected function _initialize()
+    {
         if (is_file(ROOT_PATH . 'data' . DS . 'install.lock')) {
-            header('Location: ' . url('@home/index/index'));
+            header('Location: ' . url('home/Index/index'));
             exit();
         }
         if (!defined('__ROOT__')) {
@@ -18,14 +28,16 @@ class Index extends Controller {
         }
     }
     //首页
-	public function index() {
+	public function index()
+    {
         session('step', 1);
         session('error', false);
 		return $this->fetch(':index');
     }
-    public function step2(){
+    public function step2()
+    {
         if(session('step')!==1 && session('step')!==3 && session('step')!==2){
-            $this->error('请按顺序安装！', url('index'));
+            $this->error('请按顺序安装！', url('install/Index/index'));
         }
         $data=array();
         $icon_correct='<i class="fa fa-check correct"></i> ';
@@ -135,17 +147,19 @@ class Index extends Controller {
         $this->assign($data);
         return $this->fetch(':step2');
     }
-    public function step3(){
+    public function step3()
+    {
         if(session('step')!==2 ){
-            $this->error('请按顺序安装！', url('step2'));
+            $this->error('请按顺序安装！', url('install/Index/step2'));
         }else{
             session('step', 3);
             return $this->fetch(':step3');
         }
     }
-    public function step4(){
+    public function step4()
+    {
         if(session('step')!==3){
-            $this->error('请按顺序安装！', url('step3'));
+            $this->error('请按顺序安装！', url('install/Index/step3'));
         }
         if(request()->isPost()){
             session("step",4);
@@ -162,7 +176,7 @@ class Index extends Controller {
             try {
                 $db = new \PDO($dsn, $dbconfig['username'], $dbconfig['password']);
             } catch (\PDOException $e) {
-                $this->error('数据库连接失败', url('step3'));
+                $this->error('数据库连接失败', url('install/Index/step3'));
             }
             //建立数据库
             $sql = "CREATE DATABASE IF NOT EXISTS `{$dbname}` DEFAULT CHARACTER SET utf8";
@@ -172,7 +186,7 @@ class Index extends Controller {
             try {
                 $db = new \PDO($dsn, $dbconfig['username'], $dbconfig['password']);
             } catch (\PDOException $e) {
-                $this->error('数据库连接失败', url('step3'));
+                $this->error('数据库连接失败', url('install/Index/step3'));
             }
             $dbconfig['database']=$dbname;
             $dbconfig['prefix']=trim(input('dbprefix'));
@@ -188,25 +202,27 @@ class Index extends Controller {
             //生成网站配置文件
             create_config($dbconfig);
             if(session('error')){
-                $this->error("安装失败",url('step3'));
+                $this->error("安装失败",url('install/Index/step3'));
             }else{
-                $this->success("即将安装完成",url('step5'));
+                $this->success("即将安装完成",url('install/Index/step5'));
             }
         }else{
             exit;
         }
     }
-    public function step5(){
+    public function step5()
+    {
         if(session('step')==4){
             @touch('./data/install.lock');
 			cookie('think_var', 'zh-cn');
             session(null);
             return $this->fetch(':step5');
         }else{
-            $this->error("非法安装！",url('index'));
+            $this->error("非法安装！",url('install/Index/index'));
         }
     }
-    public function testdb(){
+    public function testdb()
+    {
         if(request()->isPost()){
             $dbconfig=input("post.");
             $dsn = "mysql:host={$dbconfig['hostname']};port={$dbconfig['hostport']};charset=utf8";

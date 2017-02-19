@@ -7,12 +7,16 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
 use think\captcha\Captcha;
 use think\Validate;
-class Register extends Base {
-	
-	function index(){
+
+class Register extends Base
+{
+
+    public function index()
+    {
 	    if(session('hid')){ //已经登录时直接跳到首页
 	        $this->redirect(__ROOT__."/");
 	    }else{
@@ -20,7 +24,8 @@ class Register extends Base {
 	    }
 	}
 	//验证码
-	public function verify(){
+	public function verify()
+    {
         if (session('hid')) {
             $this->redirect(__ROOT__."/");
         }
@@ -29,7 +34,8 @@ class Register extends Base {
 		return $verify->entry('reg');
     }
 
-	function runregister(){
+    public function runregister()
+    {
 		if(request()->isPost()){
 			$member_list_username=input('member_list_username');
 			$member_list_email=input('member_list_email');
@@ -89,14 +95,14 @@ class Register extends Base {
 							$this->error(lang('activation code generation failed'));
 						}
 						//生成激活链接
-						$url = url('Register/active',array("hash"=>$activekey), "", true);
+						$url = url('home/Register/active',array("hash"=>$activekey), "", true);
 						$template = $active_options['email_tpl'];
 						$content = str_replace(array('http://#link#','#username#'), array($url,$member_list_username),$template);
 						$send_result=sendMail($member_list_email, $active_options['email_title'], $content);
 						if($send_result['error']){
 							$this->error(lang('send active email failed'));
 						}else{
-							$this->success(lang('send active email success'),url('Login/index'));
+							$this->success(lang('send active email success'),url('home/Login/index'));
 						}
 					}else{
 						//更新字段
@@ -109,7 +115,7 @@ class Register extends Base {
 						$users_model->where(array('member_list_id'=>$rst))->update($data);
 						session('hid',$rst);
 						session('user',$sl_data);
-						$this->success(lang('register success'),url('Index/index'));
+						$this->success(lang('register success'),url('home/Index/index'));
 					}
 				}else{
 					$this->error(lang('register failed'));
@@ -118,7 +124,8 @@ class Register extends Base {
 		}
 	}
 	//激活
-	function active(){
+    public function active()
+    {
 		$hash=input('hash','');
 		if(empty($hash)){
 			$this->error(lang('pwd reset hash incorrect'));
@@ -139,12 +146,12 @@ class Register extends Base {
 				$users_model->where(array('member_list_id'=>$find_user["member_list_id"]))->update($data);
 				session('hid',$find_user['member_list_id']);
 				session('user',$find_user);
-				$this->success(lang('active success'),url('Index/index'));
+				$this->success(lang('active success'),url('home/Index/index'));
 			}else{
-				$this->error(lang('active failed'),url("Login/index"));
+				$this->error(lang('active failed'),url("home/Login/index"));
 			}
 		}else{
-			$this->error(lang('pwd reset hash incorrect'),url("Login/index"));
+			$this->error(lang('pwd reset hash incorrect'),url("home/Login/index"));
 		}
 	}
 }

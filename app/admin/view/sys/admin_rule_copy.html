@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
@@ -13,7 +13,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="admin_rule_copy" method="post" action="{:url('admin_rule_runadd')}">
+				<form class="form-horizontal ajaxForm2" name="admin_rule_copy" method="post" action="{:url('admin/Sys/admin_rule_runadd')}">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 父级权限： </label>
 						<div class="col-sm-9">
@@ -37,7 +37,7 @@
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块/控制器/方法： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 控制器/方法： </label>
 						<div class="col-sm-9">
 							<input type="text" name="name" id="name"  value="{$rule.name}"  class="col-xs-10 col-sm-5" required/>
                                             <span class="help-inline col-xs-12 col-sm-7">
@@ -67,7 +67,14 @@
 						</div>
 					</div>
 					<div class="space-4"></div>
-
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 权限不检测： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="notcheck" value="1"  {if condition="$rule['notcheck'] eq 1"}checked{/if}  class="ace ace-switch ace-switch-5" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
 						<div class="col-sm-9">

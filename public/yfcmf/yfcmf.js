@@ -186,6 +186,30 @@ $(function () {
         return false;
     });
 });
+/* 检测状态操作 */
+$(function () {
+    $('body').on('click','.notcheck-btn',function () {
+        var $url = this.href,
+            val = $(this).data('id'),
+            $btn=$(this);
+        $.post($url, {x: val}, function (data) {
+            if (data.code==1) {
+                if (data.msg == '检测') {
+                    var a = '<button class="btn btn-minier btn-yellow">检测</button>';
+                    $btn.children('div').html(a).attr('title','检测');
+                    return false;
+                } else {
+                    var b = '<button class="btn btn-minier btn-danger">不检测</button>';
+                    $btn.children('div').html(b).attr('title','不检测');
+                    return false;
+                }
+            } else {
+                layer.alert(data.msg, {icon: 5});
+            }
+        }, "json");
+        return false;
+    });
+});
 /* 激活状态操作 */
 $(function () {
 	$('body').on('click','.active-btn',function () {

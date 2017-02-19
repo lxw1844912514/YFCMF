@@ -2,7 +2,7 @@
 	<div class="nav-wrap-up pos-rel">
 		<div class="nav-wrap">
 			<ul class="nav nav-list">
-				{if condition="$id_curr neq ''"}
+				{if condition="($id_curr neq '') AND (!empty($menus_child))"}
 				{foreach name="menus_child" item="k"}
 				<li>
 					<a href="{:url(''.$k['name'].'')}">
@@ -13,7 +13,7 @@
 				{/foreach}
 				{else /}
 				<li>
-					<a href="{:url('Index/index')}">
+					<a href="{:url('admin/Index/index')}">
 						<o class="font12">欢迎使用YFCMF后台系统管理</o>
 					</a>
 					<b class="arrow"></b>

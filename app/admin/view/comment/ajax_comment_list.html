@@ -12,11 +12,11 @@
 		<td>{$v.c_content}</td>
 		<td class="hidden-xs">
 			{if condition="$v['c_status'] eq 1"}
-				<a class="red state-btn" href="{:url('comment_state')}" data-id="{$v.c_id}" title="已审">
+				<a class="red state-btn" href="{:url('admin/Comment/comment_state')}" data-id="{$v.c_id}" title="已审">
 					<div id="zt{$v.c_id}"><button class="btn btn-minier btn-yellow">已审</button></div>
 				</a>
 				{else/}
-				<a class="red state-btn" href="{:url('comment_state')}" data-id="{$v.c_id}" title="未审">
+				<a class="red state-btn" href="{:url('admin/Comment/comment_state')}" data-id="{$v.c_id}" title="未审">
 					<div id="zt{$v.c_id}"><button class="btn btn-minier btn-danger">未审</button></div>
 				</a>
 			{/if}
@@ -24,7 +24,7 @@
 		<td class="hidden-sm hidden-xs">{$v.createtime|date='Y-m-d H:i:s',###}</td>
 		<td>
 			<div class="action-buttons">
-				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？包括其下子评论" href="{:url('comment_del',array('c_id'=>$v['c_id'],'p'=>input('p',1)))}" title="删除">
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？包括其下子评论" href="{:url('admin/Comment/comment_del',array('c_id'=>$v['c_id'],'p'=>input('p',1)))}" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>
 				</a>
 			</div>

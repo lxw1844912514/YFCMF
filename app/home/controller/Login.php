@@ -7,11 +7,15 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
 use think\captcha\Captcha;
 use think\Validate;
-class Login extends Base {
-	function index(){
+
+class Login extends Base
+{
+    public function index()
+    {
 	    if(session('hid')){
 			if($this->user['user_status']){
 				$this->redirect(__ROOT__."/");
@@ -23,7 +27,8 @@ class Login extends Base {
 	    }
 	}
 	//验证码
-	public function verify(){
+	public function verify()
+    {
         if (session('hid')) {
             $this->redirect(__ROOT__."/");
         }
@@ -34,7 +39,8 @@ class Login extends Base {
 	/*
      * 退出登录
      */
-	public function logout(){
+	public function logout()
+    {
 		session('hid',null);
 		session('user',null);
 		cookie('yf_logged_user',null);
@@ -42,7 +48,8 @@ class Login extends Base {
 	}
 	
     //登录验证
-    function runlogin(){
+    public function runlogin()
+    {
 		$member_list_username=input('member_list_username');
 		$member_list_pwd=input('member_list_pwd');
 		$remember=input('remember',0,'intval');
@@ -87,23 +94,31 @@ class Login extends Base {
 			//根据需要决定是否同步后台登录状态
 			$admin=Db::name('admin')->where('member_id',$member['member_list_id'])->find();
 			if($admin){
-				session('aid',$admin['admin_id']);
-				//记录对应会员ID
-				session('member_id',$admin['member_id']);				
-				session('admin_username',$admin['admin_username']);
-				session('admin_realname',$admin['admin_realname']);
-				session('admin_avatar',$admin['admin_avatar']);
-				session('admin_last_change_pwd_time', $admin ['admin_changepwd']);
+                // 记录登录
+                $auth = array(
+                    'aid'             			 => $admin['admin_id'],
+                    'admin_avatar'    			 => $admin['admin_avatar'],
+                    'admin_last_change_pwd_time' => $admin['admin_changepwd'],
+                    'admin_realname'       		 => $admin['admin_realname'],
+                    'admin_username'          	 => $admin['admin_username'],
+                    'member_id'        			 => $admin['member_id'],
+                    'admin_last_ip' 			 => $admin['admin_last_ip'],
+                    'admin_last_time'   		 => $admin['admin_last_time']
+                );
+                session('admin_auth', $auth);
+                session('admin_auth_sign', data_signature($auth));
 			}
 			
-			$this->success(lang('login success'),url('Login/check_active'));
+			$this->success(lang('login success'),url('home/Login/check_active'));
 		}
     }
-	function forgot_pwd(){
+    public function forgot_pwd()
+    {
 		return $this->view->fetch('user:forgot_pwd');
 	}
 	//验证码
-	public function verify_forgot(){
+	public function verify_forgot()
+    {
         if (session('hid')) {
             $this->redirect(__ROOT__."/");
         }
@@ -111,7 +126,8 @@ class Login extends Base {
 		$verify = new Captcha (config('verify'));
 		return $verify->entry('forgot');
     }
-	function runforgot_pwd(){
+    public function runforgot_pwd()
+    {
 		if(request()->isPost()){
 			$member_list_email=input('member_list_email');
 			$member_list_username=input('member_list_username');
@@ -143,7 +159,7 @@ class Login extends Base {
 						$this->error(lang('activation code generation failed'));
 					}
 					//生成重置链接
-					$url = url('Login/pwd_reset',array("hash"=>$activekey), "", true);
+					$url = url('home/Login/pwd_reset',array("hash"=>$activekey), "", true);
 					$template = lang('emal text').
 								<<<hello
 								<a href="http://#link#">http://#link#</a>
@@ -153,7 +169,7 @@ hello;
 					if($send_result['error']){
 						$this->error(lang('send pwd reset email failed'));
 					}else{
-						$this->success(lang('send pwd reset email success'),url('Index/index'));
+						$this->success(lang('send pwd reset email success'),url('home/Index/index'));
 					}
 				}else{
 					$this->error(lang('email not the same as registered email'));
@@ -163,18 +179,20 @@ hello;
 			}
 		}
 	}
-	function pwd_reset(){
+    public function pwd_reset()
+    {
 	    $hash=input("get.hash");
 	    $find_user=Db::name("member_list")->where(array("user_activation_key"=>$hash))->find();
 	    if (empty($find_user)){
-	        $this->error(lang('pwd reset hash incorrect'),url('Index/index'));
+	        $this->error(lang('pwd reset hash incorrect'),url('home/Index/index'));
 	    }else{
 			$this->assign("hash",$hash);
 			return $this->view->fetch('user:pwd_reset');
 	    }
 	}
 	//验证码
-	public function verify_reset(){
+	public function verify_reset()
+    {
         if (session('hid')) {
             $this->redirect(__ROOT__."/");
         }
@@ -182,7 +200,8 @@ hello;
 		$verify = new Captcha (config('verify'));
 		return $verify->entry('pwd_reset');
     }
-	function runpwd_reset(){
+    public function runpwd_reset()
+    {
 		if(request()->isPost()){
 			$verify =new Captcha();
 			if (!$verify->check(input('verify'), 'pwd_reset')) {
@@ -204,14 +223,15 @@ hello;
 				$member_list_pwd=encrypt_password($password,$member_list_salt);
 				$result=Db::name("member_list")->where(array("user_activation_key"=>$hash))->update(array('member_list_pwd'=>$member_list_pwd,'user_activation_key'=>'','member_list_salt'=>$member_list_salt));
 				if($result){
-					$this->success(lang('pwd reset success'),url("Login/index"));
+					$this->success(lang('pwd reset success'),url("home/Login/index"));
 				}else {
 					$this->error(lang('pwd reset failed'));
 				}
 			}
 		}
 	}
-	function check_active(){
+    public function check_active()
+    {
 		$this->check_login();
 		if($this->user['user_status']){
 			$this->redirect(__ROOT__."/");
@@ -221,7 +241,8 @@ hello;
 		}
 	}
 	//重发激活邮件
-	function resend(){
+    public function resend()
+    {
 		$this->check_login();
 		$current_user=$this->user;
 		if($current_user['user_status']==0){
@@ -233,20 +254,20 @@ hello;
 					$this->error(lang('activation code generation failed'));
 				}
 				//生成激活链接
-				$url = url('Register/active',array("hash"=>$activekey), "", true);
+				$url = url('home/Register/active',array("hash"=>$activekey), "", true);
 				$template = $active_options['email_tpl'];
 				$content = str_replace(array('http://#link#','#username#'), array($url,$current_user['member_list_username']),$template);
 				$send_result=sendMail($current_user['member_list_email'], $active_options['email_title'], $content);
 				if($send_result['error']){
 					$this->error(lang('send active email failed'));
 				}else{
-					$this->success(lang('send active email success'),url('Login/index'));
+					$this->success(lang('send active email success'),url('home/Login/index'));
 				}
 			}else{
-				$this->error(lang('no registered email'),url('Login/index'));
+				$this->error(lang('no registered email'),url('home/Login/index'));
 			}
 		}else{
-		    $this->error(lang('activated'),url('Index/index'));
+		    $this->error(lang('activated'),url('home/Index/index'));
 		}
 	}
 }

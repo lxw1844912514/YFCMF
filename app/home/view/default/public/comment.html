@@ -4,7 +4,7 @@
 <div class="comment-area" id="comments">
 	{if condition="!empty($user['member_list_id'])"}
 	<hr>
-	<form class="form-horizontal comment-form" action="{:url('Comment/runcomment')}" method="post" data-id='111'>
+	<form class="form-horizontal comment-form" action="{:url('home/Comment/runcomment')}" method="post" data-id='111'>
 		<div class="control-group">
 			<div class="comment-postbox-wraper">
 				<textarea class="form-control comment-postbox" placeholder="Write your comment here" style="min-height:60px;"  name="c_content" required></textarea>
@@ -19,7 +19,7 @@
 	</form>
 	{else /}
 	<span>
-	{:lang('need login to comment')} <a href="{:url('Login/index')}">{:lang('login')}</a> | <a href="{:url('Register/index')}">{:lang('register immediately')}</a>
+	{:lang('need login to comment')} <a href="{:url('home/Login/index')}">{:lang('login')}</a> | <a href="{:url('home/Register/index')}">{:lang('register immediately')}</a>
 	</span>
 	{/if}
 	{if condition="!empty($user['member_list_id'])"}
@@ -36,7 +36,7 @@
 		}
 		{/php}
 		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
-			<a class="pull-left" href="{:url('Index/visit',array('member_list_id'=>$user['member_list_id']))}">
+			<a class="pull-left" href="{:url('home/Index/visit',array('member_list_id'=>$user['member_list_id']))}">
 				{if condition="empty($user['member_list_headpic'])"}
 				<img src="{$yf_theme_path}public/images/headicon.png" class="media-object avatar"/>
 				{else /}
@@ -44,7 +44,7 @@
 				{/if}
 			</a>
 			<div class="comment-body">
-				<div class="comment-content"><a href="{:url('Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">{:lang('just')}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+				<div class="comment-content"><a href="{:url('home/Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">{:lang('just')}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
 				<div class="comment-content"><span class="content"></span></div>
 			</div>
 			<div class="clearfix"></div>
@@ -64,24 +64,24 @@
 	<div class="comments" style="margin-top:50px;">
 		{foreach name="comments" item="vo"}
 			<div class="comment" data-id="{$vo.c_id}" data-uid="{$vo.uid}" data-username="{$vo.member_list_nickname|default=$vo['member_list_username']}"  id="comment{$vo.c_id}">
-				<a class="pull-left" href="{:url('Index/visit',array('id'=>$vo['uid']))}">
+				<a class="pull-left" href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">
 				<img src="{$vo.member_list_headpic|get_imgurl=1}" class="media-object avatar"/>
 				</a>
 				<div class="comment-body">
 					<div>
-						<a href="{:url('Index/visit',array('id'=>$vo['uid']))}">{$vo.member_list_nickname|default=$vo['member_list_username']}:</a><span class="time">{:date('m-d  H:i',$vo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+						<a href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">{$vo.member_list_nickname|default=$vo['member_list_username']}:</a><span class="time">{:date('m-d  H:i',$vo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
 					<div class="comment-content">
 						<span>{$vo.c_content}</span>
 					</div>
 					{if condition="!empty($vo['children'])"}
 						{foreach name="vo.children" item="voo"}
 							<div class="comment" data-id="{$voo.c_id}" data-uid="{$voo.uid}" data-username="{$voo.member_list_nickname|default=$voo['member_list_username']}" id="comment{$voo.c_id}" style="margin-left: 80px">
-								<a class="pull-left" href="{:url('Index/visit',array('id'=>$voo['uid']))}">
+								<a class="pull-left" href="{:url('home/Index/visit',array('id'=>$voo['uid']))}">
 								<img src="{$voo.member_list_headpic|get_imgurl=1}" class="media-object avatar"/>
 								</a>
 								<div class="comment-body">
 									<div>
-										<a href="{:url('Index/visit',array('id'=>$voo['uid']))}">{$voo.member_list_nickname|default=$voo['member_list_username']}:</a><span>{:lang('reply')} <a href="{:url('Index/visit',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['member_list_nickname']|default=$parent_comments[$voo['parentid']]['member_list_username']}</a></span><span class="time">{:date('m-d  H:i',$voo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a>
+										<a href="{:url('home/Index/visit',array('id'=>$voo['uid']))}">{$voo.member_list_nickname|default=$voo['member_list_username']}:</a><span>{:lang('reply')} <a href="{:url('home/Index/visit',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['member_list_nickname']|default=$parent_comments[$voo['parentid']]['member_list_username']}</a></span><span class="time">{:date('m-d  H:i',$voo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a>
 									</div>
 									<div class="comment-content">
 										{$voo.c_content}

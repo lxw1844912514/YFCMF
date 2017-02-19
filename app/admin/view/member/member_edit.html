@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
@@ -13,7 +13,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal memberform" name="member_list_edit" method="post" action="{:url('member_runedit')}">
+				<form class="form-horizontal memberform" name="member_list_edit" method="post" action="{:url('admin/Member/member_runedit')}">
 					<input type="hidden" name="member_list_id" id="member_list_id" value="{$member_list_edit.member_list_id}" />
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
@@ -73,13 +73,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所在地：  </label>
 						<div class="col-sm-10">
-							<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:url('ajax/getRegion')}');">
+							<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:url('admin/Ajax/getRegion')}');">
 								<option value="0">省份/直辖市</option>
 								{volist name="province" id="vo"}
 									<option value="{$vo.id}" {if condition="$member_list_edit['member_list_province'] eq $vo['id']"}selected{/if}>{$vo.name}</option>
 								{/volist}
 							</select>
-							<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:url('ajax/getRegion')}');">
+							<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:url('admin/Ajax/getRegion')}');">
 								<option  value="0">市/县</option
 								{foreach name="city" item="v"}
 									<option {if condition="$member_list_edit['member_list_city'] eq $v['id']"}selected{/if} value="{$v.id}">{$v.name}</option>

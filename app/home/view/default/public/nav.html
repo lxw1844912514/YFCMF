@@ -10,14 +10,14 @@
 					{if condition="config('lang_switch_on')"}
                     <div class="phone-email pull-left">
                         {if condition="$lang eq 'en-us'"}
-                        <a href="{:url('Index/lang',array('lang_s'=>'cn'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">中文简体</i></a>
+                        <a href="{:url('home/Index/lang',array('lang_s'=>'cn'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">中文简体</i></a>
                         {else /}
-                        <a href="{:url('Index/lang',array('lang_s'=>'en'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">ENGLISH</i></a>
+                        <a href="{:url('home/Index/lang',array('lang_s'=>'en'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">ENGLISH</i></a>
                         {/if}
                     </div>
 					{/if}
                     <div id="search-form" class="pull-right">
-                        <form action="{:url('Listn/search')}" class="search-ajaxform" method="post">
+                        <form action="{:url('home/Listn/search')}" class="search-ajaxform" method="post">
                             <input type="text" class="search-text-box" name="keyword" value="{:input('keyword')}" />
                         </form>
                     </div>
@@ -57,12 +57,12 @@
                            </span>
                             </a>
                             <ul>
-                                <li><a href="{:url('Center/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('personal center')}</a></li>
+                                <li><a href="{:url('home/Center/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('personal center')}</a></li>
                                 
 								{if condition="$is_admin"}
-								<li><a href="{:url('admin/Index/index')}" target="_blank"><i class="fa fa-tachometer"></i> &nbsp;{:lang('admin manage')}</a></li>
+								<li><a href="{:url('home/admin/Index/index')}" target="_blank"><i class="fa fa-tachometer"></i> &nbsp;{:lang('admin manage')}</a></li>
 								{/if}
-								<li><a href="{:url('Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;{:lang('sign out')}</a></li>
+								<li><a href="{:url('home/Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;{:lang('sign out')}</a></li>
                             </ul>
                         </li>
                     {else /}
@@ -75,22 +75,22 @@
                             </a>
                             <ul>
                                 {if condition="config('think_sdk_sina.display')"}
-								<li><a href="{:url('Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;{:lang('weibo login')}</a></li>
+								<li><a href="{:url('home/Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;{:lang('weibo login')}</a></li>
 								{/if}
 								{if condition="config('think_sdk_qq.display')"}
-                                <li><a href="{:url('Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('qq login')}</a></li>
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('qq login')}</a></li>
 								{/if}
 								{if condition="config('think_sdk_facebook.display')"}
-                                <li><a href="{:url('Oauth/login',array('type'=>'facebook'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('facebook login')}</a></li>
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'facebook'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('facebook login')}</a></li>
                                 {/if}
                                 {if condition="config('think_sdk_weixin.display')"}
-                                <li><a href="{:url('Oauth/login',array('type'=>'weixin'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('weixin login')}</a></li>
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'weixin'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('weixin login')}</a></li>
                                 {/if}
 								{if condition="config('think_sdk_wechat.display')"}
-                                <li><a href="{:url('Oauth/login',array('type'=>'wechat'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('wechat login')}</a></li>
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'wechat'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('wechat login')}</a></li>
                                 {/if}
-                                <li><a href="{:url('Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;{:lang('login')}</a></li>
-                                <li><a href="{:url('Register/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('register')}</a></li>
+                                <li><a href="{:url('home/Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;{:lang('login')}</a></li>
+                                <li><a href="{:url('home/Register/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('register')}</a></li>
                             </ul>
                         </li>
                     {/if}

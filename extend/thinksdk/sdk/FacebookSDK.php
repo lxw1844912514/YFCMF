@@ -8,7 +8,8 @@
 // +----------------------------------------------------------------------
 use thinksdk\ThinkOauth;
 
-class FacebookSDK extends ThinkOauth{
+class FacebookSDK extends ThinkOauth
+{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
@@ -37,7 +38,8 @@ class FacebookSDK extends ThinkOauth{
 	/**
      * 请求Authorize访问地址
      */
-    public function getRequestCodeURL() {
+    public function getRequestCodeURL()
+    {
         setcookie('A_S', $this->timestamp, $this->timestamp + 600, '/');
         $this->initConfig();
         //Oauth 标准参数
@@ -58,7 +60,8 @@ class FacebookSDK extends ThinkOauth{
 	 * @param  string $method HTTP请求方法 默认为GET
 	 * @return json
 	 */
-	public function call($api, $param = '', $method = 'GET', $multi = false){
+	public function call($api, $param = '', $method = 'GET', $multi = false)
+    {
 		 $params = array('access_token'=>$this->token['access_token'],);
         $header = array();
         $data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
@@ -70,7 +73,8 @@ class FacebookSDK extends ThinkOauth{
      * 解析access_token方法请求后的返回值
      * @param string $result 获取access_token的方法的返回值
      */
-    protected function parseToken($result) {
+    protected function parseToken($result)
+    {
         parse_str($result, $data);
         if ($data['access_token'] && $data['expires']) {
             $data['expires_in'] = $data['expires'];
@@ -85,7 +89,8 @@ class FacebookSDK extends ThinkOauth{
      * 获取当前授权应用的openid
      * @return string
      */
-    public function openid() {
+    public function openid()
+    {
         $data = $this->token;
         if (isset($data['openid'])) {
             return $data['openid'];
@@ -105,7 +110,8 @@ class FacebookSDK extends ThinkOauth{
     /**
      * 获取授权用户的用户信息
      */
-    public function userinfo() {
+    public function userinfo()
+    {
         $rsp = $this->call('me');
         if (!$rsp) {
             throw new Exception('接口访问失败！' . $rsp['msg']);

@@ -52,7 +52,7 @@
 									</h4>
 
 									<div class="space-6"></div>
-									<form class="ajaxForm3" name="runlogin" id="runlogin" method="post" action="{:url('runlogin')}">
+									<form class="ajaxForm3" name="runlogin" id="runlogin" method="post" action="{:url('admin/Login/runlogin')}">
 										<fieldset>
 											<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -79,14 +79,14 @@
 											</label>
 											<label class="block clearfix">
 												<span class="block text-center">
-													<img class="verify_img" id="verify_img" src="{:url('Login/verify')}" onClick="this.src='{:url('Login/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:url('admin/Login/verify')}" onClick="this.src='{:url('admin/Login/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
 												</span>
 											</label>
 											{/if}
 
 											<div class="clearfix">
 												<label class="inline">
-													<input type="checkbox" class="ace" />
+													<input name="rememberme" type="checkbox" class="ace" />
 													<span class="lbl"> 记住信息</span>
 												</label>
 

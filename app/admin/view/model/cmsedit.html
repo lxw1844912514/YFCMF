@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 	<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
@@ -18,7 +18,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="plug_ad_runedit" method="post" action="{:url('cmsrunedit')}">
+				<form class="form-horizontal ajaxForm2" name="plug_ad_runedit" method="post" action="{:url('admin/Model/cmsrunedit')}">
 					<input type="hidden" name="{$model['model_pk']}" value="{$model_pkid}" />
                     <input type="hidden" name="id" value="{$model_id}" />
 					{foreach name="fields_data" item="f" key="k" }

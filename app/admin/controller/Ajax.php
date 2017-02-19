@@ -7,18 +7,26 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use think\Db;
-class Ajax extends Base{
+
+class Ajax
+{
 	/*
      * 返回行政区域json字符串
      */
-	public function getRegion(){
+	public function getRegion()
+	{
 		$map['pid']=input('pid');
 		$map['type']=input('type');
 		$list=Db::name("region")->where($map)->select();
 		return json($list);
 	}
-	public function getController(){
+	/*
+     * 返回模块下控制器json字符串
+     */
+	public function getController()
+	{
 		$module=input('request_module','admin');
 		$list=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
 		return json($list);

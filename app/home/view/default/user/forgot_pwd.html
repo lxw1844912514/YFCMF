@@ -23,7 +23,7 @@
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form class="form-light verify-ajax-form" id="forgot" action="{:url('Login/runforgot_pwd')}" method="post">
+										<form class="form-light verify-ajax-form" id="forgot" action="{:url('home/Login/runforgot_pwd')}" method="post">
 											<div>
 												<input type="text" id="input_username" name="member_list_username" placeholder="{:lang('username or email')}" class="form-control" required>
 											</div>
@@ -37,7 +37,7 @@
 													<input type="text" class="form-control" placeholder="" id="verify" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:url('Login/verify_forgot')}" onClick="this.src='{:url('Login/verify_forgot')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="{:lang('click to get')}">
+													<img class="verify_img" id="verify_img" src="{:url('home/Login/verify_forgot')}" onClick="this.src='{:url('home/Login/verify_forgot')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="{:lang('click to get')}">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -49,10 +49,10 @@
 											<div style="text-align: center;">
 												<div class="row">
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:url('Register/index')}">{:lang('register immediately')}</a>
+														<a href="{:url('home/Register/index')}">{:lang('register immediately')}</a>
 													</div>
 													<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-														<a href="{:url('Login/index')}">{:lang('login')}</a>
+														<a href="{:url('home/Login/index')}">{:lang('login')}</a>
 													</div>
 												</div>
 											</div>

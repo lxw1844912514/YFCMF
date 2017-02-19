@@ -7,11 +7,13 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
 /**
  * 文章列表
 */
-class Listn extends Base {
+class Listn extends Base
+{
 
 	public function index() {
 		$list_id=input('id');
@@ -58,7 +60,8 @@ class Listn extends Base {
 		$this->assign('list_id', $list_id);
 		return $this->view->fetch(":$tplname");
 	}
-    public function search() {
+    public function search()
+    {
 		$k = input("keyword");
 		$page = input("post.page");
 		$pagesize=5;
@@ -67,7 +70,7 @@ class Listn extends Base {
 		}
 		if(request()->isAjax()){
  			if(empty($page)){
-				$this->success(lang('success'),url('search',array('keyword'=>$k)));
+				$this->success(lang('success'),url('home/Listn/search',array('keyword'=>$k)));
 			}else{
 				$lists=get_news('order:news_time desc',1,$pagesize,'keyword',$k,array(),$page);
 				//替换成带ajax的class

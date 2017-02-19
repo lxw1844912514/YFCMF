@@ -24,7 +24,7 @@
 							<ul>
 								<li>{:lang('current location')}:</li>
 								<li><a href="__ROOT__/">{:lang('home')}</a></li>
-								<li><a href="{:url('Center/index')}">{:lang('personal center')}</a></li>
+								<li><a href="{:url('home/Center/index')}">{:lang('personal center')}</a></li>
 								<li>{:lang('bind account')}</li>
 							</ul>
 						</div>
@@ -44,12 +44,12 @@
 								{if condition="!empty($oauths['qq'])"}
 									<button class="btn" style="margin:0 20px;"> {:lang('bound qq')}</button>
 									{else/}
-									<a class="btn btn-primary" href="{:url('Oauth/bang',array('type'=>'qq'))}"  style="margin:0 20px;"> {:lang('bind new qq')}</a>
+									<a class="btn btn-primary" href="{:url('home/Oauth/bang',array('type'=>'qq'))}"  style="margin:0 20px;"> {:lang('bind new qq')}</a>
 								{/if}
 								{if condition="!empty($oauths['sina'])"}
 									<button class="btn"> {:lang('bound sina weibo')}</button>
 									{else/}
-									<a class="btn btn-primary" href="{:url('Oauth/bang',array('type'=>'sina'))}"> {:lang('bind new sina weibo')}</a>
+									<a class="btn btn-primary" href="{:url('home/Oauth/bang',array('type'=>'sina'))}"> {:lang('bind new sina weibo')}</a>
 								{/if}
 							</div>
 						</div>

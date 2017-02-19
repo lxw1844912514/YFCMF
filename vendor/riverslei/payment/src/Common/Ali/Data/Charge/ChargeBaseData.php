@@ -9,9 +9,9 @@ namespace Payment\Common\Ali\Data\Charge;
 
 
 use Payment\Common\Ali\Data\AliBaseData;
-use Payment\Common\AliConfig;
 use Payment\Common\PayException;
 use Payment\Config;
+use Payment\Utils\ArrayUtil;
 
 /**
  * Class ChargeBaseData
@@ -31,6 +31,40 @@ use Payment\Config;
  */
 abstract class ChargeBaseData extends AliBaseData
 {
+
+    /**
+     * 构建 APP支付 加密数据
+     * @author helei
+     */
+    protected function buildData()
+    {
+        $timeExpire = $this->timeExpire;
+        $version = $this->version;
+
+        if ($version) {
+            $signData = $this->alipay2_0Data($timeExpire);
+        } else {
+            $signData = $this->alipay1_0Data($timeExpire);
+        }
+
+        // 移除数组中的空值
+        $this->retData = ArrayUtil::paraFilter($signData);
+    }
+
+    /**
+     * 支付宝老版本构建数据
+     * @param string $timeExpire
+     * @return mixed
+     */
+    abstract protected function alipay1_0Data($timeExpire = '');
+
+    /**
+     * 支付宝新版本构建数据
+     * @param string $timeExpire
+     * @return mixed
+     */
+    abstract protected function alipay2_0Data($timeExpire = '');
+
     /**
      * 检查传入的支付参数是否正确
      *
@@ -59,8 +93,12 @@ abstract class ChargeBaseData extends AliBaseData
             throw new PayException('支付金额不能大于 ' . Config::PAY_MAX_FEE . ' 元');
         }
 
-        // 检查ip地址
-        if (empty($clientIp) || ! preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $clientIp)) {
+        $version = $this->version;
+        // 检查ip地址  老版本才需要检查
+        if (
+            empty($version) &&
+            (empty($clientIp) || ! preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $clientIp))
+        ) {
             throw new PayException('IP 地址必须上传，并且以IPV4的格式');
         }
 

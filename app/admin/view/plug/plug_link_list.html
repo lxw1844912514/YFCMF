@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 
@@ -11,7 +11,7 @@
 				</button>
 
 			</div>
-			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('plug_link_list')}">
+			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('admin/Plug/plug_link_list')}">
 				<div class="col-xs-6 col-sm-3  margintop5">
 					<select name="type" class="ajax_change">
 						<option value="">按广告位置</option>
@@ -41,7 +41,7 @@
 				</div>
 				<div class="col-xs-4 col-sm-3 margintop5">
 					<div class="input-group-btn">
-						<a href="{:url('plug_link_list')}">
+						<a href="{:url('admin/Plug/plug_link_list')}">
 							<button type="button" class="btn btn-sm  btn-purple ajax-display-all">
 								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
 								显示全部
@@ -82,7 +82,7 @@
 	</div><!-- /.page-content -->
 	<!-- 显示模态框（Modal） -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form class="form-horizontal ajaxForm2" name="plug_link_add" method="post" action="{:url('plug_link_runadd')}">
+		<form class="form-horizontal ajaxForm2" name="plug_link_add" method="post" action="{:url('admin/Plug/plug_link_runadd')}">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -210,7 +210,7 @@
 	<!-- 显示模态框（Modal） -->
 	<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
-		<form class="form-horizontal ajaxForm2" name="plug_link_runedit" method="post" action="{:url('plug_link_runedit')}">
+		<form class="form-horizontal ajaxForm2" name="plug_link_runedit" method="post" action="{:url('admin/Plug/plug_link_runedit')}">
 			<input type="hidden" name="plug_link_id" id="editplug_link_id" value="" />
 			<div class="modal-dialog">
 				<div class="modal-content">

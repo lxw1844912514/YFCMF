@@ -196,7 +196,8 @@ class Qiniu
      * @param string $bucket 空间
      * @return array
      */
-	public function uploadcatch($url,$prefix="",$name="",$ext="",$bucket=""){
+	public function uploadcatch($url,$prefix="",$name="",$ext="",$bucket="")
+    {
         if(empty($ext)) $ext=pathinfo($url, PATHINFO_EXTENSION);
         //$ext不为空，且未指定$prefix时，根据$ext判断
         if($ext && empty($prefix)){
@@ -223,7 +224,8 @@ class Qiniu
      * @param int
      * @return array
      */
-    public function listfile($prefix='',$bucket='', $marker='', $limit=1000){
+    public function listfile($prefix='',$bucket='', $marker='', $limit=1000)
+    {
         if (empty($bucket)) $bucket =config('storage.bucket');
         $auth = new \Qiniu\Auth(config("storage.accesskey"), config("storage.secretkey"));
         $bucketMgr=new \Qiniu\Storage\BucketManager($auth);

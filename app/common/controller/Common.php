@@ -7,25 +7,26 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\common\controller;
+
 use think\Controller;
-use think\Request;
 use think\Lang;
-class Common extends Controller{
+use think\captcha\Captcha;
+
+class Common extends Controller
+{
     // Request实例
-    protected $request;
 	protected $lang;
-	protected function _initialize(){
+	protected function _initialize()
+    {
+		parent::_initialize();
         if (!defined('__ROOT__')) {
             $_root = rtrim(dirname(rtrim($_SERVER['SCRIPT_NAME'], '/')), '/');
             define('__ROOT__', (('/' == $_root || '\\' == $_root) ? '' : $_root));
         }
 		if (!file_exists(ROOT_PATH.'data/install.lock')) {
             //不存在，则进入安装
-            header('Location: ' . url('install/index/index'));
+            header('Location: ' . url('install/Index/index'));
             exit();
-        }
-		if (null === $this->request) {
-            $this->request = Request::instance();
         }
         if (!defined('MODULE_NAME')){define('MODULE_NAME', $this->request->module());}
         if (!defined('CONTROLLER_NAME')){define('CONTROLLER_NAME', $this->request->controller());}
@@ -39,7 +40,24 @@ class Common extends Controller{
 		$this->assign('lang',$this->lang);
 	}
     //空操作
-    public function _empty(){
+    public function _empty()
+    {
         $this->error(lang('operation not valid'));
+    }
+	protected function verify_build($id)
+	{
+		ob_end_clean();
+		$verify = new Captcha (config('verify'));
+		return $verify->entry($id);
+	}
+	protected function verify_check($id)
+	{
+		$verify =new Captcha ();
+		if (!$verify->check(input('verify'), $id)) {
+			$this->error(lang('verifiy incorrect'),url(MODULE_NAME.'/Login/login'));
+		}
+	}
+    protected function check_admin_login(){
+		return model('admin/Admin')->is_login();
     }
 }

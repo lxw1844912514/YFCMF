@@ -8,7 +8,6 @@
 namespace Payment\Common\Ali\Data\Charge;
 
 
-use Payment\Common\AliConfig;
 use Payment\Common\PayException;
 use Payment\Utils\ArrayUtil;
 
@@ -21,19 +20,14 @@ class WapChargeData extends ChargeBaseData
 
         // 手机网站支付接口  需要检查show_url 参数，必须上传
         $showUrl = $this->show_url;
-        if (empty($showUrl)) {
+        $version = $this->version;
+        if (empty($version) && empty($showUrl)) {
             throw new PayException('使用手机网站支付接口时，必须提供show_url参数');
         }
     }
 
-    /**
-     * 构建 手机网站支付 加密数据
-     * @author helei
-     */
-    protected function buildData()
+    protected function alipay1_0Data($timeExpire = '')
     {
-        $timeExpire = $this->timeExpire;
-
         $signData = [
             // 基本参数
             'service'   => 'alipay.wap.create.direct.pay.by.user',
@@ -56,10 +50,62 @@ class WapChargeData extends ChargeBaseData
         ];
 
         if (! empty($timeExpire)) {
-            $signData['it_b_pay'] = trim($this->timeExpire) . 'm';// 超时时间 统一使用分钟计算
+            $signData['it_b_pay'] = '"' . trim($this->timeExpire) . 'm"';// 超时时间 统一使用分钟计算
         }
 
-        // 移除数组中的空值
-        $this->retData = ArrayUtil::paraFilter($signData);
+        return $signData;
+    }
+
+    protected function alipay2_0Data($timeExpire = '')
+    {
+        $signData = [
+            // 公共参数
+            'app_id'        => $this->appId,
+            'method'        => $this->method,
+            'format'        => $this->format,
+            'return_url'    => $this->returnUrl,
+            'charset'       => $this->inputCharset,
+            'sign_type'     => $this->signType,
+            'timestamp'     => $this->timestamp,
+            'version'       => $this->version,
+            'notify_url'    => $this->notifyUrl,
+
+            // 业务参数  新版支付宝，将所有业务参数设置到改字段中了，  这样不错
+            'biz_content'   => $this->getBizContent($timeExpire),
+        ];
+
+        return $signData;
+    }
+
+    /**
+     * 业务请求参数的集合，最大长度不限，除公共参数外所有请求参数都必须放在这个参数中传递
+     *
+     * @param string $timeExpire 订单过期时间，  分钟
+     *
+     * @return string
+     */
+    private function getBizContent($timeExpire = '')
+    {
+        $content = [
+            'body'          => strval($this->body),
+            'subject'       => strval($this->subject),
+            'out_trade_no'  => strval($this->order_no),
+            'total_amount'  => strval($this->amount),
+
+            // 销售产品码，商家和支付宝签约的产品码，为固定值QUICK_MSECURITY_PAY
+            'product_code'  => 'QUICK_WAP_PAY',
+            'goods_type'    => strval(1),
+        ];
+
+        if (! empty($timeExpire)) {
+            $content['timeout_express'] = $this->timeExpire . 'm';// 超时时间 统一使用分钟计算
+        }
+
+        $partner = $this->partner;
+        if (! empty($partner)) {
+            $content['seller_id'] = strval($partner);
+        }
+
+        return json_encode($content, JSON_UNESCAPED_UNICODE);
     }
 }

@@ -3,7 +3,8 @@
 *	测试是否可写
 *	rainfer <81818832@qq.com>
 */
-function testwrite($d) {
+function testwrite($d)
+{
     $tfile = "_test.txt";
     $fp = @fopen($d . "/" . $tfile, "w");
     if (!$fp) {
@@ -20,7 +21,8 @@ function testwrite($d) {
 *	建立文件夹
 *	rainfer <81818832@qq.com>
 */
-function create_dir($path) {
+function create_dir($path)
+{
     if (is_dir($path))
         return true;
     $path = dir_path($path);
@@ -40,7 +42,8 @@ function create_dir($path) {
 *	返回路径
 *	rainfer <81818832@qq.com>
 */
-function dir_path($path) {
+function dir_path($path)
+{
     $path = str_replace('\\', '/', $path);
     if (substr($path, -1) != '/')
         $path = $path . '/';
@@ -50,7 +53,8 @@ function dir_path($path) {
 *	执行sql文件
 *	rainfer <81818832@qq.com>
 */
-function execute_sql($db,$file,$tablepre){
+function execute_sql($db,$file,$tablepre)
+{
     //读取SQL文件
     $sql = file_get_contents(APP_PATH. request()->module().'/data/'.$file);
     $sql = str_replace("\r", "\n", $sql);
@@ -83,7 +87,8 @@ function execute_sql($db,$file,$tablepre){
 *	更新系统设置
 *	rainfer <81818832@qq.com>
 */
-function update_site_configs($db,$table_prefix){
+function update_site_configs($db,$table_prefix)
+{
     $sitename=input("sitename");
     $email=input("manager_email");
     $siteurl=input("siteurl");
@@ -94,6 +99,7 @@ function update_site_configs($db,$table_prefix){
             		"site_name":"$sitename",
 					"site_host":"$siteurl",
 					"site_tpl":"default",
+					"site_tpl_m":"default",
 					"site_icp":"",
 					"site_tongji":"",
 					"site_copyright":"",
@@ -121,7 +127,8 @@ helllo;
 *	创建管理员
 *	rainfer <81818832@qq.com>
 */
-function create_admin_account($db,$table_prefix){
+function create_admin_account($db,$table_prefix)
+{
     $username=input("manager");
 	$admin_pwd_salt=random(10);
     $password=encrypt_password(input("manager_pwd"),$admin_pwd_salt);
@@ -145,7 +152,8 @@ hello;
 *	写入配置
 *	rainfer <81818832@qq.com>
 */
-function create_config($config){
+function create_config($config)
+{
     if(is_array($config)){
         //读取配置内容
         $conf = file_get_contents(APP_PATH. request()->module(). '/data/database.php');

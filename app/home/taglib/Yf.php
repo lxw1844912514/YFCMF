@@ -28,7 +28,10 @@ class Yf extends Taglib
 		'singlepage'=> ['attr' => 'name,menuid', 'close' => 0],
 		'comments'=> ['attr' => 'name,field,limit,order', 'close' => 0],
 		'menu'=>['attr' => 'top_ul_id,top_ul_class,child_ul_class,child_li_class,firstchild_dropdown_class,haschild_a_class,haschild_span_class,nochild_a_class,showlevel', 'close' => 0],
+		//取数组
 		'data' => ['attr' => 'name,table,join,joinon,ids,cid,field,limit,order,where,ispage,pagesize,key,page', 'close' => 0],
+		//volist
+		'list' => ['attr' => 'name,table,join,joinon,ids,cid,field,limit,order,where,ispage,pagesize,key,page', 'close' => 1],
     ];
 
     /**

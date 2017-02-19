@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 
@@ -14,7 +14,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal memberform" name="member_list_add" method="post" action="{:url('member_runadd')}">
+				<form class="form-horizontal memberform" name="member_list_add" method="post" action="{:url('admin/Member/member_runadd')}">
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
 						<div class="col-sm-10">
@@ -73,13 +73,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所在地：  </label>
 						<div class="col-sm-10">
-							<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:url('ajax/getRegion')}');">
+							<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:url('admin/Ajax/getRegion')}');">
 								<option value="0" selected>省份/直辖市</option>
 								{volist name="province" id="vo"}
 								<option value="{$vo.id}" >{$vo.name}</option>
 								{/volist}
 							</select>
-							<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:url('ajax/getRegion')}');">
+							<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:url('admin/Ajax/getRegion')}');">
 								<option value="0">市/县</option>
 							</select>
 							<select name="member_list_town" id="town">

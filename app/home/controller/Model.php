@@ -7,10 +7,14 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
-class Model extends Base {
+
+class Model extends Base
+{
     //模型内页
-    public function index() {
+    public function index()
+    {
 		//内容id
 		$id=input('id');
 		//栏目id

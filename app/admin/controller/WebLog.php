@@ -7,13 +7,17 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use think\Db;
 use think\Cache;
-class WebLog extends Base {
+
+class WebLog extends Base
+{
 	/*
-     * 网站日志
+     * 网站日志列表
      */
-	public function weblog_list(){
+	public function weblog_list()
+	{
 		$methods=['GET','POST','PUT','DELETE','HEAD','PATCH','OPTIONS','Ajax','Pjax'];
 		$request_module=input('request_module','');
 		$controllers=array();
@@ -47,7 +51,8 @@ class WebLog extends Base {
 		if($request_method){
 			$where['method']=$request_method;
 		}
-		$weblog_list=Db::name('web_log')->alias('a')->join($join)->where($where)->order('otime desc')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		$weblog_list=Db::name('web_log')->alias('a')->join($join)->where($where)
+				->order('otime desc')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 		$show=$weblog_list->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
 		$this->assign('weblog_list',$weblog_list);
@@ -65,18 +70,26 @@ class WebLog extends Base {
 			return $this->fetch();
 		}
 	}
-	public function weblog_del(){
+	/*
+     * 网站日志删除
+     */
+	public function weblog_del()
+	{
 		$rst=Db::name('web_log')->delete(input('id'));
 		if($rst!==false){
-			$this->success('删除成功',url('weblog_list'));
+			$this->success('删除成功',url('admin/WebLog/weblog_list'));
 		}else{
-			$this -> error("删除失败",url('weblog_list'));
+			$this -> error("删除失败",url('admin/WebLog/weblog_list'));
 		}
 	}
-	public function weblog_alldel(){
+	/*
+     * 网站日志全选删除
+     */
+	public function weblog_alldel()
+	{
 		$ids = input('id/a');
 		if(empty($ids)){
-			$this -> error("请至少选择一行",url('weblog_list'));
+			$this -> error("请至少选择一行",url('admin/WebLog/weblog_list'));
 		}
 		if(is_array($ids)){
 			$where = 'id in('.implode(',',$ids).')';
@@ -85,24 +98,29 @@ class WebLog extends Base {
 		}
 		$rst=Db::name('web_log')->where($where)->delete();
 		if($rst!==false){
-			$this->success("删除成功",url('weblog_list'));
+			$this->success("删除成功",url('admin/WebLog/weblog_list'));
 		}else{
-			$this -> error("删除失败",url('weblog_list'));
+			$this -> error("删除失败",url('admin/WebLog/weblog_list'));
 		}
 	}
-	public function weblog_drop(){
+	/*
+     * 网站日志清空
+     */
+	public function weblog_drop()
+	{
 		$rst=Db::name('web_log')->where('id','gt',0)->delete();
 		if($rst!==false){
-			$this->success('清空成功',url('weblog_list'));
+			$this->success('清空成功',url('admin/WebLog/weblog_list'));
 		}else{
-			$this -> error("清空失败",url('weblog_list'));
+			$this -> error("清空失败",url('admin/WebLog/weblog_list'));
 		}
 	}
 
-    /**
-     * @return mixed
+	/*
+     * 网站日志设置显示
      */
-    public function weblog_setting(){
+    public function weblog_setting()
+	{
 		$web_log=config('web_log');
 		//模块
 		$web_log['not_log_module']=(isset($web_log['not_log_module']) && $web_log['not_log_module'])?join(',',$web_log['not_log_module']):'';
@@ -133,7 +151,11 @@ class WebLog extends Base {
 		$this->assign('web_log',$web_log);
 		return $this->fetch();
 	}
-	public function weblog_runset(){
+	/*
+     * 网站日志设置保存
+     */
+	public function weblog_runset()
+	{
 		$weblog_on=input('weblog_on',0,'intval')?true:false;
 		//设置tags
 		$configs=include APP_PATH.'tags.php';
@@ -159,9 +181,9 @@ class WebLog extends Base {
 		$rst=sys_config_setbykey('web_log',$web_log);
 		if($rst){
 			Cache::clear();
-			$this->success('设置保存成功',url('weblog_setting'));
+			$this->success('设置保存成功',url('admin/WebLog/weblog_setting'));
 		}else{
-			$this->error('设置保存失败',url('weblog_setting'));
+			$this->error('设置保存失败',url('admin/WebLog/weblog_setting'));
 		}
 	}	
 }

@@ -8,21 +8,21 @@
 // +----------------------------------------------------------------------
 namespace app\home\controller;
 
-use app\common\controller\Common;
-use think\captcha\Captcha;
 use think\Db;
-
 use Payment\ChargeContext;
 use Payment\Config;
 use Payment\Common\PayException;
 
 use Payment\NotifyContext;
 
-class Payment extends Base {
-	public function index(){
+class Payment extends Base
+{
+	public function index()
+    {
 		return $this->view->fetch('payment:index');
 	}
-	public function runpay(){
+	public function runpay()
+    {
 		if (!request()->isAjax()){
 			$this->error('提交方式不正确',url('home/payment/index'));
 		}else{
@@ -69,7 +69,8 @@ class Payment extends Base {
 
 		}
 	}
-	public function dopay($out_trade_no='NULL',$sign='NULL'){
+	public function dopay($out_trade_no='NULL',$sign='NULL')
+    {
 		if(!$out_trade_no || !$sign || $sign!==md5($out_trade_no.request()->ip())){echo 'error sgin!!';exit();}
 		$payment_model=Db::name("payment");
 		$pay_info = $payment_model->where(array("out_trade_no"=>$out_trade_no,"status"=>0))->find();
@@ -99,8 +100,7 @@ class Payment extends Base {
                 }              
             }
             //获取OPENID结束
-            $charge = new ChargeContext();  
-            exit;          
+            $charge = new ChargeContext();
             try {
             	switch ($pay_type){
             	        case 'aliwappay':  
@@ -150,17 +150,19 @@ class Payment extends Base {
             }
 
 		}else{
-			$this->error('订单不合法验证失败',url('payment/index'));exit;
+			$this->error('订单不合法验证失败',url('home/payment/index'));exit;
 		}
 
 	}
     
     /*支付成功-跳转页面*/
-    public function pay_success(){
-        $this->success('支付完成',url('Payment/index'));
+    public function pay_success()
+    {
+        $this->success('支付完成',url('home/Payment/index'));
     }
 
-	public function wxqrcodequery($out_trade_no='NULL',$sgin='NULL'){
+	public function wxqrcodequery($out_trade_no='NULL',$sgin='NULL')
+    {
         if(!$out_trade_no || !$sgin || $sgin!==md5($out_trade_no.request()->ip())){echo 'error sgin!!';exit();}
         $payment_model=Db::name("payment");
         $pay_info = $payment_model->where(array("out_trade_no"=>$out_trade_no))->find();
@@ -168,7 +170,8 @@ class Payment extends Base {
         return $data;
 	}
 
-    public function wxqrcode_notify_url(){
+    public function wxqrcode_notify_url()
+    {
         $notify = new NotifyContext();
         $callback = new PaymentNotify();
         $pay_config = config("payment.wxpayqrcode");
@@ -180,7 +183,8 @@ class Payment extends Base {
         }
     }
 
-    public function wxpub_notify_url(){
+    public function wxpub_notify_url()
+    {
         $notify = new NotifyContext();
         $callback = new PaymentNotify();
         $pay_config = config("payment.wxpaypub");
@@ -192,7 +196,8 @@ class Payment extends Base {
         }
     }
 
-    public function ali_notify_url(){
+    public function ali_notify_url()
+    {
         $notify = new NotifyContext();
         $callback = new PaymentNotify();
         $pay_config = config("payment.alipay");
@@ -204,7 +209,8 @@ class Payment extends Base {
         }
     }
 
-    public function aliwap_notify_url(){
+    public function aliwap_notify_url()
+    {
         $notify = new NotifyContext();
         $callback = new PaymentNotify();
         $pay_config = config("payment.alipay");

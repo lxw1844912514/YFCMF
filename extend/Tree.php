@@ -5,7 +5,8 @@
  * author:phpcms
  * edit：rainfer
  */
-class Tree {
+class Tree
+{
 
     /**
      * 生成树型结构所需要的2维数组
@@ -43,20 +44,41 @@ class Tree {
      * @param array $config 配置数组字段名称
      * @return boolean
      */
-    public function init($arr=array(),$config=array()) {
+    public function init($arr=array(),$config=array())
+    {
         $this->arr = $arr;
         $this->ret = '';
 		$this->str='';
 		if($config) $this->config=array_merge($this->config,$config);
         return is_array($arr);
     }
-
+    /**
+     * 递归重组节点信息为多维数组
+     * @param array
+     * @param int
+     * @param string
+     * @param string
+     * @param string
+     * @return array
+     */
+    public function get_arraylist(&$node, $pid = 0)
+    {
+        $arr = array();
+        foreach ($node as $v) {
+            if ($v [$this->config['parentid']] == $pid) {
+                $v [$this->config['child']] = $this->get_arraylist($node, $v [$this->config['id']]);
+                $arr [] = $v;
+            }
+        }
+        return $arr;
+    }
     /**
      * 得到父级数组的同级数组
      * @param int $myid 菜单id
-     * @return array
+     * @return array|mixed
      */
-    public function get_parent($myid) {
+    public function get_parent($myid)
+    {
         $newarr = array();
         if (!isset($this->arr[$myid])) return false;
         $pid = $this->arr[$myid][$this->config['parentid']];//父级id
@@ -73,9 +95,10 @@ class Tree {
     /**
      * 得到子级数组的同级数组
      * @param int $myid
-     * @return array
+     * @return array|mixed
      */
-    public function get_child($myid) {
+    public function get_child($myid)
+    {
         $newarr = array();
         if (is_array($this->arr)) {
             foreach ($this->arr as $id => $a) {
@@ -85,18 +108,42 @@ class Tree {
         }
         return $newarr ? $newarr : false;
     }
-
     /**
-     * 得到当前位置数组
-     * @param int
-     * @param array
+     * 获取所有子节点
+     * @param  array  $lists 数据集
+     * @param  int $pid   父级id
+     * @param  bool  $only_id 是否只取id
+     * @param  bool  $self 是否包含自身
      * @return array
      */
-    public function get_pos($myid, &$newarr) {
+    public function get_childs($lists=[],$pid=0,$only_id=false,$self=false)
+    {
+        $result = [];
+		if (is_array($lists)) {
+			foreach ($lists as $id => $a) {
+				if ($a[$this->config['parentid']] == $pid) {
+					$result[] = $only_id?$a[$this->config['id']]:$a;
+					unset($lists[$id]);
+					$result = array_merge($result, $this->get_childs($lists,$a[$this->config['id']],$only_id,$self));
+				}elseif($self && $a[$this->config['id']] == $pid){
+					$result[] = $only_id?$a[$this->config['id']]:$a;
+				}
+			}
+		}
+        return $result;
+    }
+    /**
+     * 得到当前位置数组
+     * @param int 位置
+     * @param array
+     * @return array|mixed
+     */
+    public function get_pos($index, &$newarr)
+    {
         $a = array();
-        if (!isset($this->arr[$myid])) return false;
-        $newarr[] = $this->arr[$myid];
-        $pid = $this->arr[$myid][$this->config['parentid']];
+        if (!isset($this->arr[$index])) return false;
+        $newarr[] = $this->arr[$index];
+        $pid = $this->arr[$index][$this->config['parentid']];
         if (isset($this->arr[$pid])) {
             $this->get_pos($pid, $newarr);
         }
@@ -119,7 +166,8 @@ class Tree {
      * @param string $str_group
      * @return string
      */
-    public function get_tree($myid, $str, $sid = 0, $adds = '', $str_group = '') {
+    public function get_tree($myid, $str, $sid = 0, $adds = '', $str_group = '')
+    {
         $number = 1;
         //一级栏目
         $child = $this->get_child($myid);//得到子级同级数组
@@ -151,7 +199,8 @@ class Tree {
      * @param int $myid，表示获得这个ID下的所有子级
      * @return array
      */
-    public function get_tree_array($myid) {
+    public function get_tree_array($myid=0)
+    {
         $retarray = array();
         //一级栏目数组
         $child = $this->get_child($myid);
@@ -172,7 +221,8 @@ class Tree {
      * @param string $adds
      * @return string
      */
-    public function get_tree_multi($myid, $str, $sid = 0, $adds = '') {
+    public function get_tree_multi($myid, $str, $sid = 0, $adds = '')
+    {
         $number = 1;
         $child = $this->get_child($myid);
         if (is_array($child)) {
@@ -205,7 +255,8 @@ class Tree {
      * @param string $adds 前缀
      * @return string $adds 前缀
      */
-    public function get_tree_category($myid, $str, $str2, $sid = 0, $adds = '') {
+    public function get_tree_category($myid, $str, $str2, $sid = 0, $adds = '')
+    {
         $number = 1;
         $child = $this->get_child($myid);
         if (is_array($child)) {
@@ -246,7 +297,8 @@ class Tree {
      * @param boolean $recursion 递归使用 外部调用时为FALSE
      * @return string
      */
-    function get_treeview($myid, $effected_id='example', $str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>", $showlevel = 0, $style='filetree ', $currentlevel = 1, $recursion=FALSE) {
+    public function get_treeview($myid, $effected_id='example', $str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>", $showlevel = 0, $style='filetree ', $currentlevel = 1, $recursion=FALSE)
+    {
         $child = $this->get_child($myid);
         if (!defined('EFFECTED_INIT')) {
             $effected = ' id="' . $effected_id . '"';
@@ -301,8 +353,9 @@ class Tree {
      * @param string $dropdown 有子元素时li的class
      * @return string
      */
-    
-    function get_treeview_menu($myid,$top_ul_id='', $childtpl="<a href='\$href' class='sf-with-ul'>\$menu_name</a>", $parenttpl="<a href='#' class='sf-with-ul'>\$menu_name<span class='sf-sub-indicator'><i class='fa fa-angle-down'></i></span></a>", $showlevel = 0,  $ul_class="" ,$li_class="" , $top_ul_class='filetree ', $currentlevel = 1, $recursion=FALSE, $dropdown='hasChild') {
+
+    public function get_treeview_menu($myid,$top_ul_id='', $childtpl="<a href='\$href' class='sf-with-ul'>\$menu_name</a>", $parenttpl="<a href='#' class='sf-with-ul'>\$menu_name<span class='sf-sub-indicator'><i class='fa fa-angle-down'></i></span></a>", $showlevel = 0,  $ul_class="" ,$li_class="" , $top_ul_class='filetree ', $currentlevel = 1, $recursion=FALSE, $dropdown='hasChild')
+    {
         //取出子菜单数组
     	$child = $this->get_child($myid);
     	if (!defined('EFFECTED_INIT')) {
@@ -350,7 +403,8 @@ class Tree {
      * @param string $item
      * @return int|boolean
      */	
-    private function have($list, $item) {
+    private function have($list, $item)
+    {
         return(strpos(',,' . $list . ',', ',' . $item . ','));
     }
 }

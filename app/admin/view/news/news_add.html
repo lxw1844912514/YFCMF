@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
@@ -13,7 +13,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('news_runadd')}"  enctype="multipart/form-data">
+				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('admin/News/news_runadd')}"  enctype="multipart/form-data">
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文章所属主栏目： </label>
@@ -21,7 +21,7 @@
 							<select name="news_columnid"  class="col-sm-3 selector" required>
 								<option value="">请选择所属栏目</option>
 								{foreach name="menu" item="vo"}
-									<option value="{$vo.id}" {if condition="$vo.menu_type eq 1"}disabled class="bgccc"{else/}class="bgc"{/if}>{$vo.lefthtml}{$vo.menu_name}({if condition="$vo.menu_l eq 'zh-cn'"}中{else /}英{/if}) {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
+									<option value="{$vo.id}" {if condition="$vo.id eq $news_columnid"} selected {/if} {if condition="$vo.menu_type eq 1"}disabled class="bgccc"{else/}class="bgc"{/if}>{$vo.lefthtml}{$vo.menu_name}({if condition="$vo.menu_l eq 'zh-cn'"}中{else /}英{/if}) {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
 								{/foreach}
 							</select>
 						</div>
@@ -190,6 +190,8 @@ echo date("Y-m-d",$time){/php}" type="text" data-date-format="yyyy-mm-dd">
 
 					<div class="clearfix form-actions">
 						<div class="col-md-offset-3 col-md-9">
+							<input class="ace ace-checkbox-2" name="continue" type="checkbox" value="1">
+							<span class="lbl"> 发布后继续</span>
 							<button class="btn btn-info" type="submit">
 								<i class="ace-icon fa fa-check bigger-110"></i>
 								保存

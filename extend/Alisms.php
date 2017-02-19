@@ -56,7 +56,8 @@ class Alisms
 	*@code 短信模板的模板CODE
 	*@ParamString  短信模板中的变量；,参数格式{“no”:”123456”}， 个人用户每个变量长度必须小于15个字符
 	*/
-	public function smsend($mobile,$ParamString,$code=''){
+	public function smsend($mobile,$ParamString,$code='')
+    {
         date_default_timezone_set("GMT");
         $dateTimeFormat = 'Y-m-d\TH:i:s\Z'; // ISO8601规范 
         if(!$code){
@@ -128,7 +129,8 @@ class Alisms
     }
 
 	//生成取短信签名
-    private function computeSignature($parameters, $accessKeySecret){
+    private function computeSignature($parameters, $accessKeySecret)
+    {
         ksort($parameters);
         $canonicalizedQueryString = '';
         foreach($parameters as $key => $value){
@@ -138,14 +140,16 @@ class Alisms
         $signature = $this->signString($stringToSign, $accessKeySecret."&");
         return $signature;
     }
-    private function percentEncode($str){
+    private function percentEncode($str)
+    {
         $res = urlencode($str);
         $res = preg_replace('/\+/', '%20', $res);
         $res = preg_replace('/\*/', '%2A', $res);
         $res = preg_replace('/%7E/', '~', $res);
         return $res;
     }
-    private function signString($source, $accessSecret){
+    private function signString($source, $accessSecret)
+    {
         return  base64_encode(hash_hmac('sha1', $source, $accessSecret, true));
     }
 	

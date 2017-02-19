@@ -21,7 +21,7 @@
 					<li><em>3</em>完成安装</li>
 				</ul>
 			</div>
-			<form id="js-install-form" action="{:url('step4')}" method="post">
+			<form id="js-install-form" action="{:url('install/Index/step4')}" method="post">
 				<input type="hidden" name="force" value="0" />
 				<div class="server">
 					<table width="100%">
@@ -134,7 +134,7 @@
 					<div id="js-response-tips" style="display: none;"></div>
 				</div>
 				<div class="bottom text-center">
-					<a href="{:url('step2')}" class="btn btn-primary">上一步</a>
+					<a href="{:url('install/Index/step2')}" class="btn btn-primary">上一步</a>
 					<button type="submit" class="btn btn-primary">创建数据</button>
 				</div>
 			</form>
@@ -154,7 +154,7 @@
 					'password' : dbPwd,
 					'hostport' : dbPort
 				};
-				var url = "{:url('testdb')}";
+				var url = "{:url('install/Index/testdb')}";
 				$.ajax({
 					type : "POST",
 					url : url,

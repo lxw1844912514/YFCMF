@@ -7,9 +7,12 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use think\Db;
 use think\Validate;
-class Plug extends Base {
+
+class Plug extends Base
+{
 	protected $files_res_exists;
 	protected $files_res_used;
 	protected $files_unused;
@@ -17,7 +20,8 @@ class Plug extends Base {
      * 留言列表
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_sug_list(){
+	public function plug_sug_list()
+	{
 		$plug_sug=Db::name('plug_sug')->order('plug_sug_open,plug_sug_addtime desc')->paginate(config('paginate.list_rows'));
 		$show=$plug_sug->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
@@ -29,7 +33,12 @@ class Plug extends Base {
 			return $this->fetch();
 		}
 	}
-	public function plug_sug_reply(){
+	/*
+	 * 留言回复返回数据
+	 * @author rainfer <81818832@qq.com>
+	 */
+	public function plug_sug_reply()
+	{
 		$plug_sug_id=input('plug_sug_id');
 		$plug_sug=Db::name('plug_sug')->where(array('plug_sug_id'=>$plug_sug_id))->find();
 		$rule = [
@@ -50,20 +59,25 @@ class Plug extends Base {
 		}
 		return json($sl_data);
 	}
-	public function plug_sug_runreply(){
+	/*
+	 * 留言回复
+	 * @author rainfer <81818832@qq.com>
+	 */
+	public function plug_sug_runreply()
+	{
 		$email=input('plug_sug_toemail');
 		$name=input('plug_sug_toname');
 		$plug_sug_id=input('plug_sug_id');
 		$content=htmlspecialchars_decode(input('plug_sug_replycontent'));
 		$send_result=sendMail($email,"Reply:". $name, $content);
 		if($send_result['error']){
-			$this->error('邮箱设置不正确或对方邮箱地址不存在',url('plug_sug_list'));
+			$this->error('邮箱设置不正确或对方邮箱地址不存在',url('admin/Plug/plug_sug_list'));
 		}else{
 			$rst=Db::name('plug_sug')->where('plug_sug_id',$plug_sug_id)->setField('plug_sug_open',1);
 			if($rst!==false){
-				$this->success('回复留言成功',url('plug_sug_list'));
+				$this->success('回复留言成功',url('admin/Plug/plug_sug_list'));
 			}else{
-				$this->error('回复留言失败',url('plug_sug_list'));
+				$this->error('回复留言失败',url('admin/Plug/plug_sug_list'));
 			}
 		}
 	}
@@ -71,22 +85,27 @@ class Plug extends Base {
      * 留言删除
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_sug_del(){
+	public function plug_sug_del()
+	{
 		$p = input('p');
 		$plug_sug_id=input('plug_sug_id');
 		$rst=Db::name('plug_sug')->where(array('plug_sug_id'=>$plug_sug_id))->delete();
 		if($rst!==false){
-			$this->success('留言删除成功',url('plug_sug_list',array('p'=>$p)));
+			$this->success('留言删除成功',url('admin/Plug/plug_sug_list',array('p'=>$p)));
 		}else{
-			$this->error('留言删除失败',url('plug_sug_list',array('p'=>$p)));
+			$this->error('留言删除失败',url('admin/Plug/plug_sug_list',array('p'=>$p)));
 		}
 	}
-	//彻底删除
-	public function plug_sug_alldel(){
+	/*
+     * 留言删除(全选)
+	 * @author rainfer <81818832@qq.com>
+     */
+	public function plug_sug_alldel()
+	{
 		$p = input('p');
 		$ids = input('sug_id/a');
 		if(empty($ids)){
-			$this -> error("请选择删除留言",url('plug_sug_list',array('p'=>$p)));
+			$this -> error("请选择删除留言",url('admin/Plug/plug_sug_list',array('p'=>$p)));
 		}
 		if(is_array($ids)){
 			$where = 'plug_sug_id in('.implode(',',$ids).')';
@@ -95,16 +114,17 @@ class Plug extends Base {
 		}
 		$rst=Db::name('plug_sug')->where($where)->delete();
 		if($rst!==false){
-			$this->success("成功删除留言！",url('plug_sug_list',array('p'=>$p)));
+			$this->success("留言删除成功！",url('admin/Plug/plug_sug_list',array('p'=>$p)));
 		}else{
-			$this -> error("删除留言失败！",url('plug_sug_list',array('p' => $p)));
+			$this -> error("删除留言失败！",url('admin/Plug/plug_sug_list',array('p' => $p)));
 		}
 	}
 	/*
      * 友情链接列表
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_list(){
+	public function plug_link_list()
+	{
 		$type=input('type');
 		$val=input('val');
 		$plug_link_l=input('plug_link_l');
@@ -140,9 +160,10 @@ class Plug extends Base {
      * 友情链接添加操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_runadd(){
+	public function plug_link_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_link_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_link_list'));
 		}else{
 			$sl_data=array(
 				'plug_link_name'=>input('plug_link_name'),
@@ -157,9 +178,9 @@ class Plug extends Base {
 			);
 			$rst=Db::name('plug_link')->insert($sl_data);
 			if($rst!==false){
-				$this->success('友情链接添加成功',url('plug_link_list'));
+				$this->success('友情链接添加成功',url('admin/Plug/plug_link_list'));
 			}else{
-				$this->error('友情链接添加失败',url('plug_link_list'));
+				$this->error('友情链接添加失败',url('admin/Plug/plug_link_list'));
 			}
 		}
 	}
@@ -168,13 +189,14 @@ class Plug extends Base {
      * 友情链接删除操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_del(){
+	public function plug_link_del()
+	{
 		$p=input('p');
 		$rst=Db::name('plug_link')->where(array('plug_link_id'=>input('plug_link_id')))->delete();
 		if($rst!==false){
-			$this->success('友情链接删除成功',url('plug_link_list',array('p' => $p)));
+			$this->success('友情链接删除成功',url('admin/Plug/plug_link_list',array('p' => $p)));
 		}else{
-			$this->error('友情链接删除失败',url('plug_link_list',array('p' => $p)));
+			$this->error('友情链接删除失败',url('admin/Plug/plug_link_list',array('p' => $p)));
 		}
 	}
 
@@ -182,7 +204,8 @@ class Plug extends Base {
      * 友情链接状态操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_state(){
+	public function plug_link_state()
+	{
 		$id=input('x');
 		$status=Db::name('plug_link')->where(array('plug_link_id'=>$id))->value('plug_link_open');//判断当前状态情况
 		if($status==1){
@@ -200,7 +223,8 @@ class Plug extends Base {
      * 友情链接修改返回值操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_edit(){
+	public function plug_link_edit()
+	{
 		$plug_link_id=input('plug_link_id');
 		$plug_link=Db::name('plug_link')->where(array('plug_link_id'=>$plug_link_id))->find();
 		$sl_data['plug_link_id']=$plug_link['plug_link_id'];
@@ -220,9 +244,10 @@ class Plug extends Base {
      * 友情 链接修改操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_link_runedit(){
+	public function plug_link_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_link_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_link_list'));
 		}else{
 			$sl_data=array(
 				'plug_link_id'=>input('plug_link_id'),
@@ -236,7 +261,7 @@ class Plug extends Base {
 
 			);
 			Db::name('plug_link')->update($sl_data);
-			$this->success('友情链接修改成功',url('plug_link_list'));
+			$this->success('友情链接修改成功',url('admin/Plug/plug_link_list'));
 		}
 	}
 
@@ -244,7 +269,8 @@ class Plug extends Base {
      * 友情链接类型列表
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_linktype_list(){
+	public function plug_linktype_list()
+	{
 		$link_type=Db::name('plug_linktype')->order('plug_linktype_order')->select();
 		$this->assign('link_type',$link_type);
 		return $this->fetch();
@@ -253,12 +279,13 @@ class Plug extends Base {
      * 友情链接类型删除
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_linktype_del(){
+	public function plug_linktype_del()
+	{
 		$rst=Db::name('plug_linktype')->where(array('plug_linktype_id'=>input('plug_linktype_id')))->delete();
 		if($rst!==false){
-			$this->success('友链类型删除成功',url('plug_linktype_list'));
+			$this->success('友链类型删除成功',url('admin/Plug/plug_linktype_list'));
 		}else{
-			$this->error('友链类型删除失败',url('plug_linktype_list'));
+			$this->error('友链类型删除失败',url('admin/Plug/plug_linktype_list'));
 		}
 	}
 
@@ -266,45 +293,49 @@ class Plug extends Base {
      * 友情链接类型添加
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_linktype_runadd(){
+	public function plug_linktype_runadd()
+	{
 		Db::name('plug_linktype')->insert(input('post.'));
-		$this->success('栏目添加成功',url('plug_linktype_list'));
+		$this->success('栏目添加成功',url('admin/Plug/plug_linktype_list'));
 	}
 
 	/*
      * 友情链接类型修改
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_linktype_runedit(){
+	public function plug_linktype_runedit()
+	{
 		$sl_data=array(
 			'plug_linktype_id'=>input('plug_linktype_id'),
 			'plug_linktype_name'=>input('plug_linktype_name'),
 			'plug_linktype_order'=>input('plug_linktype_order'),
 		);
 		Db::name('plug_linktype')->update($sl_data);
-		$this->success('友情链接栏目修改成功',url('plug_linktype_list'));
+		$this->success('友情链接栏目修改成功',url('admin/Plug/plug_linktype_list'));
 	}
 
 	/*
      * 友情链接类型排序
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_linktype_order(){
+	public function plug_linktype_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_linktype_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_linktype_list'));
 		}else{
 			$post=input('post.');
 			foreach ($post as $plug_linktype_id => $plug_linktype_order){
 				Db::name('plug_linktype')->where(array('plug_linktype_id' => $plug_linktype_id ))->setField('plug_linktype_order' , $plug_linktype_order);
 			}
-			$this->success('排序更新成功',url('plug_linktype_list'));
+			$this->success('排序更新成功',url('admin/Plug/plug_linktype_list'));
 		}
 	}
 	/*
      * 广告管理
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_list(){
+	public function plug_ad_list()
+	{
 		$key=input('key');
 		$plug_ad_l=input('plug_ad_l');
 		$map['plug_ad_name'] = array('like',"%".$key."%");
@@ -330,9 +361,10 @@ class Plug extends Base {
      * 添加广告操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_runadd(){
+	public function plug_ad_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_ad_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_ad_list'));
 		}else{
 			//处理图片
 			$img_url='';
@@ -345,7 +377,7 @@ class Plug extends Base {
 					if ($info) {
 						$img_url= config('storage.domain').$info[0]['key'];
 					}else{
-						$this->error($error,url('plug_ad_list'));//否则就是上传错误，显示错误原因
+						$this->error($error,url('admin/Plug/plug_ad_list'));//否则就是上传错误，显示错误原因
 					}
 				}else{
 					$validate=config('upload_validate');
@@ -358,7 +390,7 @@ class Plug extends Base {
 						$data['path']=$img_url;
 						Db::name('plug_files')->insert($data);
 					}else{
-						$this->error($file->getError(),url('plug_ad_list'));//否则就是上传错误，显示错误原因
+						$this->error($file->getError(),url('admin/Plug/plug_ad_list'));//否则就是上传错误，显示错误原因
 					}
 				}
 			}
@@ -378,9 +410,9 @@ class Plug extends Base {
 			);
 			$rst=Db::name('plug_ad')->insert($sl_data);
 			if($rst!==false){
-				$this->success('广告添加成功',url('plug_ad_list'));
+				$this->success('广告添加成功',url('admin/Plug/plug_ad_list'));
 			}else{
-				$this->error('广告添加失败',url('plug_ad_list'));
+				$this->error('广告添加失败',url('admin/Plug/plug_ad_list'));
 			}
 		}
 	}
@@ -389,13 +421,14 @@ class Plug extends Base {
      * 广告删除
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_del(){
+	public function plug_ad_del()
+	{
 		$plug_ad_id=input('plug_ad_id');
 		$rst=Db::name('plug_ad')->where(array('plug_ad_id'=>$plug_ad_id))->delete();
 		if($rst!==false){
-			$this->success('广告删除成功',url('plug_ad_list'));
+			$this->success('广告删除成功',url('admin/Plug/plug_ad_list'));
 		}else{
-			$this->error('广告删除失败',url('plug_ad_list'));
+			$this->error('广告删除失败',url('admin/Plug/plug_ad_list'));
 		}
 	}
 
@@ -403,15 +436,16 @@ class Plug extends Base {
      * 批量排序
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_order(){
+	public function plug_ad_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_ad_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_ad_list'));
 		}else{
 			$post=input('post.');
 			foreach ($post as $id => $sort){
 				Db::name('plug_ad')->where(array('plug_ad_id' => $id ))->setField('plug_ad_order' , $sort);
 			}
-			$this->success('广告排序更新成功',url('plug_ad_list'));
+			$this->success('广告排序更新成功',url('admin/Plug/plug_ad_list'));
 		}
 	}
 
@@ -419,7 +453,8 @@ class Plug extends Base {
      * 广告状态
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_state(){
+	public function plug_ad_state()
+	{
 		$id=input('x');
 		$status=Db::name('plug_ad')->where(array('plug_ad_id'=>$id))->value('plug_ad_open');//判断当前状态情况
 		if($status==1){
@@ -437,7 +472,8 @@ class Plug extends Base {
      * 广告位修改操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_edit(){
+	public function plug_ad_edit()
+	{
 		$plug_adtype_list=Db::name('plug_adtype')->select();
 		$plug_ad_id=input('plug_ad_id');
 		$plug_ad=Db::name('plug_ad')->where(array('plug_ad_id'=>$plug_ad_id))->find();
@@ -451,9 +487,10 @@ class Plug extends Base {
      * 修改广告操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_ad_runedit(){
+	public function plug_ad_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_ad_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_ad_list'));
 		}else{
 			$checkpic=input('checkpic');
 			$oldcheckpic=input('oldcheckpic');
@@ -469,7 +506,7 @@ class Plug extends Base {
 						if ($info) {
 							$img_url= config('storage.domain').$info[0]['key'];
 						}else{
-							$this->error($error,url('plug_ad_list'));//否则就是上传错误，显示错误原因
+							$this->error($error,url('admin/Plug/plug_ad_list'));//否则就是上传错误，显示错误原因
 						}
 					}else{
 						//本地
@@ -483,7 +520,7 @@ class Plug extends Base {
 							$data['path']=$img_url;
 							Db::name('plug_files')->insert($data);
 						}else{
-							$this->error($file->getError(),url('plug_ad_list'));//否则就是上传错误，显示错误原因
+							$this->error($file->getError(),url('admin/Plug/plug_ad_list'));//否则就是上传错误，显示错误原因
 						}
 					}
 				}
@@ -504,9 +541,9 @@ class Plug extends Base {
 			}
 			$rst=Db::name('plug_ad')->update($sl_data);
 			if($rst!==false){
-				$this->success('广告设置修改成功',url('plug_ad_list'));
+				$this->success('广告设置修改成功',url('admin/Plug/plug_ad_list'));
 			}else{
-				$this->error('广告设置修改失败',url('plug_ad_list'));
+				$this->error('广告设置修改失败',url('admin/Plug/plug_ad_list'));
 			}
 		}
 	}
@@ -514,7 +551,8 @@ class Plug extends Base {
      * 广告位列表
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_list(){
+	public function plug_adtype_list()
+	{
 		$key=input('key');
 		$map['plug_adtype_name '] = array('like',"%".$key."%");
 		$plug_adtype_list=Db::name('plug_adtype')->where($map)->order('plug_adtype_order')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
@@ -528,15 +566,16 @@ class Plug extends Base {
      * 广告位添加操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_runadd(){
+	public function plug_adtype_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_adtype_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_adtype_list'));
 		}else{
 			$rst=Db::name('plug_adtype')->insert(input('post.'));
 			if($rst!==false){
-				$this->success('广告位添加成功',url('plug_adtype_list'));			
+				$this->success('广告位添加成功',url('admin/Plug/plug_adtype_list'));			
 			}else{
-				$this->error('广告位添加失败',url('plug_adtype_list'));	
+				$this->error('广告位添加失败',url('admin/Plug/plug_adtype_list'));	
 			}
 		}
 	}
@@ -545,9 +584,10 @@ class Plug extends Base {
      * 广告位修改操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_edit(){
+	public function plug_adtype_edit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_adtype_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_adtype_list'));
 		}else{
 			$plug_adtype_id=input('plug_adtype_id');
 			$plug_adtype=Db::name('plug_adtype')->where(array('plug_adtype_id'=>$plug_adtype_id))->find();
@@ -563,15 +603,16 @@ class Plug extends Base {
      * 广告位修改操作
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_runedit(){
+	public function plug_adtype_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_adtype_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_adtype_list'));
 		}else{
 			$rst=Db::name('plug_adtype')->update(input('post.'));
 			if($rst!==false){
-				$this->success('广告位修改成功',url('plug_adtype_list'));
+				$this->success('广告位修改成功',url('admin/Plug/plug_adtype_list'));
 			}else{
-				$this->error('广告位修改失败',url('plug_adtype_list'));
+				$this->error('广告位修改失败',url('admin/Plug/plug_adtype_list'));
 			}
 			
 		}
@@ -581,18 +622,19 @@ class Plug extends Base {
      * 广告位删除
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_del(){
+	public function plug_adtype_del()
+	{
 		$p = input('p');
         $rst=Db::name('plug_ad')->where(array('plug_ad_adtypeid'=>input('plug_adtype_id')))->delete();//删除该广告位所有广告
 		if($rst!==false){
 			$rst=Db::name('plug_adtype')->where(array('plug_adtype_id'=>input('plug_adtype_id')))->delete();//删除广告位
 			if($rst!==false){
-				$this->success('广告位删除成功',url('plug_adtype_list', array('p' => $p)));
+				$this->success('广告位删除成功',url('admin/Plug/plug_adtype_list', array('p' => $p)));
 			}else{
-				$this->error('广告位删除失败',url('plug_adtype_list', array('p' => $p)));
+				$this->error('广告位删除失败',url('admin/Plug/plug_adtype_list', array('p' => $p)));
 			}
 		}else{
-			$this->error('广告位删除失败',url('plug_adtype_list', array('p' => $p)));
+			$this->error('广告位删除失败',url('admin/Plug/plug_adtype_list', array('p' => $p)));
 		}
 	}
 
@@ -600,19 +642,24 @@ class Plug extends Base {
      * 广告位排序
 	 * @author rainfer <81818832@qq.com>
      */
-	public function plug_adtype_order(){
+	public function plug_adtype_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('plug_adtype_list'));
+			$this->error('提交方式不正确',url('admin/Plug/plug_adtype_list'));
 		}else{
 			$post=input('post.');
 			foreach ($post as $id => $sort){
 				Db::name('plug_adtype')->where(array('plug_adtype_id' => $id ))->setField('plug_adtype_order' , $sort);
 			}
-			$this->success('广告位排序更新成功',url('plug_adtype_list'));
+			$this->success('广告位排序更新成功',url('admin/Plug/plug_adtype_list'));
 		}
 	}
- 	//本地文件列表
-	public function plug_file_list(){
+	/*
+    * 本地文件列表
+    * @author rainfer <81818832@qq.com>
+    */
+	public function plug_file_list()
+	{
         $map=array();
         //查询：时间格式过滤
         $sldate=input('reservation','');//获取格式 2015-11-12 - 2015-11-18
@@ -640,7 +687,11 @@ class Plug extends Base {
 			return $this->fetch();
 		}
 	}
-	public function plug_file_filter(){
+	/**
+	 * 文件过滤
+	 */
+	public function plug_file_filter()
+	{
 		//获取本地文件数组，'./data/upload/2016-01-21/56a03ff96b6ff.jpg' => int 224138
 		$file_list=list_file('data/upload');
 		$path="/data/upload/";
@@ -818,11 +869,14 @@ class Plug extends Base {
 			return $this->fetch();
 		}
 	}
+	/**
+	 * 文件删除(全选)
+	 */
 	public function plug_file_alldel(){
 		$p = input('p');
 		$ids = input('id/a');
 		if(empty($ids)){
-			$this -> error("请选择要删除的文件",url('plug_file_filter',array('p'=>$p)));
+			$this -> error("请选择要删除的文件",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 		}
 		if(is_array($ids)){
 			$where = 'id in('.implode(',',$ids).')';
@@ -836,9 +890,9 @@ class Plug extends Base {
 				}
 			}
 			if (Db::name('plug_files')->where($where)->delete()!==false) {
-				$this->success("删除文件成功！",url('plug_file_filter',array('p'=>$p)));
+				$this->success("删除文件成功！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 			} else {
-				$this->error("删除文件失败！",url('plug_file_filter',array('p'=>$p)));
+				$this->error("删除文件失败！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 			}
 		}else{
 			$r=Db::name('plug_files')->find($ids);
@@ -851,20 +905,24 @@ class Plug extends Base {
 					unlink($file);
 				}
 				if (Db::name('plug_files')->delete($ids)!==false) {
-					$this->success("删除文件成功！",url('plug_file_filter',array('p'=>$p)));
+					$this->success("删除文件成功！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 				}else{
-					$this->error("删除文件失败！",url('plug_file_filter',array('p'=>$p)));
+					$this->error("删除文件失败！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 				}
 			}else{
-				$this->error("删除文件失败！",url('plug_file_filter',array('p'=>$p)));
+				$this->error("删除文件失败！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 			}
 		}
 	}
-	public function plug_file_del(){
+	/**
+	 * 文件删除
+	 */
+	public function plug_file_del()
+	{
 		$id=input('id');
 		$p = input('p');
 		if (empty($id)){
-			$this->error('参数错误',url('plug_file_filter'));
+			$this->error('参数错误',url('admin/Plug/plug_file_filter',array('p'=>$p)));
 		}else{
 			$r=Db::name('plug_files')->find($id);
 			if($r){
@@ -876,12 +934,12 @@ class Plug extends Base {
 					unlink($file);
 				}
 				if (Db::name('plug_files')->delete($id)!==false) {
-					$this->success("删除文件成功！",url('plug_file_filter',array('p'=>$p)));
+					$this->success("删除文件成功！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 				}else{
-					$this->error("删除文件失败！",url('plug_file_filter',array('p'=>$p)));
+					$this->error("删除文件失败！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 				}
 			}else{
-				$this->error("文件删除失败！",url('plug_file_filter',array('p'=>$p)));
+				$this->error("删除文件失败！",url('admin/Plug/plug_file_filter',array('p'=>$p)));
 			}
 		}
 	} 

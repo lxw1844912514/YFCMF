@@ -7,8 +7,11 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
-class Help extends Base {
-    public function soft(){
+
+class Help extends Base
+{
+    public function soft()
+	{
         return $this->fetch();
     }
 }

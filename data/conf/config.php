@@ -1,6 +1,6 @@
 <?php
 return array (
-  'yfcmf_version' => 'V2.2.0',
+  'yfcmf_version' => 'V2.3.0',
   'update_check' => false,
   'think_sdk_qq' => 
   array (
@@ -45,7 +45,7 @@ return array (
     ),
   ),
   'upload_path' => '/data/upload',
-  'url_route_on' => false,
+  'url_route_on' => true,
   'url_route_must' => false,
   'route_complete_match' => false,
   'url_html_suffix' => 'html',
@@ -76,7 +76,10 @@ return array (
   'web_log' => 
   array (
     'weblog_on' => false,
-    'not_log_module' => ['install'],
+    'not_log_module' => 
+    array (
+      0 => 'install',
+    ),
     'not_log_controller' => 
     array (
       0 => 'home/Error',
@@ -86,8 +89,12 @@ return array (
       4 => 'admin/Ueditor',
       5 => 'admin/WebLog',
     ),
-    'not_log_action' => [],
-    'not_log_data' => [],
+    'not_log_action' => 
+    array (
+    ),
+    'not_log_data' => 
+    array (
+    ),
     'not_log_request_method' => 
     array (
       0 => 'GET',
@@ -200,4 +207,5 @@ return array (
     'aes_key' => '',
     'we_type' => '',
   ),
+  'addons_sql' => true,
 );

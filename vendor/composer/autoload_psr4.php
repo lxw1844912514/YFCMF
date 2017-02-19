@@ -11,7 +11,7 @@ return array(
     'think\\geetest\\' => array($vendorDir . '/yfcmf/geetest/src'),
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
     'think\\captcha\\' => array($vendorDir . '/topthink/think-captcha/src'),
-    'think\\' => array($vendorDir . '/topthink/think-image/src', $baseDir . '/thinkphp/library/think'),
+    'think\\' => array($vendorDir . '/topthink/think-image/src', $baseDir . '/thinkphp/library/think', $vendorDir . '/yfcmf/tp5-addons/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Symfony\\Bridge\\PsrHttpMessage\\' => array($vendorDir . '/symfony/psr-http-message-bridge'),

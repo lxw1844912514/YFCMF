@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 
@@ -12,7 +12,7 @@
 
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:url('excel_runimport')}"  enctype="multipart/form-data">
+				<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:url('admin/Sys/excel_runimport')}"  enctype="multipart/form-data">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 【文章】选择上传的EXCEL文件： </label>
 						<div class="col-sm-4">

@@ -41,7 +41,7 @@ body{background:url({$yf_theme_path}public/payment/images/bg.jpg) repeat;}
 <script>
 function p(id){
   $.ajax({
-    url: '{:url('home/payment/wxqrcodequery')}',
+    url: '{:url('home/Payment/wxqrcodequery')}',
     type: 'POST',
     dataType: 'json',
     data: {out_trade_no: id,sgin:'{$sgin}'},

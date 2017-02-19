@@ -7,10 +7,14 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
-class Comment extends Base{
+
+class Comment extends Base
+{
 	//个人中心-我的评论
-	function index(){
+    public function index()
+    {
 		$this->check_login();
 		$uid=$this->user['member_list_id'];
 		$where=array("uid"=>$uid);
@@ -23,7 +27,8 @@ class Comment extends Base{
 		return $this->view->fetch('user:comment');
 	}
 	//发表评论
-	function runcomment(){
+    public function runcomment()
+    {
         if(!config('comment.t_open')){
             $this->error(lang('comment not open'));
         }

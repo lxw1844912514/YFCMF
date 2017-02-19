@@ -7,18 +7,24 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
-class Center extends Base {
-	protected function _initialize(){
+
+class Center extends Base
+{
+	protected function _initialize()
+    {
 		parent::_initialize();
 		$this->check_login();
 	}
-	public function index() {
+	public function index()
+    {
 		$this->assign($this->user);
 		return $this->view->fetch('user:center');
     }
     //编辑用户资料
-	public function edit() {
+	public function edit()
+    {
 		$province = Db::name('Region')->where ( array('pid'=>1) )->select ();
 		$city=Db::name('Region')->where ( array('pid'=>$this->user['member_list_province']) )->select ();
 		$town=Db::name('Region')->where ( array('pid'=>$this->user['member_list_city']) )->select ();
@@ -28,25 +34,28 @@ class Center extends Base {
 		$this->assign($this->user);
 		return $this->view->fetch('user:edit');
     }
-    public function runedit() {
+    public function runedit()
+    {
     	if(request()->isPost()){
 			$post=input('post.');
 			$rst=Db::name('member_list')->where(array('member_list_id'=>$this->user['member_list_id']))->update($post);
 			if ($rst!==false) {
 				$this->user=Db::name('member_list')->find($this->user['member_list_id']);
 				session('user',$this->user);
-				$this->success(lang('save success'),url("edit"));
+				$this->success(lang('save success'),url("home/Center/edit"));
 			} else {
 				$this->error(lang('save failed'));
 			}
     	}
     }
 	//修改密码
-	    public function password() {
+	public function password()
+    {
 		$this->assign($this->user);
 		return $this->view->fetch('user:password');
     }
-	public function runchangepwd() {
+	public function runchangepwd()
+    {
     	if (request()->isPost()) {
 			$old_password=input('old_password');
     		$password=input('password');
@@ -71,7 +80,7 @@ class Center extends Base {
 					$data['member_list_id']=$this->user['member_list_id'];
 					$rst=$member->update($data);
 					if ($rst!==false) {
-						$this->success(lang('revise success'),url('index'));
+						$this->success(lang('revise success'),url('home/Center/index'));
 					} else {
 						$this->error(lang('revise failed'));
 					}
@@ -81,7 +90,8 @@ class Center extends Base {
     		}
     	}
     }
-	public function avatar(){
+	public function avatar()
+    {
         $imgurl=input('imgurl');
         //去'/'
         $imgurl=str_replace('/','',$imgurl);
@@ -95,12 +105,13 @@ class Center extends Base {
 			$data['filesize']=filesize('./'.$url);
 			$data['path']=$url;
 			Db::name('plug_files')->insert($data);
-            $this->success (lang('avatar update success'),url('index'));
+            $this->success (lang('avatar update success'),url('home/Center/index'));
         }else{
-            $this->error (lang('avatar update failed'),url('index'));
+            $this->error (lang('avatar update failed'),url('home/Center/index'));
         }
     }
-    function bang(){
+    public function bang()
+    {
     	$oauth_user_model=Db::name("OauthUser");
     	$oauths=$oauth_user_model->where(array("uid"=>$this->user['member_list_id']))->select();
     	$new_oauths=array();
@@ -110,7 +121,8 @@ class Center extends Base {
     	$this->assign("oauths",$new_oauths);
 		return $this->view->fetch('user:bang');
     }
-	function fav(){
+    public function fav()
+    {
 		$favorites_model=Db::name("favorites");
         $favorites=$favorites_model->alias("a")->join(config('database.prefix').'news b','a.t_id =b.n_id')->where(array('uid'=>$this->user['member_list_id']))->order('a.id asc')->paginate(config('paginate.list_rows'));
 		$show=$favorites->render();
@@ -118,13 +130,14 @@ class Center extends Base {
 		$this->assign("favorites",$favorites);
 		return $this->view->fetch('user:favorite');
 	}
-    function delete_favorite(){
+    public function delete_favorite()
+    {
         $id=input("id",0,"intval");
         $p=input("p",1,"intval");
         $favorites_model=Db::name("favorites");
         $result=$favorites_model->where(array('id'=>$id,'uid'=>$this->user['member_list_id']))->delete();
         if($result){
-            $this->success(lang('cancel collection success'),url('fav',array('p'=>$p)));
+            $this->success(lang('cancel collection success'),url('home/Center/fav',array('p'=>$p)));
         }else {
             $this->error(lang('cancel collection failed'));
         }

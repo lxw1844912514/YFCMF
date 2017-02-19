@@ -8,7 +8,8 @@
 // +----------------------------------------------------------------------
 use thinksdk\ThinkOauth;
 
-class SinaSDK extends ThinkOauth{
+class SinaSDK extends ThinkOauth
+{
     /**
      * 获取requestCode的api接口
      * @var string
@@ -37,7 +38,8 @@ class SinaSDK extends ThinkOauth{
     /**
      * 请求Authorize访问地址
      */
-    public function getRequestCodeURL() {
+    public function getRequestCodeURL()
+    {
         setcookie('A_S', $this->timestamp, $this->timestamp + 600, '/');
         $this->initConfig();
         //Oauth 标准参数
@@ -56,7 +58,8 @@ class SinaSDK extends ThinkOauth{
      * @param  string $method HTTP请求方法 默认为GET
      * @return json
      */
-    public function call($api, $param = '', $method = 'GET', $multi = false){
+    public function call($api, $param = '', $method = 'GET', $multi = false)
+    {
         /* 新浪微博调用公共参数 */
         $params = array(
             'access_token' => $this->token['access_token'],
@@ -96,7 +99,8 @@ class SinaSDK extends ThinkOauth{
             throw new Exception('没有获取到新浪微博用户ID！');
     }
     
-    public function userinfo() {
+    public function userinfo()
+    {
         $rsp = $this->call('users/show');
         if (!$rsp) {
             throw new Exception('接口访问失败！' . $rsp['msg']);

@@ -23,7 +23,7 @@
 							<div id="horizontal-tabs">
 								<div class="contents">
 									<div class="tabscontent" id="content1" style="display: block;">
-										<form class="form-light verify-ajax-form" id="reg" action="{:url('Register/runregister')}" method="post">
+										<form class="form-light verify-ajax-form" id="reg" action="{:url('home/Register/runregister')}" method="post">
 
 											<div>
 												<input type="text" maxlength="16" name="member_list_username" placeholder="用户名" class="form-control" required>
@@ -46,7 +46,7 @@
 													<input type="text" class="form-control" placeholder="" id="verify" style="height:40px;" name="verify" required>
 												</div>
 												<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-													<img class="verify_img" id="verify_img" src="{:url('Register/verify')}" onClick="this.src='{:url('Register/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
+													<img class="verify_img" id="verify_img" src="{:url('home/Register/verify')}" onClick="this.src='{:url('home/Register/verify')}'+'?'+Math.random()" style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;height:40px;" title="点击获取">
 												</div>
 											</div>
 											<div>&nbsp;</div>
@@ -55,7 +55,7 @@
 
 											<div style="text-align: center;">
 												<p>
-													已有账号? <a href="{:url('Login/index')}">点击此处登录</a>
+													已有账号? <a href="{:url('home/Login/index')}">点击此处登录</a>
 												</p>
 											</div>
 										</form>

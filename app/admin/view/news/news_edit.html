@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 		<!--主题-->
@@ -13,7 +13,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('news_runedit')}"  enctype="multipart/form-data">
+				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('admin/News/news_runedit')}"  enctype="multipart/form-data">
 					<input type="hidden" name="n_id" id="n_id" value="{$news_list.n_id}" />
 
 					<div class="form-group">

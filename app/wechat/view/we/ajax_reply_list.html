@@ -32,20 +32,20 @@
 		<td class="hidden-sm hidden-xs">{$v.we_reply_addtime|date='Y-m-d H:i:s',###}</td>
 		<td>
 			{if condition="$v['we_reply_open'] eq 1"}
-				<a class="red open-btn" href="{:url('reply_state')}" data-id="{$v.we_reply_id}" title="已开启">
+				<a class="red open-btn" href="{:url('wechat/We/reply_state')}" data-id="{$v.we_reply_id}" title="已开启">
 					<div><button class="btn btn-minier btn-yellow">开启</button></div>
 				</a>
 				{else/}
-				<a class="red open-btn" href="{:url('reply_state')}" data-id="{$v.we_reply_id}" title="已禁用">
+				<a class="red open-btn" href="{:url('wechat/We/reply_state')}" data-id="{$v.we_reply_id}" title="已禁用">
 					<div><button class="btn btn-minier btn-danger">禁用</button></div>
 				</a>
 			{/if}
 		</td>
 		<td>
 			<div class="hidden-sm hidden-xs action-buttons">
-				<a class="green replyedit-btn" href="{:url('reply_edit')}" data-id="{$v.we_reply_id}" data-toggle="tooltip" title="修改">
+				<a class="green replyedit-btn" href="{:url('wechat/We/reply_edit')}" data-id="{$v.we_reply_id}" data-toggle="tooltip" title="修改">
 					<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
-				<a class="red confirm-rst-url-btn" href="{:url('reply_del',array('we_reply_id'=>$v['we_reply_id']))}" data-info="您确定要删除吗？" data-toggle="tooltip" title="删除">
+				<a class="red confirm-rst-url-btn" href="{:url('wechat/We/reply_del',array('we_reply_id'=>$v['we_reply_id']))}" data-info="您确定要删除吗？" data-toggle="tooltip" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>
 			</div>
 			<div class="hidden-md hidden-lg">
@@ -55,7 +55,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 						<li>
-							<a href="{:url('reply_edit')}" data-id="{$v.we_reply_id}" class="tooltip-success replyedit-btn" data-rel="tooltip" title="修改" data-original-title="修改">
+							<a href="{:url('wechat/We/reply_edit')}" data-id="{$v.we_reply_id}" class="tooltip-success replyedit-btn" data-rel="tooltip" title="修改" data-original-title="修改">
 										<span class="green">
 											<i class="ace-icon fa fa-pencil bigger-120"></i>
 										</span>
@@ -63,7 +63,7 @@
 						</li>
 
 						<li>
-							<a href="{:url('reply_del',array('we_reply_id'=>$v['we_reply_id']))}"  data-info="您确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
+							<a href="{:url('wechat/We/reply_del',array('we_reply_id'=>$v['we_reply_id']))}"  data-info="您确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
 										<span class="red">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
 										</span>

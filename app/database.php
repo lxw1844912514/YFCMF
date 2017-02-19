@@ -46,6 +46,8 @@ return [
     'resultset_type' => 'array',
     // 是否自动写入时间戳字段
     'auto_timestamp' => false,
+	//自动时间格式转换
+	'datetime_format'=>false,
     // 是否需要进行SQL性能分析
     'sql_explain'    => false,
 ];

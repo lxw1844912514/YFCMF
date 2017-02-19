@@ -23,21 +23,21 @@
 				<div class="post-date">
 					<a class="date" href="#"><strong>{$vo.news_time|date="d",###}</strong><i>{$vo.news_time|date="M",###}</i></a>
 				</div>
-				<h3 class="content-title"><a href="{:url('News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a></h3>
+				<h3 class="content-title"><a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a></h3>
 				<div class="blog-entry-meta">
 					<div class="blog-entry-meta-author">
 						<i class="fa fa-user"></i>
-						<a href="{:url('Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.member_list_nickname|default=$vo.member_list_username}</a>
+						<a href="{:url('home/Index/visit',array('id'=>$vo['news_auto']))}" class="blog-entry-meta-author">{$vo.member_list_nickname|default=$vo.member_list_username}</a>
 					</div>
 					<div class="blog-entry-meta-comments">
-						<a href="{:url('News/index',array('id'=>$vo['n_id']))}#comments"><i class="fa fa-comment"></i></a>{$vo.comment_count}
+						<a href="{:url('home/News/index',array('id'=>$vo['n_id']))}#comments"><i class="fa fa-comment"></i></a>{$vo.comment_count}
 					</div>
 					<div class="blog-entry-meta-comments">
 						<i class="fa fa-eye"></i>
 						{$vo.news_hits}
 					</div>
 					<div class="blog-entry-meta-comments">
-						<a href="{:url('News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$vo.news_like}</span>
+						<a href="{:url('home/News/dolike',array('id'=>$vo['n_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$vo.news_like}</span>
 					</div>
 					<div class="blog-entry-meta-tags">
 					</div>
@@ -45,7 +45,7 @@
 			</header>
 			<div class="post-content">
 				<p>{$vo.news_content|html_trim=100}</p>
-				<a href="{:url('News/index',array('id'=>$vo['n_id']))}">{:lang('see')} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
+				<a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{:lang('see')} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
 			</div>
 		</div>
 		<div class="clearfix"></div>

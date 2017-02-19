@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 	<link rel="stylesheet" href="__PUBLIC__/bootstrap-select/css/bootstrap-select.min.css">
@@ -16,7 +16,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:url('runlogsys')}">
+				<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:url('admin/Sys/runlogsys')}">
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否定时清日志： </label>
 						<div class="col-sm-9" style="padding-top:5px;">

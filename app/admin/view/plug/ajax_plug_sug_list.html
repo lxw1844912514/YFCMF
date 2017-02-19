@@ -14,14 +14,14 @@
 		<td>
 			<div class="action-buttons">
 
-				<a href="{:url('plug_sug_reply')}" data-id="{$v.plug_sug_id}" class="tooltip-success sugreply-btn" data-rel="tooltip" title="回复" data-original-title="回复">
+				<a href="{:url('admin/Plug/plug_sug_reply')}" data-id="{$v.plug_sug_id}" class="tooltip-success sugreply-btn" data-rel="tooltip" title="回复" data-original-title="回复">
 					{if condition="$v['plug_sug_open'] eq 1"}
 					<span class="green"><i class="ace-icon fa fa-envelope-o bigger-120"></i></span>
 					{else /}
 					<span class="red"><i class="ace-icon fa fa-envelope bigger-120"></i></span>
 					{/if}
 				</a>
-				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('plug_sug_del',array('plug_sug_id'=>$v['plug_sug_id'],'p'=>input('p',1)))}" title="删除">
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('admin/Plug/plug_sug_del',array('plug_sug_id'=>$v['plug_sug_id'],'p'=>input('p',1)))}" title="删除">
 					<i class="ace-icon fa fa-trash-o bigger-130"></i>
 				</a>
 			</div>

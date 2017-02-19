@@ -22,12 +22,12 @@ function createPayid()
 
 // 订单信息
 $payData = [
-    "order_no"	=> createPayid(),
-    "amount"	=> '0.01',// 单位为元 ,最小为0.01
+    "order_no"	=> '201612311430',
+    "amount"	=> '10.00',// 单位为元 ,最小为0.01
     "client_ip"	=> '127.0.0.1',
-    "subject"	=> '测试支付',
-    "body"	=> '支付接口测试',
-    "show_url"  => 'http://mall.tiyushe.com/goods/23.html',// 支付宝手机网站支付接口 该参数必须上传 。其他接口忽略
+    "subject"	=> 'test',
+    "body"	=> 'test wap pay',
+    "show_url"  => 'https://helei112g.github.io/',// 支付宝手机网站支付接口 该参数必须上传 。其他接口忽略
     "extra_param"	=> '',
 ];
 
@@ -51,14 +51,17 @@ $wxconfig = require_once __DIR__ . '/wxconfig.php';
 $charge = new ChargeContext();
 
 try {
-    // 支付宝即时到帐接口
+    // 支付宝即时到帐接口  新版本，不再支持该方式
     //$type = Config::ALI_CHANNEL_WEB;
 
     // 支付宝 手机网站支接口
-    //$type = Config::ALI_CHANNEL_WAP;
+    $type = Config::ALI_CHANNEL_WAP;
 
     // 支付宝 移动支付接口
-    $type = Config::ALI_CHANNEL_APP;
+    //$type = Config::ALI_CHANNEL_APP;
+
+    // 支付宝  扫码支付
+    //$type = Config::ALI_CHANNEL_QR;
 
     $charge->initCharge($type, $aliconfig);
 
@@ -69,8 +72,9 @@ try {
     //$type = Config::WX_CHANNEL_APP;
 
     // 微信 公众号支付
-    /*$type = Config::WX_CHANNEL_PUB;
-    $charge->initCharge($type, $wxconfig);*/
+    //$type = Config::WX_CHANNEL_PUB;
+
+    //$charge->initCharge($type, $wxconfig);
     $ret = $charge->charge($payData);
 } catch (PayException $e) {
     echo $e->errorMessage();exit;
@@ -78,9 +82,12 @@ try {
 
 if ($type === Config::ALI_CHANNEL_APP) {
     echo $ret;exit;
+} elseif ($type === Config::ALI_CHANNEL_QR) {
+    $url = \Payment\Utils\DataParser::toQRimg($ret);// 内部会用到google 生成二维码的api  可能有些同学反应很慢
+    echo "<img alt='支付宝扫码支付' src='{$url}' style='width:150px;height:150px;'/>";exit;
 } elseif ($type === Config::WX_CHANNEL_QR) {
-    $url = urlencode($ret);
-    echo "<img alt='扫码支付' src='http://paysdk.weixin.qq.com/example/qrcode.php?data={$url}' style='width:150px;height:150px;'/>";exit;
+    $url = \Payment\Utils\DataParser::toQRimg($ret);
+    echo "<img alt='微信扫码支付' src='{$url}' style='width:150px;height:150px;'/>";exit;
 } elseif ($type === Config::WX_CHANNEL_PUB) {
     $json = $ret;
     var_dump($json);

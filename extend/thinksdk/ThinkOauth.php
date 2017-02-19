@@ -76,7 +76,8 @@ abstract class ThinkOauth
     private $Type = '';
     protected $timestamp = '';
 
-    private function __construct($token = null) {
+    private function __construct($token = null)
+    {
          //设置SDK类型
         $class = get_class($this);
         $this->Type = strtoupper(substr($class, 0, strlen($class) - 3));
@@ -96,7 +97,8 @@ abstract class ThinkOauth
      * 设置授权页面样式，PC或者Mobile
      * @param type $display
      */
-    public function setDisplay($display) {
+    public function setDisplay($display)
+    {
         if (in_array($display, array('default', 'mobile'))) {
             $this->display = $display;
         }
@@ -125,7 +127,8 @@ abstract class ThinkOauth
      * @param array/string $param 额外参数
      * @return array:
      */
-    protected function param($params, $param) {
+    protected function param($params, $param)
+    {
         if (is_string($param)) {
             parse_str($param, $param);
         }
@@ -135,7 +138,8 @@ abstract class ThinkOauth
      * 默认的AccessToken请求参数
      * @return type
      */
-    protected function _params() {
+    protected function _params()
+    {
         $params = array(
             'client_id'     => $this->config['app_key'],
             'client_secret' => $this->config['app_secret'],
@@ -151,13 +155,15 @@ abstract class ThinkOauth
      * @param  string $fix api后缀
      * @return string      请求的完整URL
      */
-    protected function url($api, $fix = '') {
+    protected function url($api, $fix = '')
+    {
         return $this->ApiBase . $api . $fix;
     }
     /**
      * 获取access_token
      */
-    public function getAccessToken($ignore_stat = false) {
+    public function getAccessToken($ignore_stat = false)
+    {
         if ($ignore_stat === false && isset($_COOKIE['A_S']) && $_GET['state'] != $_COOKIE['A_S']) {
             throw new Exception('传递的STATE参数不匹配！');
         } else {
@@ -173,7 +179,8 @@ abstract class ThinkOauth
     /**
      * 初始化一些特殊配置
      */
-    protected function initConfig() {
+    protected function initConfig()
+    {
         /*用与后续扩展*/
         $callback = array(
              'default' => $this->config['callback'],

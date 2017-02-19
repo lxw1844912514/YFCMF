@@ -24,7 +24,7 @@
 							<ul>
 								<li>{:lang('current location')}:</li>
 								<li><a href="__ROOT__/">{:lang('home')}</a></li>
-								<li><a href="{:url('Center/index')}">{:lang('personal center')}</a></li>
+								<li><a href="{:url('home/Center/index')}">{:lang('personal center')}</a></li>
 								<li>{:lang('my favorites')}</li>
 							</ul>
 						</div>
@@ -56,7 +56,7 @@
 											<td>{$vo.id}</td>
 											<td>{$vo.news_title}</td>
 											<td>{$vo.news_scontent|msubstr=0,20}</td>
-											<td><a href="{:url('News/index',array('id'=>$vo['t_id']))}" target="_blank">{:lang('see')}</a> | <a class="js-delete-btn" href="{:url('Center/delete_favorite',array('id'=>$vo['id'],'p'=>input('p',1)))}">{:lang('delete')}</a></td>
+											<td><a href="{:url('home/News/index',array('id'=>$vo['t_id']))}" target="_blank">{:lang('see')}</a> | <a class="js-delete-btn" href="{:url('home/Center/delete_favorite',array('id'=>$vo['id'],'p'=>input('p',1)))}">{:lang('delete')}</a></td>
 										</tr>
 									{/foreach}
                                     <tr>

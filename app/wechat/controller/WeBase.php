@@ -7,9 +7,12 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\wechat\controller;
+
 use app\admin\controller\Base;
 use EasyWeChat\Foundation\Application;
-class WeBase extends Base{
+
+class WeBase extends Base
+{
 	//微信平台
     protected $options=[
         /**
@@ -75,8 +78,9 @@ class WeBase extends Base{
             //'verify' => false, // 关掉 SSL 认证（强烈不建议！！！）
         ],
     ];
-    protected $app;
-	protected function _initialize(){
+    public $app;
+	public function _initialize()
+    {
         parent::_initialize();
 		//微信平台
         $config=config('we_options');

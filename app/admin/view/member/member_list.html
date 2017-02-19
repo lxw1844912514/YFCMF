@@ -1,17 +1,17 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 
 		<div class="row maintop">
 			<div class="col-xs-5 col-sm-2  margintop5">
-				<a href="{:url('member_add')}">
+				<a href="{:url('admin/Member/member_add')}">
 					<button class="btn btn-sm btn-danger">
 						<i class="ace-icon fa fa-bolt bigger-110"></i>
 						添加会员
 					</button>
 				</a>
 			</div>
-			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('member_list')}">
+			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('admin/Member/member_list')}">
 				<div class="col-xs-12 col-sm-4  margintop5">
 					<select name="opentype_check" class="ajax_change">
 						<option value="">按开启状态</option>
@@ -40,7 +40,7 @@
 				</div>
 				<div class="col-xs-4 col-sm-3 margintop5">
 					<div class="input-group-btn">
-						<a href="{:url('member_list')}">
+						<a href="{:url('admin/Member/member_list')}">
 							<button type="button" class="btn btn-sm  btn-purple ajax-display-all">
 								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
 								显示全部

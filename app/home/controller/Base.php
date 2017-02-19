@@ -7,17 +7,28 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use app\common\controller\Common;
+use app\admin\model\Options;
 use think\Db;
-class Base extends Common{
+
+class Base extends Common
+{
 	protected $view;
 	protected $user;
 	protected $yf_theme_path;
-	protected function _initialize(){
+	protected function _initialize()
+    {
         parent::_initialize();
 		//主题
-		$site_options=get_site_options();
-		$theme=empty($site_options['site_tpl'])?'':$site_options['site_tpl'];
+		$site_options=Options::get_options('site_options',$this->lang);
+        $site_options['site_tongji']=htmlspecialchars_decode($site_options['site_tongji']);
+        $site_options['site_copyright']=htmlspecialchars_decode($site_options['site_copyright']);
+        if(request()->isMobile()){
+            $theme=$site_options['site_tpl_m']?:$site_options['site_tpl'];
+        }else{
+            $theme=$site_options['site_tpl'];
+        }
 		$this->view=$this->view->config('view_path',APP_PATH.request()->module().'/view/'.$theme.'/');
 		$yf_theme_path=__ROOT__.'/app/home/view/'.$theme.'/';
 		$this->assign($site_options);
@@ -76,7 +87,8 @@ class Base extends Common{
 	/**
 	 * 检查用户登录
 	 */
-	protected function check_login(){
+	protected function check_login()
+    {
 		if(!session('hid')){
 			$this->error(lang('not logged'),__ROOT__."/");
 		}
@@ -85,7 +97,8 @@ class Base extends Common{
 	 * 检查操作频率
 	 * @param int $t_check 距离最后一次操作的时长
 	 */
-	protected function check_last_action($t_check){
+	protected function check_last_action($t_check)
+    {
 		$action=MODULE_NAME."-".CONTROLLER_NAME."-".ACTION_NAME;
 		$time=time();
 		$action_s=session('last_action.action');

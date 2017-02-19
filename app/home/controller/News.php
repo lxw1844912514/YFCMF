@@ -7,10 +7,14 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\home\controller;
+
 use think\Db;
-class News extends Base {
+
+class News extends Base
+{
     //文章内页
-    public function index() {
+    public function index()
+    {
 		$page=input('page',1);
 		$news=Db::name('news')->alias("a")->join(config('database.prefix').'member_list b','a.news_auto =b.member_list_id')->where(array('n_id'=>input('id'),'news_open'=>1,'news_back'=>0))->find();
 		if(empty($news)){
@@ -21,8 +25,8 @@ class News extends Base {
 		$news['content']=$news_data[$page-1];
 		$news['page']='';
 		if($total>1){
-			$prevbtn=($page<=1)?'<li class="disabled"><span>&laquo;</span></li>':'<li><a href="' . url('News/index',['id'=>input('id'),'page'=>($page-1)]) . '">&laquo;</a></li>';
-			$nextbtn=($page>=$total)?'<li class="disabled"><span>&raquo;</span></li>':'<li><a href="' . url('News/index',['id'=>input('id'),'page'=>($page+1)]) . '">&raquo;</a></li>';
+			$prevbtn=($page<=1)?'<li class="disabled"><span>&laquo;</span></li>':'<li><a href="' . url('home/News/index',['id'=>input('id'),'page'=>($page-1)]) . '">&laquo;</a></li>';
+			$nextbtn=($page>=$total)?'<li class="disabled"><span>&raquo;</span></li>':'<li><a href="' . url('home/News/index',['id'=>input('id'),'page'=>($page+1)]) . '">&raquo;</a></li>';
 			$link=$this->getLinks($page,$total,input('id'));
 			$news['page']=sprintf(
 				'<ul class="pagination">%s %s %s</ul>',
@@ -126,11 +130,12 @@ class News extends Base {
 	{
 		$urls = [];
 		for ($page = $start; $page <= $end; $page++) {
-			$urls[$page] = url('News/index',['id'=>$id,'page'=>$page]);
+			$urls[$page] = url('home/News/index',['id'=>$id,'page'=>$page]);
 		}
 		return $urls;
 	}
-    public function dolike(){
+    public function dolike()
+    {
 	    $this->check_login();
     	$id=input('id',0,'intval');
     	$can_like=check_user_action('news'.$id,1);
@@ -141,7 +146,8 @@ class News extends Base {
     		$this->error(lang('dolike already'));
     	}
     }
-	function dofavorite(){
+    public function dofavorite()
+    {
         $this->check_login();
 		$key=input('key');
 		if($key){

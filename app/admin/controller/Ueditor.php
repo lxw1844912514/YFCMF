@@ -7,20 +7,28 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use app\common\controller\Common;
 use think\Db;
-class Ueditor extends Common {
+
+class Ueditor extends Common
+{
 	protected $config;
 	protected $type;
-	function _initialize() {
+	protected function _initialize()
+	{
 		parent::_initialize();
-		$adminid=session('aid');
+		$adminid=session('admin_auth.aid');
 		$userid=session('hid');
 		if(empty($adminid) && empty($userid)){
 			exit("非法上传！");
 		}
 	}
-	function upload(){
+	/**
+	 * 上传
+	 */
+	public function upload()
+	{
 		$this->type=input('edit_type','');
 		date_default_timezone_set("Asia/chongqing");
 		error_reporting(E_ERROR);
@@ -91,7 +99,8 @@ class Ueditor extends Common {
 			exit($result) ;
 		}
 	}
-	private function _ueditor_list($action){
+	private function _ueditor_list($action)
+	{
 		/* 判断类型 */
 		switch ($action) {
 			/* 列出文件 */
@@ -205,7 +214,8 @@ class Ueditor extends Common {
 		return $files;
 	}
 	//上传
-	private function _ueditor_upload($config=array()){
+	private function _ueditor_upload($config=array())
+	{
 		$title = '';
 		$url='';
 		if(!empty($config)){
@@ -222,7 +232,8 @@ class Ueditor extends Common {
                 if($info) {
                     $imgurl=ROOT_PATH.config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
                     //上传微信
-                    $material = $this->app->material;
+                    $wechat=controller('wechat/WeBase');
+                    $material = $wechat->app->material;
                     $result = $material->uploadArticleImage($imgurl);
                     $url = $result->url;
                     if(!empty($url)){
@@ -289,7 +300,8 @@ class Ueditor extends Common {
 		return json_encode($response);
 	}
 	//涂鸦
-	private function _ueditor_upload_scrawl(){		
+	private function _ueditor_upload_scrawl()
+	{		
 		$data = input('post.' . $this->config ['scrawlFieldName']);
         $url='';
         $title = '';
@@ -305,7 +317,8 @@ class Ueditor extends Common {
                 }else{
                     $savepath = save_storage_content('png', $img);
                     //上传微信
-                    $material = $this->app->material;
+                    $wechat=controller('wechat/WeBase');
+                    $material = $wechat->app->material;
                     $result = $material->uploadArticleImage(ROOT_PATH.$savepath);
                     $url = $result->url;
                     if(!empty($url)){
@@ -356,7 +369,8 @@ class Ueditor extends Common {
 		return json_encode($response);
 	}
 	//抓取远程文件
-	private function _ueditor_upload_catch(){
+	private function _ueditor_upload_catch()
+	{
 		set_time_limit(0);
 		$sret = array(
 			'state' => '',
@@ -378,7 +392,8 @@ class Ueditor extends Common {
                                 $savepath = save_storage_content($ext, $img);
                                 if ($savepath) {
                                     //上传微信
-                                    $material = $this->app->material;
+                                    $wechat=controller('wechat/WeBase');
+                                    $material = $wechat->app->material;
                                     $result = $material->uploadArticleImage(ROOT_PATH.$savepath);
                                     $url = $result->url;
                                     if(!empty($url)){

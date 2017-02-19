@@ -40,7 +40,7 @@
 	<![endif]-->
     <!-- 引入基本的js -->
     <script type="text/javascript">
-        var admin_ueditor_handle = "{:url('Sys/upload')}";
+        var admin_ueditor_handle = "{:url('admin/Ueditor/upload')}";
         var admin_ueditor_lang ='zh-cn';
     </script>
     <!--[if !IE]> -->
@@ -91,13 +91,13 @@
 		<div class="navbar-buttons navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
 				<li class="grey">
-					<a href="{:url('home/index/index')}" target="_blank">
+					<a href="{:url('home/Index/index')}" target="_blank">
 						前台首页
 					</a>
 				</li>
 
 				<li class="purple">
-					<a data-info="确定要清理缓存吗？" class="confirm-rst-btn" href="{:url('Sys/clear')}">
+					<a data-info="确定要清理缓存吗？" class="confirm-rst-btn" href="{:url('admin/Sys/clear')}">
 						清除缓存
 					</a>
 				</li>
@@ -105,18 +105,18 @@
 				{if condition="config('lang_switch_on')"}
 				<li class="grey">
 					{switch name="$lang"}
-						{case value="zh-cn"}<a href="{:url('Index/lang',['lang_s'=>'en'])}" class="rst-url-btn">ENGLISH</a>{/case}
-						{case value="en-us"}<a href="{:url('Index/lang',['lang_s'=>'cn'])}" class="rst-url-btn">简体中文</a>{/case}
+						{case value="zh-cn"}<a href="{:url('admin/Index/lang',['lang_s'=>'en'])}" class="rst-url-btn">ENGLISH</a>{/case}
+						{case value="en-us"}<a href="{:url('admin/Index/lang',['lang_s'=>'cn'])}" class="rst-url-btn">简体中文</a>{/case}
 					{/switch}
 				</li>
 				{/if}
 				<!-- 用户菜单开始 -->
 				<li class="light-blue dropdown-modal">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="{$admin_avatar|get_imgurl=2}" alt="{:session('admin_username')}" />
+						<img class="nav-user-photo" src="{$admin_avatar|get_imgurl=2}" alt="{:session('admin_auth.admin_username')}" />
 								<span class="user-info">
 									<small>欢迎,</small>
-									{:session('admin_username')}
+									{:session('admin_auth.admin_username')}
 								</span>
 
 						<i class="ace-icon fa fa-caret-down"></i>
@@ -124,7 +124,7 @@
 
 					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 						<li>
-							<a href="{:url('Sys/profile')}">
+							<a href="{:url('admin/Admin/profile')}">
 								<i class="ace-icon fa fa-user"></i>
 								会员中心
 							</a>

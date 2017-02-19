@@ -7,8 +7,12 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+
 use think\Db;
-class Member extends Base {
+use app\admin\model\MemberList;
+
+class Member extends Base
+{
 	/*
      * 用户管理
      */
@@ -23,7 +27,10 @@ class Member extends Base {
 		if($activetype_check !== ''){
 			$where['user_status']=$activetype_check;
 		}
-		$member_list=Db::name('Member_list')->alias('a')->join(config('database.prefix').'member_group b','a.member_list_groupid=b.member_group_id')->where($where)->where('member_list_username|member_list_email','like',"%".$key."%")->order('member_list_addtime desc')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		$member_model=new MemberList;
+		$member_list=$member_model->alias('a')->join(config('database.prefix').'member_group b','a.member_list_groupid=b.member_group_id')
+				->where($where)->where('member_list_username|member_list_email','like',"%".$key."%")
+				->order('member_list_addtime desc')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 		$show=$member_list->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
 		$this->assign('opentype_check',$opentype_check);
@@ -38,7 +45,7 @@ class Member extends Base {
 		}
 	}
 	/*
-     * 添加用户界面
+     * 添加用户显示
      */
 	public function member_add(){
 		$province = Db::name('Region')->where ( array('pid'=>1) )->select ();
@@ -53,7 +60,7 @@ class Member extends Base {
      */
 	public function member_runadd(){
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('member_list'));
+			$this->error('提交方式不正确',url('admin/Member/member_list'));
 		}else{
 			$member_list_salt=random(10);
 			$sl_data=array(
@@ -76,11 +83,11 @@ class Member extends Base {
 				'score'=>input('score',0,'intval'),
 				'coin'=>input('coin',0,'intval'),
 			);
-			$rst=Db::name('member_list')->insert($sl_data);
+			$rst=MemberList::create($sl_data);
 			if($rst!==false){
-				$this->success('会员添加成功',url('member_list'));
+				$this->success('会员添加成功',url('admin/Member/member_list'));
 			}else{
-				$this->error('会员添加失败',url('member_list'));
+				$this->error('会员添加失败',url('admin/Member/member_list'));
 			}
 		}
 	}
@@ -106,7 +113,7 @@ class Member extends Base {
 	 */
 	public function member_runedit(){
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('member_list'));
+			$this->error('提交方式不正确',url('admin/Member/member_list'));
 		}else{
 			$sl_data['member_list_id']=input('member_list_id');
 			$sl_data['member_list_groupid']=input('member_list_groupid');
@@ -130,38 +137,46 @@ class Member extends Base {
 			$sl_data['signature']=input('signature');
 			$sl_data['score']=input('score',0,'intval');
 			$sl_data['coin']=input('coin',0,'intval');
-			$rst=Db::name('member_list')->update($sl_data);
+			$rst=MemberList::update($sl_data);
 			if($rst!==false){
-				$this->success('会员修改成功',url('member_list'));
+				$this->success('会员修改成功',url('admin/Member/member_list'));
 			}else{
-				$this->error('会员修改失败',url('member_list'));
+				$this->error('会员修改失败',url('admin/Member/member_list'));
 			}
 		}
 	}
-
+	/*
+     * 会员禁止/取消禁止
+     */
 	public function member_state(){
 		$id=input('x');
-		$status=Db::name('member_list')->where(array('member_list_id'=>$id))->value('member_list_open');//判断当前状态情况
+		$member_model=new MemberList;
+		$status=$member_model->where(array('member_list_id'=>$id))->value('member_list_open');//判断当前状态情况
 		if($status==1){
 			$statedata = array('member_list_open'=>0);
-			Db::name('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$member_model->where(array('member_list_id'=>$id))->setField($statedata);
 			$this->success('状态禁止');
 		}else{
 			$statedata = array('member_list_open'=>1);
-			Db::name('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$member_model->where(array('member_list_id'=>$id))->setField($statedata);
 			$this->success('状态开启');
 		}
 	}
-	public function member_active(){
+	/*
+     * 会员激活/取消激活
+     */
+	public function member_active()
+	{
 		$id=input('x');
-		$status=Db::name('member_list')->where(array('member_list_id'=>$id))->value('user_status');//判断当前状态情况
+		$member_model=new MemberList;
+		$status=$member_model->where(array('member_list_id'=>$id))->value('user_status');//判断当前状态情况
 		if($status==1){
 			$statedata = array('user_status'=>0);
-			Db::name('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$member_model->where(array('member_list_id'=>$id))->setField($statedata);
 			$this->success('未激活');
 		}else{
 			$statedata = array('user_status'=>1);
-			Db::name('member_list')->where(array('member_list_id'=>$id))->setField($statedata);
+			$member_model->where(array('member_list_id'=>$id))->setField($statedata);
 			$this->success('已激活');
 		}
 	}
@@ -169,25 +184,28 @@ class Member extends Base {
 	/*
      * 会员删除
      */
-	public function member_del(){
+	public function member_del()
+	{
 		$p=input('p');
 		$member_list_id=input('member_list_id');
+		$member_model=new MemberList;
 		$rst=Db::name('admin')->where('member_id',$member_list_id)->find();
 		if($rst){
-			$this->error('此会员已关联管理员,请从管理员处删除',url('member_list', array('p' => $p)));
+			$this->error('此会员已关联管理员,请从管理员处删除',url('admin/Member/member_list', array('p' => $p)));
 		}else{
-			$rst=Db::name('member_list')->where(array('member_list_id'=>$member_list_id))->delete();
+			$rst=$member_model->where(array('admin/Member/member_list_id'=>$member_list_id))->delete();
 			if($rst!==false){
-				$this->success('会员删除成功',url('member_list', array('p' => $p)));
+				$this->success('会员删除成功',url('admin/Member/member_list', array('p' => $p)));
 			}else{
-				$this->error('会员删除失败',url('member_list', array('p' => $p)));
+				$this->error('会员删除失败',url('admin/Member/member_list', array('p' => $p)));
 			}
 		}
 	}
 	/*
      *会员组显示列表
      */
-	public function member_group_list(){
+	public function member_group_list()
+	{
 		$member_group=Db::name('member_group');
 		$member_group_list=$member_group->order('member_group_order')->select();
 		$this->assign('member_group_list',$member_group_list);
@@ -197,15 +215,16 @@ class Member extends Base {
 	/*
      * 会员组添加方法
      */
-	public function member_group_runadd(){
+	public function member_group_runadd()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('member_group_list'));
+			$this->error('提交方式不正确',url('admin/Member/member_group_list'));
 		}else{
 			$rst=Db::name('member_group')->insert(input('post.'));
 			if($rst!==false){
-				$this->success('会员组添加成功',url('member_group_list'));
+				$this->success('会员组添加成功',url('admin/Member/member_group_list'));
 			}else{
-				$this->error('会员组添加失败',url('member_group_list'));
+				$this->error('会员组添加失败',url('admin/Member/member_group_list'));
 			}
 		}
 	}
@@ -213,26 +232,28 @@ class Member extends Base {
 	/*
      * 会员组删除
      */
-	public function member_group_del(){
+	public function member_group_del()
+	{
 		$member_group_id=input('member_group_id');
 		if (empty($member_group_id)){
-			$this->error('会员组ID不存在',url('member_group_list'));
+			$this->error('会员组ID不存在',url('admin/Member/member_group_list'));
 		}
         $rst=Db::name('member_group')->where(array('member_group_id'=>input('member_group_id')))->delete();
         if($rst!==false){
-            $this->success('会员组删除成功',url('member_group_list'));
+            $this->success('会员组删除成功',url('admin/Member/member_group_list'));
         }else{
-            $this->error('会员组删除失败',url('member_group_list'));
+            $this->error('会员组删除失败',url('admin/Member/member_group_list'));
         }
 	}
 
 	/*
      * 改变会员组状态
      */
-	public function member_group_state(){
+	public function member_group_state()
+	{
 		$member_group_id=input('x');
 		if (!$member_group_id){
-			$this->error('ID:'.$member_group_id.'不存在',url('member_group_list'));
+			$this->error('ID:'.$member_group_id.'不存在',url('admin/Member/member_group_list'));
 		}
 		$status=Db::name('member_group')->where(array('member_group_id'=>$member_group_id))->value('member_group_open');//判断当前状态情况
 		if($status==1){
@@ -249,22 +270,24 @@ class Member extends Base {
 	/*
      * 排序更新
      */
-	public function member_group_order(){
+	public function member_group_order()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('member_group_list'));
+			$this->error('提交方式不正确',url('admin/Member/member_group_list'));
 		}else{
-			$post=input('post');
+			$post=input('post.');
 			foreach ($post as $id => $sort){
 				Db::name('member_group')->where(array('member_group_id' => $id ))->setField('member_group_order' , $sort);
 			}
-			$this->success('排序更新成功',url('member_group_list'));
+			$this->success('排序更新成功',url('admin/Member/member_group_list'));
 		}
 	}
 
 	/*
      * 修改会员组返回值
      */
-	public function member_group_edit(){
+	public function member_group_edit()
+	{
 		$member_group_id=input('member_group_id');
 		$member_group=Db::name('member_group')->where(array('member_group_id'=>$member_group_id))->find();
 		$sl_data['member_group_id']=$member_group['member_group_id'];
@@ -280,9 +303,10 @@ class Member extends Base {
 	/*
      * 修改用户组方法
      */
-	public function member_group_runedit(){
+	public function member_group_runedit()
+	{
 		if (!request()->isAjax()){
-			$this->error('提交方式不正确',url('member_group_list'));
+			$this->error('提交方式不正确',url('admin/Member/member_group_list'));
 		}else{
 			$sl_data=array(
 				'member_group_id'=>input('member_group_id'),
@@ -294,9 +318,9 @@ class Member extends Base {
 			);
 			$rst=Db::name('member_group')->update($sl_data);
 			if($rst!==false){
-				$this->success('会员组修改成功',url('member_group_list'));
+				$this->success('会员组修改成功',url('admin/Member/member_group_list'));
 			}else{
-				$this->error('会员组修改失败',url('member_group_list'));
+				$this->error('会员组修改失败',url('admin/Member/member_group_list'));
 			}
 		}
 	}

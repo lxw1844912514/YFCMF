@@ -7,7 +7,9 @@
 // | Author: rainfer <81818832@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\behavior;
+
 use think\Log;
+
 class Cron 
 {    
 	protected $options   =  array(

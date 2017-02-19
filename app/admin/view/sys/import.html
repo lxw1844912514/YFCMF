@@ -1,4 +1,4 @@
-{extend name="public/base" /}
+{extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
 
@@ -28,7 +28,7 @@
 								<td class="hidden-sm hidden-xs">{$key}</td>
 								<td>
 									<div class="hidden-sm hidden-xs action-buttons">
-										<a class="db-import confirm-rst-url-btn" data-info="你确定要还原吗？" href="{:url('restore?time='.$v['time'])}" title="还原">
+										<a class="db-import confirm-rst-url-btn" data-info="你确定要还原吗？" href="{:url('admin/Sys/restore?time='.$v['time'])}" title="还原">
 											<i class="ace-icon fa fa-reply-all bigger-130"></i>
 										</a>
 										{if condition="$v['compress'] eq 'GZ'"}
@@ -38,7 +38,7 @@
 										{/if}
 											<i class="ace-icon fa fa-cloud-download bigger-130"></i>
 										</a>
-										<a class="confirm-rst-url-btn" href="{:url('del?time='.$v['time'])}"  data-info="你确定要删除吗？" title="删除">
+										<a class="confirm-rst-url-btn" href="{:url('admin/Sys/del?time='.$v['time'])}"  data-info="你确定要删除吗？" title="删除">
 											<i class="ace-icon fa fa-trash-o bigger-130"></i>
 										</a>
 									</div>
@@ -49,7 +49,7 @@
 											</button>
 											<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 												<li>
-													<a href="{:url('restore?time='.$v['time'])}"  data-info="你确定要还原吗？" class="tooltip-success confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="还原">
+													<a href="{:url('admin/Sys/restore?time='.$v['time'])}"  data-info="你确定要还原吗？" class="tooltip-success confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="还原">
 																<span class="green">
 																	<i class="ace-icon fa fa-reply-all bigger-120"></i>
 																</span>
@@ -68,7 +68,7 @@
 												</li>
 
 												<li>
-													<a href="{:url('del?time='.$v['time'])}"  data-info="你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
+													<a href="{:url('admin/Sys/del?time='.$v['time'])}"  data-info="你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
 																<span class="red">
 																	<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																</span>
