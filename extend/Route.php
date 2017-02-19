@@ -33,10 +33,12 @@ class Route
 					// 内容模块
 					$rules = [
 					];
-					$data=\think\Db::name("route")->where("status=1")->order("listorder asc")->column('full_url','url');
-					$data=array_merge($rules,$data);
-					foreach ($data as $key => $rule) {
-					$routes[] = [$key, $rule, 'post|get', [], []];
+					if(file_exists(ROOT_PATH.'data/install.lock')){
+						$data=\think\Db::name("route")->where("status=1")->order("listorder asc")->column('full_url','url');
+						$data=array_merge($rules,$data);
+						foreach ($data as $key => $rule) {
+						$routes[] = [$key, $rule, 'post|get', [], []];
+						}	
 					}
 					\think\Cache::set('routes', $routes);
 					break;

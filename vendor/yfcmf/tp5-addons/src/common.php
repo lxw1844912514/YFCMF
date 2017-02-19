@@ -31,7 +31,7 @@ Loader::addNamespace('addons', ADDON_PATH);
 // 闭包初始化行为
 Hook::add('action_begin', function () {
     // 插件相关数据表
-    if(!Config::get('addons_sql')){
+    if(!Config::get('addons_sql') && file_exists(ROOT_PATH.'data/install.lock')){
         install_sql();
         sys_config_setbykey('addons_sql',true);
     }
