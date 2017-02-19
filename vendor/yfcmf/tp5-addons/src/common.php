@@ -37,7 +37,7 @@ Hook::add('action_begin', function () {
     }
     //所有有效钩子-插件
     $hook_addons = Cache::get('hook_addons');
-    if (empty($hook_addons)) {
+    if (empty($hook_addons) && Config::get('addons_sql')) {
         $hook_addons=Db::name('hook_addon')->alias('a')
             ->join(Config::get('database.prefix').'hook b','a.hook =b.name')
             ->join(Config::get('database.prefix').'addon c','a.addon =c.name')
