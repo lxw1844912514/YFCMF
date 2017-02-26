@@ -41,7 +41,7 @@ class Oauth extends Base
 		if(is_array($token)){
 			$user_info = $sns->userinfo();
 			$oauth_bang_s=session('oauth_bang');
-			if(!empty($oauth_bang_s)){
+			if($oauth_bang_s){
 				$this->_bang_handle($user_info, $type, $token);
 				
 			}else{
@@ -83,8 +83,10 @@ class Oauth extends Base
 		$need_bang=true;
 		if($find_oauth_user){
 			if($find_oauth_user['uid']==$current_uid){
+				session('oauth_bang',null);
 				$this->error(lang('bound already'),url('home/Center/bang'));exit;
 			}else{
+				session('oauth_bang',null);
 				$this->error(lang('bound other account'),url('home/Center/bang'));exit;
 			}
 		}
@@ -109,15 +111,15 @@ class Oauth extends Base
 				$new_oauth_user_data['openid']=$user_info['openid'];
 				$new_oauth_user_id=Db::name('OauthUser')->insertGetId($new_oauth_user_data);
 				if($new_oauth_user_id){
+					session('oauth_bang',null);
 					$this->success(lang('bind success'),url('home/Center/bang'));
-					session_unset("oauth_bang");
 				}else{
+					session('oauth_bang',null);
 					$this->error(lang('bind failed'),url('home/Center/bang'));
-					session_unset("oauth_bang");
 				}
 			}else{
+				session('oauth_bang',null);
 				$this->error(lang('bind failed'),url('home/Center/bang'));
-				session_unset("oauth_bang");
 			}
 		}
 	}

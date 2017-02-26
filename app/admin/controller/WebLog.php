@@ -138,9 +138,11 @@ class WebLog extends Base
 				$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
 				cache('controllers'.'_'.$module,$arr);
 			}
-			foreach($arr as $key=>$v){
-				$controllers[$module][]=$module.'/'.$key;
-				$actions[$module.'/'.$key]=array_map('array_shift',$v['method']);
+			if($arr){
+				foreach($arr as $key=>$v){
+					$controllers[$module][]=$module.'/'.$key;
+					$actions[$module.'/'.$key]=array_map('array_shift',$v['method']);
+				}
 			}
 		}
 		$methods=['GET','POST','PUT','DELETE','HEAD','PATCH','OPTIONS','Ajax','Pjax'];

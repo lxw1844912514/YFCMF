@@ -81,8 +81,6 @@ class QqSDK extends ThinkOauth
     protected function parseToken($result)
     {
         parse_str($result, $data);
-        var_dump($data);
-        //$data = json_decode($data, true);
         if ($data['access_token'] && $data['expires_in']) {
             $this->token    = $data;
             $data['openid'] = $this->openid();
