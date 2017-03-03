@@ -20,11 +20,14 @@ use think\model\Relation;
 
 class BelongsToMany extends Relation
 {
-    // 中间表模型
+    // 中间表表名
     protected $middle;
 
+    // 中间表模型
+    protected $pivot;
+
     /**
-     * 架构函数
+     * 构造函数
      * @access public
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
@@ -43,6 +46,28 @@ class BelongsToMany extends Relation
     }
 
     /**
+     * 设置中间表模型
+     * @param $pivot
+     * @return $this
+     */
+    public function pivot($pivot)
+    {
+        $this->pivot = $pivot;
+        return $this;
+    }
+
+    /**
+     * 实例化中间表模型
+     * @param $data
+     * @return mixed
+     */
+    protected function newPivot($data)
+    {
+        $pivot = $this->pivot ?: '\\think\\model\\Pivot';
+        return new $pivot($data, $this->middle);
+    }
+
+    /**
      * 延迟获取关联数据
      * @param string   $subRelation 子关联名
      * @param \Closure $closure     闭包查询条件
@@ -54,7 +79,7 @@ class BelongsToMany extends Relation
         $localKey   = $this->localKey;
         $middle     = $this->middle;
         if ($closure) {
-            call_user_func_array($closure, [ & $this->query]);
+            call_user_func_array($closure, [& $this->query]);
         }
         // 关联查询
         $pk                              = $this->parent->getPk();
@@ -71,9 +96,49 @@ class BelongsToMany extends Relation
                     }
                 }
             }
-            $set->pivot = new Pivot($pivot, $this->middle);
+            $set->pivot = $this->newPivot($pivot);
         }
         return $result;
+    }
+
+    /**
+     * 根据关联条件查询当前模型
+     * @access public
+     * @param string  $operator 比较操作符
+     * @param integer $count    个数
+     * @param string  $id       关联表的统计字段
+     * @param string  $joinType JOIN类型
+     * @return Query
+     */
+    public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
+    {
+        return $this->parent;
+    }
+
+    /**
+     * 根据关联条件查询当前模型
+     * @access public
+     * @param mixed $where 查询条件（数组或者闭包）
+     * @return Query
+     * @throws Exception
+     */
+    public function hasWhere($where = [])
+    {
+        throw new Exception('relation not support: hasWhere');
+    }
+
+    /**
+     * 设置中间表的查询条件
+     * @param      $field
+     * @param null $op
+     * @param null $condition
+     * @return $this
+     */
+    public function wherePivot($field, $op = null, $condition = null)
+    {
+        $field = 'pivot.' . $field;
+        $this->query->where($field, $op, $condition);
+        return $this;
     }
 
     /**
@@ -205,7 +270,7 @@ class BelongsToMany extends Relation
                     }
                 }
             }
-            $set->pivot                      = new Pivot($pivot, $this->middle);
+            $set->pivot                      = $this->newPivot($pivot);
             $data[$pivot[$this->localKey]][] = $set;
         }
         return $data;
@@ -302,7 +367,7 @@ class BelongsToMany extends Relation
             foreach ($ids as $id) {
                 $pivot[$this->foreignKey] = $id;
                 $this->query->table($this->middle)->insert($pivot, true);
-                $result[] = new Pivot($pivot, $this->middle);
+                $result[] = $this->newPivot($pivot);
             }
             if (count($result) == 1) {
                 // 返回中间表模型对象
