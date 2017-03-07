@@ -193,7 +193,7 @@ class Member extends Base
 		if($rst){
 			$this->error('此会员已关联管理员,请从管理员处删除',url('admin/Member/member_list', array('p' => $p)));
 		}else{
-			$rst=$member_model->where(array('admin/Member/member_list_id'=>$member_list_id))->delete();
+			$rst=$member_model->where(array('member_list_id'=>$member_list_id))->delete();
 			if($rst!==false){
 				$this->success('会员删除成功',url('admin/Member/member_list', array('p' => $p)));
 			}else{

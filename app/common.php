@@ -330,11 +330,7 @@ function random($length=10, $type='letter', $convert=0)
  */
 function has_controller($module,$controller)
 {
-	$arr=cache('controllers'.'_'.$module);
-	if(empty($arr)){
-		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
-		cache('controllers'.'_'.$module,$arr);
-	}
+	$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
     if((!empty($arr[$controller])) && $arr[$controller]['class_name']==$controller){
         return true;
     }else{
@@ -350,11 +346,7 @@ function has_controller($module,$controller)
  */
 function has_action($module,$controller,$action)
 {
-	$arr=cache('controllers'.'_'.$module);
-	if(empty($arr)){
-		$arr=$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
-		cache('controllers'.'_'.$module,$arr);
-	}
+	$arr=\ReadClass::readDir(APP_PATH . $module. DS .'controller');
     if((!empty($arr[$controller])) && $arr[$controller]['class_name']==$controller ){
 		$method_name=array_map('array_shift',$arr[$controller]['method']);
         if(in_array($action, $method_name)){
