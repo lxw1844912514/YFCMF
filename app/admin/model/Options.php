@@ -59,8 +59,8 @@ class Options extends Model
         $map=cache('site_options_map');
         if(empty($map)){
             $site_options = self::get_options('site_options',$lang);
-            $map['map_lat']=isset($site_options['map_lat'])?:'';
-            $map['map_lng']=isset($site_options['map_lng'])?:'';
+            $map['map_lat']=isset($site_options['map_lat'])?$site_options['map_lat']:'';
+            $map['map_lng']=isset($site_options['map_lng'])?$site_options['map_lng']:'';
             if((empty($map['map_lat']) || empty($map['map_lng'])) && $site_options['site_co_name']){
                 $strUrl='http://api.map.baidu.com/place/v2/search?query='.$site_options['site_co_name'].'&region=全国&city_limit=false&output=json&ak='.config('baidumap_ak');//自己去申请ak
                 $jsonStr = file_get_contents($strUrl);
