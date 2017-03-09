@@ -9,11 +9,13 @@
 						<option value="news_title" {if condition="($keytype eq 'news_title') or ($keytype eq '')"}selected{/if}>按标题搜</option>
 						<option value="news_auto" {if condition="$keytype eq 'news_auto'"}selected{/if}>按发布人ID</option>
 					</select>
+					{if condition="config('lang_switch_on')"}
 					<select name="news_l" class="ajax_change">
 						<option value="">按语言</option>
 						<option value="zh-cn" {if condition="$news_l eq 'zh-cn'"}selected="selected"{/if}>中文</option>
 						<option value="en-us" {if condition="$news_l eq 'en-us'"}selected="selected"{/if} >英语</option>
 					</select>
+					{/if}
 					<select name="diyflag" class="ajax_change">
 						<option value="">按属性</option>
 						{foreach name="diyflag" item="v"}

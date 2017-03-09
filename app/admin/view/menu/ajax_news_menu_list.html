@@ -18,7 +18,9 @@
 		</td>
 		<td style=padding-left:{if condition='$v.leftpin neq 0'}{$v.leftpin}{/if}px; >{$v.lefthtml}{$v.menu_name}</span></td>
 		<td>{$v.model_title}</td>
+		{if condition="config('lang_switch_on')"}
 		<td>{$v.menu_l}</td>
+		{/if}
 		<td>
 			{if condition="$v['menu_open'] eq 1"}
 				<a class="red display-btn" href="{:url('admin/Menu/news_menu_state')}" data-id="{$v.id}" title="已显示">

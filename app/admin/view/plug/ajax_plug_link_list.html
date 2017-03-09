@@ -5,7 +5,9 @@
 		<td><a href="{$v.plug_link_url}" target="_blank">{$v.plug_link_url}</a></td>
 		<td class="hidden-sm hidden-xs">{$v.plug_link_qq}</td>
 		<td class="hidden-xs">{$v.plug_linktype_name}</td>
+		{if condition="config('lang_switch_on')"}
 		<td class="hidden-xs">{$v.plug_link_l}</td>
+		{/if}
 		<td class="hidden-sm hidden-xs">{$v.plug_link_addtime|date='Y-m-d',###}</td>
 		<td class="hidden-xs">
 			{if condition='$v.plug_link_open eq 1'}

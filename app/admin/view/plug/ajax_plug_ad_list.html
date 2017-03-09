@@ -3,7 +3,9 @@
 		<td class="hidden-xs" height="28" >{$v.plug_ad_id}</td>
 		<td><a href="{$v.plug_ad_url}" target="_blank">{$v.plug_ad_name}</a></td>
 		<td class="hidden-sm hidden-xs">{$v.plug_adtype_name}</td>
+		{if condition="config('lang_switch_on')"}
 		<td class="hidden-sm hidden-xs">{$v.plug_ad_l}</td>
+		{/if}
 		<td class="hidden-sm hidden-xs">{$v.plug_ad_addtime|date='Y-m-d',###}</td>
 		<td><input name="{$v.plug_ad_id}" value="{$v.plug_ad_order}" class="list_order center"/></td>
 		<td>
@@ -50,5 +52,5 @@
 {/foreach}
 <tr>
 	<td height="50" align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
-	<td height="50" colspan="7" align="right">{$page}</td>
+	<td height="50" colspan="10" align="right">{$page}</td>
 </tr>

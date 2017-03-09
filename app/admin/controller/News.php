@@ -49,6 +49,9 @@ class News extends Base
 		if (!empty($news_l)){
 			$map['news_l']= array('eq',$news_l);
 		}
+        if(!config('lang_switch_on')){
+            $map['news_l']=  $this->lang;
+        }
 		if ($news_columnid!=''){
 			$ids=get_menu_byid($news_columnid,1,2);
 			$map['news_columnid']= array('in',implode(",", $ids));
@@ -66,7 +69,7 @@ class News extends Base
 		$diyflag_list=Db::name('diyflag')->select();
 		$this->assign('diyflag',$diyflag_list);
 		//栏目数据
-		$menu_text=menu_text();
+		$menu_text=menu_text($this->lang);
 		$this->assign('menu',$menu_text);
 		$this->assign('opentype_check',$opentype_check);
 		$this->assign('news_columnid',$news_columnid);
@@ -89,7 +92,7 @@ class News extends Base
 	public function news_add()
 	{
 		$news_columnid=input('news_columnid',0,'intval');
-	    $menu_text=menu_text();
+	    $menu_text=menu_text($this->lang);
 		$this->assign('menu',$menu_text);
 		$diyflag=Db::name('diyflag')->select();
 		$source=Db::name('source')->select();
@@ -237,7 +240,7 @@ class News extends Base
 		$pic_list = array_filter(explode(",", $text));
 		$this->assign('pic_list',$pic_list);
 		//栏目数据
-		$menu_text=menu_text();
+		$menu_text=menu_text($this->lang);
 		$this->assign('menu',$menu_text);
 		$diyflag=Db::name('diyflag')->select();
 		$source=Db::name('source')->select();//来源
@@ -473,6 +476,9 @@ class News extends Base
 		if (!empty($news_l)){
 			$map['news_l']= array('eq',$news_l);
 		}
+        if(!config('lang_switch_on')){
+            $map['news_l']=  $this->lang;
+        }
 		$where=$diyflag?"FIND_IN_SET('$diyflag',news_flag)":'';
 		$news_model=new NewsModel;
 		$news=$news_model->alias("a")->field('a.*,b.*,c.menu_name')

@@ -1601,11 +1601,15 @@ function menu_left($menu,$id_field='id',$pid_field='pid',$lefthtml = '─' , $pi
  * @author  rainfer
  * @return array|mixed
  */
-function menu_text()
+function menu_text($lang='zh-cn')
 {
 	$menu_text=cache('menu_text');
 	if(empty($menu_text)){
-		$menu_text=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
+        $map=[];
+        if(!config('lang_switch_on')){
+            $map['menu_l']=  $lang;
+        }
+		$menu_text=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')->where($map)-> order('menu_l desc,listorder') -> select();
 		$menu_text = menu_left($menu_text,'id','parentid');
 		cache('menu_text',$menu_text);
 	}

@@ -1,7 +1,8 @@
 {extend name="admin@public/base" /}
 {block name="main-content"}
 	<div class="page-content">
-			<form name="admin_list_sea" class="form-search form-horizontal" id="list-filter" method="post" action="{:url('admin/Menu/news_menu_list')}">
+		{if condition="config('lang_switch_on')"}
+		<form name="admin_list_sea" class="form-search form-horizontal" id="list-filter" method="post" action="{:url('admin/Menu/news_menu_list')}">
 			<div class="row maintop">
 				<div class="col-xs-12 col-sm-12">按语言刷选：
 					<select name="menu_l" class="ajax_change">
@@ -12,6 +13,7 @@
 				</div>
 			</div>
 		</form>
+		{/if}
 		<div class="row">
 			<div class="col-xs-12">
 				<div>
@@ -24,7 +26,9 @@
 								<th>类型</th>
 								<th>菜单标题</th>
 								<th>模型</th>
+								{if condition="config('lang_switch_on')"}
 								<th>语言</th>
+								{/if}
 								<th>显示状态</th>
 								<th style="border-right:#CCC solid 1px;">操作</th>
 							</tr>

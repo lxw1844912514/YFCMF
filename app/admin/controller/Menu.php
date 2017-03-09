@@ -28,6 +28,9 @@ class Menu extends Base
 		if(!empty($menu_l)){
 			$where['menu_l']=array('eq',$menu_l);
 		}
+        if(!config('lang_switch_on')){
+            $where['menu_l']=  $this->lang;
+        }
 		$menu_model=new MenuModel;
 		$menus=$menu_model->where($where)->order('menu_l Desc,listorder')->select();
         $menus=get_menu_model($menus);

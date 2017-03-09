@@ -19,11 +19,13 @@
 							<option value="{$v.plug_linktype_id}" {if condition="$type eq $v['plug_linktype_id']"}selected{/if}>{$v.plug_linktype_name}</option>
 						{/foreach}
 					</select>
+					{if condition="config('lang_switch_on')"}
 					<select name="plug_link_l" class="ajax_change">
 						<option value="">按语言</option>
 						<option value="zh-cn" {if condition="$plug_link_l eq 'zh-cn'"}selected="selected"{/if}>中文</option>
 						<option value="en-us" {if condition="$plug_link_l eq 'en-us'"}selected="selected"{/if} >英语</option>
 					</select>
+					{/if}
 				</div>
 				<div class="col-xs-12 col-sm-4 margintop5">
 					<div class="input-group">
@@ -63,7 +65,9 @@
 							<th>链接URL</th>
 							<th class="hidden-sm hidden-xs">联系QQ</th>
 							<th class="hidden-xs">所属栏目</th>
+							{if condition="config('lang_switch_on')"}
 							<th class="hidden-xs">语言</th>
+							{/if}
 							<th class="hidden-sm hidden-xs">添加时间</th>
 							<th class="hidden-xs" style="border-right:#CCC solid 1px;">状态</th>
 							<th style="border-right:#CCC solid 1px;">操作</th>
@@ -111,7 +115,7 @@
 									</div>
 								</div>
 								<div class="space-4"></div>
-
+								{if condition="config('lang_switch_on')"}
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 语言： </label>
 									<div class="col-sm-10">
@@ -122,7 +126,8 @@
 										</select>
 									</div>
 								</div>
-								<div class="space-4"></div>								
+								<div class="space-4"></div>
+								{/if}
 								
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
@@ -240,7 +245,7 @@
 									</div>
 								</div>
 								<div class="space-4"></div>
-								
+								{if condition="config('lang_switch_on')"}
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 语言： </label>
 									<div class="col-sm-10">
@@ -252,6 +257,7 @@
 									</div>
 								</div>
 								<div class="space-4"></div>
+								{/if}
 
 								<div class="form-group">
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>

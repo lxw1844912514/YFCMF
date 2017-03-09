@@ -16,11 +16,13 @@
 							<option value="{$vo.id}" {if condition="$vo.menu_type eq 1"}class="bgccc"{else/}class="bgc"{/if} {if condition="$news_columnid eq $vo['id']"}selected{/if}>{$vo.lefthtml}{$vo.menu_name} {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
 						{/foreach}
 					</select>
+					{if condition="config('lang_switch_on')"}
 					<select name="news_l" class="ajax_change">
 						<option value="">按语言</option>
 						<option value="zh-cn" {if condition="$news_l eq 'zh-cn'"}selected="selected"{/if}>中文</option>
 						<option value="en-us" {if condition="$news_l eq 'en-us'"}selected="selected"{/if} >英语</option>
 					</select>
+					{/if}
 					<select name="diyflag" class="ajax_change">
 						<option value="">按属性</option>
 						{foreach name="diyflag" item="v"}

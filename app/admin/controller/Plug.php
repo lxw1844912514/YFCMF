@@ -138,8 +138,11 @@ class Plug extends Base
 		if (!empty($plug_link_l)){
 			$map['plug_link_l']=  array('eq',$plug_link_l);
 		}
+		if(!config('lang_switch_on')){
+            $map['plug_link_l']=  $this->lang;
+        }
 		$link_type=Db::name('plug_linktype')->select();
-		$plug_link=Db::name('Plug_link')->alias("a")->join(config('database.prefix').'plug_linktype b','a.plug_link_typeid =b.plug_linktype_id')->where($map)->order('plug_link_addtime desc')->paginate(2,false,['query'=>get_query()]);
+		$plug_link=Db::name('Plug_link')->alias("a")->join(config('database.prefix').'plug_linktype b','a.plug_link_typeid =b.plug_linktype_id')->where($map)->order('plug_link_addtime desc')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 		$show = $plug_link->render();
 		$show=preg_replace("(<a[^>]*page[=|/](\d+).+?>(.+?)<\/a>)","<a href='javascript:ajax_page($1);'>$2</a>",$show);
 		$this->assign('plug_link',$plug_link);
@@ -342,6 +345,9 @@ class Plug extends Base
 		if (!empty($plug_ad_l)){
 			$map['plug_ad_l']=  array('eq',$plug_ad_l);
 		}
+		if(!config('lang_switch_on')){
+            $map['plug_ad_l']=  $this->lang;
+        }
 		$plug_adtype_list=Db::name('plug_adtype')->order('plug_adtype_order')->select();//获取所有广告位
 		$plug_ad_list=Db::name('plug_ad')->alias("a")->join(config('database.prefix').'plug_adtype b','a.plug_ad_adtypeid =b.plug_adtype_id')->where($map)->order('plug_ad_order')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 		$show = $plug_ad_list->render();

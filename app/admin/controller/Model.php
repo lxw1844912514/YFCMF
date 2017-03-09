@@ -796,7 +796,11 @@ class Model extends Base
             $fields[$key]=$this->cms_fields[$key];
         }
         //栏目数据
-        $menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')-> order('menu_l desc,listorder') -> select();
+        $map=[];
+        if(!config('lang_switch_on')){
+            $map['menu_l']=  $this->lang;
+        }
+        $menu_next=Db::name('menu')->where('menu_type <> 4 and menu_type <> 2')->where($map)-> order('menu_l desc,listorder') -> select();
         $arr = menu_left($menu_next,'id','parentid');
         $this->assign('menu',$arr);
         $this->assign('model_cid',$model_cid);
