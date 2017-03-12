@@ -216,6 +216,8 @@
 											<option value="baidu_map">百度地图坐标</option>
 											<option value="imagefile">单图片</option>
 											<option value="images">多图片</option>
+											<option value="file">单文件</option>
+											<option value="files">多文件</option>
 											<option value="selecttext">选择文本</option>
 											<option value="currency">货币</option>
 											<option value="large_number">长整数</option>
@@ -236,7 +238,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 字段数据：  </label>
 										<div class="col-sm-10">
-											<input type="text" name="field_data" id="field_data" placeholder="输入字段数据" class="col-xs-10 col-sm-5"/><span class="lbl">格式:'1:text1,2:text2,3:text3'或'数据表名|值字段名|标题字段名(|排序字段)'</span>
+											<input type="text" name="field_data" id="field_data" placeholder="输入字段数据" class="col-xs-10 col-sm-5"/><span class="lbl">格式:'1:text1,2:text2,3:text3'或'数据表名|值字段名|标题字段名(|排序字段)(|条件)'</span>
 										</div>
 									</div>
 									<div class="space-4 col-xs-12"></div>
@@ -334,6 +336,8 @@
 											<option value="baidu_map">百度地图坐标</option>
                                             <option value="imagefile">单图片</option>
                                             <option value="images">多图片</option>
+											<option value="file">单文件</option>
+											<option value="files">多文件</option>
                                             <option value="selecttext">选择文本</option>
                                             <option value="currency">货币</option>
                                             <option value="large_number">长整数</option>
@@ -354,7 +358,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 字段数据：  </label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="field_data" id="field_data" placeholder="输入字段数据" class="col-xs-10 col-sm-5"/><span class="lbl">格式:'1:text1,2:text2,3:text3'或'数据表名|值字段名|标题字段名(|排序字段)'</span>
+                                            <input type="text" name="field_data" id="field_data" placeholder="输入字段数据" class="col-xs-10 col-sm-5"/><span class="lbl">格式:'1:text1,2:text2,3:text3'或'数据表名|值字段名|标题字段名(|排序字段)(|条件)'</span>
                                         </div>
                                     </div>
                                     <div class="space-4 col-xs-12"></div>
@@ -612,7 +616,7 @@ $(function () {
             Modal.find("#input_length").hide(400);
 		}
 		//是否图片
-		if($type=='imagefile' || $type=='images'){
+		if($type=='imagefile' || $type=='images' || $type=='file' || $type=='files'){
             Modal.find("#input_default").hide(400);
 		}else{
             Modal.find("#input_default").show(400);

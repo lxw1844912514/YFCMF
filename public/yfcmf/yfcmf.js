@@ -1026,6 +1026,32 @@ $(function () {
 			}
 		}
         return false;
+    }).on('change','.ajax_change_news_columnid',function () {
+        var obj=$(this).siblings('.action');
+        var old_id=obj.find('.cancel-change-columnid').data('columnid'),new_id=$(this).val();
+        if(old_id != new_id){
+            obj.find('.change-columnid').data('columnid',new_id);
+            obj.removeClass('none');
+        }else{
+            obj.addClass('none');
+        }
+    }).on('click','a.change-columnid',function () {
+        var $url=this.href,$news_columnid=$(this).data('columnid'),$n_id=$(this).data('id');
+        var obj=$(this);
+        $.post($url,{news_columnid:$news_columnid,n_id:$n_id}, function (data) {
+            if (data.code==1) {
+                obj.parent().addClass('none');
+                obj.siblings('.cancel-change-columnid').data('columnid',$news_columnid);
+                layer.msg(data.msg,{icon: 6});
+            }else{
+                layer.msg(data.msg,{icon: 5});
+            }
+        }, "json");
+        return false;
+    }).on('click','a.cancel-change-columnid',function () {
+        var old_id=$(this).data('columnid'),obj=$(this).parent();
+        obj.addClass('none').siblings('.ajax_change_news_columnid').val(old_id);
+        return false;
     });
 	//极验验证
     $('#geetest_on').click(function(){

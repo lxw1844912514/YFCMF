@@ -6,7 +6,12 @@
 		<td>{$v.uptime|date="Y-m-d H:i:s",###}</td>
 		<td>
 			{php}
-				$is_img=@exif_imagetype('.'.$v['path']);
+				if(function_exists('exif_imagetype')){
+					$is_img=exif_imagetype('.'.$v['path']);
+				}else{
+					$info = getimagesize($image);
+					$is_img=$info[2];
+				}
 				if(!$is_img){
 				$suff=pathinfo($v['path'], PATHINFO_EXTENSION);
 				}

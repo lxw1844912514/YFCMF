@@ -448,6 +448,26 @@ class News extends Base
 		}
 	}
     /**
+     * 文章修改栏目
+     */
+    public function news_columnid()
+    {
+        $news_columnid=input('news_columnid');
+        $n_id=input('n_id');
+        $news_model=new NewsModel;
+        $data=$news_model->find($n_id);
+        if($data){
+            $rst=$news_model->where('n_id',$n_id)->update(['news_columnid'=>$news_columnid]);
+            if($rst!==false){
+                $this->success('更新栏目成功');
+            }else{
+                $this->error('更新栏目失败');
+            }
+        }else{
+            $this->error('文章不存在');
+        }
+    }
+    /**
      * 回收站列表
      */
 	public function news_back()

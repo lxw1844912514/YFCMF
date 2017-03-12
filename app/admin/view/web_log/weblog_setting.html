@@ -40,7 +40,7 @@
 							<select name="not_log_controller[]" id="selectcontroller" class="selectpicker" multiple data-width="fit" data-size="10" data-selected-text-format="count > 6">
 							{foreach name="$modules" item="v"}
 							<optgroup label="{$v}模块">
-							{notempty name="controllers.v"}
+							{notempty name="controllers[$v]"}
 								{foreach name="$controllers[$v]" item="vv"}
 								<option>{$vv}</option>
 								{/foreach}

@@ -86,7 +86,7 @@ class Model extends Base
                 if($pid1){
                     //增加模型数据
                     $sldata=array(
-                        'name'=>'Model/cmsadd?id='.$model_id,
+                        'name'=>'admin/Model/cmsadd?id='.$model_id,
                         'title'=>'增加'.$model['model_title'],
                         'pid'=>$pid1,
                         'level'=>$level+2,
@@ -96,7 +96,7 @@ class Model extends Base
                     $pid2=Db::name('auth_rule')->insertGetId($sldata);
                     if($pid2){
                         $sldata=array(
-                            'name'=>'Model/cmsrunadd',
+                            'name'=>'admin/Model/cmsrunadd',
                             'title'=>'增加操作',
                             'pid'=>$pid2,
                             'level'=>$level+3,
@@ -110,7 +110,7 @@ class Model extends Base
                     }
                     //添加列表
                     $sldata=array(
-                        'name'=>'Model/cmslist?id='.$model_id,
+                        'name'=>'admin/Model/cmslist?id='.$model_id,
                         'title'=>$model['model_title'].'列表',
                         'pid'=>$pid1,
                         'level'=>$level+2,
@@ -121,12 +121,12 @@ class Model extends Base
                     if($pid2){
                         //删除、状态、编辑显示、编辑操作、排序、全部删除
                         $sldata=[
-                            ['name'=>'Model/cmsdel','title'=>'删除操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsstate','title'=>'状态操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsorder','title'=>'排序操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsalldel','title'=>'全部删除','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsedit','title'=>'编辑显示','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
-                            ['name'=>'Model/cmsrunedit','title'=>'编辑操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsdel','title'=>'删除操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsstate','title'=>'状态操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsorder','title'=>'排序操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsalldel','title'=>'全部删除','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsedit','title'=>'编辑显示','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
+                            ['name'=>'admin/Model/cmsrunedit','title'=>'编辑操作','pid'=>$pid2,'level'=>$level+3,'status'=>0,'addtime'=>time()],
                         ];
                         Db::name('auth_rule')->insertAll($sldata);
                         Cache::clear();
@@ -267,7 +267,7 @@ class Model extends Base
             'data'=>'menu|id|menu_name|id',
             'description'=>'前台栏目',
             'length'=>100,
-            'rules'=>'required',
+            'rules'=>'',
             'default'=>''
         );
         $model_fields[input('model_order',$model_name.'_order')]=array(
@@ -311,6 +311,7 @@ class Model extends Base
                         //变长或固定字符串型
                         case 'text' :
                         case 'imagefile' :
+                        case 'file' :
                         case 'selecttext' :
                         case 'checkbox' :
                             if (empty ($fi ['length'])) {
@@ -368,6 +369,7 @@ class Model extends Base
                         case 'richtext' :
                         case 'bigtext' :
                         case 'images':
+                        case 'files':
                             $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
                             break;
                         //TINYINT型
@@ -524,7 +526,7 @@ class Model extends Base
             'data'=>'menu|id|menu_name|id',
             'description'=>'前台栏目',
             'length'=>100,
-            'rules'=>'required',
+            'rules'=>'',
             'default'=>''
         );
         $model_fields[input('model_order',$model_name.'_order')]=array(
@@ -566,6 +568,7 @@ class Model extends Base
                         //变长或固定字符串型
                         case 'text' :
                         case 'imagefile' :
+                        case 'file' :
                         case 'selecttext' :
                         case 'checkbox' :
                             if (empty ($fi ['length'])) {
@@ -623,6 +626,7 @@ class Model extends Base
                         case 'richtext' :
                         case 'bigtext' :
                         case 'images':
+                        case 'files':
                             $sql_fields [] = "`$f` TEXT COMMENT '$fi[title]'";
                             break;
                         //TINYINT型
@@ -751,7 +755,7 @@ class Model extends Base
 					    $item [$kk] = htmlspecialchars($vv);
                         break;
 					case 'currency':
-						$item[$kk] = long_currency($vv);
+						$item[$kk] = long_currency((float)$vv);
 						break;
 					case 'datetime' :
 						$item [$kk] = date('Y-m-d H:i:s', $vv);
@@ -786,6 +790,26 @@ class Model extends Base
 					case 'baidu_map':
 						$item[$kk] = htmlspecialchars($vv);
 						break;
+                    //文件
+                    case 'file':
+                        if ($vv) {
+                            $item [$kk] = '<a href="' . get_imgurl($vv) . '" target="_blank">查看</a>';
+                        } else {
+                            $item [$kk] = '';
+                        }
+                        break;
+                    //多文件
+                    case 'files':
+                        $files = array();
+                        if ($vv) {
+                            foreach (explode(',', $vv) as $vvv) {
+                                $files[] = '<a href="' . get_imgurl($vvv) . '" target="_blank">查看</a>';
+                            }
+                            $item [$kk] = join(' ', $files);
+                        } else {
+                            $item [$kk] = '';
+                        }
+                        break;
 				}
 			}
 			$data_list[]= $item;
@@ -1004,8 +1028,8 @@ class Model extends Base
 		$rets = array();
 		if (!empty ($value)) {
 			if(stripos($data,'|') != false){
-				@list ($model, $vfield, $vtitle,$sort)=explode('|', $data);
-				$fields=Db::name($model)->field($vtitle)->where($vfield,'in',$value)->order($sort)->select();
+				@list ($model, $vfield, $vtitle,$sort,$where)=explode('|', $data);
+				$fields=Db::name($model)->field($vtitle)->where($vfield,'in',$value)->where($where)->order($sort)->select();
 				foreach ($fields as $v){
 					$rets [] = $v [$vtitle];
 				}
@@ -1028,8 +1052,8 @@ class Model extends Base
 	{
         $rets = array();
 	    if(stripos($data,'|') != false){
-            @list ($model, $vfield, $vtitle,$sort)=explode('|', $data);
-            $fields=Db::name($model)->field($vfield . ',' . $vtitle)->order($sort)->select();
+            @list ($model, $vfield, $vtitle,$sort,$where)=explode('|', $data);
+            $fields=Db::name($model)->field($vfield . ',' . $vtitle)->where($where)->order($sort)->select();
             foreach ($fields as $v){
                 $rets [$v [$vfield]] = $v [$vtitle];
             }
@@ -1110,7 +1134,7 @@ class Model extends Base
                 'data'=>'menu|id|menu_name|id',
                 'description'=>'前台栏目',
                 'length'=>100,
-                'rules'=>'required',
+                'rules'=>'',
                 'default'=>''];
             $this->cms_fields=array_merge($this->cms_fields,$model['model_fields']?json_decode($model['model_fields'],true):array());
             //处理baidu_map
@@ -1215,6 +1239,10 @@ class Model extends Base
                     $fields_data [$k] ['images'] = array_filter(explode(",", $data [$k]));
                     $fields_data [$k] ['value'] = join(',',$fields_data [$k] ['images']);
                     break;
+                case 'files':
+                    $fields_data [$k] ['files'] = array_filter(explode(",", $data [$k]));
+                    $fields_data [$k] ['value'] = $fields_data [$k] ['files'];
+                    break;
                 case 'baidu_map':
                     if(isset($data[$k])){
                         $fields_data [$k] ['value'] = $data [$k];
@@ -1229,6 +1257,7 @@ class Model extends Base
                 case 'richtext' :
                 case 'large_number' :
                 case 'imagefile' :
+                case 'file' :
                     $fields_data [$k] ['value'] = $data [$k];
                     break;
                 case 'date' :
@@ -1239,7 +1268,7 @@ class Model extends Base
                     }
                     break;
                 case 'currency':
-                    $fields_data [$k] ['value'] = long_currency($data [$k]);
+                    $fields_data [$k] ['value'] = long_currency((float)$data [$k]);
                     break;
                 case 'selectnumber' :
                 case 'selecttext' :
@@ -1277,7 +1306,7 @@ class Model extends Base
             if(!$is_edit || !in_array('readonly', $rules)){
                 switch ($f ['type']) {
                     case 'images':
-                        //判断是否有传多图
+                        //判断是否有传多图,目前只支持1个字段为多图
                         $files = request()->file('pic_all');
                         $picall_url='';
                         if(!empty($files)){
@@ -1290,12 +1319,12 @@ class Model extends Base
                                     if(!empty($info['pic_all'])) {
                                         foreach ($info['pic_all'] as $file) {
                                             $img_url=config('storage.domain').$file['key'];
-                                            $picall_url = $img_url . ',' . $picall_url;
+                                            $picall_url = $picall_url.($picall_url?',':'').$img_url;
                                         }
                                     }else{
                                         foreach ($info as $file) {
                                             $img_url=config('storage.domain').$file['key'];
-                                            $picall_url = $img_url . ',' . $picall_url;
+                                            $picall_url = $picall_url.($picall_url?',':'').$img_url;
                                         }
                                     }
                                 }else{
@@ -1313,14 +1342,72 @@ class Model extends Base
                                         $data['filesize'] = $info->getSize();
                                         $data['path'] = $img_url;
                                         Db::name('plug_files')->insert($data);
-                                        $picall_url = $img_url . ',' . $picall_url;
+                                        $picall_url = $picall_url.($picall_url?',':'').$img_url;
                                     } else {
                                         $this->error($file->getError());//否则就是上传错误，显示错误原因
                                     }
                                 }
                             }
                         }
-                        $postdata[$k]=input('pic_oldlist','').$picall_url;
+                        $pic_oldlist=input('pic_oldlist','');
+                        if($picall_url){
+                            $postdata[$k]=$pic_oldlist.($pic_oldlist?',':'').$picall_url;
+                        }else{
+                            $postdata[$k]=$pic_oldlist;
+                        }
+                        break;
+                    case 'files':
+                        //判断是否有传多文件,目前只支持1个字段为多文件
+                        $files = request()->file('file_all');
+                        $fileall_url='';
+                        if(!empty($files)){
+                            if(config('storage.storage_open')){
+                                //七牛
+                                $upload = \Qiniu::instance(['exts'=> []]);//不限制后缀
+                                $info = $upload->upload();
+                                $error = $upload->getError();
+                                if ($info) {
+                                    if(!empty($info['file_all'])) {
+                                        foreach ($info['file_all'] as $file) {
+                                            $file_url=config('storage.domain').$file['key'];
+                                            $fileall_url = $fileall_url.($fileall_url?',':'').$file_url;
+                                        }
+                                    }else{
+                                        foreach ($info as $file) {
+                                            $file_url=config('storage.domain').$file['key'];
+                                            $fileall_url = $fileall_url.($fileall_url?',':'').$file_url;
+                                        }
+                                    }
+                                }else{
+                                    $this->error($error);//否则就是上传错误，显示错误原因
+                                }
+                            }else{
+                                $validate = config('upload_validate');
+                                unset($validate['ext']);//不限制后缀
+                                //多文件
+                                foreach ($files as $file) {
+                                    $info = $file->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
+                                    if ($info) {
+                                        $file_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
+                                        //写入数据库
+                                        $data['uptime'] = time();
+                                        $data['filesize'] = $info->getSize();
+                                        $data['path'] = $file_url;
+                                        Db::name('plug_files')->insert($data);
+                                        $fileall_url = $fileall_url.($fileall_url?',':'').$file_url;
+                                    } else {
+                                        $this->error($file->getError());//否则就是上传错误，显示错误原因
+                                    }
+                                }
+                            }
+                        }
+                        $file_oldlist=input('oldfile/a');
+                        $file_oldlist=$file_oldlist?join(',',$file_oldlist):'';
+                        if($fileall_url){
+                            $postdata[$k]=$file_oldlist.($file_oldlist?',':'').$fileall_url;
+                        }else{
+                            $postdata[$k]=$file_oldlist;
+                        }
                         break;
                     case 'imagefile':
                         $file = request()->file('pic_one_'.$k);
@@ -1361,6 +1448,47 @@ class Model extends Base
                             $postdata[$k]=$img_one;
                         }
                         break;
+                    case 'file':
+                        //支持多个字段单文件
+                        $file = request()->file('file_one_'.$k);
+                        $file_one='';
+                        if(!empty($file)){
+                            if(config('storage.storage_open')){
+                                //七牛
+                                $upload = \Qiniu::instance(['exts'=> []]);//不限制后缀
+                                $info = $upload->upload();
+                                $error = $upload->getError();
+                                if ($info) {
+                                    if(!empty($info['file_one_'.$k])){
+                                        $file_one= config('storage.domain').$info['file_one_'.$k][0]['key'];
+                                    }else{
+                                        $file_one= config('storage.domain').$info[0]['key'];
+                                    }
+                                }else{
+                                    $this->error($error);//否则就是上传错误，显示错误原因
+                                }
+                            }else{
+                                $validate = config('upload_validate');
+                                unset($validate['ext']);//不限制后缀
+                                //单图
+                                $info = $file[0]->validate($validate)->rule('uniqid')->move(ROOT_PATH . config('upload_path') . DS . date('Y-m-d'));
+                                if ($info) {
+                                    $file_url = config('upload_path'). '/' . date('Y-m-d') . '/' . $info->getFilename();
+                                    //写入数据库
+                                    $data['uptime'] = time();
+                                    $data['filesize'] = $info->getSize();
+                                    $data['path'] = $file_url;
+                                    Db::name('plug_files')->insert($data);
+                                    $file_one = $file_url;
+                                } else {
+                                    $this->error($file->getError());//否则就是上传错误，显示错误原因
+                                }
+                            }
+                        }
+                        if(!empty($file_one)){
+                            $postdata[$k]=$file_one;
+                        }
+                        break;
                     case 'baidu_map':
                         $postdata [$k] = input("${k}", 0, 'floatval');
                         break;
@@ -1384,19 +1512,19 @@ class Model extends Base
                         break;
                     case 'selectnumber' :
                         $postdata [$k] = input("$k", 0, 'intval');
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                        if (in_array('required', $rules) && !$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
                             $this->error($f ['title'] . ' 无效');
                         }
                         break;
                     case 'selecttext' :
                         $postdata [$k] = input("$k", '', 'trim');
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                        if (in_array('required', $rules) && !$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
                             $this->error($f ['title'] . ' 无效');
                         }
                         break;
                     case 'checkbox' :
                         $postdata [$k] = input("{$k}".'/a', array());
-                        if (!$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
+                        if (in_array('required', $rules) && !$this->cms_field_option_valid($f ['data'], $postdata [$k])) {
                             $this->error($f ['title'] . ' 无效');
                         }
                         $postdata [$k] = join(',', $postdata [$k]);

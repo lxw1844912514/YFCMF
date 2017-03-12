@@ -72,12 +72,12 @@ class Index extends Controller
             $data['mbstring'] = $icon_error.'未开启';
             $err++;
         }
-        if (extension_loaded('exif')) {
+/*         if (extension_loaded('exif')) {
             $data['exif'] = $icon_correct.'已开启';
         } else {
             $data['exif'] = $icon_error.'未开启';
             $err++;
-        }
+        } */
         //设置获取
         if (ini_get('file_uploads')) {
             $data['upload_size'] = $icon_correct . ini_get('upload_max_filesize');

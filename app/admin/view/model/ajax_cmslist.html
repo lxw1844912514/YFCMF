@@ -6,7 +6,14 @@
 			<span class="lbl"></span>
 		</label>
 	</td>
-	<td height="28" ><input name="{$v[$model['model_pk']]}" value="{$v[$model['model_order']]|default=50}" class="list_order center"/></td>
+    {switch name="fields[$model['model_order']]['type']" }
+    {case value="number"}
+    <td height="28" ><input name="{$v[$model['model_pk']]}" value="{$v[$model['model_order']]|default=50}" class="list_order center"/></td>
+    {/case}
+    {case value="datetime|date"}
+	<td height="28" >{$v[$model['model_order']]}</td>
+    {/case}
+    {/switch}
 	{foreach name="fields" item="vv" key="k"}
 	{if condition="$k neq $model['model_order']"}
 	<td height="28" >{$v[$k]}</td>

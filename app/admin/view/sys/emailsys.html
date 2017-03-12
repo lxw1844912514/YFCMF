@@ -59,7 +59,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 连接方式： </label>
 						<div class="col-sm-9">
-							<select name="options[smtpsecure]"  class="col-xs-10 col-sm-5" >
+							<select name="options[smtpsecure]"  id="smtpsecure" class="col-xs-10 col-sm-5" >
 								<option value="" {if condition="$sys.smtpsecure eq ''"}selected{/if}>普通连接方式</option>
 								<option value="ssl" {if condition="$sys.smtpsecure eq 'ssl'"}selected{/if}>SSL连接方式</option>
 								<option value="tls" {if condition="$sys.smtpsecure eq 'tls'"}selected{/if}>TLS连接方式</option>
@@ -71,7 +71,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SMTP服务器端口： </label>
 						<div class="col-sm-9">
-							<input type="number" name="options[smtp_port]" id="smtp_port" value="{$sys.smtp_port}"  class="col-xs-10 col-sm-5" required/>
+							<input type="number" name="options[smtp_port]" id="smtp_port" value="{$sys.smtp_port|default=25}"  class="col-xs-10 col-sm-5" required/>
 						</div>
 					</div>
 					<div class="space-4"></div>
@@ -115,4 +115,15 @@
 			</div>
 		</div>
 	</div>
+{/block}
+{block name="scripts"}
+<script>
+    $(document).ready(function(){
+        $('#smtpsecure').change(function(){
+            var $type=$(this).children('option:selected').val();
+            var $port=$type=='ssl'?465:25;//不同方式默认端口
+            $('#smtp_port').val($port);
+        })
+    })
+</script>
 {/block}

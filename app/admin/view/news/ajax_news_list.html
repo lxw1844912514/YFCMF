@@ -9,7 +9,23 @@
 		<td class="hidden-xs center"><input name="{$v.n_id}" value="{$v.listorder|default=50}" class="list_order news_order"/></td>
 		<td class="hidden-xs" align="center">{$v.n_id}</td>
 		<td><a href="{:url('admin/News/news_edit',array('n_id'=>$v['n_id']))}" title="{$v.news_title}">{$v.news_title|subtext=25}</a>【{$v['member_list_nickname']|default=$v['member_list_username']}】</td>
-		<td class="hidden-sm hidden-xs">{$v.menu_name}</td>
+		<td class="hidden-xs hidden-sm">
+			<select name="news_columnid" class="ajax_change_news_columnid">
+			{foreach name="menu" item="vo"}
+				{if condition="($vo['menu_type'] neq '') AND ($vo['menu_l'] eq $v['news_l'])"}
+			<option value="{$vo.id}" class="bgc" {if condition="$v.news_columnid eq $vo['id']"}selected{/if}>{$vo.lefthtml}{$vo.menu_name}</option>
+				{/if}
+			{/foreach}
+			</select>
+			<span class="action none">
+				<a href="{:url('admin/News/news_columnid')}" class="green change-columnid" data-columnid="{$v.news_columnid}" data-id="{$v.n_id}" title="确认">
+					<i class="ace-icon fa fa-check bigger-130"></i>
+				</a>
+				<a href="javascript:void(0);" class="red cancel-change-columnid" data-columnid="{$v.news_columnid}" title="取消">
+					<i class="ace-icon fa fa-close bigger-130"></i>
+				</a>
+			</span>
+		</td>
 		<td class="hidden-sm hidden-xs">
 			{if condition="strstr($v['news_flag'],'h') eq true"}<span style="color:#03C">头</span>{/if}
 			{if condition="strstr($v['news_flag'],'c') eq true"}<span style="color:#060">荐</span>{/if}

@@ -16,7 +16,17 @@
 				<form class="form-horizontal ajaxForm2" name="runnews_menuedit" method="post" action="{:url('admin/Menu/news_menu_runedit')}">
 					<input type="hidden" name="id" value="{$menu.id}" />
 					<input type="hidden" name="lang_list" value="{$menu.menu_l}" />
-					<input type="hidden" name="parentid" value="{$menu.parentid}" />
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
+						<div class="col-sm-9">
+							<select name="parentid"  id="parentid" class="col-sm-3 selector">
+								<option value="">请选择所属栏目</option>
+								{foreach name="menu_text" item="vo"}
+								<option value="{$vo.id}" {if condition="$vo.id eq $menu.parentid"} selected {/if} {if condition="$vo.menu_type eq 1"} class="bgccc"{else/}class="bgc"{/if}>{$vo.lefthtml}{$vo.menu_name}({if condition="$vo.menu_l eq 'zh-cn'"}中{else /}英{/if}) {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
 						<div class="col-sm-9">
@@ -28,10 +38,10 @@
 					</div>
 
 					{if condition="config('lang_switch_on')"}
-					<div class="form-group">
+					<div id="menu_l" class="form-group {neq name="menu.parentid" value="0"}none{/neq}">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单所属语言： </label>
 						<div class="col-sm-9">
-							<select name="menu_l"  class="col-sm-3 " disabled required>
+							<select name="menu_l"  class="col-sm-3 selector" required>
 								<option value="">请选择所属语言</option>
 								<option value="zh-cn" {if condition="$menu['menu_l'] eq 'zh-cn'"}selected{/if}>中文</option>
 								<option value="en-us" {if condition="$menu['menu_l'] eq 'en-us'"}selected{/if}>英语</option>
@@ -255,6 +265,15 @@
             $("input[name='menu_type'][checked]").attr("checked",false);
             $(this).attr("checked",true);
             checkType();
+        });
+        //语言
+        $('#parentid').change(function(){
+            var $parentid=$(this).children('option:selected').val();
+            if($parentid){
+                $('#menu_l').hide();
+            }else{
+                $('#menu_l').show();
+            }
         });
     </script>
 {/block}

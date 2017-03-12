@@ -837,6 +837,55 @@ class Plug extends Base
 				}
 			}
 		}
+		//model自定义模型
+        $table_arr=Db::name('model')->column('model_name,model_fields','model_name');
+		foreach ($table_arr as $table=>$fields){
+		    $fields=json_decode($fields,true);
+		    foreach ($fields as $field){
+                //文件或图片或富文本字段
+		        if(in_array($field['type'],['imagefile','images','file','files','richtext'])){
+                    $datas=Db::name($table)->field($field['name'])->select();
+                    foreach ($datas as $d) {
+                        if($d[$field['name']]){
+                            if($field['type']=='richtext'){
+                                //匹配'/网站目录/data/....'
+                                $preg_match=__ROOT__.'\/data\/upload\/([0-9]{4}[-][0-9]{2}[-][0-9]{2}\/[a-z0-9]{13}\.[a-z0-9]+)/i';
+                                @preg_match_all($preg_match, $d[$field['name']], $mat);
+                                if(!empty($mat [1])){
+                                    foreach ($mat [1] as &$f) {
+                                        $this->files_res_used['/data/upload/'.$f]=true;
+                                    }
+                                }
+
+                                //匹配'./data/....'
+                                $preg_match='/\.\/data\/upload\/([0-9]{4}[-][0-9]{2}[-][0-9]{2}\/[a-z0-9]{13}\.[a-z0-9]+)/i';
+                                @preg_match_all($preg_match, $d[$field['name']], $mat);
+                                if(!empty($mat [1])){
+                                    foreach ($mat [1] as &$f) {
+                                        $this->files_res_used['/data/upload/'.$f]=true;
+                                    }
+                                }
+                            }elseif($field['type']=='imagefile' || $field['type']=='file'){
+                                if(stripos($d[$field['name']],'http')===false){
+                                    //本地图片
+                                    $this->files_res_used[$d[$field['name']]]=true;
+                                }
+                            }else{
+                                //字段保存'/data/....'
+                                if($d[$field['name']]){
+                                    $imgs=array_filter(explode(",",$d[$field['name']]));
+                                    foreach ($imgs as &$f) {
+                                        if(stripos($f,'http')===false && !empty($f)){
+                                            $this->files_res_used[$f]=true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         //找出未使用的资源文件
         $this->files_unused=array();
         $ids=array();

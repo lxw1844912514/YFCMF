@@ -57,10 +57,20 @@ class Menu extends Base
 		if($parentid){
 			$menu_l=$menu_model->where('id',$parentid)->value('menu_l');
 		}
+        $where=array();
+        if(!empty($menu_l)){
+            $where['menu_l']=array('eq',$menu_l);
+        }
+        if(!config('lang_switch_on')){
+            $where['menu_l']=  $this->lang;
+        }
 		$options_model=new OptionsModel;
 		$tpls=$options_model->tpls($this->lang);
 		$model=Db::name('model')->select();
         $this->assign('model',$model);
+        $menu_text=$menu_model->where($where)->order('menu_l Desc,listorder')->select();
+        $menu_text = menu_left($menu_text,'id','parentid');
+        $this->assign('menu_text',$menu_text);
 		$this->assign('parentid',$parentid);
 		$this->assign('menu_l',$menu_l);
 		$this->assign('tpls',$tpls);
@@ -72,7 +82,7 @@ class Menu extends Base
 	public function news_menu_runadd()
 	{
 		$lang_list=input('lang_list');
-		if(empty($lang_list)) $lang_list=input('menu_l','zh-cn');
+		if(empty($lang_list)) $lang_list=input('menu_l',$this->lang);
 		if (!request()->isAjax()){
 			$this->error('提交方式不正确',url('admin/Menu/news_menu_list',array('menu_l'=>$lang_list)));
 		}else{
@@ -105,14 +115,21 @@ class Menu extends Base
 					}
 				}
 			}
+			//处理语言
+            $parentid=input('parentid',0,'intval');
+			if($parentid){
+                $menu_l=Db::name('menu')->where('id',$parentid)->value('menu_l');
+            }else{
+			    $menu_l=input('menu_l',$this->lang);
+            }
 			//构建数组
 			$data=array(
 				'menu_name'=>input('menu_name'),
-				'menu_l'=>empty($lang_list)?input('menu_l','zh-cn'):$lang_list,
+				'menu_l'=>$menu_l,
 				'menu_enname'=>input('menu_enname'),
 				'menu_type'=>input('menu_type'),
                 'menu_modelid'=>input('menu_modelid',0,'intval'),
-				'parentid'=>input('parentid'),
+				'parentid'=>$parentid,
 				'menu_listtpl'=>input('menu_listtpl'),
 				'menu_newstpl'=>input('menu_newstpl'),
 				'menu_address'=>input('menu_address'),
@@ -148,6 +165,14 @@ class Menu extends Base
 		$tpls=$options_model->tpls($this->lang);
         $model=Db::name('model')->select();
         $this->assign('model',$model);
+        $where=array();
+        $where['menu_l']=array('eq',$menu['menu_l']);
+        if(!config('lang_switch_on')){
+            $where['menu_l']=  $this->lang;
+        }
+        $menu_text=Db::name('menu')->where($where)->order('menu_l Desc,listorder')->select();
+        $menu_text = menu_left($menu_text,'id','parentid');
+        $this->assign('menu_text',$menu_text);
 		$this->assign('menu',$menu);
 		$this->assign('tpls',$tpls);
 		return $this->fetch();
@@ -158,6 +183,7 @@ class Menu extends Base
 	public function news_menu_runedit()
 	{
 		$lang_list=input('lang_list');
+        if(empty($lang_list)) $lang_list=input('menu_l',$this->lang);
 		if (!request()->isAjax()){
 			$this->error('提交方式不正确',url('admin/Menu/news_menu_list',array('menu_l'=>$lang_list)));
 		}else{
@@ -193,13 +219,21 @@ class Menu extends Base
 					}
 				}
 			}
+            //处理语言
+            $parentid=input('parentid',0,'intval');
+            if($parentid){
+                $menu_l=Db::name('menu')->where('id',$parentid)->value('menu_l');
+            }else{
+                $menu_l=input('menu_l',$this->lang);
+            }
 			$data=array(
 				'id'=>input('id'),
 				'menu_name'=>input('menu_name'),
 				'menu_enname'=>input('menu_enname'),
 				'menu_type'=>input('menu_type'),
                 'menu_modelid'=>input('menu_modelid',0,'intval'),
-				'parentid'=>input('parentid'),
+				'parentid'=>$parentid,
+                'menu_l'=>$menu_l,
 				'menu_listtpl'=>input('menu_listtpl'),
 				'menu_newstpl'=>input('menu_newstpl'),
 				'menu_address'=>input('menu_address'),

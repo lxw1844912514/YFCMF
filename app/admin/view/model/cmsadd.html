@@ -147,6 +147,22 @@
                                 </div>
                             </div>
                             {/case}
+                            {case value="file"}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
+                                <div class="col-sm-6">
+                                    <input name="file_one_{$k}[]" type="file" class="file col-xs-6 col-sm-6" data-show-preview="false" data-show-upload="false" data-show-caption="true">
+                                </div>
+                            </div>
+                            {/case}
+                            {case value="files"}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
+                                <div class="col-sm-6">
+                                    <input name="file_all[]" type="file" class="file col-xs-6 col-sm-6" multiple data-show-preview="false" data-show-upload="false" data-show-caption="true">
+                                </div>
+                            </div>
+                            {/case}
                             {case value="imagefile"}
                             <div class="form-group">
                                 <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> {$f.title}：  </label>
@@ -264,13 +280,13 @@
         format: 'yyyy-mm-dd',
         autoclose: true,
         todayHighlight: true,
-        language:'zh-CN',
+        language:'zh-CN'
     });
     $(".datetime-picker").datetimepicker({
         format: 'yyyy-mm-dd hh:ii:ss',
         autoclose: true,
         todayHighlight: true,
-        language:'zh-CN',
+        language:'zh-CN'
     });
 </script>
 {/block}

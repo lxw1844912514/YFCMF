@@ -103,7 +103,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 支付异步通知 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[alipay][notify_url]" value="{$payment.alipay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[alipay][notify_url]" value="{$payment.alipay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*https://api.xx.com/receive_notify.html</span></span>
                                     </div>
@@ -111,7 +111,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 成功跳转 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[alipay][return_url]" value="{$payment.alipay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[alipay][return_url]" value="{$payment.alipay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
                                        <input type="text" hidden="" name="config[alipay][time_expire]" value="14"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*https://api.xx.com/receive_return.html</span></span>
@@ -185,7 +185,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 支付异步通知 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[aliwappay][notify_url]" value="{$payment.aliwappay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[aliwappay][notify_url]" value="{$payment.aliwappay.notify_url}" placeholder="支付通知地址"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*https://api.xx.com/receive_notify.html</span></span>
                                     </div>
@@ -193,7 +193,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 成功跳转 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[aliwappay][return_url]" value="{$payment.aliwappay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[aliwappay][return_url]" value="{$payment.aliwappay.return_url}" placeholder="成功跳转地址"  class="col-xs-10 col-sm-5">
                                        <input type="text" hidden="" name="config[aliwappay][time_expire]" value="14"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle">*https://api.xx.com/receive_return.html</span></span>
@@ -251,7 +251,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通知地址 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[wxpayqrcode][notify_url]" value="{$payment['wxpayqrcode']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[wxpayqrcode][notify_url]" value="{$payment['wxpayqrcode']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
                                         <input type="text" hidden="" name="config[wxpayqrcode][time_expire]" value="14"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle" >*</span></span>
@@ -314,7 +314,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信通知地址 </label>
                                     <div class="col-sm-9">
-                                       <input type="text" name="config[wxpaypub][notify_url]" value="{$payment['wxpaypub']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
+                                       <input type="url" name="config[wxpaypub][notify_url]" value="{$payment['wxpaypub']['notify_url']}" placeholder="微信通知地址"  class="col-xs-10 col-sm-5">
                                         <input type="text" hidden="" name="config[wxqrcode][time_expire]" value="14"  class="col-xs-10 col-sm-5">
                                     <span class="help-inline col-xs-12 col-sm-7">
                                    <span class="middle" >*</span></span>
