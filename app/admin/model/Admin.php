@@ -10,6 +10,7 @@
 namespace app\admin\model;
 
 use app\admin\model\MemberList;
+use app\admin\model\AuthGroupAccess;
 use think\Model;
 use think\Db;
 
@@ -23,6 +24,11 @@ class Admin extends Model
     protected $autoWriteTimestamp = true;
     protected $createTime = 'admin_addtime';
     protected $updateTime = false;
+
+	public function groups()
+    {
+		return $this->belongsToMany('AuthGroup','__AUTH_GROUP_ACCESS__','group_id','uid');
+    }
     /**
      * 用户登录
      * @param string $username 用户名
@@ -135,18 +141,14 @@ class Admin extends Model
         );
         $admin=self::create($sldata);
         if($admin){
-            //添加管理组
-            $admin_id=$admin['admin_id'];
-            $accdata=array(
-                'uid'=>$admin_id,
-                'group_id'=>$group_id,
-            );
-            Db::name('auth_group_access')->insert($accdata);
+            //关联添加管理组
+			$admin->groups()->attach($group_id);
+
             //添加会员
             $member_id=MemberList::add($admin_username,$admin_pwd_salt,$admin_pwd,1,$admin_realname,$admin_email,$admin_tel,1,1);
             //修改admin对应member_id
-            if($member_id) self::update(['admin_id' =>$admin_id, 'member_id' =>$member_id]);
-            return $admin_id;
+            if($member_id) self::update(['admin_id' =>$admin['admin_id'], 'member_id' =>$member_id]);
+            return $admin['admin_id'];
         }else{
             return 0;
         }
@@ -158,7 +160,7 @@ class Admin extends Model
      */
     public static function edit($data)
     {
-        $admin=self::get($data['admin_id'])->toArray();
+        $admin=self::get($data['admin_id'])->toarray();
         $admin['admin_username']=$data['admin_username'];
         $admin['admin_email']=$data['admin_email'];
         $admin['admin_tel']=$data['admin_tel'];
@@ -171,21 +173,23 @@ class Admin extends Model
         }
         $rst=self::where('admin_id',$data['admin_id'])->update($admin);
         if($rst!==false){
-            $access=Db::name('auth_group_access')->where('uid',$data['admin_id'])->find();
-            if($access){
-                //修改
-                if($access['group_id']!=$data['group_id']){
-                    Db::name('auth_group_access')->where('uid',$data['admin_id'])->setField('group_id',$data['group_id']);
-                }
-            }else{
-                //增加
-                $access['uid']=$data['admin_id'];
-                $access['group_id']=$data['group_id'];
-                Db::name('auth_group_access')->insert($access);
-            }
+				AuthGroupAccess::where('uid',$data['admin_id'])->update(['group_id'=>$data['group_id']]);
             return true;
         }else{
             return false;
         }
     }
+    /**
+     * 管理员列表
+     * @param array
+     * @return bool
+     */
+    public static function getList($search_name=null,$order='admin_id')
+    {
+		$map=array();
+		if($search_name){
+			$map['admin_username']= array('like',"%".$search_name."%");
+		}
+		return self::where($map)->order('admin_id')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+	}
 }

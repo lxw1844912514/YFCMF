@@ -62,8 +62,8 @@ return array (
   'geetest' => 
   array (
     'geetest_on' => false,
-    'captcha_id' => '',
-    'private_key' => '',
+    'captcha_id' => 'admin',
+    'private_key' => 'admin',
   ),
   'log' => 
   array (
@@ -207,5 +207,5 @@ return array (
     'aes_key' => '',
     'we_type' => '',
   ),
-  'addons_sql' => false,
+  'addons_sql' => true,
 );

@@ -9,7 +9,9 @@
 namespace app\admin\controller;
 
 use app\admin\model\Admin as AdminModel;
+use app\admin\model\AuthGroup as AuthGroup;
 use app\admin\model\AuthRule;
+use app\admin\model\User;
 use think\Db;
 use think\Cache;
 
@@ -22,11 +24,7 @@ class Admin extends Base
 	{
 		$search_name=input('search_name');
 		$this->assign('search_name',$search_name);
-		$map=array();
-		if($search_name){
-			$map['admin_username']= array('like',"%".$search_name."%");
-		}
-		$admin_list=Db::name('admin')->where($map)->order('admin_id')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		$admin_list=AdminModel::getList($search_name);
 		$page = $admin_list->render();
 		$this->assign('admin_list',$admin_list);
 		$this->assign('page',$page);
@@ -37,7 +35,7 @@ class Admin extends Base
 	 */
 	public function admin_add()
 	{
-		$auth_group=Db::name('auth_group')->select();
+		$auth_group=AuthGroup::all();
 		$this->assign('auth_group',$auth_group);
 		return $this->fetch();
 	}
@@ -58,9 +56,9 @@ class Admin extends Base
 	 */
 	public function admin_edit()
 	{
-		$auth_group=Db::name('auth_group')->select();
-		$admin_list=Db::name('admin')->find(input('admin_id'));
-		$auth_group_access=Db::name('auth_group_access')->where(array('uid'=>$admin_list['admin_id']))->value('group_id');
+		$auth_group=AuthGroup::all();
+		$admin_list=AdminModel::get(input('admin_id'),'groups');
+		$auth_group_access=$admin_list->groups[0]['id'];//只取第1个管理组
 		$this->assign('admin_list',$admin_list);
 		$this->assign('auth_group',$auth_group);
 		$this->assign('auth_group_access',$auth_group_access);
