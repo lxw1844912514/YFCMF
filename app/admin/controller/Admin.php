@@ -11,7 +11,6 @@ namespace app\admin\controller;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\AuthGroup as AuthGroup;
 use app\admin\model\AuthRule;
-use app\admin\model\User;
 use think\Db;
 use think\Cache;
 

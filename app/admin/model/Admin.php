@@ -9,8 +9,6 @@
 
 namespace app\admin\model;
 
-use app\admin\model\MemberList;
-use app\admin\model\AuthGroupAccess;
 use think\Model;
 use think\Db;
 
@@ -123,6 +121,15 @@ class Admin extends Model
     }
     /**
      * 增加管理员
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param int
+     * @param string
+     * @param int
+     * @return mixed
      */
     public static function add($admin_username,$admin_pwd_salt='',$admin_pwd,$admin_email='',$admin_tel='',$admin_open=0,$admin_realname='',$group_id=1)
     {
@@ -173,7 +180,8 @@ class Admin extends Model
         }
         $rst=self::where('admin_id',$data['admin_id'])->update($admin);
         if($rst!==false){
-				AuthGroupAccess::where('uid',$data['admin_id'])->update(['group_id'=>$data['group_id']]);
+                $access=new AuthGroupAccess;
+                $access->where('uid',$data['admin_id'])->update(['group_id'=>$data['group_id']]);
             return true;
         }else{
             return false;
@@ -182,7 +190,8 @@ class Admin extends Model
     /**
      * 管理员列表
      * @param array
-     * @return bool
+     * @param string
+     * @return mixed
      */
     public static function getList($search_name=null,$order='admin_id')
     {
@@ -190,6 +199,6 @@ class Admin extends Model
 		if($search_name){
 			$map['admin_username']= array('like',"%".$search_name."%");
 		}
-		return self::where($map)->order('admin_id')->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
+		return self::where($map)->order($order)->paginate(config('paginate.list_rows'),false,['query'=>get_query()]);
 	}
 }

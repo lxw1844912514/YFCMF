@@ -12,7 +12,7 @@ use think\Db;
 use think\Cache;
 use think\helper\Time;
 use app\admin\model\News as NewsModel;
-use app\admin\model\MemberList;
+use app\common\model\MemberList;
 
 class Index extends Base
 {

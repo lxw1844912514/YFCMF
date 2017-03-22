@@ -9,7 +9,7 @@
 namespace app\admin\controller;
 
 use think\Db;
-use app\admin\model\MemberList;
+use app\common\model\MemberList;
 
 class Member extends Base
 {
