@@ -149,7 +149,7 @@ class Yf extends Taglib
 		$childtpl='<a href=\'\$href\' class=\''.$nochild_a_class.'\'>\$menu_name</a>';
 		$parenttpl='<a href=\'#\' class=\''.$haschild_a_class.'\'>\$menu_name<span class=\''.$haschild_span_class.'\'>&nbsp;<i class=\'fa fa-angle-down\'></i></span></a>';
 		$parseStr = '<?php ';
-		$parseStr .='echo get_menu("main","'.$top_ul_id.'","'.$childtpl.'","'.$parenttpl.'","'.$child_ul_class.'","'.$child_li_class.'","'.$top_ul_class.'","'.$showlevel.'","'.$firstchild_dropdown_class.'");';
+		$parseStr .='echo get_menu(0,"'.$top_ul_id.'","'.$childtpl.'","'.$parenttpl.'","'.$child_ul_class.'","'.$child_li_class.'","'.$top_ul_class.'","'.$showlevel.'","'.$firstchild_dropdown_class.'");';
 		$parseStr .="?>";
         if (!empty($parseStr)) {
             return $parseStr;
