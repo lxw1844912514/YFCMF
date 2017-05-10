@@ -34,6 +34,8 @@ Hook::add('action_begin', function () {
     if(!Config::get('addons_sql') && file_exists(ROOT_PATH.'data/install.lock')){
         install_sql();
         sys_config_setbykey('addons_sql',true);
+    }elseif(!file_exists(ROOT_PATH.'data/install.lock')){
+		sys_config_setbykey('addons_sql',false);
     }
     //所有有效钩子-插件
     $hook_addons = Cache::get('hook_addons');
