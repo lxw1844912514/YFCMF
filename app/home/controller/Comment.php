@@ -42,7 +42,7 @@ class Comment extends Base
             $data['full_name']=$this->user['member_list_username'];
             $data['email']=$this->user['member_list_email'];
             $data['createtime']=time();
-            $data['c_content']=input('c_content');
+            $data['c_content']=htmlspecialchars_decode(input('c_content'));
             $data['parentid']=input('parentid',0,'intval');
 			$result=Db::name('comments')->insertGetId($data);
 			if ($result!==false){

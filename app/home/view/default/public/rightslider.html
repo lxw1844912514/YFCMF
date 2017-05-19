@@ -53,7 +53,7 @@
 								</a>
                                 <i class="fa fa-comment"></i>
                                 <a href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">{$vo['member_list_nickname']|default=$vo['member_list_username']}:</a>
-                                <p>{$vo.c_content}</p>
+                                <p>{$vo.c_content|htmlspecialchars}</p>
                                 <span class="comment-time">{$vo.createtime|date="Y-m-d H:i:s",###}</span>
                             </li>{/foreach}
                     </ul>
