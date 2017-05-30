@@ -42,6 +42,7 @@ class Ueditor extends Common
 			"catcherUrlPrefix" => $storage_domain, /* 图片访问路径前缀 */
 			"fileUrlPrefix" => $storage_domain, /* 文件访问路径前缀 */
 			"imageManagerUrlPrefix" => $storage_domain, /* 图片访问路径前缀 */
+			"videoUrlPrefix" => $storage_domain, /* 视频访问路径前缀 */
 		);
 		if(config('storage.storage_open') && $this->type!='mats'){
 			$CONFIG=array_merge($CONFIG,$config_qiniu);
