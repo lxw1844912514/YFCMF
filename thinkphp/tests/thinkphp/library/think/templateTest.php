@@ -38,7 +38,7 @@ EOF;
 {\$name.a??'test'}
 EOF;
         $data = <<<EOF
-<?php echo isset(\$name['a']) ? \$name['a'] : 'test'; ?>
+<?php echo isset(\$name['a'])?\$name['a']:'test'; ?>
 EOF;
 
         $template->parse($content);
@@ -78,7 +78,7 @@ EOF;
 {\$name.a==\$name.b?='test'}
 EOF;
         $data = <<<EOF
-<?php if(!empty(\$name['a']) && \$name['a']==\$name['b']) echo 'test'; ?>
+<?php if(\$name['a']==\$name['b']) echo 'test'; ?>
 EOF;
 
         $template->parse($content);
@@ -88,7 +88,7 @@ EOF;
 {\$name.a==\$name.b?'a':'b'}
 EOF;
         $data = <<<EOF
-<?php echo !empty(\$name['a']) && \$name['a']==\$name['b']?'a':'b'; ?>
+<?php echo \$name['a']==\$name['b']?'a':'b'; ?>
 EOF;
 
         $template->parse($content);
