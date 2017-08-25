@@ -33,6 +33,17 @@ class POI extends AbstractAPI
     const API_LIST = 'http://api.weixin.qq.com/cgi-bin/poi/getpoilist';
     const API_UPDATE = 'http://api.weixin.qq.com/cgi-bin/poi/updatepoi';
     const API_DELETE = 'http://api.weixin.qq.com/cgi-bin/poi/delpoi';
+    const API_GET_CATEGORIES = 'http://api.weixin.qq.com/cgi-bin/poi/getwxcategory';
+
+    /**
+     * Get POI supported categories.
+     *
+     * @return \EasyWeChat\Support\Collection
+     */
+    public function getCategories()
+    {
+        return $this->parseJSON('get', [self::API_GET_CATEGORIES]);
+    }
 
     /**
      * Get POI by ID.
@@ -78,6 +89,16 @@ class POI extends AbstractAPI
                   ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return int
+     */
+    public function createAndGetId(array $data)
+    {
+        return $this->create($data)['poi_id'];
     }
 
     /**

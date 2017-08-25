@@ -13,9 +13,7 @@ use Payment\Common\AliConfig;
 use Payment\Common\BaseData;
 use Payment\Common\BaseStrategy;
 use Payment\Common\PayException;
-use Payment\Config;
 use Payment\Utils\ArrayUtil;
-use Payment\Utils\StrUtil;
 
 abstract class AliBaseStrategy implements BaseStrategy
 {
@@ -80,45 +78,7 @@ abstract class AliBaseStrategy implements BaseStrategy
      */
     protected function retData(array $data)
     {
-        $version = $this->config->version;// 新版本
-        if ($version === Config::ALI_API_VERSION) {
-            $sign = $data['sign'];
-            $data = ArrayUtil::removeKeys($data, ['sign']);
-
-            $data = ArrayUtil::arraySort($data);
-
-            // 支付宝新版本  需要转码
-            foreach ($data as &$value) {
-                $value = StrUtil::characet($value, $this->config->inputCharset);
-            }
-
-            $data['sign'] = $sign;// sign  需要放在末尾
-            return $this->config->getewayUrl . http_build_query($data);
-        }
-
         $url = $this->config->getewayUrl . http_build_query($data);
         return $url;
-    }
-
-    /**
-     * 返回统一的交易状态  做一些转化，方便处理
-     * @param $status
-     * @return string
-     * @author helei
-     */
-    protected function getTradeStatus($status)
-    {
-        switch ($status) {
-            case 'TRADE_SUCCESS':
-            case 'TRADE_FINISHED':
-                return Config::TRADE_STATUS_SUCC;
-
-            case 'WAIT_BUYER_PAY':
-            case 'TRADE_CLOSED':
-            default :
-                return Config::TRADE_STATUS_FAILD;
-
-
-        }
     }
 }

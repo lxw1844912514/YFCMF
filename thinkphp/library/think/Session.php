@@ -347,7 +347,7 @@ class Session
      * @param bool $delete 是否删除关联会话文件
      * @return void
      */
-    public static function regenerate($delete = false)
+    private static function regenerate($delete = false)
     {
         session_regenerate_id($delete);
     }

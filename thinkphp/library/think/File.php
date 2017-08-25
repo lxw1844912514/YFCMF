@@ -95,8 +95,7 @@ class File extends SplFileObject
 
     /**
      * 获取文件的哈希散列值
-     * @param string $type
-     * @return mixed $string
+     * @return $string
      */
     public function hash($type = 'sha1')
     {

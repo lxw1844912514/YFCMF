@@ -11,6 +11,9 @@ use think\Request;
 use think\Response;
 use app\admin\controller\Auth;
 use think\Lang;
+use Flc\Alidayu\Client;
+use Flc\Alidayu\App;
+use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
 // 应用公共文件
 /**
  * 所有用到密码的不可逆加密方式
@@ -1629,4 +1632,92 @@ function data_signature($data = [])
     $code = http_build_query($data);
     $sign = sha1($code);
     return $sign;
+}
+/**
+ * 发送短信验证码
+ * @param string $account 手机号
+ * @param string $type 验证码类型,比如'reg','reset'...
+ * @return array 结果
+ */
+function sendsms($account,$type)
+{
+    $where['sms_type']=$type;
+    $where['sms_tel']=$account;
+    $rst=Db::name('smslog')->where($where)->find();
+    if($rst){
+        if($rst['sms_time']>(time()-120)){
+            return ['code'=>0,'msg'=>'已获取过,'.(time()-$rst['sms_time']).'后稍后再试'];
+        }
+    }
+    $rst_sms=false;
+    $error='未设置短信平台配置';
+    $code=random(6,'number');
+    if(config('think_sdk_sms.sms_open')){
+        $alisms=  array (
+            'app_key' => config('think_sdk_sms.AccessKeyId'),
+            'app_secret' => config('think_sdk_sms.accessKeySecret')
+        );
+        $client = new Client(new App($alisms));
+        $req    = new AlibabaAliqinFcSmsNumSend;
+        $req->setRecNum($account)
+            ->setSmsParam([
+                'number' => $code
+            ])
+            ->setSmsFreeSignName(config('think_sdk_sms.signName'))
+            ->setSmsTemplateCode(config('think_sdk_sms.TemplateCode'));
+        $resp = $client->execute($req);
+        if(isset($resp->result) && $resp->result->success){
+            $rst_sms=true;
+        }else{
+            $error=$resp->sub_msg;
+        }
+    }
+    if($rst_sms){
+        if($rst){
+            //更新
+            $rst['sms_time']=time();
+            $rst['sms_code']=$code;
+            $rst=Db::name('smslog')->update($rst);
+            if($rst!==false){
+                return ['code'=>1,'msg'=>'发送成功'];
+            }else{
+                return ['code'=>0,'msg'=>'获取失败,请重试'];
+            }
+        }else{
+            //插入数据库
+            $data=[
+                'sms_type'=>$type,
+                'sms_tel'=>$account,
+                'sms_time'=>time(),
+                'sms_code'=>$code
+            ];
+            $rst=Db::name('smslog')->insert($data);
+            if($rst){
+                return ['code'=>1,'msg'=>'发送成功'];
+            }else{
+                return ['code'=>0,'msg'=>'获取失败,请重试'];
+            }
+        }
+    }else{
+        return ['code'=>0,'msg'=>$error];
+    }
+}
+/**
+ * 检测短信验证码
+ * @param string $account 手机号
+ * @param string $type 验证码类型,比如'reg','reset'...
+ * @param string $verify 验证码
+ * @return boolean true|false
+ */
+function checksms($account,$type,$verify)
+{
+    $where['sms_type']=$type;
+    $where['sms_tel']=$account;
+    $where['sms_time']=['>',time()-120];
+    $rst=Db::name('smslog')->where($where)->find();
+    if(!$rst || $rst['sms_code']!=$verify){
+        return false;
+    }else{
+        return true;
+    }
 }

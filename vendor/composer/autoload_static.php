@@ -43,11 +43,13 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
             'Payment\\' => 8,
         ),
         'O' => 
         array (
             'Overtrue\\Socialite\\' => 19,
+            'OSS\\' => 4,
         ),
         'M' => 
         array (
@@ -58,6 +60,10 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+        ),
+        'F' => 
+        array (
+            'Flc\\Alidayu\\' => 12,
         ),
         'E' => 
         array (
@@ -120,6 +126,10 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
         'Payment\\' => 
         array (
             0 => __DIR__ . '/..' . '/riverslei/payment/src',
@@ -127,6 +137,10 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
         'Overtrue\\Socialite\\' => 
         array (
             0 => __DIR__ . '/..' . '/overtrue/socialite/src',
+        ),
+        'OSS\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aliyuncs/oss-sdk-php/src/OSS',
         ),
         'Monolog\\' => 
         array (
@@ -143,6 +157,10 @@ class ComposerStaticInit42f1a2b06c32df0543aaa7dd0a10f07a
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Flc\\Alidayu\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/flc/alidayu/src/Alidayu',
         ),
         'EasyWeChat\\' => 
         array (

@@ -415,9 +415,8 @@ class Query
             }
             $result = $pdo->fetchColumn();
             if ($force) {
-                $result += 0;
+                $result = is_numeric($result) ? $result + 0 : $result;
             }
-
             if (isset($cache)) {
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
@@ -2081,7 +2080,7 @@ class Query
         }
 
         // 执行操作
-        $result = 0 === $sql ? 0 : $this->execute($sql, $bind);
+        $result = $this->execute($sql, $bind);
         if ($result) {
             $sequence  = $sequence ?: (isset($options['sequence']) ? $options['sequence'] : null);
             $lastInsId = $this->getLastInsID($sequence);
@@ -2336,7 +2335,7 @@ class Query
             $modelName = $this->model;
             if (count($resultSet) > 0) {
                 foreach ($resultSet as $key => $result) {
-                    /** @var Model $model */
+                    /** @var Model $result */
                     $model = new $modelName($result);
                     $model->isUpdate(true);
 
@@ -2392,7 +2391,6 @@ class Query
      * @param mixed     $value   缓存数据
      * @param array     $options 缓存参数
      * @param array     $bind    绑定参数
-     * @return string
      */
     protected function getCacheKey($value, $options, $bind = [])
     {
@@ -2566,10 +2564,9 @@ class Query
      * @param integer  $count    每次处理的数据数量
      * @param callable $callback 处理回调方法
      * @param string   $column   分批处理的字段名
-     * @param string   $order    排序规则
      * @return boolean
      */
-    public function chunk($count, $callback, $column = null, $order = 'asc')
+    public function chunk($count, $callback, $column = null)
     {
         $options = $this->getOptions();
         if (isset($options['table'])) {
@@ -2577,12 +2574,9 @@ class Query
         } else {
             $table = '';
         }
-        $column = $column ?: $this->getPk($table);
-        if (is_array($column)) {
-            $column = $column[0];
-        }
+        $column    = $column ?: $this->getPk($table);
         $bind      = $this->bind;
-        $resultSet = $this->limit($count)->order($column, $order)->select();
+        $resultSet = $this->limit($count)->order($column, 'asc')->select();
         if (strpos($column, '.')) {
             list($alias, $key) = explode('.', $column);
         } else {
@@ -2601,8 +2595,8 @@ class Query
             $resultSet = $this->options($options)
                 ->limit($count)
                 ->bind($bind)
-                ->where($column, 'asc' == strtolower($order) ? '>' : '<', $lastId)
-                ->order($column, $order)
+                ->where($column, '>', $lastId)
+                ->order($column, 'asc')
                 ->select();
             if ($resultSet instanceof Collection) {
                 $resultSet = $resultSet->all();

@@ -13,7 +13,6 @@ namespace Payment;
 use Payment\Charge\Ali\AliAppCharge;
 use Payment\Charge\Ali\AliWapCharge;
 use Payment\Charge\Ali\AliWebCharge;
-use Payment\Charge\Ali\AliQrCharge;
 use Payment\Charge\Weixin\WxAppCharge;
 use Payment\Charge\Weixin\WxPubCharge;
 use Payment\Charge\Weixin\WxQrCharge;
@@ -50,7 +49,7 @@ class ChargeContext
         // 初始化时，可能抛出异常，再次统一再抛出给客户端进行处理
         try {
             switch ($channel) {
-                case Config::ALI_CHANNEL_WEB:// 老版本不支持
+                case Config::ALI_CHANNEL_WEB:
                     $this->payWay = new AliWebCharge($config);
                     break;
                 case Config::ALI_CHANNEL_WAP:
@@ -58,9 +57,6 @@ class ChargeContext
                     break;
                 case Config::ALI_CHANNEL_APP:
                     $this->payWay = new AliAppCharge($config);
-                    break;
-                case Config::ALI_CHANNEL_QR:
-                    $this->payWay = new AliQrCharge($config);
                     break;
                 case Config::WX_CHANNEL_QR:
                     $this->payWay = new WxQrCharge($config);

@@ -76,7 +76,7 @@ class WxTransferQuery extends WxBaseStrategy
                 'amount'   => $data['payment_amount'],
                 'order_no'   => $data['partner_trade_no'],// 商户单号
                 'trans_id'  => $data['detail_id'],// 付款单号
-                'trans_status'  => strtolower($data['status']),// 转账状态
+                'trans_status'  => $data['status'],// 转账状态
                 'reason'    => $data['reason'],// 失败原因
                 'buyer_id'   => $data['openid'],
                 'trans_name'   => $data['transfer_name'],// 收款用户姓名

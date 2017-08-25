@@ -120,23 +120,10 @@ abstract class Driver
     public function remember($name, $value, $expire = null)
     {
         if (!$this->has($name)) {
-            while ($this->has($name . '.lock')) {
-                // 存在锁定则等待
+            if ($value instanceof \Closure) {
+                $value = call_user_func($value);
             }
-
-            try {
-                // 锁定
-                $this->set($name . '.lock', true);
-                if ($value instanceof \Closure) {
-                    $value = call_user_func($value);
-                }
-                $this->set($name, $value, $expire);
-                // 解锁
-                $this->rm($name . '.lock');
-            } catch (\Exception $e) {
-                // 解锁
-                $this->rm($name . '.lock');
-            }
+            $this->set($name, $value, $expire);
         } else {
             $value = $this->get($name);
         }
@@ -153,9 +140,7 @@ abstract class Driver
      */
     public function tag($name, $keys = null, $overlay = false)
     {
-        if (is_null($name)) {
-
-        } elseif (is_null($keys)) {
+        if (is_null($keys)) {
             $this->tag = $name;
         } else {
             $key = 'tag_' . md5($name);
@@ -206,7 +191,7 @@ abstract class Driver
         $key   = 'tag_' . md5($tag);
         $value = $this->get($key);
         if ($value) {
-            return array_filter(explode(',', $value));
+            return explode(',', $value);
         } else {
             return [];
         }

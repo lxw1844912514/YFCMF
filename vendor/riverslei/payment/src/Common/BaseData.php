@@ -38,13 +38,15 @@ abstract class BaseData
      */
     public function __construct(ConfigInterface $config, array $reqData)
     {
-        $this->data = array_merge($config->toArray(), $reqData);
+        $this->data = array_merge($reqData, $config->toArray());
 
         try {
             $this->checkDataParam();
         } catch (PayException $e) {
             throw $e;
         }
+
+        $this->signType = 'MD5';// 默认使用RSA 进行加密处理
     }
 
     /**
@@ -81,14 +83,7 @@ abstract class BaseData
     {
         $this->buildData();
 
-        $version = $this->version;// 支付宝新版本的签名，不需要移出  sign_type
-
-        if (empty($version)) {
-            $values = ArrayUtil::removeKeys($this->retData, ['sign', 'sign_type']);
-        } else {
-            $values = ArrayUtil::removeKeys($this->retData, ['sign']);
-        }
-
+        $values = ArrayUtil::removeKeys($this->retData, ['sign', 'sign_type']);
 
         $values = ArrayUtil::arraySort($values);
 

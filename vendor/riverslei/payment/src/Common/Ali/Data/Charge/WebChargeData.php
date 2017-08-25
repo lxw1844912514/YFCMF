@@ -9,7 +9,7 @@
 
 namespace Payment\Common\Ali\Data\Charge;
 
-use Payment\Common\PayException;
+use Payment\Common\AliConfig;
 use Payment\Utils\ArrayUtil;
 
 /**
@@ -24,12 +24,12 @@ class WebChargeData extends ChargeBaseData
 {
     /**
      * 构建 即时到帐 加密数据
-     * @param string $timeExpire
-     * @return array
      * @author helei
      */
-    protected function alipay1_0Data($timeExpire = '')
+    protected function buildData()
     {
+        $timeExpire = $this->timeExpire;
+
         $signData = [
             // 基本参数
             'service'   => 'create_direct_pay_by_user',
@@ -58,13 +58,6 @@ class WebChargeData extends ChargeBaseData
         }
 
         // 移除数组中的空值
-        $signData = ArrayUtil::paraFilter($signData);
-
-        return $signData;
-    }
-
-    protected function alipay2_0Data($timeExpire = '')
-    {
-        throw new PayException('即时到帐接口 不支持新版本');
+        $this->retData = ArrayUtil::paraFilter($signData);
     }
 }

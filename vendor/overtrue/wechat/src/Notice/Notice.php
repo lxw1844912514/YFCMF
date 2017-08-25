@@ -43,12 +43,19 @@ class Notice extends AbstractAPI
      * @var array
      */
     protected $message = [
-                          'touser' => '',
-                          'template_id' => '',
-                          'url' => '',
-                          'topcolor' => '#FF0000',
-                          'data' => [],
-                         ];
+        'touser' => '',
+        'template_id' => '',
+        'url' => '',
+        'data' => [],
+    ];
+
+    /**
+     * Required attributes.
+     *
+     * @var array
+     */
+    protected $required = ['touser', 'template_id'];
+
     /**
      * Message backup.
      *
@@ -62,6 +69,7 @@ class Notice extends AbstractAPI
     const API_GET_INDUSTRY = 'https://api.weixin.qq.com/cgi-bin/template/get_industry';
     const API_GET_ALL_PRIVATE_TEMPLATE = 'https://api.weixin.qq.com/cgi-bin/template/get_all_private_template';
     const API_DEL_PRIVATE_TEMPLATE = 'https://api.weixin.qq.com/cgi-bin/template/del_private_template';
+    const API_SEND_SUBSCRIPTION = 'https://api.weixin.qq.com/cgi-bin/message/template/subscribe';
 
     /**
      * Notice constructor.
@@ -73,6 +81,20 @@ class Notice extends AbstractAPI
         parent::__construct($accessToken);
 
         $this->messageBackup = $this->message;
+    }
+
+    /**
+     * Set default color.
+     *
+     * @param string $color example: #0f0f0f
+     *
+     * @return $this
+     */
+    public function defaultColor($color)
+    {
+        $this->defaultColor = $color;
+
+        return $this;
     }
 
     /**
@@ -152,18 +174,32 @@ class Notice extends AbstractAPI
      */
     public function send($data = [])
     {
-        $params = array_merge([
-                   'touser' => '',
-                   'template_id' => '',
-                   'url' => '',
-                   'topcolor' => '',
-                   'data' => [],
-                  ], $data);
+        return $this->parseJSON('json', [static::API_SEND_NOTICE, $this->validParams($data)]);
+    }
 
-        $required = ['touser', 'template_id'];
+    /**
+     * Send template-message for subscription.
+     *
+     * @param array $data
+     *
+     * @return \EasyWeChat\Support\Collection
+     */
+    public function sendSubscription(array $data = [])
+    {
+        return $this->parseJSON('json', [static::API_SEND_SUBSCRIPTION, $this->validParams($data)]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function validParams(array $data = [])
+    {
+        $params = array_merge($this->message, $data);
 
         foreach ($params as $key => $value) {
-            if (in_array($key, $required, true) && empty($value) && empty($this->message[$key])) {
+            if (in_array($key, $this->required, true) && empty($value) && empty($this->message[$key])) {
                 throw new InvalidArgumentException("Attribute '$key' can not be empty!");
             }
 
@@ -174,7 +210,7 @@ class Notice extends AbstractAPI
 
         $this->message = $this->messageBackup;
 
-        return $this->parseJSON('json', [self::API_SEND_NOTICE, $params]);
+        return $params;
     }
 
     /**
@@ -193,12 +229,12 @@ class Notice extends AbstractAPI
                 'uses' => 'template_id',
                 'to' => 'touser',
                 'receiver' => 'touser',
-                'color' => 'topcolor',
-                'topColor' => 'topcolor',
                 'url' => 'url',
                 'link' => 'url',
                 'data' => 'data',
                 'with' => 'data',
+                'formId' => 'form_id',
+                'prepayId' => 'form_id',
                ];
 
         if (0 === stripos($method, 'with') && strlen($method) > 4) {

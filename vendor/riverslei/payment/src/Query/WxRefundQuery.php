@@ -59,7 +59,7 @@ class WxRefundQuery extends WxTradeQuery
                 'refund_channel'    => $data[$refund_channel],
                 'refund_fee'    => $fee,
                 //'settlement_refund_fee' => $data[$settlement_refund_fee],
-                'refund_status' => strtolower($data[$refund_status]),
+                'refund_status' => $data[$refund_status],
                 'recv_accout'   => $data[$recv_accout],
             ];
         }

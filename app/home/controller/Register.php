@@ -17,7 +17,7 @@ class Register extends Base
 
     public function index()
     {
-	    if(session('hid')){ //已经登录时直接跳到首页
+        if(session('hid')){ //已经登录时直接跳到首页
 	        $this->redirect(__ROOT__."/");
 	    }else{
 			return $this->view->fetch('user:register');

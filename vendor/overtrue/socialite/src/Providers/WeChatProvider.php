@@ -16,12 +16,13 @@ use Overtrue\Socialite\AccessTokenInterface;
 use Overtrue\Socialite\InvalidArgumentException;
 use Overtrue\Socialite\ProviderInterface;
 use Overtrue\Socialite\User;
+use Overtrue\Socialite\WeChatComponentInterface;
 
 /**
  * Class WeChatProvider.
  *
- * @link http://mp.weixin.qq.com/wiki/9/01f711493b5a02f24b04365ac5d8fd95.html [WeChat - 公众平台OAuth文档]
- * @link https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN [网站应用微信登录开发指南]
+ * @see http://mp.weixin.qq.com/wiki/9/01f711493b5a02f24b04365ac5d8fd95.html [WeChat - 公众平台OAuth文档]
+ * @see https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN [网站应用微信登录开发指南]
  */
 class WeChatProvider extends AbstractProvider implements ProviderInterface
 {
@@ -48,6 +49,59 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
      * @var bool
      */
     protected $stateless = true;
+
+    /**
+     * Return country code instead of country name.
+     *
+     * @var bool
+     */
+    protected $withCountryCode = false;
+
+    /**
+     * @var WeChatComponentInterface
+     */
+    protected $component;
+
+    /**
+     * Return country code instead of country name.
+     *
+     * @return $this
+     */
+    public function withCountryCode()
+    {
+        $this->withCountryCode = true;
+
+        return $this;
+    }
+
+    /**
+     * WeChat OpenPlatform 3rd component.
+     *
+     * @param WeChatComponentInterface $component
+     *
+     * @return $this
+     */
+    public function component(WeChatComponentInterface $component)
+    {
+        $this->scopes = ['snsapi_base'];
+
+        $this->component = $component;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function getAccessToken($code)
+    {
+        $response = $this->getHttpClient()->get($this->getTokenUrl(), [
+            'headers' => ['Accept' => 'application/json'],
+            'query' => $this->getTokenFields($code),
+        ]);
+
+        return $this->parseAccessToken($response->getBody());
+    }
 
     /**
      * {@inheritdoc}.
@@ -78,6 +132,10 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getCodeFields($state = null)
     {
+        if ($this->component) {
+            $this->with(['component_appid' => $this->component->getAppId()]);
+        }
+
         return array_merge([
             'appid' => $this->clientId,
             'redirect_uri' => $this->redirectUrl,
@@ -92,7 +150,7 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        if ($this->isOpenPlatform()) {
+        if ($this->component) {
             return $this->baseUrl.'/oauth2/component/access_token';
         }
 
@@ -114,11 +172,14 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
             throw new InvalidArgumentException('openid of AccessToken is required.');
         }
 
+        $language = $this->withCountryCode ? null : (isset($this->parameters['lang']) ? $this->parameters['lang'] : 'zh_CN');
+
         $response = $this->getHttpClient()->get($this->baseUrl.'/userinfo', [
-            'query' => [
+            'query' => array_filter([
                 'access_token' => $token->getToken(),
                 'openid' => $token['openid'],
-            ],
+                'lang' => $language,
+            ]),
         ]);
 
         return json_decode($response->getBody(), true);
@@ -143,45 +204,14 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenFields($code)
     {
-        $base = [
+        return array_filter([
             'appid' => $this->clientId,
+            'secret' => $this->clientSecret,
+            'component_appid' => $this->component ? $this->component->getAppId() : null,
+            'component_access_token' => $this->component ? $this->component->getToken() : null,
             'code' => $code,
             'grant_type' => 'authorization_code',
-        ];
-
-        if ($this->isOpenPlatform()) {
-            return array_merge($base, [
-                'component_appid' => $this->config->get('wechat.open_platform.app_id'),
-                'component_access_token' => $this->config->get('wechat.open_platform.access_token'),
-            ]);
-        }
-
-        return array_merge($base, [
-            'secret' => $this->clientSecret,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getAccessToken($code)
-    {
-        $response = $this->getHttpClient()->get($this->getTokenUrl(), [
-            'headers' => ['Accept' => 'application/json'],
-            'query' => $this->getTokenFields($code),
-        ]);
-
-        return $this->parseAccessToken($response->getBody());
-    }
-
-    /**
-     * Detect wechat open platform.
-     *
-     * @return bool
-     */
-    protected function isOpenPlatform()
-    {
-        return (bool) $this->config->get('wechat.open_platform');
     }
 
     /**
